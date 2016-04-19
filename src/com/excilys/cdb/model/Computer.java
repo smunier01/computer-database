@@ -1,13 +1,14 @@
 package com.excilys.cdb.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Computer {
 	
 	private Long id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private Company company;
 	
 	/**
@@ -16,8 +17,8 @@ public class Computer {
 	public Computer() {
 		this.id = 0L;
 		this.name = "";
-		this.introduced = new Date();
-		this.discontinued = new Date();
+		this.introduced = LocalDate.now();
+		this.discontinued = LocalDate.now();
 		this.company = new Company();
 	}
 	
@@ -30,7 +31,7 @@ public class Computer {
 	 * @param discontinued discontinued date
 	 * @param company company (with id = 0 if no company)
 	 */
-	public Computer(Long id, String name, Date introduced, Date discontinued, Company company) {
+	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -54,19 +55,19 @@ public class Computer {
 		this.name = name;
 	}
 
-	public Date getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(Date introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
 
-	public Date getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Date discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 

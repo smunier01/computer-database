@@ -2,6 +2,9 @@ package com.excilys.cdb.main;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -16,6 +19,7 @@ import com.excilys.cdb.model.Computer;
  * class in charge of the CLI menu.
  * 
  * @author excilys
+ * @param <T>
  */
 public class Menu {
 
@@ -37,7 +41,7 @@ public class Menu {
 	/**
 	 * formatter to parse the dates
 	 */
-	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	/**
 	 * 
@@ -97,7 +101,7 @@ public class Menu {
 	public boolean pick(int choice) {
 
 		Long computerId, companyId;
-		Date introduced, discontinued;
+		LocalDate introduced, discontinued;
 		String name;
 		Computer computer;
 
@@ -117,7 +121,9 @@ public class Menu {
 		// show details of an existing computer
 		case 3:
 			// prompt for a Long (id)
-			computerId = promptForLong("id : ");
+			while ((computerId = promptForLong("id : ")) <= 0) {
+				System.out.println("invalid id");
+			}
 
 			// then show the details of the corresponding computer
 			showComputerDetails(computerId);
@@ -127,16 +133,24 @@ public class Menu {
 		// create a new computer
 		case 4:
 			// prompt for a string (name)
-			name = promptForString("name : ");
+			while((name = promptForString("name : ")).equals("")) {
+				System.out.println("invalid name");
+			};
 
 			// prompt for a date for the column introduced
-			introduced = promptForDate("introduced date : ");
+			while ((introduced = promptForDate("introduced date (format yyyy-MM-dd) : ")) == null) {
+				System.out.println("invalid date");
+			}
 
 			// prompt for a date for the column discontinued
-			discontinued = promptForDate("discontinued date : ");
+			while ((discontinued = promptForDate("discontinued date (format yyyy-MM-dd) : ")) == null) {
+				System.out.println("invalid date");
+			}
 
 			// prompt for a long for the id of the company
-			companyId = promptForLong("company id : ");
+			while ((companyId = promptForLong("company id : ")) <= 0) {
+				System.out.println("invalid id");
+			}
 
 			// create the new computer
 			this.createComputer(name, introduced, discontinued, companyId);
@@ -146,8 +160,10 @@ public class Menu {
 		// update an existing computer
 		case 5:
 
-			// prompt for the the
-			computerId = promptForLong("id : ");
+			// prompt for the computer id
+			while ((computerId = promptForLong("id : ")) <= 0) {
+				System.out.println("invalid id");
+			}
 
 			computer = this.computerDAO.find(computerId);
 
@@ -155,11 +171,26 @@ public class Menu {
 				break;
 			}
 
-			name = promptForString("new name (current : " + computer.getName() + " ) : ");
-			introduced = promptForDate("new introduced date (current : " + computer.getIntroduced().toString() + " ) : ");
-			discontinued = promptForDate(
-					"new introduced date (current : " + computer.getDiscontinued().toString() + " ) : ");
-			companyId = promptForLong("new company id (current : " + computer.getCompany().getId() + " ) : ");
+			String tmpPromptName = "new name (current : " + computer.getName() + " ) : ";
+			String tmpPromptIntro = "new introduced date (current : " + computer.getIntroduced().toString() + " ) : ";
+			String tmpPromptDisco = "new introduced date (current : " + computer.getDiscontinued().toString() + " ) : ";
+			String tmpPromptCompaId = "new company id (current : " + computer.getCompany().getId() + " ) : ";
+			
+			while ((name = promptForString(tmpPromptName)) == "") {
+				System.out.println("invalid name");
+			}
+			
+			while ((introduced = promptForDate(tmpPromptIntro)) == null) {
+				System.out.println("invalid date");
+			}
+			
+			while ((discontinued = promptForDate(tmpPromptDisco)) == null) {
+				System.out.println("invalid date");
+			}
+			
+			while ((companyId = promptForLong(tmpPromptCompaId)) <= 0) {
+				System.out.println("invalid id");
+			}
 
 			this.updateComputer(computerId, name, introduced, discontinued, companyId);
 
@@ -168,7 +199,9 @@ public class Menu {
 		// delete an existing computer
 		case 6:
 			
-			computerId = promptForLong("id : ");
+			while ((computerId = promptForLong("id : ")) <= 0) {
+				System.out.println("invalid id");
+			}
 			
 			this.deleteComputer(computerId);
 			
@@ -187,9 +220,18 @@ public class Menu {
 	 * @return
 	 */
 	private Long promptForLong(String s) {
+		Long result;
+		
 		System.out.print(s);
 		
-		return sc.nextLong();
+		try {
+			result = sc.nextLong();
+		} catch (InputMismatchException e) {
+			sc.next();
+			result = -1L;
+		}
+		
+		return result;
 	}
 
 	/**
@@ -198,28 +240,43 @@ public class Menu {
 	 * @return
 	 */
 	private String promptForString(String s) {
+		String result;
+		
 		System.out.print(s);
-		return sc.next();
+		
+		try {
+			result = sc.next();
+		} catch (InputMismatchException e) {
+			sc.next();
+			result = "";
+		}
+		
+		return result;
 	}
-
+	
 	/**
 	 * use the scanner to prompt for a Date
 	 * @param s String that will be use as an indication for the prompt
 	 * @return null if the date is not valid
 	 */
-	private Date promptForDate(String s) {
+	private LocalDate promptForDate(String s) {
 
 		System.out.print(s);
+		
 		String dateString = sc.next();
 
-		Date date = null;
+		LocalDate date = null;
 
 		try {
-			date = formatter.parse(dateString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		
+			date = LocalDate.parse(dateString, formatter);
 
+		} catch(DateTimeParseException e) {
+			
+			date = null;
+			
+		}
+		
 		return date;
 	}
 	
@@ -253,7 +310,7 @@ public class Menu {
 	 * @param discontinued discontinued date
 	 * @param companyId id of the company (0 if no company)
 	 */
-	public void createComputer(String name, Date introduced, Date discontinued, Long companyId) {
+	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
 
 		// use a default company if id <= 0
 		Company company = companyId <= 0 ? new Company() : this.companyDAO.find(companyId);
@@ -273,7 +330,7 @@ public class Menu {
 	 * @param discontinued new discontinued date
 	 * @param companyId new company id (0 if no company)
 	 */
-	public void updateComputer(Long id, String name, Date introduced, Date discontinued, Long companyId) {
+	public void updateComputer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
 
 		// use a default company if id <= 0
 		Company company = companyId <= 0 ? new Company() : this.companyDAO.find(companyId);

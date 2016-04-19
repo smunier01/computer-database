@@ -3,11 +3,14 @@ package com.excilys.cdb.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.util.Util;
 
 public class ComputerDAO extends DAO<Computer> {
 
@@ -32,8 +35,10 @@ public class ComputerDAO extends DAO<Computer> {
 			if (rs.first()) {
 
 				String name = rs.getString("name");
-				Date introduced = rs.getDate("introduced");
-				Date discontinued = rs.getDate("discontinued");
+				
+				LocalDate introduced = Util.timestampToLocalDate(rs.getTimestamp("introduced"));
+				LocalDate discontinued = Util.timestampToLocalDate(rs.getTimestamp("discontinued"));
+				
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
@@ -58,9 +63,10 @@ public class ComputerDAO extends DAO<Computer> {
 			PreparedStatement prepare = this.connect.prepareStatement(
 					"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)");
 			prepare.setString(1, obj.getName());
-			prepare.setDate(2, new java.sql.Date(obj.getIntroduced().getTime()));
-			prepare.setDate(3, new java.sql.Date(obj.getIntroduced().getTime()));
 
+			prepare.setTimestamp(2, Timestamp.valueOf(obj.getIntroduced().atStartOfDay()));
+			prepare.setTimestamp(3, Timestamp.valueOf(obj.getDiscontinued().atStartOfDay()));
+			
 			Long companyId = obj.getCompany().getId();
 			
 			if (companyId > 0) {
@@ -92,8 +98,9 @@ public class ComputerDAO extends DAO<Computer> {
 			stmt = this.connect.prepareStatement(sql);
 
 			stmt.setString(1, obj.getName());
-			stmt.setDate(2, new java.sql.Date(obj.getIntroduced().getTime()));
-			stmt.setDate(3, new java.sql.Date(obj.getIntroduced().getTime()));
+			
+			stmt.setTimestamp(2, Timestamp.valueOf(obj.getIntroduced().atStartOfDay()));
+			stmt.setTimestamp(3, Timestamp.valueOf(obj.getDiscontinued().atStartOfDay()));
 
 			Long companyId = obj.getCompany().getId();
 			
@@ -157,8 +164,10 @@ public class ComputerDAO extends DAO<Computer> {
 
 				Long id = rs.getLong("id");
 				String name = rs.getString("name");
-				Date introduced = rs.getDate("introduced");
-				Date discontinued = rs.getDate("discontinued");
+
+				LocalDate introduced = Util.timestampToLocalDate(rs.getTimestamp("introduced"));
+				LocalDate discontinued = Util.timestampToLocalDate(rs.getTimestamp("discontinued"));
+				
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
