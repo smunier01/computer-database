@@ -1,7 +1,6 @@
 package com.excilys.cdb.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Computer {
 	

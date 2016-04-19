@@ -94,8 +94,7 @@ public class Menu {
 	/**
 	 * route to the right action based on the option picked
 	 * 
-	 * @param choice
-	 *            id of the option
+	 * @param choice id of the option
 	 * @return false if the user wants to quit
 	 */
 	public boolean pick(int choice) {
@@ -104,22 +103,66 @@ public class Menu {
 		LocalDate introduced, discontinued;
 		String name;
 		Computer computer;
+		int start;
 
 		boolean stop = false;
 
 		switch (choice) {
 		// display the list of computers
 		case 1:
-			listComputers();
+			
+			start = 0;
+			
+			while (listComputers(start, 20)) {
+				System.out.println("quit (0), next(1)");
+				
+				Long a = null;
+				
+				while ((a = promptForLong(":")) < 0) {
+					System.out.println("invalid choice");
+				}
+				
+				if (a == 0) {
+					break;
+				} else if (a == 1) {
+					start += 20;
+				} else if (a == 2 && start >= 20) {
+					start -= 20;
+				}
+				
+			}
+			
 			break;
 			
 		// display the list of companies
 		case 2:
-			listCompanies();
+			start = 0;
+			
+			// loop for pagination
+			while (listCompanies(start, 20)) {
+				System.out.println("quit (0), next(1)");
+				
+				Long a = null;
+				
+				while ((a = promptForLong(":")) < 0) {
+					System.out.println("invalid choice");
+				}
+				
+				if (a == 0) {
+					break;
+				} else if (a == 1) {
+					start += 20;
+				} else if (a == 2 && start >= 20) {
+					start -= 20;
+				}
+
+			}
+			
 			break;
 		
 		// show details of an existing computer
 		case 3:
+			
 			// prompt for a Long (id)
 			while ((computerId = promptForLong("id : ")) <= 0) {
 				System.out.println("invalid id");
@@ -148,7 +191,7 @@ public class Menu {
 			}
 
 			// prompt for a long for the id of the company
-			while ((companyId = promptForLong("company id : ")) <= 0) {
+			while ((companyId = promptForLong("company id : ")) <= -1) {
 				System.out.println("invalid id");
 			}
 
@@ -188,7 +231,7 @@ public class Menu {
 				System.out.println("invalid date");
 			}
 			
-			while ((companyId = promptForLong(tmpPromptCompaId)) <= 0) {
+			while ((companyId = promptForLong(tmpPromptCompaId)) <= -1) {
 				System.out.println("invalid id");
 			}
 
@@ -282,24 +325,34 @@ public class Menu {
 	
 	/**
 	 * display the list of computers using the corresponding DAO class.
+	 * @param start offset to start
+	 * @param nb number of elements to return
+	 * @return false if offset reached the end of the data
 	 */
-	public void listComputers() {
-		ArrayList<Computer> computers = this.computerDAO.findAll();
+	public boolean listComputers(int start, int nb) {
+		ArrayList<Computer> computers = this.computerDAO.findAll(start, nb);
 
 		for (Computer c : computers) {
 			System.out.println(c.toString());
 		}
+		
+		return (computers.size() == nb);
 	}
 
 	/**
 	 * display the list of companies using the corresponding DAO class.
+	 * @param start offset to start
+	 * @param nb number of elements to return
+	 * @return false if offset reached the end of the data
 	 */
-	public void listCompanies() {
-		ArrayList<Company> companies = this.companyDAO.findAll();
+	public boolean listCompanies(int start, int nb) {
+		ArrayList<Company> companies = this.companyDAO.findAll(start, nb);
 
 		for (Company c : companies) {
 			System.out.println(c);
 		}
+		
+		return (companies.size() == nb);
 	}
 	
 	/**

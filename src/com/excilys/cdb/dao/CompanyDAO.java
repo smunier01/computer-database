@@ -1,9 +1,12 @@
 package com.excilys.cdb.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.excilys.cdb.jdbc.ConnectionMySQL;
 import com.excilys.cdb.model.Company;
 
 /**
@@ -21,14 +24,16 @@ public class CompanyDAO extends DAO<Company> {
 
 		String sql = "select id, name from company where id=?";
 
-		PreparedStatement stmt;
-
+		PreparedStatement stmt = null;
+		Connection con = ConnectionMySQL.getConnection();
+		ResultSet rs = null;
+		
 		try {
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
 			stmt.setLong(1, id);
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
 			if (rs.first()) {
 
@@ -40,6 +45,8 @@ public class CompanyDAO extends DAO<Company> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, rs);
 		}
 
 		return company;
@@ -51,15 +58,20 @@ public class CompanyDAO extends DAO<Company> {
 	@Override
 	public Company create(Company obj) {
 
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		
 		try {
-			PreparedStatement prepare = this.connect.prepareStatement(
+			stmt = con.prepareStatement(
 					"INSERT INTO company (name) VALUES(?)");
-			prepare.setString(1, obj.getName());
+			stmt.setString(1, obj.getName());
 
-			prepare.executeUpdate();
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, null);
 		}
 		
 		return obj;
@@ -72,11 +84,12 @@ public class CompanyDAO extends DAO<Company> {
 	public Company update(Company obj) {
 		String sql = "UPDATE company SET name=? WHERE id=:?";
 
-		PreparedStatement stmt;
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
 
 		try {
 
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
 			stmt.setString(1, obj.getName());
 			stmt.setLong(2, obj.getId());
@@ -85,6 +98,8 @@ public class CompanyDAO extends DAO<Company> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, null);
 		}
 
 		return obj;
@@ -97,11 +112,12 @@ public class CompanyDAO extends DAO<Company> {
 	public void delete(Company obj) {
 		String sql = "DELETE FROM company WHERE id=?";
 
-		PreparedStatement stmt;
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
 
 		try {
 
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
 			stmt.setLong(1, obj.getId());
 
@@ -109,6 +125,8 @@ public class CompanyDAO extends DAO<Company> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, null);
 		}
 	}
 	
@@ -122,12 +140,14 @@ public class CompanyDAO extends DAO<Company> {
 
 		String sql = "SELECT id, name FROM company";
 
-		PreparedStatement stmt;
-
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
 		try {
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
 			while (rs.next()) {
 
@@ -142,6 +162,45 @@ public class CompanyDAO extends DAO<Company> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, rs);
+		}
+
+		return result;
+	}
+
+	@Override
+	public ArrayList<Company> findAll(int start, int nb) {
+		ArrayList<Company> result = new ArrayList<>();
+
+		String sql = "SELECT id, name FROM company LIMIT ?,?";
+
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, start);
+			stmt.setInt(2, nb);
+			
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				Long id = rs.getLong("id");
+				String name = rs.getString("name");
+
+				Company company = new Company(id, name);
+
+				result.add(company);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, rs);
 		}
 
 		return result;

@@ -21,6 +21,20 @@ public class ConnectionMySQL {
 
 	private ConnectionMySQL() {}
 
+	public static Connection getConnection() {
+		
+		Connection con = null;
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			con = DriverManager.getConnection(url, user, passwd);
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return con;
+	}
+	
 	public static Connection getInstance() {
 		
 		if (connect == null) {

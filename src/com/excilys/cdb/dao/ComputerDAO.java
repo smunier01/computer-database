@@ -1,16 +1,17 @@
 package com.excilys.cdb.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
+import com.excilys.cdb.jdbc.ConnectionMySQL;
+import com.excilys.cdb.mapper.TimestampToLocalDate;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.util.Util;
 
 public class ComputerDAO extends DAO<Computer> {
 
@@ -23,21 +24,23 @@ public class ComputerDAO extends DAO<Computer> {
 
 		String sql = "select c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id WHERE c.id=?";
 
-		PreparedStatement stmt;
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
 		try {
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
 			stmt.setLong(1, id);
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
 			if (rs.first()) {
 
 				String name = rs.getString("name");
 				
-				LocalDate introduced = Util.timestampToLocalDate(rs.getTimestamp("introduced"));
-				LocalDate discontinued = Util.timestampToLocalDate(rs.getTimestamp("discontinued"));
+				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
+				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
 				
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
@@ -48,6 +51,8 @@ public class ComputerDAO extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, rs);
 		}
 
 		return computer;
@@ -59,26 +64,31 @@ public class ComputerDAO extends DAO<Computer> {
 	@Override
 	public Computer create(Computer obj) {
 
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		
 		try {
-			PreparedStatement prepare = this.connect.prepareStatement(
+			stmt = con.prepareStatement(
 					"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)");
-			prepare.setString(1, obj.getName());
+			stmt.setString(1, obj.getName());
 
-			prepare.setTimestamp(2, Timestamp.valueOf(obj.getIntroduced().atStartOfDay()));
-			prepare.setTimestamp(3, Timestamp.valueOf(obj.getDiscontinued().atStartOfDay()));
+			stmt.setTimestamp(2, Timestamp.valueOf(obj.getIntroduced().atStartOfDay()));
+			stmt.setTimestamp(3, Timestamp.valueOf(obj.getDiscontinued().atStartOfDay()));
 			
 			Long companyId = obj.getCompany().getId();
 			
 			if (companyId > 0) {
-				prepare.setLong(4, companyId);
+				stmt.setLong(4, companyId);
 			} else {
-				prepare.setNull(4, java.sql.Types.BIGINT);
+				stmt.setNull(4, java.sql.Types.BIGINT);
 			}
 
-			prepare.executeUpdate();
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, null);
 		}
 		
 		return obj;
@@ -91,11 +101,12 @@ public class ComputerDAO extends DAO<Computer> {
 	public Computer update(Computer obj) {
 		String sql = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=:?";
 
-		PreparedStatement stmt;
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
 
 		try {
 
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
 			stmt.setString(1, obj.getName());
 			
@@ -116,6 +127,8 @@ public class ComputerDAO extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, null);
 		}
 
 		return obj;
@@ -128,11 +141,12 @@ public class ComputerDAO extends DAO<Computer> {
 	public void delete(Computer obj) {
 		String sql = "DELETE FROM computer WHERE id=?";
 
-		PreparedStatement stmt;
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
 
 		try {
 
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
 			stmt.setLong(1, obj.getId());
 
@@ -140,6 +154,8 @@ public class ComputerDAO extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, null);
 		}
 	}
 
@@ -153,20 +169,22 @@ public class ComputerDAO extends DAO<Computer> {
 
 		String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id";
 
-		PreparedStatement stmt;
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
 		try {
-			stmt = this.connect.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
 			while (rs.next()) {
 
 				Long id = rs.getLong("id");
 				String name = rs.getString("name");
 
-				LocalDate introduced = Util.timestampToLocalDate(rs.getTimestamp("introduced"));
-				LocalDate discontinued = Util.timestampToLocalDate(rs.getTimestamp("discontinued"));
+				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
+				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
 				
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
@@ -179,6 +197,53 @@ public class ComputerDAO extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, rs);
+		}
+
+		return result;
+	}
+
+	@Override
+	public ArrayList<Computer> findAll(int start, int nb) {
+		
+		ArrayList<Computer> result = new ArrayList<>();
+
+		String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id LIMIT ?,?";
+
+		Connection con = ConnectionMySQL.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = con.prepareStatement(sql);
+
+			stmt.setInt(1, start);
+			stmt.setInt(2, nb);
+			
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				Long id = rs.getLong("id");
+				String name = rs.getString("name");
+
+				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
+				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
+				
+				Long companyId = rs.getLong("company_id");
+				String companyName = rs.getString("company_name");
+
+				Company company = new Company(companyId, companyName);
+				Computer computer = new Computer(id, name, introduced, discontinued, company);
+				result.add(computer);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeConnection(con, stmt, rs);
 		}
 
 		return result;

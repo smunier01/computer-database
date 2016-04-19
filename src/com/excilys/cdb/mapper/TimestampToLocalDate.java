@@ -1,10 +1,11 @@
-package com.excilys.cdb.util;
+package com.excilys.cdb.mapper;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-public class Util {
-	public static LocalDate timestampToLocalDate(Timestamp timestamp) {
+public class TimestampToLocalDate {
+	
+	public static LocalDate convert(Timestamp timestamp) {
 		
 		LocalDate date;
 		
