@@ -1,17 +1,12 @@
 package com.excilys.cdb.main;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.excilys.cdb.dao.CompanyDAO;
-import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -23,37 +18,18 @@ import com.excilys.cdb.model.Computer;
  */
 public class Menu {
 
-	/**
-	 * possible options in the menu
-	 */
 	private static ArrayList<String> options;
 
-	/**
-	 * 
-	 */
-	private ComputerDAO computerDAO = null;
-
-	/**
-	 * 
-	 */
-	private CompanyDAO companyDAO = null;
-
-	/**
-	 * formatter to parse the dates
-	 */
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	/**
-	 * 
-	 */
-	private Scanner sc;
+	private Scanner sc = null;
+	
+	private MainApp app;
 
-	public Menu(Scanner sc) {
+	public Menu(Scanner sc, MainApp app) {
 
 		this.sc = sc;
-
-		computerDAO = new ComputerDAO();
-		companyDAO = new CompanyDAO();
+		this.app = app;
 
 		options = new ArrayList<>();
 
@@ -63,12 +39,13 @@ public class Menu {
 		options.add("Create Computer");
 		options.add("Update Computer");
 		options.add("Delete Computer");
+		options.add("quit");
 	}
 
 	/**
-	 * display the menu with the possible options
+	 * display the menu with all the possible options
 	 */
-	public void print() {
+	public void printMenu() {
 		System.out.println("Menu:");
 
 		for (int i = 0; i < options.size(); i++) {
@@ -83,14 +60,14 @@ public class Menu {
 	 */
 	public boolean pick() {
 
-		print();
+		printMenu();
 
 		int choice = sc.nextInt();
 
 		return pick(choice);
 
 	}
-
+		
 	/**
 	 * route to the right action based on the option picked
 	 * 
@@ -114,7 +91,7 @@ public class Menu {
 			start = 0;
 			
 			while (listComputers(start, 20)) {
-				System.out.println("quit (0), next(1)");
+				System.out.println("quit (0), next(1), previous(2)");
 				
 				Long a = null;
 				
@@ -140,7 +117,7 @@ public class Menu {
 			
 			// loop for pagination
 			while (listCompanies(start, 20)) {
-				System.out.println("quit (0), next(1)");
+				System.out.println("quit (0), next(1), previous(2)");
 				
 				Long a = null;
 				
@@ -196,7 +173,7 @@ public class Menu {
 			}
 
 			// create the new computer
-			this.createComputer(name, introduced, discontinued, companyId);
+			this.app.createComputer(name, introduced, discontinued, companyId);
 
 			break;
 
@@ -208,7 +185,7 @@ public class Menu {
 				System.out.println("invalid id");
 			}
 
-			computer = this.computerDAO.find(computerId);
+			computer = this.app.getComputer(computerId);
 
 			if (computer == null) {
 				break;
@@ -235,7 +212,7 @@ public class Menu {
 				System.out.println("invalid id");
 			}
 
-			this.updateComputer(computerId, name, introduced, discontinued, companyId);
+			this.app.updateComputer(computerId, name, introduced, discontinued, companyId);
 
 			break;
 			
@@ -246,7 +223,7 @@ public class Menu {
 				System.out.println("invalid id");
 			}
 			
-			this.deleteComputer(computerId);
+			this.app.deleteComputer(computerId);
 			
 			break;
 		default:
@@ -300,7 +277,7 @@ public class Menu {
 	/**
 	 * use the scanner to prompt for a Date
 	 * @param s String that will be use as an indication for the prompt
-	 * @return null if the date is not valid
+	 * @return null if the date is not valid, LocalDate.MIN
 	 */
 	private LocalDate promptForDate(String s) {
 
@@ -309,28 +286,33 @@ public class Menu {
 		String dateString = sc.next();
 
 		LocalDate date = null;
-
-		try {
 		
-			date = LocalDate.parse(dateString, formatter);
+		
+		if ("".equals(dateString)) {
+			date = LocalDate.MIN;
+		} else {
+			try {
 
-		} catch(DateTimeParseException e) {
-			
-			date = null;
-			
+				date = LocalDate.parse(dateString, formatter);
+
+			} catch (DateTimeParseException e) {
+
+				date = null;
+
+			}
 		}
 		
 		return date;
 	}
 	
 	/**
-	 * display the list of computers using the corresponding DAO class.
+	 * display the list of computers.
 	 * @param start offset to start
 	 * @param nb number of elements to return
 	 * @return false if offset reached the end of the data
 	 */
 	public boolean listComputers(int start, int nb) {
-		ArrayList<Computer> computers = this.computerDAO.findAll(start, nb);
+		ArrayList<Computer> computers = this.app.getComputers(start, nb);
 
 		for (Computer c : computers) {
 			System.out.println(c.toString());
@@ -340,13 +322,14 @@ public class Menu {
 	}
 
 	/**
-	 * display the list of companies using the corresponding DAO class.
+	 * display the list of companies
+	 * 
 	 * @param start offset to start
 	 * @param nb number of elements to return
 	 * @return false if offset reached the end of the data
 	 */
 	public boolean listCompanies(int start, int nb) {
-		ArrayList<Company> companies = this.companyDAO.findAll(start, nb);
+		ArrayList<Company> companies = this.app.getCompanies(start, nb);
 
 		for (Company c : companies) {
 			System.out.println(c);
@@ -355,59 +338,6 @@ public class Menu {
 		return (companies.size() == nb);
 	}
 	
-	/**
-	 * create a new computer
-	 * 
-	 * @param name name of the computer
-	 * @param introduced introduced date
-	 * @param discontinued discontinued date
-	 * @param companyId id of the company (0 if no company)
-	 */
-	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
-
-		// use a default company if id <= 0
-		Company company = companyId <= 0 ? new Company() : this.companyDAO.find(companyId);
-
-		Computer computer = new Computer(0L, name, introduced, discontinued, company);
-
-		this.computerDAO.create(computer);
-
-	}
-
-	/**
-	 * update a computer
-	 * 
-	 * @param id id of the computer
-	 * @param name new name
-	 * @param introduced new introduced date
-	 * @param discontinued new discontinued date
-	 * @param companyId new company id (0 if no company)
-	 */
-	public void updateComputer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
-
-		// use a default company if id <= 0
-		Company company = companyId <= 0 ? new Company() : this.companyDAO.find(companyId);
-
-		Computer computer = new Computer(id, name, introduced, discontinued, company);
-
-		this.computerDAO.update(computer);
-
-	}
-
-	/**
-	 * delete a computer
-	 * 
-	 * @param id id of the computer to delete
-	 */
-	public void deleteComputer(Long id) {
-		
-		// we get the computer to see if it exists
-		Computer computer = this.computerDAO.find(id);
-
-		if (computer != null) {
-			this.computerDAO.delete(computer);
-		}
-	}
 
 	/**
 	 * show details of a computer based on its id
@@ -415,7 +345,7 @@ public class Menu {
 	 * @param id id of the computer to show
 	 */
 	public void showComputerDetails(Long id) {
-		Computer computer = this.computerDAO.find(id);
+		Computer computer = this.app.getComputer(id);
 
 		if (computer != null) {
 			System.out.println("Details on computer " + id + " :");

@@ -183,7 +183,6 @@ public class CompanyDAO extends DAO<Company> {
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, start);
 			stmt.setInt(2, nb);
-			
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {

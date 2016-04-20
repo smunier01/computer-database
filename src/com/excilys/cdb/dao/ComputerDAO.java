@@ -71,10 +71,23 @@ public class ComputerDAO extends DAO<Computer> {
 			stmt = con.prepareStatement(
 					"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)");
 			stmt.setString(1, obj.getName());
-
-			stmt.setTimestamp(2, Timestamp.valueOf(obj.getIntroduced().atStartOfDay()));
-			stmt.setTimestamp(3, Timestamp.valueOf(obj.getDiscontinued().atStartOfDay()));
 			
+			LocalDate introduced = obj.getIntroduced();
+			
+			if (introduced.equals(LocalDate.MIN)) {
+				stmt.setNull(2, java.sql.Types.TIMESTAMP);
+			} else {
+				stmt.setTimestamp(2, Timestamp.valueOf(introduced.atStartOfDay()));
+			}
+			
+			LocalDate discontinued = obj.getDiscontinued();
+			
+			if (discontinued.equals(LocalDate.MIN)) {
+				stmt.setNull(3, java.sql.Types.TIMESTAMP);
+			} else {
+				stmt.setTimestamp(3, Timestamp.valueOf(discontinued.atStartOfDay()));
+			}
+
 			Long companyId = obj.getCompany().getId();
 			
 			if (companyId > 0) {
@@ -110,8 +123,21 @@ public class ComputerDAO extends DAO<Computer> {
 
 			stmt.setString(1, obj.getName());
 			
-			stmt.setTimestamp(2, Timestamp.valueOf(obj.getIntroduced().atStartOfDay()));
-			stmt.setTimestamp(3, Timestamp.valueOf(obj.getDiscontinued().atStartOfDay()));
+			LocalDate introduced = obj.getIntroduced();
+			
+			if (introduced.equals(LocalDate.MIN)) {
+				stmt.setNull(2, java.sql.Types.TIMESTAMP);
+			} else {
+				stmt.setTimestamp(2, Timestamp.valueOf(introduced.atStartOfDay()));
+			}
+			
+			LocalDate discontinued = obj.getDiscontinued();
+			
+			if (discontinued.equals(LocalDate.MIN)) {
+				stmt.setNull(3, java.sql.Types.TIMESTAMP);
+			} else {
+				stmt.setTimestamp(3, Timestamp.valueOf(discontinued.atStartOfDay()));
+			}
 
 			Long companyId = obj.getCompany().getId();
 			
