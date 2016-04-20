@@ -6,14 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.jdbc.ConnectionMySQL;
 import com.excilys.cdb.model.Company;
+import com.excilys.sdb.service.ComputerService;
 
 /**
- * 
  * @author excilys
  */
 public class CompanyDAO extends DAO<Company> {
+
+	final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
 	/**
 	 * find a company by its ID
@@ -22,12 +27,12 @@ public class CompanyDAO extends DAO<Company> {
 	public Company find(Long id) {
 		Company company = null;
 
-		String sql = "select id, name from company where id=?";
+		String sql = "SELECT id, name FROM company WHERE id=?";
 
 		PreparedStatement stmt = null;
 		Connection con = ConnectionMySQL.getConnection();
 		ResultSet rs = null;
-		
+
 		try {
 			stmt = con.prepareStatement(sql);
 
@@ -41,17 +46,21 @@ public class CompanyDAO extends DAO<Company> {
 
 				company = new Company(id, name);
 
+				logger.info("successfully found company of id : " + id);
+
+			} else {
+				logger.warn("couldn't find company of id : " + id);
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, rs);
 		}
 
 		return company;
 	}
-	
+
 	/**
 	 * create a new company
 	 */
@@ -60,20 +69,26 @@ public class CompanyDAO extends DAO<Company> {
 
 		Connection con = ConnectionMySQL.getConnection();
 		PreparedStatement stmt = null;
-		
+
 		try {
-			stmt = con.prepareStatement(
-					"INSERT INTO company (name) VALUES(?)");
+			stmt = con.prepareStatement("INSERT INTO company (name) VALUES(?)");
+			
 			stmt.setString(1, obj.getName());
 
-			stmt.executeUpdate();
+			int res = stmt.executeUpdate();
+			
+			if (res > 0) {
+				logger.info("succefully created company : " + obj.getName());
+			} else {
+				logger.info("couldn't create company : " + obj.getName());
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, null);
 		}
-		
+
 		return obj;
 	}
 
@@ -94,17 +109,23 @@ public class CompanyDAO extends DAO<Company> {
 			stmt.setString(1, obj.getName());
 			stmt.setLong(2, obj.getId());
 
-			stmt.executeUpdate();
+			int res = stmt.executeUpdate();
+			
+			if (res > 0) {
+				logger.info("succefully updated company : " + obj.getId());
+			} else {
+				logger.info("couldn't update company : " + obj.getId());
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, null);
 		}
 
 		return obj;
 	}
-	
+
 	/**
 	 * delete a company
 	 */
@@ -121,15 +142,21 @@ public class CompanyDAO extends DAO<Company> {
 
 			stmt.setLong(1, obj.getId());
 
-			stmt.executeUpdate();
+			int res = stmt.executeUpdate();
+			
+			if (res > 0) {
+				logger.info("succefully deleted company : " + obj.getName());
+			} else {
+				logger.warn("couldn't delete company : " + obj.getName());
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, null);
 		}
 	}
-	
+
 	/**
 	 * return all companies
 	 */
@@ -143,7 +170,7 @@ public class CompanyDAO extends DAO<Company> {
 		Connection con = ConnectionMySQL.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			stmt = con.prepareStatement(sql);
 
@@ -159,9 +186,15 @@ public class CompanyDAO extends DAO<Company> {
 				result.add(company);
 
 			}
+			
+			if (result.size() > 0) {
+				logger.info("successfully retrieved " + result.size() + " companies");
+			} else {
+				logger.warn("couldn't retrieve any companies");
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, rs);
 		}
@@ -178,7 +211,7 @@ public class CompanyDAO extends DAO<Company> {
 		Connection con = ConnectionMySQL.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, start);
@@ -186,18 +219,22 @@ public class CompanyDAO extends DAO<Company> {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-
 				Long id = rs.getLong("id");
 				String name = rs.getString("name");
 
 				Company company = new Company(id, name);
 
 				result.add(company);
-
 			}
 
+			if (result.size() > 0) {
+				logger.info("successfully retrieved " + result.size() + " companies");
+			} else {
+				logger.warn("couldn't retrieve any companies");
+			}
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, rs);
 		}

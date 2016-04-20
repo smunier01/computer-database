@@ -9,14 +9,16 @@ import java.util.Scanner;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.sdb.service.ComputerService;
 
 /**
  * class in charge of the CLI menu.
  * 
  * @author excilys
- * @param <T>
  */
 public class Menu {
+	
+	private static final int MAX_PER_PAGES = 20;
 
 	private static ArrayList<String> options;
 
@@ -24,12 +26,12 @@ public class Menu {
 
 	private Scanner sc = null;
 	
-	private MainApp app;
+	private ComputerService computerService;
 
-	public Menu(Scanner sc, MainApp app) {
+	public Menu(Scanner sc) {
 
 		this.sc = sc;
-		this.app = app;
+		this.computerService = new ComputerService();
 
 		options = new ArrayList<>();
 
@@ -62,7 +64,11 @@ public class Menu {
 
 		printMenu();
 
-		int choice = sc.nextInt();
+		int choice = 0;
+
+		while ((choice = Math.toIntExact(promptForLong(":"))) < 0) {
+			System.out.println("invalid choice");
+		}
 
 		return pick(choice);
 
@@ -90,7 +96,8 @@ public class Menu {
 			
 			start = 0;
 			
-			while (listComputers(start, 20)) {
+			// loop for pagination
+			while (listComputers(start, MAX_PER_PAGES)) {
 				System.out.println("quit (0), next(1), previous(2)");
 				
 				Long a = null;
@@ -102,9 +109,9 @@ public class Menu {
 				if (a == 0) {
 					break;
 				} else if (a == 1) {
-					start += 20;
-				} else if (a == 2 && start >= 20) {
-					start -= 20;
+					start += MAX_PER_PAGES;
+				} else if (a == 2 && start >= MAX_PER_PAGES) {
+					start -= MAX_PER_PAGES;
 				}
 				
 			}
@@ -116,7 +123,7 @@ public class Menu {
 			start = 0;
 			
 			// loop for pagination
-			while (listCompanies(start, 20)) {
+			while (listCompanies(start, MAX_PER_PAGES)) {
 				System.out.println("quit (0), next(1), previous(2)");
 				
 				Long a = null;
@@ -128,9 +135,9 @@ public class Menu {
 				if (a == 0) {
 					break;
 				} else if (a == 1) {
-					start += 20;
-				} else if (a == 2 && start >= 20) {
-					start -= 20;
+					start += MAX_PER_PAGES;
+				} else if (a == 2 && start >= MAX_PER_PAGES) {
+					start -= MAX_PER_PAGES;
 				}
 
 			}
@@ -173,7 +180,7 @@ public class Menu {
 			}
 
 			// create the new computer
-			this.app.createComputer(name, introduced, discontinued, companyId);
+			this.computerService.createComputer(name, introduced, discontinued, companyId);
 
 			break;
 
@@ -185,7 +192,7 @@ public class Menu {
 				System.out.println("invalid id");
 			}
 
-			computer = this.app.getComputer(computerId);
+			computer = this.computerService.getComputer(computerId);
 
 			if (computer == null) {
 				break;
@@ -212,7 +219,7 @@ public class Menu {
 				System.out.println("invalid id");
 			}
 
-			this.app.updateComputer(computerId, name, introduced, discontinued, companyId);
+			this.computerService.updateComputer(computerId, name, introduced, discontinued, companyId);
 
 			break;
 			
@@ -223,7 +230,7 @@ public class Menu {
 				System.out.println("invalid id");
 			}
 			
-			this.app.deleteComputer(computerId);
+			this.computerService.deleteComputer(computerId);
 			
 			break;
 		default:
@@ -312,7 +319,7 @@ public class Menu {
 	 * @return false if offset reached the end of the data
 	 */
 	public boolean listComputers(int start, int nb) {
-		ArrayList<Computer> computers = this.app.getComputers(start, nb);
+		ArrayList<Computer> computers = this.computerService.getComputers(start, nb);
 
 		for (Computer c : computers) {
 			System.out.println(c.toString());
@@ -329,7 +336,7 @@ public class Menu {
 	 * @return false if offset reached the end of the data
 	 */
 	public boolean listCompanies(int start, int nb) {
-		ArrayList<Company> companies = this.app.getCompanies(start, nb);
+		ArrayList<Company> companies = this.computerService.getCompanies(start, nb);
 
 		for (Company c : companies) {
 			System.out.println(c);
@@ -345,7 +352,7 @@ public class Menu {
 	 * @param id id of the computer to show
 	 */
 	public void showComputerDetails(Long id) {
-		Computer computer = this.app.getComputer(id);
+		Computer computer = this.computerService.getComputer(id);
 
 		if (computer != null) {
 			System.out.println("Details on computer " + id + " :");

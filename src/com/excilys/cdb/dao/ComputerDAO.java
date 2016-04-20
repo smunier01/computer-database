@@ -8,12 +8,17 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.jdbc.ConnectionMySQL;
 import com.excilys.cdb.mapper.TimestampToLocalDate;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDAO extends DAO<Computer> {
+
+	final static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	/**
 	 * find a computer by its ID
@@ -22,7 +27,7 @@ public class ComputerDAO extends DAO<Computer> {
 	public Computer find(Long id) {
 		Computer computer = null;
 
-		String sql = "select c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id WHERE c.id=?";
+		String sql = "SELECT c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
 		Connection con = ConnectionMySQL.getConnection();
 		PreparedStatement stmt = null;
@@ -36,21 +41,23 @@ public class ComputerDAO extends DAO<Computer> {
 			rs = stmt.executeQuery();
 
 			if (rs.first()) {
-
 				String name = rs.getString("name");
-				
+
 				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
 				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-				
+
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
 				computer = new Computer(id, name, introduced, discontinued, new Company(companyId, companyName));
 
+				logger.info("succefully found computer of id : " + id);
+			} else {
+				logger.warn("couldn't find computer of id : " + id);
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, rs);
 		}
@@ -66,22 +73,22 @@ public class ComputerDAO extends DAO<Computer> {
 
 		Connection con = ConnectionMySQL.getConnection();
 		PreparedStatement stmt = null;
-		
+
 		try {
 			stmt = con.prepareStatement(
 					"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)");
 			stmt.setString(1, obj.getName());
-			
+
 			LocalDate introduced = obj.getIntroduced();
-			
+
 			if (introduced.equals(LocalDate.MIN)) {
 				stmt.setNull(2, java.sql.Types.TIMESTAMP);
 			} else {
 				stmt.setTimestamp(2, Timestamp.valueOf(introduced.atStartOfDay()));
 			}
-			
+
 			LocalDate discontinued = obj.getDiscontinued();
-			
+
 			if (discontinued.equals(LocalDate.MIN)) {
 				stmt.setNull(3, java.sql.Types.TIMESTAMP);
 			} else {
@@ -89,21 +96,27 @@ public class ComputerDAO extends DAO<Computer> {
 			}
 
 			Long companyId = obj.getCompany().getId();
-			
+
 			if (companyId > 0) {
 				stmt.setLong(4, companyId);
 			} else {
 				stmt.setNull(4, java.sql.Types.BIGINT);
 			}
 
-			stmt.executeUpdate();
+			int res = stmt.executeUpdate();
+			
+			if (res > 0) {
+				logger.info("successfully created computer : " + obj.toString());
+			} else {
+				logger.warn("couldn't create computer : " + obj.toString());
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, null);
 		}
-		
+
 		return obj;
 	}
 
@@ -122,17 +135,17 @@ public class ComputerDAO extends DAO<Computer> {
 			stmt = con.prepareStatement(sql);
 
 			stmt.setString(1, obj.getName());
-			
+
 			LocalDate introduced = obj.getIntroduced();
-			
+
 			if (introduced.equals(LocalDate.MIN)) {
 				stmt.setNull(2, java.sql.Types.TIMESTAMP);
 			} else {
 				stmt.setTimestamp(2, Timestamp.valueOf(introduced.atStartOfDay()));
 			}
-			
+
 			LocalDate discontinued = obj.getDiscontinued();
-			
+
 			if (discontinued.equals(LocalDate.MIN)) {
 				stmt.setNull(3, java.sql.Types.TIMESTAMP);
 			} else {
@@ -140,19 +153,25 @@ public class ComputerDAO extends DAO<Computer> {
 			}
 
 			Long companyId = obj.getCompany().getId();
-			
+
 			if (companyId > 0) {
 				stmt.setLong(4, companyId);
 			} else {
 				stmt.setNull(4, java.sql.Types.BIGINT);
 			}
-			
+
 			stmt.setLong(5, obj.getId());
 
-			stmt.executeUpdate();
+			int res = stmt.executeUpdate();
+			
+			if (res > 0) {
+				logger.info("successfully updated computer : " + obj.toString());
+			} else {
+				logger.warn("couldn't update computer : " + obj.toString());
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, null);
 		}
@@ -176,10 +195,16 @@ public class ComputerDAO extends DAO<Computer> {
 
 			stmt.setLong(1, obj.getId());
 
-			stmt.executeUpdate();
+			int res =stmt.executeUpdate();
 
+			if (res > 0) {
+				logger.info("successfully deleted computer : " + obj.toString());
+			} else {
+				logger.warn("couldn't delete computer : " + obj.toString());
+			}
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, null);
 		}
@@ -193,7 +218,7 @@ public class ComputerDAO extends DAO<Computer> {
 
 		ArrayList<Computer> result = new ArrayList<>();
 
-		String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id";
+		String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
 		Connection con = ConnectionMySQL.getConnection();
 		PreparedStatement stmt = null;
@@ -211,7 +236,7 @@ public class ComputerDAO extends DAO<Computer> {
 
 				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
 				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-				
+
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
@@ -220,9 +245,15 @@ public class ComputerDAO extends DAO<Computer> {
 				result.add(computer);
 
 			}
+			
+			if (result.size() > 0) {
+				logger.info("successfully retrieved " + result.size() + " computer(s)");
+			} else {
+				logger.warn("couldn't retrieve any computers");
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, rs);
 		}
@@ -232,7 +263,7 @@ public class ComputerDAO extends DAO<Computer> {
 
 	@Override
 	public ArrayList<Computer> findAll(int start, int nb) {
-		
+
 		ArrayList<Computer> result = new ArrayList<>();
 
 		String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id LIMIT ?,?";
@@ -246,7 +277,7 @@ public class ComputerDAO extends DAO<Computer> {
 
 			stmt.setInt(1, start);
 			stmt.setInt(2, nb);
-			
+
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -256,7 +287,7 @@ public class ComputerDAO extends DAO<Computer> {
 
 				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
 				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-				
+
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
@@ -265,9 +296,15 @@ public class ComputerDAO extends DAO<Computer> {
 				result.add(computer);
 
 			}
+			
+			if (result.size() > 0) {
+				logger.info("successfully retrieved " + result.size() + " computer(s)");
+			} else {
+				logger.warn("couldn't retrieve any computers");
+			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			this.closeConnection(con, stmt, rs);
 		}
