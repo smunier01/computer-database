@@ -11,14 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQL;
 import com.excilys.cdb.model.Company;
-import com.excilys.sdb.service.ComputerService;
 
 /**
  * @author excilys
  */
 public class CompanyDAO extends DAO<Company> {
 
-	final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+	private final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
 	/**
 	 * find a company by its ID
@@ -55,7 +54,7 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeConnection(con, stmt, rs);
+			this.closeAll(con, stmt, rs);
 		}
 
 		return company;
@@ -86,7 +85,7 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeConnection(con, stmt, null);
+			this.closeAll(con, stmt, null);
 		}
 
 		return obj;
@@ -120,7 +119,7 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeConnection(con, stmt, null);
+			this.closeAll(con, stmt, null);
 		}
 
 		return obj;
@@ -153,7 +152,7 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeConnection(con, stmt, null);
+			this.closeAll(con, stmt, null);
 		}
 	}
 
@@ -196,7 +195,7 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeConnection(con, stmt, rs);
+			this.closeAll(con, stmt, rs);
 		}
 
 		return result;
@@ -236,7 +235,7 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeConnection(con, stmt, rs);
+			this.closeAll(con, stmt, rs);
 		}
 
 		return result;

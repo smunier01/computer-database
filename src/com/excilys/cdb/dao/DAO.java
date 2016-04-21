@@ -1,10 +1,9 @@
 package com.excilys.cdb.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * abstract class describing methods of a dao object
@@ -15,6 +14,8 @@ import java.util.ArrayList;
  */
 public abstract class DAO<T> {
 
+	final static Logger logger = LoggerFactory.getLogger(DAO.class);
+
 	public abstract T find(Long id);
 
 	public abstract T create(T obj);
@@ -24,33 +25,16 @@ public abstract class DAO<T> {
 	public abstract void delete(T obj);
 
 	public abstract ArrayList<T> findAll();
-	
+
 	public abstract ArrayList<T> findAll(int start, int nb);
 
-	public void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
-
-		try {
-			if (rs != null) {
-				rs.close();
+	public void closeAll(AutoCloseable... ressources) {
+		for (AutoCloseable ressource : ressources) {
+			try {
+				ressource.close();
+			} catch (Exception e) {
+				logger.error("couldn't close ressource : " + ressource.toString());
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			if (stmt != null) {
-				stmt.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			if (con != null) {
-				con.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 }

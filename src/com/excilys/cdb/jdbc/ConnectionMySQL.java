@@ -2,7 +2,10 @@ package com.excilys.cdb.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Singleton to connect to the database
@@ -17,34 +20,21 @@ public class ConnectionMySQL {
 
 	private static String passwd = "qwerty1234";
 
-	private static Connection connect = null;
-
-	private ConnectionMySQL() {}
+	private ConnectionMySQL() {
+	}
 
 	public static Connection getConnection() {
-		
+
 		Connection con = null;
-		
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(url, user, passwd);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		return con;
 	}
-	
-	public static Connection getInstance() {
-		
-		if (connect == null) {
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-				connect = DriverManager.getConnection(url, user, passwd);
-			} catch (SQLException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return connect;
-	}
+
 }
