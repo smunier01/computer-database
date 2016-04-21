@@ -1,5 +1,7 @@
 package com.excilys.cdb.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -15,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public abstract class DAO<T> {
 
 	final static Logger logger = LoggerFactory.getLogger(DAO.class);
-	
+		
 	/**
 	 * find an object by its id
 	 * @param id of the object
@@ -69,5 +71,17 @@ public abstract class DAO<T> {
 				logger.error("couldn't close resource : " + resource.toString());
 			}
 		}
+	}
+	
+	public PreparedStatement setParams(PreparedStatement stmt, Object... params) throws SQLException {
+		
+		int cnt = 0;
+		
+		for (Object o : params) {
+			stmt.setObject(++cnt, o);
+		}
+		
+		return stmt;
+		
 	}
 }

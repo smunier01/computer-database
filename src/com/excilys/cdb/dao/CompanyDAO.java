@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQL;
+import com.excilys.cdb.mapper.CompanyResultSetMapper;
+import com.excilys.cdb.mapper.ComputerResultSetMapper;
 import com.excilys.cdb.model.Company;
 
 /**
@@ -17,213 +19,229 @@ import com.excilys.cdb.model.Company;
  */
 public class CompanyDAO extends DAO<Company> {
 
-	private final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+    private final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
-	@Override
-	public Company find(Long id) {
-		Company company = null;
+    private CompanyResultSetMapper mapper = CompanyResultSetMapper.getInstance();
 
-		String sql = "SELECT id, name FROM company WHERE id=?";
+    private static volatile CompanyDAO instance = null;
 
-		PreparedStatement stmt = null;
-		Connection con = ConnectionMySQL.getConnection();
-		ResultSet rs = null;
+    private CompanyDAO() {
+        super();
+    }
+    
+    public static CompanyDAO getInstance() {
+        
+        if (instance == null) {
+            synchronized (ComputerResultSetMapper.class) {
+                if (instance == null) {
+                    instance = new CompanyDAO();
+                }
+            }
+        }
 
-		try {
-			stmt = con.prepareStatement(sql);
+        return instance;
+    }
 
-			stmt.setLong(1, id);
+    @Override
+    public Company find(Long id) {
+        Company company = null;
 
-			rs = stmt.executeQuery();
+        String sql = "SELECT id, name FROM company WHERE id=?";
 
-			if (rs.first()) {
+        PreparedStatement stmt = null;
+        Connection con = ConnectionMySQL.getConnection();
+        ResultSet rs = null;
 
-				String name = rs.getString("name");
+        try {
+            stmt = con.prepareStatement(sql);
 
-				company = new Company(id, name);
+            this.setParams(stmt, id);
 
-				logger.info("successfully found company of id : " + id);
+            rs = stmt.executeQuery();
 
-			} else {
-				logger.warn("couldn't find company of id : " + id);
-			}
+            if (rs.first()) {
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, rs);
-		}
+                String name = rs.getString("name");
 
-		return company;
-	}
+                company = new Company(id, name);
 
-	@Override
-	public Company create(Company obj) {
+                logger.info("successfully found company of id : " + id);
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
+            } else {
+                logger.warn("couldn't find company of id : " + id);
+            }
 
-		try {
-			stmt = con.prepareStatement("INSERT INTO company (name) VALUES(?)");
-			
-			stmt.setString(1, obj.getName());
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
 
-			int res = stmt.executeUpdate();
-			
-			if (res > 0) {
-				logger.info("succefully created company : " + obj.getName());
-			} else {
-				logger.info("couldn't create company : " + obj.getName());
-			}
+        return company;
+    }
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt);
-		}
+    @Override
+    public Company create(Company obj) {
 
-		return obj;
-	}
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
 
-	@Override
-	public Company update(Company obj) {
-		String sql = "UPDATE company SET name=? WHERE id=:?";
+        try {
+            stmt = con.prepareStatement("INSERT INTO company (name) VALUES(?)");
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
+            this.setParams(stmt, obj.getName());
 
-		try {
+            int res = stmt.executeUpdate();
 
-			stmt = con.prepareStatement(sql);
+            if (res > 0) {
+                logger.info("succefully created company : " + obj.getName());
+            } else {
+                logger.info("couldn't create company : " + obj.getName());
+            }
 
-			stmt.setString(1, obj.getName());
-			stmt.setLong(2, obj.getId());
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt);
+        }
 
-			int res = stmt.executeUpdate();
-			
-			if (res > 0) {
-				logger.info("succefully updated company : " + obj.getId());
-			} else {
-				logger.info("couldn't update company : " + obj.getId());
-			}
+        return obj;
+    }
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt);
-		}
+    @Override
+    public Company update(Company obj) {
+        String sql = "UPDATE company SET name=? WHERE id=:?";
 
-		return obj;
-	}
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
 
-	@Override
-	public void delete(Company obj) {
-		String sql = "DELETE FROM company WHERE id=?";
+        try {
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
+            stmt = con.prepareStatement(sql);
 
-		try {
+            this.setParams(stmt, obj.getName(), obj.getId());
 
-			stmt = con.prepareStatement(sql);
+            int res = stmt.executeUpdate();
 
-			stmt.setLong(1, obj.getId());
+            if (res > 0) {
+                logger.info("succefully updated company : " + obj.getId());
+            } else {
+                logger.info("couldn't update company : " + obj.getId());
+            }
 
-			int res = stmt.executeUpdate();
-			
-			if (res > 0) {
-				logger.info("succefully deleted company : " + obj.getName());
-			} else {
-				logger.warn("couldn't delete company : " + obj.getName());
-			}
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt);
+        }
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt);
-		}
-	}
+        return obj;
+    }
 
-	@Override
-	public ArrayList<Company> findAll() {
+    @Override
+    public void delete(Company obj) {
+        String sql = "DELETE FROM company WHERE id=?";
 
-		ArrayList<Company> result = new ArrayList<>();
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
 
-		String sql = "SELECT id, name FROM company";
+        try {
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+            stmt = con.prepareStatement(sql);
 
-		try {
-			stmt = con.prepareStatement(sql);
+            this.setParams(stmt, obj.getId());
 
-			rs = stmt.executeQuery();
+            int res = stmt.executeUpdate();
 
-			while (rs.next()) {
+            if (res > 0) {
+                logger.info("succefully deleted company : " + obj.getName());
+            } else {
+                logger.warn("couldn't delete company : " + obj.getName());
+            }
 
-				Long id = rs.getLong("id");
-				String name = rs.getString("name");
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt);
+        }
+    }
 
-				Company company = new Company(id, name);
+    @Override
+    public ArrayList<Company> findAll() {
 
-				result.add(company);
+        ArrayList<Company> result = new ArrayList<>();
 
-			}
-			
-			if (result.size() > 0) {
-				logger.info("successfully retrieved " + result.size() + " companies");
-			} else {
-				logger.warn("couldn't retrieve any companies");
-			}
+        String sql = "SELECT id, name FROM company";
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, rs);
-		}
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-		return result;
-	}
+        try {
+            stmt = con.prepareStatement(sql);
 
-	@Override
-	public ArrayList<Company> findAll(int start, int nb) {
-		ArrayList<Company> result = new ArrayList<>();
+            rs = stmt.executeQuery();
 
-		String sql = "SELECT id, name FROM company LIMIT ?,?";
+            while (rs.next()) {
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+                Company company = mapper.map(rs);
 
-		try {
-			stmt = con.prepareStatement(sql);
-			stmt.setInt(1, start);
-			stmt.setInt(2, nb);
-			rs = stmt.executeQuery();
+                result.add(company);
 
-			while (rs.next()) {
-				Long id = rs.getLong("id");
-				String name = rs.getString("name");
+            }
 
-				Company company = new Company(id, name);
+            if (result.size() > 0) {
+                logger.info("successfully retrieved " + result.size() + " companies");
+            } else {
+                logger.warn("couldn't retrieve any companies");
+            }
 
-				result.add(company);
-			}
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
 
-			if (result.size() > 0) {
-				logger.info("successfully retrieved " + result.size() + " companies");
-			} else {
-				logger.warn("couldn't retrieve any companies");
-			}
-			
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, rs);
-		}
+        return result;
+    }
 
-		return result;
-	}
+    @Override
+    public ArrayList<Company> findAll(int start, int nb) {
+        ArrayList<Company> result = new ArrayList<>();
+
+        String sql = "SELECT id, name FROM company LIMIT ?,?";
+
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = con.prepareStatement(sql);
+
+            this.setParams(stmt, start, nb);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Company company = mapper.map(rs);
+
+                result.add(company);
+            }
+
+            if (result.size() > 0) {
+                logger.info("successfully retrieved " + result.size() + " companies");
+            } else {
+                logger.warn("couldn't retrieve any companies");
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
+
+        return result;
+    }
 
 }

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQL;
+import com.excilys.cdb.mapper.ComputerResultSetMapper;
 import com.excilys.cdb.mapper.LocalDateToTimestamp;
 import com.excilys.cdb.mapper.TimestampToLocalDate;
 import com.excilys.cdb.model.Company;
@@ -19,254 +20,245 @@ import com.excilys.cdb.model.Computer;
 
 public class ComputerDAO extends DAO<Computer> {
 
-	final static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+    final static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
-	@Override
-	public Computer find(Long id) {
-		Computer computer = null;
+    private ComputerResultSetMapper mapper = ComputerResultSetMapper.getInstance();
 
-		String sql = "SELECT c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
+    private static volatile ComputerDAO instance = null;
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			stmt = con.prepareStatement(sql);
+    private ComputerDAO() {
+        super();
+    }
+    
+    public static ComputerDAO getInstance() {
+        
+        if (instance == null) {
+            synchronized (ComputerResultSetMapper.class) {
+                if (instance == null) {
+                    instance = new ComputerDAO();
+                }
+            }
+        }
 
-			stmt.setLong(1, id);
+        return instance;
+    }
+    
+    @Override
+    public Computer find(Long id) {
+        Computer computer = null;
 
-			rs = stmt.executeQuery();
+        String sql = "SELECT c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
-			if (rs.first()) {
-				String name = rs.getString("name");
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
+        try {
+            stmt = con.prepareStatement(sql);
 
-				Long companyId = rs.getLong("company_id");
-				String companyName = rs.getString("company_name");
+            // stmt.setLong(1, id);
+            setParams(stmt, id);
 
-				computer = new Computer(id, name, introduced, discontinued, new Company(companyId, companyName));
+            rs = stmt.executeQuery();
 
-				logger.info("succefully found computer of id : " + id);
-			} else {
-				logger.warn("couldn't find computer of id : " + id);
-			}
+            if (rs.first()) {
+                String name = rs.getString("name");
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, rs);
-		}
-		
-		return computer;
-	}
+                LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
+                LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
 
-	@Override
-	public Computer create(Computer obj) {
-		
-		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		
-		try {
-			stmt = con.prepareStatement(sql);
+                Long companyId = rs.getLong("company_id");
+                String companyName = rs.getString("company_name");
 
-			Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
+                computer = new Computer(id, name, introduced, discontinued, new Company(companyId, companyName));
 
-			Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
-			
-			stmt.setString(1, obj.getName());
-			
-			stmt.setObject(2, introduced);
-			
-			stmt.setObject(3, discontinued);
+                logger.info("succefully found computer of id : " + id);
+            } else {
+                logger.warn("couldn't find computer of id : " + id);
+            }
 
-			stmt.setObject(4, obj.getCompany().getId());
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
 
-			int res = stmt.executeUpdate();
-			
-			if (res > 0) {
-				logger.info("successfully created computer : " + obj.toString());
-			} else {
-				logger.warn("couldn't create computer : " + obj.toString());
-			}
+        return computer;
+    }
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, null);
-		}
-		
-		return obj;
-	}
+    @Override
+    public Computer create(Computer obj) {
 
-	@Override
-	public Computer update(Computer obj) {
-		String sql = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=:?";
+        String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		
-		try {
+        try {
+            stmt = con.prepareStatement(sql);
 
-			stmt = con.prepareStatement(sql);
+            Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
 
-			Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
+            Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
 
-			Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
-			
-			stmt.setString(1, obj.getName());
-			
-			stmt.setObject(2, introduced);
-			
-			stmt.setObject(3, discontinued);
+            this.setParams(stmt, obj.getName(), introduced, discontinued, obj.getCompany().getId());
 
-			stmt.setObject(4, obj.getCompany().getId());
+            int res = stmt.executeUpdate();
 
-			stmt.setLong(5, obj.getId());
+            if (res > 0) {
+                logger.info("successfully created computer : " + obj.toString());
+            } else {
+                logger.warn("couldn't create computer : " + obj.toString());
+            }
 
-			int res = stmt.executeUpdate();
-			
-			if (res > 0) {
-				logger.info("successfully updated computer : " + obj.toString());
-			} else {
-				logger.warn("couldn't update computer : " + obj.toString());
-			}
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt);
+        }
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt);
-		}
-		
-		return obj;
-	}
+        return obj;
+    }
 
-	@Override
-	public void delete(Computer obj) {
-		String sql = "DELETE FROM computer WHERE id=?";
+    @Override
+    public Computer update(Computer obj) {
+        String sql = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=:?";
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
 
-		try {
+        try {
 
-			stmt = con.prepareStatement(sql);
+            stmt = con.prepareStatement(sql);
 
-			stmt.setLong(1, obj.getId());
+            Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
 
-			int res =stmt.executeUpdate();
+            Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
 
-			if (res > 0) {
-				logger.info("successfully deleted computer : " + obj.toString());
-			} else {
-				logger.warn("couldn't delete computer : " + obj.toString());
-			}
-			
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt);
-		}
-	}
+            setParams(stmt, obj.getName(), introduced, discontinued, obj.getCompany().getId(), obj.getId());
 
-	@Override
-	public ArrayList<Computer> findAll() {
+            int res = stmt.executeUpdate();
 
-		ArrayList<Computer> result = new ArrayList<>();
+            if (res > 0) {
+                logger.info("successfully updated computer : " + obj.toString());
+            } else {
+                logger.warn("couldn't update computer : " + obj.toString());
+            }
 
-		String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt);
+        }
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+        return obj;
+    }
 
-		try {
-			stmt = con.prepareStatement(sql);
+    @Override
+    public void delete(Computer obj) {
+        String sql = "DELETE FROM computer WHERE id=?";
 
-			rs = stmt.executeQuery();
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
 
-			while (rs.next()) {
+        try {
 
-				Long id = rs.getLong("id");
-				String name = rs.getString("name");
-				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-				Long companyId = rs.getLong("company_id");
-				String companyName = rs.getString("company_name");
+            stmt = con.prepareStatement(sql);
 
-				Company company = new Company(companyId, companyName);
-				Computer computer = new Computer(id, name, introduced, discontinued, company);
-				
-				result.add(computer);
+            this.setParams(stmt, obj.getId());
 
-			}
-			
-			if (result.size() > 0) {
-				logger.info("successfully retrieved " + result.size() + " computer(s)");
-			} else {
-				logger.warn("couldn't retrieve any computers");
-			}
+            int res = stmt.executeUpdate();
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, rs);
-		}
+            if (res > 0) {
+                logger.info("successfully deleted computer : " + obj.toString());
+            } else {
+                logger.warn("couldn't delete computer : " + obj.toString());
+            }
 
-		return result;
-	}
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt);
+        }
+    }
 
-	@Override
-	public ArrayList<Computer> findAll(int start, int nb) {
+    @Override
+    public ArrayList<Computer> findAll() {
 
-		ArrayList<Computer> result = new ArrayList<>();
-		
-		String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id LIMIT ?,?";
+        ArrayList<Computer> result = new ArrayList<>();
 
-		Connection con = ConnectionMySQL.getConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			stmt = con.prepareStatement(sql);
+        String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
-			stmt.setInt(1, start);
-			stmt.setInt(2, nb);
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-			rs = stmt.executeQuery();
+        try {
+            stmt = con.prepareStatement(sql);
 
-			while (rs.next()) {
+            rs = stmt.executeQuery();
 
-				Long id = rs.getLong("id");
-				String name = rs.getString("name");
-				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-				Long companyId = rs.getLong("company_id");
-				String companyName = rs.getString("company_name");
+            while (rs.next()) {
 
-				Company company = new Company(companyId, companyName);
-				Computer computer = new Computer(id, name, introduced, discontinued, company);
-				
-				result.add(computer);
+                Computer computer = mapper.map(rs);
+                
+                result.add(computer);
 
-			}
-			
-			if (result.size() > 0) {
-				logger.info("successfully retrieved " + result.size() + " computer(s)");
-			} else {
-				logger.warn("couldn't retrieve any computers");
-			}
+            }
 
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-		} finally {
-			this.closeAll(con, stmt, rs);
-		}
+            if (result.size() > 0) {
+                logger.info("successfully retrieved " + result.size() + " computer(s)");
+            } else {
+                logger.warn("couldn't retrieve any computers");
+            }
 
-		return result;
-	}
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
+
+        return result;
+    }
+
+    @Override
+    public ArrayList<Computer> findAll(int start, int nb) {
+
+        ArrayList<Computer> result = new ArrayList<>();
+
+        String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id LIMIT ?,?";
+
+        Connection con = ConnectionMySQL.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = con.prepareStatement(sql);
+
+            this.setParams(stmt, start, nb);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Computer computer = mapper.map(rs);
+
+                result.add(computer);
+
+            }
+
+            if (result.size() > 0) {
+                logger.info("successfully retrieved " + result.size() + " computer(s)");
+            } else {
+                logger.warn("couldn't retrieve any computers");
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
+
+        return result;
+    }
 
 }

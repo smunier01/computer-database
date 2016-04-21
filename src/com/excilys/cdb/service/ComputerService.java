@@ -18,27 +18,17 @@ import com.excilys.cdb.model.Computer;
  */
 public class ComputerService {
 
-	/**
-	 * 
-	 */
-	private ComputerDAO computerDAO;
+	private ComputerDAO computerDAO = ComputerDAO.getInstance();
 
-	/**
-	 * 
-	 */
-	private CompanyDAO companyDAO;
+	private CompanyDAO companyDAO = CompanyDAO.getInstance();
 
-	/**
-	 * 
-	 */
 	final static Logger logger = LoggerFactory.getLogger(ComputerService.class);
 	
 	/**
 	 * 
 	 */
 	public ComputerService() {
-		computerDAO = new ComputerDAO();
-		companyDAO = new CompanyDAO();
+
 	}
 
 	/**

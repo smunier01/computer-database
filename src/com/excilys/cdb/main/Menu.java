@@ -17,7 +17,7 @@ import com.excilys.cdb.service.ComputerService;
  * @author excilys
  */
 public class Menu {
-	
+
 	private static final int MAX_PER_PAGES = 20;
 
 	private static ArrayList<String> options;
@@ -25,7 +25,7 @@ public class Menu {
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	private Scanner sc = null;
-	
+
 	private ComputerService computerService;
 
 	public Menu(Scanner sc) {
@@ -56,7 +56,8 @@ public class Menu {
 	}
 
 	/**
-	 * print the menu, prompt the user to pick an answer, then route to the correct method
+	 * print the menu, prompt the user to pick an answer, then route to the
+	 * correct method
 	 * 
 	 * @return false if the user wants to quit
 	 */
@@ -73,11 +74,12 @@ public class Menu {
 		return pick(choice);
 
 	}
-		
+
 	/**
 	 * route to the right action based on the option picked
 	 * 
-	 * @param choice id of the option
+	 * @param choice
+	 *            id of the option
 	 * @return false if the user wants to quit
 	 */
 	public boolean pick(int choice) {
@@ -93,45 +95,19 @@ public class Menu {
 		switch (choice) {
 		// display the list of computers
 		case 1:
-			
+
 			start = 0;
-			
+
 			// loop for pagination
 			while (listComputers(start, MAX_PER_PAGES)) {
 				System.out.println("quit (0), next(1), previous(2)");
-				
+
 				Long a = null;
-				
+
 				while ((a = promptForLong(":")) < 0) {
 					System.out.println("invalid choice");
 				}
-				
-				if (a == 0) {
-					break;
-				} else if (a == 1) {
-					start += MAX_PER_PAGES;
-				} else if (a == 2 && start >= MAX_PER_PAGES) {
-					start -= MAX_PER_PAGES;
-				}
-				
-			}
-			
-			break;
-			
-		// display the list of companies
-		case 2:
-			start = 0;
-			
-			// loop for pagination
-			while (listCompanies(start, MAX_PER_PAGES)) {
-				System.out.println("quit (0), next(1), previous(2)");
-				
-				Long a = null;
-				
-				while ((a = promptForLong(":")) < 0) {
-					System.out.println("invalid choice");
-				}
-				
+
 				if (a == 0) {
 					break;
 				} else if (a == 1) {
@@ -141,12 +117,38 @@ public class Menu {
 				}
 
 			}
-			
+
 			break;
-		
+
+		// display the list of companies
+		case 2:
+			start = 0;
+
+			// loop for pagination
+			while (listCompanies(start, MAX_PER_PAGES)) {
+				System.out.println("quit (0), next(1), previous(2)");
+
+				Long a = null;
+
+				while ((a = promptForLong(":")) < 0) {
+					System.out.println("invalid choice");
+				}
+
+				if (a == 0) {
+					break;
+				} else if (a == 1) {
+					start += MAX_PER_PAGES;
+				} else if (a == 2 && start >= MAX_PER_PAGES) {
+					start -= MAX_PER_PAGES;
+				}
+
+			}
+
+			break;
+
 		// show details of an existing computer
 		case 3:
-			
+
 			// prompt for a Long (id)
 			while ((computerId = promptForLong("id : ")) <= 0) {
 				System.out.println("invalid id");
@@ -156,13 +158,14 @@ public class Menu {
 			showComputerDetails(computerId);
 
 			break;
-		
+
 		// create a new computer
 		case 4:
 			// prompt for a string (name)
-			while((name = promptForString("name : ")).equals("")) {
+			while ((name = promptForString("name : ")).equals("")) {
 				System.out.println("invalid name");
-			};
+			}
+			;
 
 			// prompt for a date for the column introduced
 			while ((introduced = promptForDate("introduced date (format yyyy-MM-dd) : ")) == null) {
@@ -202,19 +205,19 @@ public class Menu {
 			String tmpPromptIntro = "new introduced date (current : " + computer.getIntroduced().toString() + " ) : ";
 			String tmpPromptDisco = "new introduced date (current : " + computer.getDiscontinued().toString() + " ) : ";
 			String tmpPromptCompaId = "new company id (current : " + computer.getCompany().getId() + " ) : ";
-			
+
 			while ((name = promptForString(tmpPromptName)) == "") {
 				System.out.println("invalid name");
 			}
-			
+
 			while ((introduced = promptForDate(tmpPromptIntro)) == null) {
 				System.out.println("invalid date");
 			}
-			
+
 			while ((discontinued = promptForDate(tmpPromptDisco)) == null) {
 				System.out.println("invalid date");
 			}
-			
+
 			while ((companyId = promptForLong(tmpPromptCompaId)) <= -1) {
 				System.out.println("invalid id");
 			}
@@ -222,18 +225,18 @@ public class Menu {
 			this.computerService.updateComputer(computerId, name, introduced, discontinued, companyId);
 
 			break;
-			
+
 		// delete an existing computer
 		case 6:
-			
+
 			while ((computerId = promptForLong("id : ")) <= 0) {
 				System.out.println("invalid id");
 			}
-			
+
 			this.computerService.deleteComputer(computerId);
-			
+
 			break;
-			
+
 		// quit
 		default:
 			stop = true;
@@ -245,79 +248,83 @@ public class Menu {
 
 	/**
 	 * use the scanner to prompt for a Long
-	 * @param s String that will be use as an indication for the prompt
+	 * 
+	 * @param s
+	 *            String that will be use as an indication for the prompt
 	 * @return
 	 */
 	private Long promptForLong(String s) {
 		Long result;
-		
+
 		System.out.print(s);
-		
+
 		try {
 			result = sc.nextLong();
 		} catch (InputMismatchException e) {
 			sc.next();
 			result = -1L;
 		}
-		
+
 		return result;
 	}
 
 	/**
 	 * use the scanner to prompt for a String
-	 * @param s String that will be use as an indication for the prompt
+	 * 
+	 * @param s
+	 *            String that will be use as an indication for the prompt
 	 * @return
 	 */
 	private String promptForString(String s) {
 		String result;
-		
+
 		System.out.print(s);
-		
+
 		try {
 			result = sc.next();
 		} catch (InputMismatchException e) {
 			sc.next();
 			result = "";
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * use the scanner to prompt for a Date
-	 * @param s String that will be use as an indication for the prompt
-	 * @return null if the date is not valid, LocalDate.MIN
+	 * 
+	 * @param s
+	 *            String that will be use as an indication for the prompt
+	 * @return null if the date is not valid, LocalDate.MIN if empty date
 	 */
 	private LocalDate promptForDate(String s) {
 
 		System.out.print(s);
-		
+
 		String dateString = sc.next();
 
 		LocalDate date = null;
-		
-		
+
 		if ("".equals(dateString)) {
 			date = LocalDate.MIN;
 		} else {
 			try {
-
 				date = LocalDate.parse(dateString, formatter);
-
 			} catch (DateTimeParseException e) {
-
 				date = null;
-
 			}
 		}
-		
+
 		return date;
 	}
-	
+
 	/**
 	 * display the list of computers.
-	 * @param start offset to start
-	 * @param nb number of elements to return
+	 * 
+	 * @param start
+	 *            offset to start
+	 * @param nb
+	 *            number of elements to return
 	 * @return false if offset reached the end of the data
 	 */
 	public boolean listComputers(int start, int nb) {
@@ -326,15 +333,17 @@ public class Menu {
 		for (Computer c : computers) {
 			System.out.println(c.toString());
 		}
-		
+
 		return (computers.size() == nb);
 	}
 
 	/**
 	 * display the list of companies
 	 * 
-	 * @param start offset to start
-	 * @param nb number of elements to return
+	 * @param start
+	 *            offset to start
+	 * @param nb
+	 *            number of elements to return
 	 * @return false if offset reached the end of the data
 	 */
 	public boolean listCompanies(int start, int nb) {
@@ -343,15 +352,15 @@ public class Menu {
 		for (Company c : companies) {
 			System.out.println(c);
 		}
-		
+
 		return (companies.size() == nb);
 	}
-	
 
 	/**
 	 * show details of a computer based on its id
 	 * 
-	 * @param id id of the computer to show
+	 * @param id
+	 *            id of the computer to show
 	 */
 	public void showComputerDetails(Long id) {
 		Computer computer = this.computerService.getComputer(id);
