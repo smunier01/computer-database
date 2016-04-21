@@ -15,25 +15,58 @@ import org.slf4j.LoggerFactory;
 public abstract class DAO<T> {
 
 	final static Logger logger = LoggerFactory.getLogger(DAO.class);
-
+	
+	/**
+	 * find an object by its id
+	 * @param id of the object
+	 * @return 
+	 */
 	public abstract T find(Long id);
 
+	/**
+	 * create a new object
+	 * @param obj object to create
+	 * @return
+	 */
 	public abstract T create(T obj);
 
+	/**
+	 * update an object
+	 * @param obj object to update
+	 * @return
+	 */
 	public abstract T update(T obj);
 
+	/**
+	 * remove an object
+	 * @param obj object to remove
+	 */
 	public abstract void delete(T obj);
 
+	/**
+	 * return all object
+	 * @return arraylist containing the objects
+	 */
 	public abstract ArrayList<T> findAll();
-
+	
+	/**
+	 * return all object with an offset and a limit
+	 * @param start offset
+	 * @param nb number of object to return
+	 * @return arraylist containing the objects
+	 */
 	public abstract ArrayList<T> findAll(int start, int nb);
 
-	public void closeAll(AutoCloseable... ressources) {
-		for (AutoCloseable ressource : ressources) {
+	/**
+	 * close the list of resources given
+	 * @param resources resources to close
+	 */
+	public void closeAll(AutoCloseable... resources) {
+		for (AutoCloseable resource : resources) {
 			try {
-				ressource.close();
+				resource.close();
 			} catch (Exception e) {
-				logger.error("couldn't close ressource : " + ressource.toString());
+				logger.error("couldn't close resource : " + resource.toString());
 			}
 		}
 	}

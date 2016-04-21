@@ -19,9 +19,6 @@ public class CompanyDAO extends DAO<Company> {
 
 	private final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
-	/**
-	 * find a company by its ID
-	 */
 	@Override
 	public Company find(Long id) {
 		Company company = null;
@@ -60,9 +57,6 @@ public class CompanyDAO extends DAO<Company> {
 		return company;
 	}
 
-	/**
-	 * create a new company
-	 */
 	@Override
 	public Company create(Company obj) {
 
@@ -85,15 +79,12 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeAll(con, stmt, null);
+			this.closeAll(con, stmt);
 		}
 
 		return obj;
 	}
 
-	/**
-	 * modify values of a company
-	 */
 	@Override
 	public Company update(Company obj) {
 		String sql = "UPDATE company SET name=? WHERE id=:?";
@@ -119,15 +110,12 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeAll(con, stmt, null);
+			this.closeAll(con, stmt);
 		}
 
 		return obj;
 	}
 
-	/**
-	 * delete a company
-	 */
 	@Override
 	public void delete(Company obj) {
 		String sql = "DELETE FROM company WHERE id=?";
@@ -152,13 +140,10 @@ public class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeAll(con, stmt, null);
+			this.closeAll(con, stmt);
 		}
 	}
 
-	/**
-	 * return all companies
-	 */
 	@Override
 	public ArrayList<Company> findAll() {
 

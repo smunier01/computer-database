@@ -2,10 +2,7 @@ package com.excilys.cdb.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Singleton to connect to the database
@@ -36,5 +33,5 @@ public class ConnectionMySQL {
 
 		return con;
 	}
-
+	
 }

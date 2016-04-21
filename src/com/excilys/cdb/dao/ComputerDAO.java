@@ -21,9 +21,6 @@ public class ComputerDAO extends DAO<Computer> {
 
 	final static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
-	/**
-	 * find a computer by its ID
-	 */
 	@Override
 	public Computer find(Long id) {
 		Computer computer = null;
@@ -66,9 +63,6 @@ public class ComputerDAO extends DAO<Computer> {
 		return computer;
 	}
 
-	/**
-	 * create a new computer
-	 */
 	@Override
 	public Computer create(Computer obj) {
 		
@@ -108,9 +102,6 @@ public class ComputerDAO extends DAO<Computer> {
 		return obj;
 	}
 
-	/**
-	 * modify values of a computer
-	 */
 	@Override
 	public Computer update(Computer obj) {
 		String sql = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=:?";
@@ -147,15 +138,12 @@ public class ComputerDAO extends DAO<Computer> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeAll(con, stmt, null);
+			this.closeAll(con, stmt);
 		}
 		
 		return obj;
 	}
 
-	/**
-	 * delete a computer
-	 */
 	@Override
 	public void delete(Computer obj) {
 		String sql = "DELETE FROM computer WHERE id=?";
@@ -180,13 +168,10 @@ public class ComputerDAO extends DAO<Computer> {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		} finally {
-			this.closeAll(con, stmt, null);
+			this.closeAll(con, stmt);
 		}
 	}
 
-	/**
-	 * return all computers
-	 */
 	@Override
 	public ArrayList<Computer> findAll() {
 
@@ -207,15 +192,14 @@ public class ComputerDAO extends DAO<Computer> {
 
 				Long id = rs.getLong("id");
 				String name = rs.getString("name");
-
 				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
 				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
 				Company company = new Company(companyId, companyName);
 				Computer computer = new Computer(id, name, introduced, discontinued, company);
+				
 				result.add(computer);
 
 			}
@@ -258,15 +242,14 @@ public class ComputerDAO extends DAO<Computer> {
 
 				Long id = rs.getLong("id");
 				String name = rs.getString("name");
-
 				LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
 				LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-
 				Long companyId = rs.getLong("company_id");
 				String companyName = rs.getString("company_name");
 
 				Company company = new Company(companyId, companyName);
 				Computer computer = new Computer(id, name, introduced, discontinued, company);
+				
 				result.add(computer);
 
 			}

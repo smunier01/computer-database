@@ -56,7 +56,7 @@ public class Menu {
 	}
 
 	/**
-	 * prompt the user to pick an answer, then route to the correct method
+	 * print the menu, prompt the user to pick an answer, then route to the correct method
 	 * 
 	 * @return false if the user wants to quit
 	 */
@@ -233,6 +233,8 @@ public class Menu {
 			this.computerService.deleteComputer(computerId);
 			
 			break;
+			
+		// quit
 		default:
 			stop = true;
 			System.out.println("quitting");
