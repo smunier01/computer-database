@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.ComputerDAO;
-import com.excilys.cdb.mapper.ComputerResultSetMapper;
 
 /**
  * Singleton to connect to the database

@@ -83,6 +83,8 @@ public class ComputerDAO extends DAO<Computer> {
     @Override
     public Computer create(Computer obj) throws DAOException {
 
+        
+        
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
         Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
