@@ -7,7 +7,7 @@ import com.excilys.cdb.model.Company;
 
 public class CompanyResultSetMapper implements ResultSetMapper<Company> {
 
-    private static CompanyResultSetMapper instance = null;
+    private volatile static CompanyResultSetMapper instance = null;
 
     private CompanyResultSetMapper() {
         super();

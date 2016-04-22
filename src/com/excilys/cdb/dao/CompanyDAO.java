@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.jdbc.ConnectionMySQL;
+import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.mapper.CompanyResultSetMapper;
 import com.excilys.cdb.mapper.ComputerResultSetMapper;
 import com.excilys.cdb.model.Company;
@@ -21,9 +23,11 @@ public class CompanyDAO extends DAO<Company> {
 
     private final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
-    private CompanyResultSetMapper mapper = CompanyResultSetMapper.getInstance();
-
     private static volatile CompanyDAO instance = null;
+    
+    private final CompanyResultSetMapper mapper = CompanyResultSetMapper.getInstance();
+    
+    private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 
     private CompanyDAO() {
         super();
@@ -43,13 +47,13 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public Company find(Long id) {
+    public Company find(Long id) throws DAOException {
         Company company = null;
 
         String sql = "SELECT id, name FROM company WHERE id=?";
 
         PreparedStatement stmt = null;
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         ResultSet rs = null;
 
         try {
@@ -73,6 +77,7 @@ public class CompanyDAO extends DAO<Company> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
         }
@@ -81,9 +86,9 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public Company create(Company obj) {
+    public Company create(Company obj) throws DAOException {
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -96,11 +101,12 @@ public class CompanyDAO extends DAO<Company> {
             if (res > 0) {
                 logger.info("succefully created company : " + obj.getName());
             } else {
-                logger.info("couldn't create company : " + obj.getName());
+                logger.warn("couldn't create company : " + obj.getName());
             }
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
         }
@@ -109,10 +115,10 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public Company update(Company obj) {
+    public Company update(Company obj) throws DAOException {
         String sql = "UPDATE company SET name=? WHERE id=:?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -126,11 +132,12 @@ public class CompanyDAO extends DAO<Company> {
             if (res > 0) {
                 logger.info("succefully updated company : " + obj.getId());
             } else {
-                logger.info("couldn't update company : " + obj.getId());
+                logger.warn("couldn't update company : " + obj.getId());
             }
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
         }
@@ -139,10 +146,10 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public void delete(Company obj) {
+    public void delete(Company obj) throws DAOException {
         String sql = "DELETE FROM company WHERE id=?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -161,19 +168,20 @@ public class CompanyDAO extends DAO<Company> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
         }
     }
 
     @Override
-    public ArrayList<Company> findAll() {
+    public List<Company> findAll() throws DAOException {
 
-        ArrayList<Company> result = new ArrayList<>();
+        List<Company> result = new ArrayList<>();
 
         String sql = "SELECT id, name FROM company";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -198,6 +206,7 @@ public class CompanyDAO extends DAO<Company> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
         }
@@ -206,12 +215,12 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public ArrayList<Company> findAll(int start, int nb) {
+    public List<Company> findAll(int start, int nb) throws DAOException {
         ArrayList<Company> result = new ArrayList<>();
 
         String sql = "SELECT id, name FROM company LIMIT ?,?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -237,6 +246,7 @@ public class CompanyDAO extends DAO<Company> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
         }

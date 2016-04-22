@@ -5,33 +5,34 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.jdbc.ConnectionMySQL;
+import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.mapper.ComputerResultSetMapper;
 import com.excilys.cdb.mapper.LocalDateToTimestamp;
-import com.excilys.cdb.mapper.TimestampToLocalDate;
-import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDAO extends DAO<Computer> {
 
     final static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
-    private ComputerResultSetMapper mapper = ComputerResultSetMapper.getInstance();
+    private final ComputerResultSetMapper mapper = ComputerResultSetMapper.getInstance();
 
+    private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
+    
     private static volatile ComputerDAO instance = null;
 
     private ComputerDAO() {
         super();
     }
-    
+
     public static ComputerDAO getInstance() {
-        
+
         if (instance == null) {
             synchronized (ComputerResultSetMapper.class) {
                 if (instance == null) {
@@ -42,35 +43,27 @@ public class ComputerDAO extends DAO<Computer> {
 
         return instance;
     }
-    
+
     @Override
-    public Computer find(Long id) {
+    public Computer find(Long id) throws DAOException {
         Computer computer = null;
 
-        String sql = "SELECT c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
+        String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(sql);
 
-            // stmt.setLong(1, id);
             setParams(stmt, id);
 
             rs = stmt.executeQuery();
 
             if (rs.first()) {
-                String name = rs.getString("name");
 
-                LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-                LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-
-                Long companyId = rs.getLong("company_id");
-                String companyName = rs.getString("company_name");
-
-                computer = new Computer(id, name, introduced, discontinued, new Company(companyId, companyName));
+                computer = mapper.map(rs);
 
                 logger.info("succefully found computer of id : " + id);
             } else {
@@ -79,6 +72,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
         }
@@ -87,10 +81,10 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public Computer create(Computer obj) {
+    public Computer create(Computer obj) throws DAOException {
 
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -112,6 +106,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
         }
@@ -120,10 +115,10 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public Computer update(Computer obj) {
+    public Computer update(Computer obj) throws DAOException {
         String sql = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=:?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -146,6 +141,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
         }
@@ -154,10 +150,10 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public void delete(Computer obj) {
+    public void delete(Computer obj) throws DAOException {
         String sql = "DELETE FROM computer WHERE id=?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -176,19 +172,20 @@ public class ComputerDAO extends DAO<Computer> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
         }
     }
 
     @Override
-    public ArrayList<Computer> findAll() {
+    public List<Computer> findAll() throws DAOException {
 
         ArrayList<Computer> result = new ArrayList<>();
 
         String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -200,7 +197,7 @@ public class ComputerDAO extends DAO<Computer> {
             while (rs.next()) {
 
                 Computer computer = mapper.map(rs);
-                
+
                 result.add(computer);
 
             }
@@ -213,6 +210,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
         }
@@ -221,13 +219,13 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public ArrayList<Computer> findAll(int start, int nb) {
+    public List<Computer> findAll(int start, int nb) throws DAOException {
 
         ArrayList<Computer> result = new ArrayList<>();
 
         String sql = "select c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name from computer c left join company o on c.company_id=o.id LIMIT ?,?";
 
-        Connection con = ConnectionMySQL.getConnection();
+        Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -254,6 +252,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
         }
