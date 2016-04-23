@@ -43,8 +43,8 @@ public class ComputerService {
     public void deleteComputer(Long id) throws DAOException {
 
         if (id == null || id <= 0) {
-            logger.warn("can't delete computer with id : " + id);
-            return;
+        	logger.warn("can't delete computer with id : " + id);
+        	throw new IllegalArgumentException();
         }
 
         // we get the computer to see if it exists
@@ -76,7 +76,7 @@ public class ComputerService {
         if (id == null || id <= 0 || "".equals(name) || introduced == null || discontinued == null
                 || companyId == null) {
             logger.warn("wrong parameter when updating computer");
-            return;
+            throw new IllegalArgumentException();
         }
 
         // use a default company if id <= 0
@@ -112,7 +112,7 @@ public class ComputerService {
         // check parameters and return if something is wrong
         if ("".equals(name) || introduced == null || discontinued == null || companyId == null) {
             logger.warn("wrong parameter when creating computer");
-            return;
+            throw new IllegalArgumentException();
         }
 
         // use a default company if id <= 0
@@ -141,7 +141,7 @@ public class ComputerService {
             return this.companyDAO.find(id);
         } else {
             logger.warn("can't get company with id : " + id);
-            return null;
+            throw new IllegalArgumentException();
         }
     }
 
@@ -157,7 +157,7 @@ public class ComputerService {
             return this.computerDAO.find(id);
         } else {
             logger.warn("can't get computer with id : " + id);
-            return null;
+            throw new IllegalArgumentException();
         }
     }
 
@@ -175,7 +175,7 @@ public class ComputerService {
             return this.computerDAO.findAll(offset, nb);
         } else {
             logger.warn("can't get computers with offset = " + offset + " and nb = " + nb);
-            return new ArrayList<Computer>();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -193,7 +193,7 @@ public class ComputerService {
             return this.companyDAO.findAll(offset, nb);
         } else {
             logger.warn("can't get companies with offset = " + offset + " and nb = " + nb);
-            return new ArrayList<Company>();
+            throw new IllegalArgumentException();
         }
     }
 }

@@ -21,7 +21,7 @@ public class Company {
 	 * 
 	 */
 	public Company() {
-		this.id = 0L;
+		this.id = null;
 		this.name = ""; 
 	}
 	

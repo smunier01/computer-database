@@ -46,7 +46,8 @@ public class ComputerDAO extends DAO<Computer> {
 
     @Override
     public Computer find(Long id) throws DAOException {
-        Computer computer = null;
+        
+    	Computer computer = null;
 
         String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
@@ -83,14 +84,13 @@ public class ComputerDAO extends DAO<Computer> {
     @Override
     public Computer create(Computer obj) throws DAOException {
 
-        
-        
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
         Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement(sql);
+            stmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
 
@@ -101,7 +101,15 @@ public class ComputerDAO extends DAO<Computer> {
             int res = stmt.executeUpdate();
 
             if (res > 0) {
-                logger.info("successfully created computer : " + obj.toString());
+            	rs = stmt.getGeneratedKeys();
+            	if (rs.next()) {
+                    obj.setId(rs.getLong(1));
+                    logger.info("successfully created computer : " + obj.toString());
+                } else {
+                	logger.error("Computer created but no ID could be obtained.");
+                    throw new DAOException("Computer created but no ID could be obtained.");
+                }
+            	
             } else {
                 logger.warn("couldn't create computer : " + obj.toString());
             }
@@ -110,7 +118,7 @@ public class ComputerDAO extends DAO<Computer> {
             logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            this.closeAll(con, stmt, rs);
         }
 
         return obj;
@@ -118,7 +126,7 @@ public class ComputerDAO extends DAO<Computer> {
 
     @Override
     public Computer update(Computer obj) throws DAOException {
-        String sql = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=:?";
+        String sql = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 
         Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
