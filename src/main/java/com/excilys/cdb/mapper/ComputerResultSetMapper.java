@@ -34,7 +34,7 @@ public class ComputerResultSetMapper implements ResultSetMapper<Computer> {
         String name = rs.getString("name");
         LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
         LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-        Long companyId = rs.getLong("company_id");
+        Long companyId = rs.getLong("company_id") <=0 ? null : rs.getLong("company_id") ;
         String companyName = rs.getString("company_name");
 
         Company company = new Company(companyId, companyName);

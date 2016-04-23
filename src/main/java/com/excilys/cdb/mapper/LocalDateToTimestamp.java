@@ -9,7 +9,7 @@ public class LocalDateToTimestamp {
 
 		Timestamp timestamp;
 		
-		if (localDate.equals(LocalDate.MIN)) {
+		if (localDate == null || localDate.equals(LocalDate.MIN)) {
 			timestamp = null;
 		} else {
 			timestamp = Timestamp.valueOf(localDate.atStartOfDay());
