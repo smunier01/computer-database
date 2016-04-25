@@ -1,7 +1,5 @@
 package com.excilys.cdb.jdbc;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -16,7 +14,7 @@ import com.excilys.cdb.dao.ComputerDAO;
 
 /**
  * Singleton to connect to the database 5.1.38
- * 
+ *
  * @author excilys
  */
 public class ConnectionMySQLFactory {
@@ -32,24 +30,27 @@ public class ConnectionMySQLFactory {
     private static volatile ConnectionMySQLFactory instance = null;
 
     private ConnectionMySQLFactory() {
-        Properties props = new Properties();
+
+        final Properties props = new Properties();
         InputStream in = null;
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
+
             in = ConnectionMySQLFactory.class.getClassLoader().getResourceAsStream("mysql.properties");
             props.load(in);
 
-            url = props.getProperty("DB_URL");
-            user = props.getProperty("DB_USERNAME");
-            passwd = props.getProperty("DB_PASSWORD");
+            ConnectionMySQLFactory.url = props.getProperty("DB_URL");
+            ConnectionMySQLFactory.user = props.getProperty("DB_USERNAME");
+            ConnectionMySQLFactory.passwd = props.getProperty("DB_PASSWORD");
 
-        } catch (IOException e) {
+        } catch (final IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             try {
                 in.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
@@ -57,15 +58,15 @@ public class ConnectionMySQLFactory {
 
     public static ConnectionMySQLFactory getInstance() {
 
-        if (instance == null) {
+        if (ConnectionMySQLFactory.instance == null) {
             synchronized (ConnectionMySQLFactory.class) {
-                if (instance == null) {
-                    instance = new ConnectionMySQLFactory();
+                if (ConnectionMySQLFactory.instance == null) {
+                    ConnectionMySQLFactory.instance = new ConnectionMySQLFactory();
                 }
             }
         }
 
-        return instance;
+        return ConnectionMySQLFactory.instance;
     }
 
     public Connection create() {
@@ -73,8 +74,9 @@ public class ConnectionMySQLFactory {
         Connection con = null;
 
         try {
-            con = DriverManager.getConnection(url, user, passwd);
-        } catch (SQLException e) {
+            con = DriverManager.getConnection(ConnectionMySQLFactory.url, ConnectionMySQLFactory.user,
+                    ConnectionMySQLFactory.passwd);
+        } catch (final SQLException e) {
             e.printStackTrace();
         }
 

@@ -1,6 +1,9 @@
 package com.excilys.cdb.company;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -12,7 +15,7 @@ import com.excilys.cdb.model.Company;
 
 public class CompanyDAOTest {
 
-    private CompanyDAO companyDAO = CompanyDAO.getInstance();
+    private final CompanyDAO companyDAO = CompanyDAO.getInstance();
 
     @Test
     public void testFindShouldHaveValidId() throws DAOException {
@@ -32,17 +35,17 @@ public class CompanyDAOTest {
 
         // create a company
 
-        Company comp = new Company(null, "MyCompanyName");
+        final Company comp = new Company(null, "MyCompanyName");
 
         assertNotNull(comp);
-        Company a = companyDAO.create(comp);
+        final Company a = companyDAO.create(comp);
         assertNotNull(a);
-        Long id = a.getId();
+        final Long id = a.getId();
         assertTrue(id > 0L);
 
         // find the computer by its id
 
-        Company b = companyDAO.find(id);
+        final Company b = companyDAO.find(id);
 
         assertNotNull(b);
         assertEquals(comp.getName(), b.getName());
@@ -54,7 +57,7 @@ public class CompanyDAOTest {
 
         // try to find it again
 
-        Company c = companyDAO.find(id);
+        final Company c = companyDAO.find(id);
 
         assertNull(c);
     }
@@ -64,12 +67,12 @@ public class CompanyDAOTest {
 
         // create a company
 
-        Company comp = new Company(null, "MyCompanyName");
+        final Company comp = new Company(null, "MyCompanyName");
 
         assertNotNull(comp);
-        Company a = companyDAO.create(comp);
+        final Company a = companyDAO.create(comp);
         assertNotNull(a);
-        Long id = a.getId();
+        final Long id = a.getId();
         assertTrue(id > 0L);
 
         // modify the object
@@ -78,14 +81,14 @@ public class CompanyDAOTest {
 
         // update the db
 
-        Company b = companyDAO.update(a);
+        final Company b = companyDAO.update(a);
 
         assertEquals(b, a);
         assertEquals(id, b.getId());
 
         // retrieve from db
 
-        Company d = companyDAO.find(id);
+        final Company d = companyDAO.find(id);
 
         assertNotNull(d);
         assertEquals("NewCompanyName", d.getName());
@@ -96,14 +99,14 @@ public class CompanyDAOTest {
 
         // test the delete
 
-        Company e = companyDAO.find(id);
+        final Company e = companyDAO.find(id);
 
         assertNull(e);
     }
 
     @Test
     public void testFindAll() throws DAOException {
-        List<Company> companies = companyDAO.findAll();
+        final List<Company> companies = companyDAO.findAll();
 
         assertNotNull(companies);
         assertTrue(companies.size() > 0);
@@ -114,31 +117,31 @@ public class CompanyDAOTest {
 
         // count the number of computers with findAll
 
-        List<Company> companies1 = companyDAO.findAll();
+        final List<Company> companies1 = companyDAO.findAll();
 
         assertNotNull(companies1);
         assertTrue(companies1.size() > 0);
 
-        long sizeA = companies1.size();
+        final long sizeA = companies1.size();
 
         // create a computer
 
-        Company company = new Company(null, "MyCompanyName");
+        final Company company = new Company(null, "MyCompanyName");
 
         assertNotNull(company);
-        Company a = companyDAO.create(company);
+        final Company a = companyDAO.create(company);
         assertNotNull(a);
-        Long id = a.getId();
+        final Long id = a.getId();
         assertTrue(id > 0L);
 
         // count again, and compare the sizes
 
-        List<Company> companies2 = companyDAO.findAll();
+        final List<Company> companies2 = companyDAO.findAll();
 
         assertNotNull(companies2);
         assertTrue(companies2.size() > 0);
 
-        long sizeB = companies2.size();
+        final long sizeB = companies2.size();
 
         assertEquals(sizeA + 1L, sizeB);
 
@@ -148,20 +151,20 @@ public class CompanyDAOTest {
 
         // count and compare sizes
 
-        List<Company> companies3 = companyDAO.findAll();
+        final List<Company> companies3 = companyDAO.findAll();
 
         assertNotNull(companies3);
         assertTrue(companies3.size() > 0);
 
-        long sizeC = companies3.size();
+        final long sizeC = companies3.size();
 
         assertEquals(sizeA, sizeC);
     }
 
     @Test
     public void testFindAllWithLimit1() throws DAOException {
-        List<Company> companies1 = companyDAO.findAll(0, 20);
-        List<Company> companies2 = companyDAO.findAll();
+        final List<Company> companies1 = companyDAO.findAll(0, 20);
+        final List<Company> companies2 = companyDAO.findAll();
 
         assertNotNull(companies1);
         assertNotNull(companies2);
@@ -175,8 +178,8 @@ public class CompanyDAOTest {
 
     @Test
     public void testFindAllWithLimit2() throws DAOException {
-        List<Company> companies1 = companyDAO.findAll(20, 7);
-        List<Company> companies2 = companyDAO.findAll();
+        final List<Company> companies1 = companyDAO.findAll(20, 7);
+        final List<Company> companies2 = companyDAO.findAll();
 
         assertNotNull(companies1);
         assertNotNull(companies2);

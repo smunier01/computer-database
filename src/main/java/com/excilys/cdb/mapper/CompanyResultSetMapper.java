@@ -14,21 +14,21 @@ public class CompanyResultSetMapper implements ResultSetMapper<Company> {
     }
 
     public static CompanyResultSetMapper getInstance() {
-        if (instance == null) {
+        if (CompanyResultSetMapper.instance == null) {
             synchronized (ComputerResultSetMapper.class) {
-                if (instance == null) {
-                    instance = new CompanyResultSetMapper();
+                if (CompanyResultSetMapper.instance == null) {
+                    CompanyResultSetMapper.instance = new CompanyResultSetMapper();
                 }
             }
         }
-        
-        return instance;
+
+        return CompanyResultSetMapper.instance;
     }
-    
+
     @Override
-    public Company map(ResultSet rs) throws SQLException {
-        Long id = rs.getLong("id");
-        String name = rs.getString("name");
+    public Company map(final ResultSet rs) throws SQLException {
+        final Long id = rs.getLong("id");
+        final String name = rs.getString("name");
 
         return new Company(id, name);
     }

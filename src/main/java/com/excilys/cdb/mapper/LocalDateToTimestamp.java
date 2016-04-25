@@ -5,16 +5,16 @@ import java.time.LocalDate;
 
 public class LocalDateToTimestamp {
 
-	public static Timestamp convert(LocalDate localDate) {
+    public static Timestamp convert(final LocalDate localDate) {
 
-		Timestamp timestamp;
-		
-		if (localDate == null || localDate.equals(LocalDate.MIN)) {
-			timestamp = null;
-		} else {
-			timestamp = Timestamp.valueOf(localDate.atStartOfDay());
-		}
-		
-		return timestamp;
-	}
+        Timestamp timestamp;
+
+        if (localDate == null || localDate.equals(LocalDate.MIN)) {
+            timestamp = null;
+        } else {
+            timestamp = Timestamp.valueOf(localDate.atStartOfDay());
+        }
+
+        return timestamp;
+    }
 }

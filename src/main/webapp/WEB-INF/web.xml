@@ -4,13 +4,24 @@
 	version="3.0">
 
 	<display-name>Archetype Created Web Application</display-name>
+	
 	<servlet>
 		<servlet-name>ComputerServlet</servlet-name>
 		<servlet-class>com.excilys.cdb.servlets.ComputerServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>ComputerFormServlet</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.ComputerFormServlet</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>ComputerServlet</servlet-name>
-		<url-pattern>/hello</url-pattern>
+		<url-pattern>/sup1</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ComputerFormServlet</servlet-name>
+		<url-pattern>/computer/form</url-pattern>
 	</servlet-mapping>
 </web-app>

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,36 +25,36 @@ public class CompanyDAO extends DAO<Company> {
     private final static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
     private static volatile CompanyDAO instance = null;
-    
+
     private final CompanyResultSetMapper mapper = CompanyResultSetMapper.getInstance();
-    
+
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 
     private CompanyDAO() {
         super();
     }
-    
+
     public static CompanyDAO getInstance() {
-        
-        if (instance == null) {
+
+        if (CompanyDAO.instance == null) {
             synchronized (ComputerResultSetMapper.class) {
-                if (instance == null) {
-                    instance = new CompanyDAO();
+                if (CompanyDAO.instance == null) {
+                    CompanyDAO.instance = new CompanyDAO();
                 }
             }
         }
 
-        return instance;
+        return CompanyDAO.instance;
     }
 
     @Override
-    public Company find(Long id) throws DAOException {
+    public Company find(final Long id) throws DAOException {
         Company company = null;
 
-        String sql = "SELECT id, name FROM company WHERE id=?";
+        final String sql = "SELECT id, name FROM company WHERE id=?";
 
         PreparedStatement stmt = null;
-        Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         ResultSet rs = null;
 
         try {
@@ -65,18 +66,18 @@ public class CompanyDAO extends DAO<Company> {
 
             if (rs.first()) {
 
-                String name = rs.getString("name");
+                final String name = rs.getString("name");
 
                 company = new Company(id, name);
 
-                logger.info("successfully found company of id : " + id);
+                CompanyDAO.logger.info("successfully found company of id : " + id);
 
             } else {
-                logger.warn("couldn't find company of id : " + id);
+                CompanyDAO.logger.warn("couldn't find company of id : " + id);
             }
 
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (final SQLException e) {
+            CompanyDAO.logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
@@ -86,35 +87,35 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public Company create(Company obj) throws DAOException {
+    public Company create(final Company obj) throws DAOException {
 
-        String sql = "INSERT INTO company (name) VALUES (?)";
-        Connection con = connectionFactory.create();
+        final String sql = "INSERT INTO company (name) VALUES (?)";
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             this.setParams(stmt, obj.getName());
 
-            int res = stmt.executeUpdate();
+            final int res = stmt.executeUpdate();
 
             if (res > 0) {
                 rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
                     obj.setId(rs.getLong(1));
-                    logger.info("successfully created company : " + obj.toString());
+                    CompanyDAO.logger.info("successfully created company : " + obj.toString());
                 } else {
-                    logger.error("Company created but no ID could be obtained.");
+                    CompanyDAO.logger.error("Company created but no ID could be obtained.");
                     throw new DAOException("Company created but no ID could be obtained.");
                 }
             } else {
-                logger.warn("couldn't create company : " + obj.getName());
+                CompanyDAO.logger.warn("couldn't create company : " + obj.getName());
             }
 
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (final SQLException e) {
+            CompanyDAO.logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
@@ -124,10 +125,10 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public Company update(Company obj) throws DAOException {
-        String sql = "UPDATE company SET name=? WHERE id=?";
+    public Company update(final Company obj) throws DAOException {
+        final String sql = "UPDATE company SET name=? WHERE id=?";
 
-        Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -136,16 +137,16 @@ public class CompanyDAO extends DAO<Company> {
 
             this.setParams(stmt, obj.getName(), obj.getId());
 
-            int res = stmt.executeUpdate();
+            final int res = stmt.executeUpdate();
 
             if (res > 0) {
-                logger.info("succefully updated company : " + obj.getId());
+                CompanyDAO.logger.info("succefully updated company : " + obj.getId());
             } else {
-                logger.warn("couldn't update company : " + obj.getId());
+                CompanyDAO.logger.warn("couldn't update company : " + obj.getId());
             }
 
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (final SQLException e) {
+            CompanyDAO.logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
@@ -155,10 +156,10 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public void delete(Company obj) throws DAOException {
-        String sql = "DELETE FROM company WHERE id=?";
+    public void delete(final Company obj) throws DAOException {
+        final String sql = "DELETE FROM company WHERE id=?";
 
-        Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -167,16 +168,16 @@ public class CompanyDAO extends DAO<Company> {
 
             this.setParams(stmt, obj.getId());
 
-            int res = stmt.executeUpdate();
+            final int res = stmt.executeUpdate();
 
             if (res > 0) {
-                logger.info("succefully deleted company : " + obj.getName());
+                CompanyDAO.logger.info("succefully deleted company : " + obj.getName());
             } else {
-                logger.warn("couldn't delete company : " + obj.getName());
+                CompanyDAO.logger.warn("couldn't delete company : " + obj.getName());
             }
 
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (final SQLException e) {
+            CompanyDAO.logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
@@ -186,11 +187,11 @@ public class CompanyDAO extends DAO<Company> {
     @Override
     public List<Company> findAll() throws DAOException {
 
-        List<Company> result = new ArrayList<>();
+        final List<Company> result = new ArrayList<>();
 
-        String sql = "SELECT id, name FROM company";
+        final String sql = "SELECT id, name FROM company";
 
-        Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -201,20 +202,20 @@ public class CompanyDAO extends DAO<Company> {
 
             while (rs.next()) {
 
-                Company company = mapper.map(rs);
+                final Company company = this.mapper.map(rs);
 
                 result.add(company);
 
             }
 
             if (result.size() > 0) {
-                logger.info("successfully retrieved " + result.size() + " companies");
+                CompanyDAO.logger.info("successfully retrieved " + result.size() + " companies");
             } else {
-                logger.warn("couldn't retrieve any companies");
+                CompanyDAO.logger.warn("couldn't retrieve any companies");
             }
 
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (final SQLException e) {
+            CompanyDAO.logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
@@ -224,12 +225,12 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public List<Company> findAll(int start, int nb) throws DAOException {
-        ArrayList<Company> result = new ArrayList<>();
+    public List<Company> findAll(final int start, final int nb) throws DAOException {
+        final ArrayList<Company> result = new ArrayList<>();
 
-        String sql = "SELECT id, name FROM company LIMIT ?,?";
+        final String sql = "SELECT id, name FROM company LIMIT ?,?";
 
-        Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -242,19 +243,19 @@ public class CompanyDAO extends DAO<Company> {
 
             while (rs.next()) {
 
-                Company company = mapper.map(rs);
+                final Company company = this.mapper.map(rs);
 
                 result.add(company);
             }
 
             if (result.size() > 0) {
-                logger.info("successfully retrieved " + result.size() + " companies");
+                CompanyDAO.logger.info("successfully retrieved " + result.size() + " companies");
             } else {
-                logger.warn("couldn't retrieve any companies");
+                CompanyDAO.logger.warn("couldn't retrieve any companies");
             }
 
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (final SQLException e) {
+            CompanyDAO.logger.error(e.getMessage());
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt, rs);
@@ -263,4 +264,31 @@ public class CompanyDAO extends DAO<Company> {
         return result;
     }
 
+    @Override
+    public long count() throws DAOException {
+        final String sql = "SELECT count(id) as nb FROM company";
+
+        final Connection con = this.connectionFactory.create();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        long nb = 0;
+
+        try {
+            stmt = con.prepareStatement(sql);
+
+            rs = stmt.executeQuery();
+
+            if (rs.first()) {
+                nb = rs.getLong("nb");
+            }
+
+        } catch (final SQLException e) {
+            ComputerDAO.logger.error(e.getMessage());
+            throw new DAOException(e);
+        } finally {
+            this.closeAll(con, stmt, rs);
+        }
+
+        return nb;
+    }
 }

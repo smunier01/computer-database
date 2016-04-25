@@ -1,31 +1,25 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.exception.DAOException;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.ComputerService;
-
 /**
- * Servlet implementation class ComputerServlet
+ * Servlet implementation class ComputerFormServlet
  */
-public class ComputerServlet extends HttpServlet {
-
+@WebServlet("/ComputerFormServlet")
+public class ComputerFormServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    private final ComputerService computerService = new ComputerService();
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ComputerServlet() {
+    public ComputerFormServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -35,21 +29,9 @@ public class ComputerServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        request.getRequestDispatcher("/WEB-INF/views/addComputer.html").forward(request, response);
 
-        List<Computer> computers = null;
-        long nbComputers = 0;
-
-        try {
-            nbComputers = this.computerService.countComputers();
-            computers = this.computerService.getComputers(0, 20);
-        } catch (final DAOException e) {
-            e.printStackTrace();
-        }
-
-        request.setAttribute("nbComputers", nbComputers);
-        request.setAttribute("computers", computers);
-
-        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
     }
 
     /**
@@ -60,7 +42,6 @@ public class ComputerServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        System.out.println("Hello2");
         this.doGet(request, response);
     }
 
