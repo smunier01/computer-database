@@ -88,18 +88,27 @@ public class CompanyDAO extends DAO<Company> {
     @Override
     public Company create(Company obj) throws DAOException {
 
+        String sql = "INSERT INTO company (name) VALUES (?)";
         Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement("INSERT INTO company (name) VALUES(?)");
+            stmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             this.setParams(stmt, obj.getName());
 
             int res = stmt.executeUpdate();
 
             if (res > 0) {
-                logger.info("succefully created company : " + obj.getName());
+                rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    obj.setId(rs.getLong(1));
+                    logger.info("successfully created company : " + obj.toString());
+                } else {
+                    logger.error("Company created but no ID could be obtained.");
+                    throw new DAOException("Company created but no ID could be obtained.");
+                }
             } else {
                 logger.warn("couldn't create company : " + obj.getName());
             }
@@ -116,7 +125,7 @@ public class CompanyDAO extends DAO<Company> {
 
     @Override
     public Company update(Company obj) throws DAOException {
-        String sql = "UPDATE company SET name=? WHERE id=:?";
+        String sql = "UPDATE company SET name=? WHERE id=?";
 
         Connection con = connectionFactory.create();
         PreparedStatement stmt = null;

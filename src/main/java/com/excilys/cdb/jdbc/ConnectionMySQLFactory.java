@@ -1,8 +1,13 @@
 package com.excilys.cdb.jdbc;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,28 +15,48 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dao.ComputerDAO;
 
 /**
- * Singleton to connect to the database
- * 5.1.38
+ * Singleton to connect to the database 5.1.38
+ * 
  * @author excilys
  */
 public class ConnectionMySQLFactory {
 
     final static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-    
-	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 
-	private static String user = "admincdb";
+    private static String url;
 
-	private static String passwd = "qwerty1234";
+    private static String user;
 
-	private static volatile ConnectionMySQLFactory instance = null;
-	
+    private static String passwd;
+
+    private static volatile ConnectionMySQLFactory instance = null;
+
     private ConnectionMySQLFactory() {
-        super();
+        Properties props = new Properties();
+        InputStream in = null;
+
+        try {
+
+            in = ConnectionMySQLFactory.class.getClassLoader().getResourceAsStream("mysql.properties");
+            props.load(in);
+
+            url = props.getProperty("DB_URL");
+            user = props.getProperty("DB_USERNAME");
+            passwd = props.getProperty("DB_PASSWORD");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
-    
+
     public static ConnectionMySQLFactory getInstance() {
-        
+
         if (instance == null) {
             synchronized (ConnectionMySQLFactory.class) {
                 if (instance == null) {
@@ -43,17 +68,17 @@ public class ConnectionMySQLFactory {
         return instance;
     }
 
-	public Connection create() {
+    public Connection create() {
 
-		Connection con = null;
+        Connection con = null;
 
-		try {
-			con = DriverManager.getConnection(url, user, passwd);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        try {
+            con = DriverManager.getConnection(url, user, passwd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-		return con;
-	}
-	
+        return con;
+    }
+
 }
