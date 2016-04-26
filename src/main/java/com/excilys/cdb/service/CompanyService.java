@@ -61,7 +61,7 @@ public enum CompanyService {
 				throw new ServiceException(e);
 			}
 		} else {
-			ComputerService.logger.warn("illegal argument when retrieving company, id : " + id);
+			ComputerService.LOGGER.warn("illegal argument when retrieving company, id : " + id);
 			throw new IllegalArgumentException();
 		}
 
@@ -88,7 +88,7 @@ public enum CompanyService {
 				throw new ServiceException(e);
 			}
 		} else {
-			ComputerService.logger.warn("can't get companies with offset = " + offset + " and nb = " + nb);
+			ComputerService.LOGGER.warn("can't get companies with offset = " + offset + " and nb = " + nb);
 			throw new IllegalArgumentException();
 		}
 

@@ -32,11 +32,12 @@
 					<form action="form" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label class="control-label" for="computerName">Computer name</label> <input
-									type="text" class="form-control" name="computerName"
-									id="computerName" placeholder="Computer name"
-									value="${computerName}">
-<span id="helpBlock2" class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+								<label class="control-label" for="computerName">Computer
+									name</label> <input type="text" class="form-control"
+									name="computerName" id="computerName"
+									placeholder="Computer name" value="${computerName}"> <span
+									id="helpBlock2" class="help-block">A block of help text
+									that breaks onto a new line and may extend beyond one line.</span>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
