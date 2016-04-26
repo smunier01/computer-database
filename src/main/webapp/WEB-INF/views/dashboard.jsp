@@ -45,8 +45,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="${pageContext.request.contextPath}/computer/form" method="POST">
-			<input type="hidden" name="method" value="DELETE" />
+		<form id="deleteForm" action="${pageContext.request.contextPath}/computer/delete" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 

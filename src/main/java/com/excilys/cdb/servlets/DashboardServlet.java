@@ -15,7 +15,7 @@ import com.excilys.cdb.service.ComputerService;
 /**
  * Servlet implementation class ComputerServlet
  */
-public class ComputerServlet extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,11 +24,13 @@ public class ComputerServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ComputerServlet() {
+    public DashboardServlet() {
         super();
     }
 
     /**
+     * get the list of computers to display on the dashboard
+     *
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
@@ -39,6 +41,8 @@ public class ComputerServlet extends HttpServlet {
         List<Computer> computers = null;
         long nbComputers = 0;
 
+        // offset should be optional and 0 by default
+
         final String offsetStr = request.getParameter("offset");
         int offset = 0;
 
@@ -47,12 +51,18 @@ public class ComputerServlet extends HttpServlet {
         }
 
         try {
+            // we need the number of computers for the pagination
             nbComputers = this.computerService.countComputers();
-            System.out.println(offset);
+
+            // list of computers
             computers = this.computerService.getComputers(offset, 20);
+
         } catch (final DAOException e) {
-            e.printStackTrace();
+            // internal error if DAOexception
+            request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
         }
+
+        // set the attributes for the jsp
 
         request.setAttribute("currentOffset", offset);
         request.setAttribute("maxPerPages", 20);
@@ -61,17 +71,4 @@ public class ComputerServlet extends HttpServlet {
 
         request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
     }
-
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
-     */
-    @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        System.out.println("Hello2");
-        this.doGet(request, response);
-    }
-
 }

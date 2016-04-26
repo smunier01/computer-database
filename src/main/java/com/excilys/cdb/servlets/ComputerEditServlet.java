@@ -30,12 +30,10 @@ public class ComputerEditServlet extends HttpServlet {
      */
     public ComputerEditServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * Display the form to edit an existing computer
      */
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
@@ -53,10 +51,14 @@ public class ComputerEditServlet extends HttpServlet {
 
             try {
 
+                // we need the list of companies for the dropdown menu
                 companies = this.computerService.getCompanies();
+
+                // computer to display the current values
                 computer = this.computerService.getComputer(id);
 
                 if (computer == null) {
+                    // if this computer id doesn't exist, 404 page
                     request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
                 } else {
                     request.setAttribute("companies", companies);
@@ -74,8 +76,7 @@ public class ComputerEditServlet extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * Edit an existing computer
      */
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
@@ -119,7 +120,7 @@ public class ComputerEditServlet extends HttpServlet {
 
                 this.computerService.updateComputer(idComputer, nameStr, introduced, discontinued, companyId);
 
-                response.sendRedirect(request.getContextPath() + "/sup2");
+                response.sendRedirect(request.getContextPath() + "/dashboard");
 
             }
 
