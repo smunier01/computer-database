@@ -18,15 +18,15 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/sup2"> Application -
+			<a class="navbar-brand"
+				href="${pageContext.request.contextPath}/dashboard"> Application -
 				Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
-
 		<div class="container">
-			<h1 id="homeTitle">${nbComputers} Computers found</h1>
+			<h1 id="homeTitle">${nbComputers}Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -38,14 +38,17 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="${pageContext.request.contextPath}/computer/form">Add
+					<a class="btn btn-success" id="addComputer"
+						href="${pageContext.request.contextPath}/computer/add">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="${pageContext.request.contextPath}/computer/delete" method="POST">
+		<form id="deleteForm"
+			action="${pageContext.request.contextPath}/computer/delete"
+			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -78,7 +81,9 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href="${pageContext.request.contextPath}/computer/edit?id=${computer.id}" onclick="">${computer.name}</a></td>
+							<td><a
+								href="${pageContext.request.contextPath}/computer/edit?id=${computer.id}"
+								onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
 							<td>${computer.company.name}</td>
@@ -92,15 +97,16 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?offset=${currentOffset - 20}" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
+				<li><a href="?offset=${currentOffset - 20}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<li><a href="?offset=10">1</a></li>
 				<li><a href="?offset=20">2</a></li>
 				<li><a href="?offset=30">3</a></li>
 				<li><a href="?offset=40">4</a></li>
 				<li><a href="?offset=50">5</a></li>
-				<li><a href="?offset=${currentOffset + 20}" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="?offset=${currentOffset + 20}" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
