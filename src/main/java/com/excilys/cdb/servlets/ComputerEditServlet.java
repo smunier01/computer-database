@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.util.Util;
 
 /**
@@ -21,113 +22,118 @@ import com.excilys.cdb.util.Util;
  */
 @WebServlet("/ComputerEditServlet")
 public class ComputerEditServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService = new ComputerService();
+	private final ComputerService computerService;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ComputerEditServlet() {
-        super();
-    }
+	private final CompanyService companyService;
 
-    /**
-     * Display the form to edit an existing computer
-     */
-    @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ComputerEditServlet() {
+		super();
 
-        // show form to edit a computer
+		computerService = ComputerService.getInstance();
+		companyService = CompanyService.getInstance();
+	}
 
-        final String idStr = request.getParameter("id");
+	/**
+	 * Display the form to edit an existing computer
+	 */
+	@Override
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
+			throws ServletException, IOException {
 
-        if (idStr != null) {
+		// show form to edit a computer
 
-            final long id = Long.parseLong(idStr);
-            Computer computer = null;
-            List<Company> companies;
+		final String idStr = request.getParameter("id");
 
-            try {
+		if (idStr != null) {
 
-                // we need the list of companies for the dropdown menu
-                companies = this.computerService.getCompanies();
+			final long id = Long.parseLong(idStr);
+			Computer computer = null;
+			List<Company> companies;
 
-                // computer to display the current values
-                computer = this.computerService.getComputer(id);
+			try {
 
-                if (computer == null) {
-                    // if this computer id doesn't exist, 404 page
-                    request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
-                } else {
-                    request.setAttribute("companies", companies);
-                    request.setAttribute("computer", computer);
-                    request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
-                }
+				// we need the list of companies for the dropdown menu
+				companies = companyService.getCompanies();
 
-            } catch (final DAOException e) {
-                request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-            }
-        } else {
-            request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
-        }
+				// computer to display the current values
+				computer = computerService.getComputer(id);
 
-    }
+				if (computer == null) {
+					// if this computer id doesn't exist, 404 page
+					request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
+				} else {
+					request.setAttribute("companies", companies);
+					request.setAttribute("computer", computer);
+					request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+				}
 
-    /**
-     * Edit an existing computer
-     */
-    @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+			} catch (final ServiceException e) {
+				request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+			}
+		} else {
+			request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
+		}
 
-        // execute the update on the computer
+	}
 
-        final String idStr = request.getParameter("id");
+	/**
+	 * Edit an existing computer
+	 */
+	@Override
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+			throws ServletException, IOException {
 
-        // check if the computer we are trying to update exists.
+		// execute the update on the computer
 
-        Computer computer = null;
+		final String idStr = request.getParameter("id");
 
-        try {
+		// check if the computer we are trying to update exists.
 
-            final String nameStr = request.getParameter("computerName");
-            final String introducedStr = request.getParameter("introduced");
-            final String discontinuedStr = request.getParameter("discontinued");
-            final String companyIdStr = request.getParameter("companyId");
+		Computer computer = null;
 
-            // check if the computer we are trying to update exists.
+		try {
 
-            final long idComputer = Long.parseLong(idStr);
-            computer = this.computerService.getComputer(idComputer);
+			final String nameStr = request.getParameter("computerName");
+			final String introducedStr = request.getParameter("introduced");
+			final String discontinuedStr = request.getParameter("discontinued");
+			final String companyIdStr = request.getParameter("companyId");
 
-            final long companyId = Long.parseLong(companyIdStr);
+			// check if the computer we are trying to update exists.
 
-            // check if parameters are valid
+			final long idComputer = Long.parseLong(idStr);
+			computer = computerService.getComputer(idComputer);
 
-            if (nameStr == null && !"".equals(nameStr)) {
+			final long companyId = Long.parseLong(companyIdStr);
 
-                request.setAttribute("computer", computer);
-                request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+			// check if parameters are valid
 
-            } else {
+			if ((nameStr == null) && !"".equals(nameStr)) {
 
-                final LocalDate introduced = Util.stringToLocalDate(introducedStr);
-                final LocalDate discontinued = Util.stringToLocalDate(discontinuedStr);
+				request.setAttribute("computer", computer);
+				request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 
-                // update the computer object
+			} else {
 
-                this.computerService.updateComputer(idComputer, nameStr, introduced, discontinued, companyId);
+				final LocalDate introduced = Util.stringToLocalDate(introducedStr);
+				final LocalDate discontinued = Util.stringToLocalDate(discontinuedStr);
 
-                response.sendRedirect(request.getContextPath() + "/dashboard");
+				// update the computer object
 
-            }
+				computerService.updateComputer(idComputer, nameStr, introduced, discontinued, companyId);
 
-        } catch (final DAOException e) {
-            request.setAttribute("error", "could not update computer");
-            request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
-        }
-    }
+				response.sendRedirect(request.getContextPath() + "/dashboard");
+
+			}
+
+		} catch (final ServiceException e) {
+			request.setAttribute("error", "could not update computer");
+			request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+		}
+	}
 
 }

@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.ServiceException;
 
 /**
  * Servlet implementation class ComputerDeleteServlet
@@ -16,43 +16,45 @@ import com.excilys.cdb.service.ComputerService;
 @WebServlet("/ComputerDeleteServlet")
 public class ComputerDeleteServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    ComputerService computerService = new ComputerService();
+	ComputerService computerService;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ComputerDeleteServlet() {
-        super();
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ComputerDeleteServlet() {
+		super();
 
-    /**
-     * delete a list of computers
-     */
-    @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+		computerService = ComputerService.getInstance();
+	}
 
-        final String selection = request.getParameter("selection");
+	/**
+	 * delete a list of computers
+	 */
+	@Override
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+			throws ServletException, IOException {
 
-        if (selection != null) {
-            final String[] ids = selection.split(",");
-            for (final String s : ids) {
+		final String selection = request.getParameter("selection");
 
-                final long id = Long.parseLong(s);
+		if (selection != null) {
+			final String[] ids = selection.split(",");
+			for (final String s : ids) {
 
-                if (id > 0) {
-                    try {
-                        this.computerService.deleteComputer(id);
-                    } catch (final DAOException e) {
-                        request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-                    }
-                }
-            }
-        }
+				final long id = Long.parseLong(s);
 
-        response.sendRedirect(request.getContextPath() + "/dashboard");
-    }
+				if (id > 0) {
+					try {
+						computerService.deleteComputer(id);
+					} catch (final ServiceException e) {
+						request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+					}
+				}
+			}
+		}
+
+		response.sendRedirect(request.getContextPath() + "/dashboard");
+	}
 
 }

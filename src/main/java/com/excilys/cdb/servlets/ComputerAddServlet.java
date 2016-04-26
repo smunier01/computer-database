@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.util.Util;
 
 /**
@@ -22,80 +23,87 @@ import com.excilys.cdb.util.Util;
 @WebServlet("/ComputerFormServlet")
 public class ComputerAddServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService = new ComputerService();
+	private final ComputerService computerService;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ComputerAddServlet() {
-        super();
-    }
+	private final CompanyService companyService;
 
-    /**
-     * Display the form to create a new computer
-     */
-    @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ComputerAddServlet() {
 
-        // to display the add computer form, we only need the list of companies
+		super();
 
-        List<Company> companies;
+		computerService = ComputerService.getInstance();
+		companyService = CompanyService.getInstance();
 
-        try {
-            companies = this.computerService.getCompanies();
-        } catch (final DAOException e) {
-            companies = new ArrayList<>();
-        }
+	}
 
-        request.setAttribute("companies", companies);
+	/**
+	 * Display the form to create a new computer
+	 */
+	@Override
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
+			throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+		// to display the add computer form, we only need the list of companies
 
-    }
+		List<Company> companies;
 
-    /**
-     * Create a new computer
-     */
-    @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+		try {
+			companies = companyService.getCompanies();
+		} catch (final ServiceException e) {
+			companies = new ArrayList<>();
+		}
 
-        final String nameStr = request.getParameter("computerName");
-        final String introducedStr = request.getParameter("introduced");
-        final String discontinuedStr = request.getParameter("discontinued");
-        final String companyIdStr = request.getParameter("companyId");
+		request.setAttribute("companies", companies);
 
-        // only the computer name is required
-        if (nameStr == null && !"".equals(nameStr)) {
+		request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
-            // re-display the form if parameters are wrong
+	}
 
-            request.setAttribute("computerName", nameStr);
-            request.setAttribute("introduced", introducedStr);
-            request.setAttribute("discontinued", discontinuedStr);
-            request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+	/**
+	 * Create a new computer
+	 */
+	@Override
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+			throws ServletException, IOException {
 
-        } else {
+		final String nameStr = request.getParameter("computerName");
+		final String introducedStr = request.getParameter("introduced");
+		final String discontinuedStr = request.getParameter("discontinued");
+		final String companyIdStr = request.getParameter("companyId");
 
-            final LocalDate introduced = Util.stringToLocalDate(introducedStr);
-            final LocalDate discontinued = Util.stringToLocalDate(discontinuedStr);
-            final long companyId = Long.parseLong(companyIdStr);
+		// only the computer name is required
+		if ((nameStr == null) && !"".equals(nameStr)) {
 
-            try {
+			// re-display the form if parameters are wrong
 
-                // create the computer and redirect to the main page
+			request.setAttribute("computerName", nameStr);
+			request.setAttribute("introduced", introducedStr);
+			request.setAttribute("discontinued", discontinuedStr);
+			request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
-                this.computerService.createComputer(nameStr, introduced, discontinued, companyId);
-                response.sendRedirect(request.getContextPath() + "/dashboard");
+		} else {
 
-            } catch (final DAOException e) {
+			final LocalDate introduced = Util.stringToLocalDate(introducedStr);
+			final LocalDate discontinued = Util.stringToLocalDate(discontinuedStr);
+			final long companyId = Long.parseLong(companyIdStr);
 
-                request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+			try {
 
-            }
-        }
-    }
+				// create the computer and redirect to the main page
+
+				computerService.createComputer(nameStr, introduced, discontinued, companyId);
+				response.sendRedirect(request.getContextPath() + "/dashboard");
+
+			} catch (final ServiceException e) {
+
+				request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+
+			}
+		}
+	}
 }
