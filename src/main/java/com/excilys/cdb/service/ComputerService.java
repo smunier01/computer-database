@@ -191,8 +191,18 @@ public class ComputerService {
     }
 
     /**
+     * get the entire company list with no offset / limit
+     *
+     * @return list of company
+     * @throws DAOException
+     */
+    public List<Company> getCompanies() throws DAOException {
+        return this.companyDAO.findAll();
+    }
+
+    /**
      * get the number of computers
-     * 
+     *
      * @return number of computers
      * @throws DAOException
      */

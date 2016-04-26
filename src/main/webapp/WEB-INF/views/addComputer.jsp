@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,40 +18,42 @@
 				Computer Database </a>
 		</div>
 	</header>
+
 	<section id="main">
+
 		<div class="container">
+
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">id: 0</div>
-					<h1>Edit Computer</h1>
-
-					<form action="editComputer" method="POST">
-						<input type="hidden" value="0" />
+					<h1>Add Computer</h1>
+					<form action="form" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									placeholder="Computer name">
+									type="text" class="form-control" name="computerName" id="computerName"
+									placeholder="Computer name" value="${computerName}">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									placeholder="Introduced date">
+									type="date" class="form-control" name="introduced" id="introduced"
+									placeholder="Introduced date" value="${introduced}">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									placeholder="Discontinued date">
+									type="date" class="form-control" name="discontinued" id="discontinued"
+									placeholder="Discontinued date" value="${computerName}">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId">
-									<option value="0">--</option>
+									class="form-control" name="companyId" id="companyId">
+									<c:forEach items="${companies}" var="company">
+										<option value="${company.id}">${company.name}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
+							<input type="submit" value="Add" class="btn btn-primary">
 							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
 						</div>
 					</form>

@@ -39,13 +39,23 @@ public class ComputerServlet extends HttpServlet {
         List<Computer> computers = null;
         long nbComputers = 0;
 
+        final String offsetStr = request.getParameter("offset");
+        int offset = 0;
+
+        if (offsetStr != null) {
+            offset = Integer.parseInt(offsetStr);
+        }
+
         try {
             nbComputers = this.computerService.countComputers();
-            computers = this.computerService.getComputers(0, 20);
+            System.out.println(offset);
+            computers = this.computerService.getComputers(offset, 20);
         } catch (final DAOException e) {
             e.printStackTrace();
         }
 
+        request.setAttribute("currentOffset", offset);
+        request.setAttribute("maxPerPages", 20);
         request.setAttribute("nbComputers", nbComputers);
         request.setAttribute("computers", computers);
 
