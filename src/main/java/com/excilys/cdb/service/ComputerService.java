@@ -11,6 +11,7 @@ import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.util.PageParameters;
 
 /**
  *
@@ -63,18 +64,18 @@ public enum ComputerService {
     public void deleteComputer(final Long id) throws ServiceException {
 
         if ((id == null) || (id <= 0)) {
-            LOGGER.warn("can't delete computer with id : " + id);
+            ComputerService.LOGGER.warn("can't delete computer with id : " + id);
             throw new IllegalArgumentException();
         }
 
         try {
             // we get the computer to see if it exists
-            final Computer computer = computerDAO.find(id);
+            final Computer computer = this.computerDAO.find(id);
 
             if (computer != null) {
-                computerDAO.delete(computer);
+                this.computerDAO.delete(computer);
             }
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
     }
@@ -100,21 +101,21 @@ public enum ComputerService {
 
         // TODO introduced & discontinued should be valid even if null
         if ((id == null) || (id <= 0) || "".equals(name) || (introduced == null) || (discontinued == null)) {
-            LOGGER.warn("wrong parameter when updating computer");
+            ComputerService.LOGGER.warn("wrong parameter when updating computer");
             throw new IllegalArgumentException();
         }
 
         try {
             // use a default company if id <= 0 or id == null*
             final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+                    : this.companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
 
-            computerDAO.update(computer);
+            this.computerDAO.update(computer);
 
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
 
@@ -139,20 +140,20 @@ public enum ComputerService {
 
         // check parameters and return if something is wrong
         if ("".equals(name) || (introduced == null) || (discontinued == null) || (companyId == null)) {
-            LOGGER.warn("wrong parameter when creating computer");
+            ComputerService.LOGGER.warn("wrong parameter when creating computer");
             throw new IllegalArgumentException();
         }
 
         try {
             // use a default company if id <= 0 or id == null
             final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+                    : this.companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
 
-            computerDAO.create(computer);
-        } catch (DAOException e) {
+            this.computerDAO.create(computer);
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
 
@@ -170,13 +171,13 @@ public enum ComputerService {
     public Computer getComputer(final Long id) throws ServiceException {
 
         if ((id == null) || (id <= 0)) {
-            LOGGER.warn("can't get computer with id : " + id);
+            ComputerService.LOGGER.warn("can't get computer with id : " + id);
             throw new IllegalArgumentException();
         }
 
         try {
-            return computerDAO.find(id);
-        } catch (DAOException e) {
+            return this.computerDAO.find(id);
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
 
@@ -185,23 +186,21 @@ public enum ComputerService {
     /**
      * get list of computers.
      *
-     * @param offset
-     *            offset
-     * @param nb
-     *            number max of computers to return
+     * @param page
+     *            page parameters
      * @return the list of computers
      * @throws ServiceException
      *             exception
      */
-    public List<Computer> getComputers(final int offset, final int nb) throws ServiceException {
-        if ((offset < 0) || (nb <= 0)) {
-            LOGGER.warn("can't get computers with offset = " + offset + " and nb = " + nb);
+    public List<Computer> getComputers(final PageParameters page) throws ServiceException {
+        if ((page.getPageNumber() < 0) || (page.getSize() <= 0)) {
+            ComputerService.LOGGER.warn("can't get computers with page = " + page);
             throw new IllegalArgumentException();
         }
 
         try {
-            return computerDAO.findAll(offset, nb);
-        } catch (DAOException e) {
+            return this.computerDAO.findAll(page);
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
     }
@@ -215,8 +214,8 @@ public enum ComputerService {
      */
     public long countComputers() throws ServiceException {
         try {
-            return computerDAO.count();
-        } catch (DAOException e) {
+            return this.computerDAO.count();
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
     }

@@ -5,24 +5,16 @@ import java.sql.SQLException;
 
 import com.excilys.cdb.model.Company;
 
-public class CompanyResultSetMapper implements ResultSetMapper<Company> {
+public enum CompanyResultSetMapper implements ResultSetMapper<Company> {
 
-    private volatile static CompanyResultSetMapper instance = null;
+    INSTANCE;
 
-    private CompanyResultSetMapper() {
-        super();
+    CompanyResultSetMapper() {
+
     }
 
     public static CompanyResultSetMapper getInstance() {
-        if (CompanyResultSetMapper.instance == null) {
-            synchronized (ComputerResultSetMapper.class) {
-                if (CompanyResultSetMapper.instance == null) {
-                    CompanyResultSetMapper.instance = new CompanyResultSetMapper();
-                }
-            }
-        }
-
-        return CompanyResultSetMapper.instance;
+        return INSTANCE;
     }
 
     @Override

@@ -7,6 +7,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.util.PageParameters;
+
 /**
  * abstract class describing methods of a dao object.
  *
@@ -75,16 +77,14 @@ public abstract class DAO<T> {
 
     /**
      * return all object with an offset and a limit.
-     *
-     * @param start
-     *            offset
-     * @param nb
-     *            number of object to return
-     * @return list containing the objects
+     * 
+     * @param params
+     *            page parameters
+     * @return the list of object
      * @throws DAOException
      *             exception
      */
-    public abstract List<T> findAll(int start, int nb) throws DAOException;
+    public abstract List<T> findAll(PageParameters params) throws DAOException;
 
     /**
      * count the number of object in the table.
@@ -109,7 +109,7 @@ public abstract class DAO<T> {
                 try {
                     resource.close();
                 } catch (final Exception e) {
-                    LOGGER.error("couldn't close resource : " + resource.toString());
+                    DAO.LOGGER.error("couldn't close resource : " + resource.toString());
                 }
             }
         }

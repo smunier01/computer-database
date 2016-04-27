@@ -11,66 +11,70 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceException;
+import com.excilys.cdb.util.PageParameters;
 
 /**
  * Servlet implementation class ComputerServlet
  */
 public class DashboardServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final ComputerService computerService;
+    private final ComputerService computerService;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DashboardServlet() {
-		super();
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public DashboardServlet() {
+        super();
 
-		computerService = ComputerService.getInstance();
-	}
+        this.computerService = ComputerService.getInstance();
+    }
 
-	/**
-	 * get the list of computers to display on the dashboard
-	 *
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	@Override
-	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * get the list of computers to display on the dashboard
+     *
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    @Override
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException, IOException {
 
-		List<Computer> computers = null;
-		long nbComputers = 0;
+        List<Computer> computers = null;
+        long nbComputers = 0;
 
-		// offset should be optional and 0 by default
+        // offset should be optional and 0 by default
 
-		final String offsetStr = request.getParameter("offset");
-		int offset = 0;
+        final String pageStr = request.getParameter("page");
+        int page = 0;
 
-		if (offsetStr != null) {
-			offset = Integer.parseInt(offsetStr);
-		}
+        if (pageStr != null) {
+            page = Integer.parseInt(pageStr);
+        }
 
-		try {
-			// we need the number of computers for the pagination
-			nbComputers = computerService.countComputers();
+        final String psizeStr = request.getParameter("psize");
+        final int pageSize = psizeStr != null ? Integer.parseInt(psizeStr) : 10;
 
-			// list of computers
-			computers = computerService.getComputers(offset, 20);
+        try {
+            // we need the number of computers for the pagination
+            nbComputers = this.computerService.countComputers();
 
-		} catch (final ServiceException e) {
-			// internal error if DAOexception
-			request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-		}
+            // list of computers
+            computers = this.computerService.getComputers(new PageParameters(pageSize, page));
 
-		// set the attributes for the jsp
+        } catch (final ServiceException e) {
+            // internal error if DAOexception
+            request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+        }
 
-		request.setAttribute("currentOffset", offset);
-		request.setAttribute("maxPerPages", 20);
-		request.setAttribute("nbComputers", nbComputers);
-		request.setAttribute("computers", computers);
+        // set the attributes for the jsp
 
-		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-	}
+        request.setAttribute("currentPage", page);
+        request.setAttribute("maxPerPages", pageSize);
+        request.setAttribute("nbComputers", nbComputers);
+        request.setAttribute("computers", computers);
+
+        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+    }
 }

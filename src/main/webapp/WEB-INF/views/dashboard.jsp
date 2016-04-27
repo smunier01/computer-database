@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="/WEB-INF/hello.tld" prefix="test" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputers}Computers found</h1>
+			<h1 id="homeTitle">${nbComputers} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -97,17 +98,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?offset=${currentOffset - 20}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
-				<li><a href="?offset=10">1</a></li>
-				<li><a href="?offset=20">2</a></li>
-				<li><a href="?offset=30">3</a></li>
-				<li><a href="?offset=40">4</a></li>
-				<li><a href="?offset=50">5</a></li>
-				<li><a href="?offset=${currentOffset + 20}" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-				</a></li>
+				<test:pagination current="${currentPage}" count="${nbComputers / maxPerPages}"/>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

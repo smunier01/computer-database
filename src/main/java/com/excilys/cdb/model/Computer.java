@@ -14,11 +14,11 @@ public class Computer {
      * default constructor for a computer.
      */
     public Computer() {
-        id = 0L;
-        name = "";
-        introduced = null;
-        discontinued = null;
-        company = new Company();
+        this.id = 0L;
+        this.name = "";
+        this.introduced = null;
+        this.discontinued = null;
+        this.company = new Company();
     }
 
     /**
@@ -57,16 +57,18 @@ public class Computer {
         private Company company = new Company();
 
         /**
-         *
+         * default constructor for the builder.
          */
         public ComputerBuilder() {
 
         }
 
         /**
+         * id setter.
          *
          * @param id
-         * @return
+         *            id of the computer
+         * @return instance of the builder
          */
         public ComputerBuilder id(final Long id) {
             this.id = id;
@@ -74,9 +76,11 @@ public class Computer {
         }
 
         /**
+         * name setter.
          *
          * @param name
-         * @return
+         *            name of the computer
+         * @return instance of the builder
          */
         public ComputerBuilder name(final String name) {
             this.name = name;
@@ -84,9 +88,11 @@ public class Computer {
         }
 
         /**
+         * introduced date setter.
          *
          * @param introduced
-         * @return
+         *            introduced date of the computer
+         * @return instance of the builder
          */
         public ComputerBuilder introduced(final LocalDate introduced) {
             this.introduced = introduced;
@@ -94,9 +100,11 @@ public class Computer {
         }
 
         /**
+         * discontinued date setter.
          *
          * @param discontinued
-         * @return
+         *            discontinued date of the computer
+         * @return instance of the builder
          */
         public ComputerBuilder discontinued(final LocalDate discontinued) {
             this.discontinued = discontinued;
@@ -104,9 +112,11 @@ public class Computer {
         }
 
         /**
+         * company setter.
          *
          * @param company
-         * @return
+         *            company of the computer
+         * @return instance of the builder
          */
         public ComputerBuilder company(final Company company) {
             this.company = company;
@@ -114,123 +124,81 @@ public class Computer {
         }
 
         /**
+         * build the computer.
          *
-         * @return
+         * @return instance of the computer created by the builder
          */
         public Computer build() {
-            return new Computer(id, name, introduced, discontinued, company);
+            return new Computer(this.id, this.name, this.introduced, this.discontinued, this.company);
         }
     }
 
-    /**
-     *
-     * @return
-     */
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    /**
-     *
-     * @param id
-     */
     public void setId(final Long id) {
         this.id = id;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    /**
-     *
-     * @param name
-     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /**
-     *
-     * @return
-     */
     public LocalDate getIntroduced() {
-        return introduced;
+        return this.introduced;
     }
 
-    /**
-     *
-     * @param introduced
-     */
     public void setIntroduced(final LocalDate introduced) {
         this.introduced = introduced;
     }
 
-    /**
-     *
-     * @return
-     */
     public LocalDate getDiscontinued() {
-        return discontinued;
+        return this.discontinued;
     }
 
-    /**
-     *
-     * @param discontinued
-     */
     public void setDiscontinued(final LocalDate discontinued) {
         this.discontinued = discontinued;
     }
 
-    /**
-     *
-     * @return
-     */
     public Company getCompany() {
-        return company;
+        return this.company;
     }
 
-    /**
-     *
-     * @param company
-     */
     public void setCompany(final Company company) {
         this.company = company;
     }
 
-    /**
-     *
-     */
     @Override
     public String toString() {
 
-        final String intro = introduced == null ? "null" : introduced.toString();
-        final String discon = discontinued == null ? "null" : discontinued.toString();
+        final String intro = this.introduced == null ? "null" : this.introduced.toString();
+        final String discon = this.discontinued == null ? "null" : this.discontinued.toString();
 
-        return id + " " + name + " " + intro + " " + discon + " " + company.toString();
+        return this.id + " " + this.name + " " + intro + " " + discon + " " + this.company.toString();
     }
 
     /**
-     * auto-generated hashCode
+     * auto-generated hashCode.
      */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((company == null) ? 0 : company.hashCode());
-        result = (prime * result) + ((discontinued == null) ? 0 : discontinued.hashCode());
-        result = (prime * result) + ((id == null) ? 0 : id.hashCode());
-        result = (prime * result) + ((introduced == null) ? 0 : introduced.hashCode());
-        result = (prime * result) + ((name == null) ? 0 : name.hashCode());
+        result = (prime * result) + ((this.company == null) ? 0 : this.company.hashCode());
+        result = (prime * result) + ((this.discontinued == null) ? 0 : this.discontinued.hashCode());
+        result = (prime * result) + ((this.id == null) ? 0 : this.id.hashCode());
+        result = (prime * result) + ((this.introduced == null) ? 0 : this.introduced.hashCode());
+        result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
         return result;
     }
 
     /**
-     * auto-generated equals
+     * auto-generated equals.
      */
     @Override
     public boolean equals(final Object obj) {
@@ -240,43 +208,43 @@ public class Computer {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Computer other = (Computer) obj;
-        if (company == null) {
+        if (this.company == null) {
             if (other.company != null) {
                 return false;
             }
-        } else if (!company.equals(other.company)) {
+        } else if (!this.company.equals(other.company)) {
             return false;
         }
-        if (discontinued == null) {
+        if (this.discontinued == null) {
             if (other.discontinued != null) {
                 return false;
             }
-        } else if (!discontinued.equals(other.discontinued)) {
+        } else if (!this.discontinued.equals(other.discontinued)) {
             return false;
         }
-        if (id == null) {
+        if (this.id == null) {
             if (other.id != null) {
                 return false;
             }
-        } else if (!id.equals(other.id)) {
+        } else if (!this.id.equals(other.id)) {
             return false;
         }
-        if (introduced == null) {
+        if (this.introduced == null) {
             if (other.introduced != null) {
                 return false;
             }
-        } else if (!introduced.equals(other.introduced)) {
+        } else if (!this.introduced.equals(other.introduced)) {
             return false;
         }
-        if (name == null) {
+        if (this.name == null) {
             if (other.name != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (!this.name.equals(other.name)) {
             return false;
         }
         return true;
