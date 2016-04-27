@@ -11,50 +11,50 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceException;
 
 /**
- * Servlet implementation class ComputerDeleteServlet
+ * Servlet implementation class ComputerDeleteServlet.
  */
 @WebServlet("/ComputerDeleteServlet")
 public class ComputerDeleteServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	ComputerService computerService;
+    private final ComputerService computerService;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ComputerDeleteServlet() {
-		super();
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ComputerDeleteServlet() {
+        super();
 
-		computerService = ComputerService.getInstance();
-	}
+        this.computerService = ComputerService.getInstance();
+    }
 
-	/**
-	 * delete a list of computers
-	 */
-	@Override
-	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * delete a list of computers.
+     */
+    @Override
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException, IOException {
 
-		final String selection = request.getParameter("selection");
+        final String selection = request.getParameter("selection");
 
-		if (selection != null) {
-			final String[] ids = selection.split(",");
-			for (final String s : ids) {
+        if (selection != null) {
+            final String[] ids = selection.split(",");
+            for (final String s : ids) {
 
-				final long id = Long.parseLong(s);
+                final long id = Long.parseLong(s);
 
-				if (id > 0) {
-					try {
-						computerService.deleteComputer(id);
-					} catch (final ServiceException e) {
-						request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-					}
-				}
-			}
-		}
+                if (id > 0) {
+                    try {
+                        this.computerService.deleteComputer(id);
+                    } catch (final ServiceException e) {
+                        request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+                    }
+                }
+            }
+        }
 
-		response.sendRedirect(request.getContextPath() + "/dashboard");
-	}
+        response.sendRedirect(request.getContextPath() + "/dashboard");
+    }
 
 }

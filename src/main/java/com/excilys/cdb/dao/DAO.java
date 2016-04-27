@@ -18,9 +18,6 @@ import com.excilys.cdb.util.PageParameters;
  */
 public abstract class DAO<T> {
 
-    /**
-     * logger.
-     */
     static final Logger LOGGER = LoggerFactory.getLogger(DAO.class);
 
     /**
@@ -77,7 +74,7 @@ public abstract class DAO<T> {
 
     /**
      * return all object with an offset and a limit.
-     * 
+     *
      * @param params
      *            page parameters
      * @return the list of object

@@ -5,6 +5,13 @@ import java.time.LocalDate;
 
 public class LocalDateToTimestamp {
 
+    /**
+     * convert a LocalDate to timestamp.
+     *
+     * @param localDate
+     *            LocalDate to convert
+     * @return the timestamp
+     */
     public static Timestamp convert(final LocalDate localDate) {
 
         Timestamp timestamp;

@@ -14,7 +14,7 @@ import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.util.PageParameters;
 
 /**
- * Servlet implementation class ComputerServlet
+ * Servlet implementation class ComputerServlet.
  */
 public class DashboardServlet extends HttpServlet {
 
@@ -32,7 +32,7 @@ public class DashboardServlet extends HttpServlet {
     }
 
     /**
-     * get the list of computers to display on the dashboard
+     * get the list of computers to display on the dashboard.
      *
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)

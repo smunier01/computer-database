@@ -11,10 +11,18 @@ public enum ComputerResultSetMapper implements ResultSetMapper<Computer> {
 
     INSTANCE;
 
+    /**
+     * default constructor for the singleton.
+     */
     ComputerResultSetMapper() {
 
     }
 
+    /**
+     * public accessor for the singleton.
+     *
+     * @return return unique instance of the singleton
+     */
     public static ComputerResultSetMapper getInstance() {
         return INSTANCE;
     }

@@ -9,10 +9,18 @@ public enum CompanyResultSetMapper implements ResultSetMapper<Company> {
 
     INSTANCE;
 
+    /**
+     * default constructor for the singleton.
+     */
     CompanyResultSetMapper() {
 
     }
 
+    /**
+     * public accessor for the singleton.
+     *
+     * @return return unique instance of the singleton
+     */
     public static CompanyResultSetMapper getInstance() {
         return INSTANCE;
     }
