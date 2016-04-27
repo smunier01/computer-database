@@ -2,6 +2,7 @@ package com.excilys.cdb.servlets;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
@@ -54,11 +57,16 @@ public class ComputerEditServlet extends HttpServlet {
             final long id = Long.parseLong(idStr);
             Computer computer = null;
             List<Company> companies;
+            final List<CompanyDTO> companyDtos = new ArrayList<>();
 
             try {
 
                 // we need the list of companies for the dropdown menu
                 companies = this.companyService.getCompanies();
+
+                for (final Company c : companies) {
+                    companyDtos.add(new CompanyDTO(c));
+                }
 
                 // computer to display the current values
                 computer = this.computerService.getComputer(id);
@@ -67,8 +75,8 @@ public class ComputerEditServlet extends HttpServlet {
                     // if this computer id doesn't exist, 404 page
                     request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
                 } else {
-                    request.setAttribute("companies", companies);
-                    request.setAttribute("computer", computer);
+                    request.setAttribute("companies", companyDtos);
+                    request.setAttribute("computer", new ComputerDTO(computer));
                     request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
                 }
 
@@ -114,7 +122,7 @@ public class ComputerEditServlet extends HttpServlet {
 
             if ((nameStr == null) && !"".equals(nameStr)) {
 
-                request.setAttribute("computer", computer);
+                request.setAttribute("computer", new ComputerDTO(computer));
                 request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 
             } else {

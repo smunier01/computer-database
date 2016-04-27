@@ -1,6 +1,7 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceException;
@@ -68,12 +70,21 @@ public class DashboardServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
         }
 
+        // create list of ComputerDTO
+
+        final List<ComputerDTO> dtos = new ArrayList<>();
+
+        for (final Computer c : computers) {
+            dtos.add(new ComputerDTO(c));
+        }
+
         // set the attributes for the jsp
 
         request.setAttribute("currentPage", page);
+        request.setAttribute("nbPages", nbComputers / pageSize);
         request.setAttribute("maxPerPages", pageSize);
         request.setAttribute("nbComputers", nbComputers);
-        request.setAttribute("computers", computers);
+        request.setAttribute("computers", dtos);
 
         request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
     }

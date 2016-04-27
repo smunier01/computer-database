@@ -29,7 +29,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="form" method="POST">
+					<form action="${pageContext.request.contextPath}/computer/add" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<label class="control-label" for="computerName">Computer

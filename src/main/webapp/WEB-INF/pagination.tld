@@ -7,7 +7,7 @@
 		<tag-class>com.excilys.cdb.taglib.PaginationTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
-			<rtexprvalue>true</rtexprvalue> 
+			<rtexprvalue>true</rtexprvalue>
 			<name>current</name>
 		</attribute>
 		<attribute>

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -58,7 +59,15 @@ public class ComputerAddServlet extends HttpServlet {
             companies = new ArrayList<>();
         }
 
-        request.setAttribute("companies", companies);
+        // convert it to DTOs
+
+        final List<CompanyDTO> companyDtos = new ArrayList<>();
+
+        for (final Company c : companies) {
+            companyDtos.add(new CompanyDTO(c));
+        }
+
+        request.setAttribute("companies", companyDtos);
 
         request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
@@ -80,6 +89,8 @@ public class ComputerAddServlet extends HttpServlet {
         if ((nameStr == null) && !"".equals(nameStr)) {
 
             // re-display the form if parameters are wrong
+
+            // TODO use request.setAttribute("computer", dto);
 
             request.setAttribute("computerName", nameStr);
             request.setAttribute("introduced", introducedStr);

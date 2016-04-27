@@ -54,7 +54,7 @@ public class PaginationTag extends SimpleTagSupport {
             builder.append("<li class=\"disabled\"><a>&hellip;</a></li>");
         }
 
-        for (int i = indexStart; i < indexStop; i++) {
+        for (int i = indexStart; i <= indexStop; i++) {
             if (this.current == i) {
                 builder.append("<li class=\"active\"><a href=\"?page=" + i + "\"> " + (i + 1) + " </a></li>");
             } else {
@@ -62,7 +62,7 @@ public class PaginationTag extends SimpleTagSupport {
             }
         }
 
-        if (indexStop < this.count) {
+        if (indexStop < (this.count - 1)) {
             builder.append("<li class=\"disabled\"><a>&hellip;</a></li>");
             builder.append("<li><a href=\"?page=" + (this.count - 1) + "\">" + this.count + "</a></li>");
         }

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="/WEB-INF/pagination.tld" prefix="mylib" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,7 +88,7 @@
 								onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
-							<td>${computer.company.name}</td>
+							<td>${computer.companyName}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -98,13 +99,14 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<mylib:pagination current="${currentPage}" count="${nbComputers / maxPerPages}"/>
+				<!--<mylib:pagination current="${currentPage}" count="${nbComputers / maxPerPages}"/>-->
+				<mylib2:pagination2 current="${currentPage}" count="${nbPages}" psize="${maxPerPages}"/>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<a href="?psize=10" class="btn btn-default">10</a>
+				<a href="?psize=50" class="btn btn-default">50</a>
+				<a href="?psize=100" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>
