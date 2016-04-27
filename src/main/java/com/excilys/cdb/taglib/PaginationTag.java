@@ -1,4 +1,4 @@
-package taglib;
+package com.excilys.cdb.taglib;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  *
  * @author excilys
  */
-public class HelloTag extends SimpleTagSupport {
+public class PaginationTag extends SimpleTagSupport {
 
     private int current;
 

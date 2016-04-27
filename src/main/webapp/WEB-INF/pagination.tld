@@ -4,7 +4,7 @@
 	<short-name>Example TLD</short-name>
 	<tag>
 		<name>pagination</name>
-		<tag-class>taglib.HelloTag</tag-class>
+		<tag-class>com.excilys.cdb.taglib.PaginationTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<rtexprvalue>true</rtexprvalue> 

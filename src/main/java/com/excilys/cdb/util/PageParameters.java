@@ -7,14 +7,8 @@ package com.excilys.cdb.util;
  */
 public class PageParameters {
 
-    /**
-     * size of the page.
-     */
     private long size;
 
-    /**
-     * number of the page.
-     */
     private long pageNumber;
 
     /**

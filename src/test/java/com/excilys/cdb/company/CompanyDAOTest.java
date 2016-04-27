@@ -1,10 +1,5 @@
 package com.excilys.cdb.company;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.junit.Assert;
@@ -13,7 +8,6 @@ import org.junit.Test;
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
 
 public class CompanyDAOTest {
