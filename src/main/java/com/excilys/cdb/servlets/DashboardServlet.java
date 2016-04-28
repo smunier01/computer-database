@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Computer;
@@ -43,6 +44,9 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
+        // true is used to create a new session if one doesn't already exist
+        final HttpSession session = request.getSession(true);
+
         List<Computer> computers = null;
         long nbComputers = 0;
 
@@ -55,15 +59,30 @@ public class DashboardServlet extends HttpServlet {
             page = Integer.parseInt(pageStr);
         }
 
-        final String psizeStr = request.getParameter("psize");
-        final int pageSize = psizeStr != null ? Integer.parseInt(psizeStr) : 10;
+        // psize (size of a page) is optional and 10 by default
+        // we store it in the session variable
+
+        int psize = 0;
+
+        try {
+            psize = Integer.parseInt(request.getParameter("psize"));
+            session.setAttribute("psize", psize);
+        } catch (final NumberFormatException ignored) {
+            final Object spsize = session.getAttribute("psize");
+
+            if (spsize == null) {
+                psize = 10;
+            } else {
+                psize = (Integer) spsize;
+            }
+        }
 
         try {
             // we need the number of computers for the pagination
             nbComputers = this.computerService.countComputers();
 
             // list of computers
-            computers = this.computerService.getComputers(new PageParameters(pageSize, page));
+            computers = this.computerService.getComputers(new PageParameters(psize, page));
 
         } catch (final IllegalArgumentException e) {
             response.sendRedirect(request.getContextPath() + "/dashboard");
@@ -83,8 +102,8 @@ public class DashboardServlet extends HttpServlet {
         // set the attributes for the jsp
 
         request.setAttribute("currentPage", page);
-        request.setAttribute("nbPages", nbComputers / pageSize);
-        request.setAttribute("maxPerPages", pageSize);
+        request.setAttribute("nbPages", nbComputers / psize);
+        request.setAttribute("maxPerPages", psize);
         request.setAttribute("nbComputers", nbComputers);
         request.setAttribute("computers", dtos);
 
