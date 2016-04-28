@@ -65,8 +65,10 @@ public class DashboardServlet extends HttpServlet {
             // list of computers
             computers = this.computerService.getComputers(new PageParameters(pageSize, page));
 
+        } catch (final IllegalArgumentException e) {
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
         } catch (final ServiceException e) {
-            // internal error if DAOexception
             request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
         }
 

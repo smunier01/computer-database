@@ -106,4 +106,8 @@ public class PageParameters {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + "]";
+    }
 }

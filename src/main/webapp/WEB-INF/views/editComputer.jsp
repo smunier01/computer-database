@@ -55,9 +55,9 @@
 								<label for="companyId">Company</label> <select
 									class="form-control" name="companyId" id="companyId">
 									<c:forEach items="${companies}" var="company">
-										${computer.company.id}
+										${computer.companyId}
 										<option value="${company.id}"
-											${company.id == computer.company.id ? 'selected' : ''}>${company.name}</option>
+											${company.id == computer.companyId ? 'selected' : ''}>${company.name}</option>
 
 									</c:forEach>
 								</select>
