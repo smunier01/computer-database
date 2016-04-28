@@ -30,17 +30,15 @@ $(function() {
 	}();
 
 	$('#computerName').on('input', function() {
-		console.log("wtf");
+
 		var elem = $(this);
 		var parent = elem.parent().first();
 
 		if (!validateString(elem.val())) {
-			console.log(elem.val());
 			parent.addClass('has-error');
 			parent.removeClass('has-success');
 			name = false;
 		} else {
-			console.log("aa");
 			parent.addClass('has-success');
 			parent.removeClass('has-error');
 			name = true;

@@ -22,19 +22,10 @@ public enum ComputerService {
 
     INSTANCE;
 
-    /**
-     * logger.
-     */
     static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
-    /**
-     * instance of the computerDAO class.
-     */
     private final ComputerDAO computerDAO = ComputerDAO.getInstance();
 
-    /**
-     *
-     */
     private final CompanyDAO companyDAO = CompanyDAO.getInstance();
 
     /**
@@ -70,10 +61,10 @@ public enum ComputerService {
 
         try {
             // we get the computer to see if it exists
-            final Computer computer = computerDAO.find(id);
+            final Computer computer = this.computerDAO.find(id);
 
             if (computer != null) {
-                computerDAO.delete(computer);
+                this.computerDAO.delete(computer);
             }
         } catch (final DAOException e) {
             throw new ServiceException(e);
@@ -108,12 +99,12 @@ public enum ComputerService {
         try {
             // use a default company if id <= 0 or id == null*
             final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+                    : this.companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
 
-            computerDAO.update(computer);
+            this.computerDAO.update(computer);
 
         } catch (final DAOException e) {
             throw new ServiceException(e);
@@ -150,12 +141,12 @@ public enum ComputerService {
         try {
             // use a default company if id <= 0 or id == null
             final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+                    : this.companyDAO.find(companyId);
 
             computer = new Computer.ComputerBuilder().name(name).introduced(introduced).discontinued(discontinued)
                     .company(company).build();
 
-            computerDAO.create(computer);
+            this.computerDAO.create(computer);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -180,7 +171,7 @@ public enum ComputerService {
         }
 
         try {
-            return computerDAO.find(id);
+            return this.computerDAO.find(id);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -203,7 +194,7 @@ public enum ComputerService {
         }
 
         try {
-            return computerDAO.findAll(page);
+            return this.computerDAO.findAll(page);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -218,7 +209,7 @@ public enum ComputerService {
      */
     public long countComputers() throws ServiceException {
         try {
-            return computerDAO.count();
+            return this.computerDAO.count();
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }

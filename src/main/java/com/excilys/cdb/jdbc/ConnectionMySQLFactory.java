@@ -21,24 +21,12 @@ public class ConnectionMySQLFactory {
 
     static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
-    /**
-     * url of the database with options.
-     */
     private static String url;
 
-    /**
-     * username to connect to the database.
-     */
     private static String user;
 
-    /**
-     * password of the user.
-     */
     private static String passwd;
 
-    /**
-     * unique instance of our factory.
-     */
     private static volatile ConnectionMySQLFactory instance = null;
 
     /**
@@ -64,15 +52,15 @@ public class ConnectionMySQLFactory {
 
         } catch (final IOException e) {
             // TODO not sure what to do here ?
-            LOGGER.error("could not read mysql.properties");
-        } catch (ClassNotFoundException e) {
+            ConnectionMySQLFactory.LOGGER.error("could not read mysql.properties");
+        } catch (final ClassNotFoundException e) {
             // TODO not sure what to do here ?
-            LOGGER.error("mysql jdbc driver could not be loaded");
+            ConnectionMySQLFactory.LOGGER.error("mysql jdbc driver could not be loaded");
         } finally {
             try {
                 in.close();
             } catch (final IOException e) {
-                LOGGER.warn("could not close InputStream of the mysql property file");
+                ConnectionMySQLFactory.LOGGER.warn("could not close InputStream of the mysql property file");
             }
         }
     }
@@ -109,7 +97,7 @@ public class ConnectionMySQLFactory {
                     ConnectionMySQLFactory.passwd);
         } catch (final SQLException e) {
             // TODO not sure what to do here
-            LOGGER.error("could not get Connection");
+            ConnectionMySQLFactory.LOGGER.error("could not get Connection");
         }
 
         return con;

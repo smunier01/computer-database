@@ -9,11 +9,17 @@ import com.excilys.cdb.model.Computer;
  * @author excilys
  */
 public class ComputerDTO {
+
     private String id;
+
     private String name;
+
     private String introduced;
+
     private String discontinued;
+
     private String companyId;
+
     private String companyName;
 
     /**

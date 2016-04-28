@@ -8,7 +8,9 @@ import com.excilys.cdb.model.Company;
  * @author excilys
  */
 public class CompanyDTO {
+
     private String id;
+
     private String name;
 
     /**

@@ -24,28 +24,16 @@ import com.excilys.cdb.util.PageParameters;
  */
 public class CompanyDAO extends DAO<Company> {
 
-    /**
-     *
-     */
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
-    /**
-     *
-     */
     private static volatile CompanyDAO instance = null;
 
-    /**
-     *
-     */
     private final CompanyResultSetMapper companyMapper = CompanyResultSetMapper.getInstance();
 
-    /**
-     *
-     */
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 
     /**
-     *
+     * default constructor for the singleton.
      */
     private CompanyDAO() {
         super();
