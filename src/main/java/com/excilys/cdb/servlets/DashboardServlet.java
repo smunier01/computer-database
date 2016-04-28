@@ -31,7 +31,25 @@ public class DashboardServlet extends HttpServlet {
     public DashboardServlet() {
         super();
 
-        this.computerService = ComputerService.getInstance();
+        computerService = ComputerService.getInstance();
+    }
+
+    private int getInt(HttpServletRequest request, String key, int def) {
+        String str = request.getParameter(key);
+
+        int result;
+
+        if (str == null) {
+            result = def;
+        } else {
+            try {
+                result = Integer.parseInt(str);
+            } catch (NumberFormatException e) {
+                result = def;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -48,16 +66,10 @@ public class DashboardServlet extends HttpServlet {
         final HttpSession session = request.getSession(true);
 
         List<Computer> computers = null;
-        long nbComputers = 0;
 
-        // offset should be optional and 0 by default
+        // page should be optional and 0 by default
 
-        final String pageStr = request.getParameter("page");
-        int page = 0;
-
-        if (pageStr != null) {
-            page = Integer.parseInt(pageStr);
-        }
+        long page = getInt(request, "page", 0);
 
         // psize (size of a page) is optional and 10 by default
         // we store it in the session variable
@@ -77,12 +89,14 @@ public class DashboardServlet extends HttpServlet {
             }
         }
 
+        long nbComputers = 0;
+
         try {
             // we need the number of computers for the pagination
-            nbComputers = this.computerService.countComputers();
+            nbComputers = computerService.countComputers();
 
             // list of computers
-            computers = this.computerService.getComputers(new PageParameters(psize, page));
+            computers = computerService.getComputers(new PageParameters(psize, page));
 
         } catch (final IllegalArgumentException e) {
             response.sendRedirect(request.getContextPath() + "/dashboard");
@@ -100,7 +114,7 @@ public class DashboardServlet extends HttpServlet {
         }
 
         // set the attributes for the jsp
-
+        // TODO this should be a PageParameters object ...
         request.setAttribute("currentPage", page);
         request.setAttribute("nbPages", nbComputers / psize);
         request.setAttribute("maxPerPages", psize);

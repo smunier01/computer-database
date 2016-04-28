@@ -61,10 +61,10 @@ public enum ComputerService {
 
         try {
             // we get the computer to see if it exists
-            final Computer computer = this.computerDAO.find(id);
+            final Computer computer = computerDAO.find(id);
 
             if (computer != null) {
-                this.computerDAO.delete(computer);
+                computerDAO.delete(computer);
             }
         } catch (final DAOException e) {
             throw new ServiceException(e);
@@ -98,12 +98,12 @@ public enum ComputerService {
         try {
             // use a default company if id <= 0 or id == null*
             final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : this.companyDAO.find(companyId);
+                    : companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
 
-            this.computerDAO.update(computer);
+            computerDAO.update(computer);
 
         } catch (final DAOException e) {
             throw new ServiceException(e);
@@ -131,7 +131,7 @@ public enum ComputerService {
 
         // check parameters and return if something is wrong
         if ("".equals(name)) {
-            ComputerService.LOGGER.warn("wrong parameter when creating computer");
+            LOGGER.warn("wrong parameter when creating computer");
             throw new IllegalArgumentException();
         }
 
@@ -140,17 +140,48 @@ public enum ComputerService {
         try {
             // use a default company if id <= 0 or id == null
             final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : this.companyDAO.find(companyId);
+                    : companyDAO.find(companyId);
 
             computer = new Computer.ComputerBuilder().name(name).introduced(introduced).discontinued(discontinued)
                     .company(company).build();
 
-            this.computerDAO.create(computer);
+            computerDAO.create(computer);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
 
         return computer;
+    }
+
+    /**
+     * add a new computer to the database based on a computer object.
+     *
+     * @param c
+     *            computer object to add to the database
+     * @return instance of the computer with id updated
+     * @throws ServiceException
+     *             exception
+     */
+    public Computer createComputer(Computer c) throws ServiceException {
+        if ((c.getName() == null) || "".equals(c.getName())) {
+            LOGGER.warn("wrong parameters when creating computer");
+            throw new IllegalArgumentException();
+        }
+
+        Company company = c.getCompany();
+
+        if (company == null) {
+            company = new Company();
+            c.setCompany(company);
+        }
+
+        try {
+            computerDAO.create(c);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return c;
     }
 
     /**
@@ -170,7 +201,7 @@ public enum ComputerService {
         }
 
         try {
-            return this.computerDAO.find(id);
+            return computerDAO.find(id);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -193,7 +224,7 @@ public enum ComputerService {
         }
 
         try {
-            return this.computerDAO.findAll(page);
+            return computerDAO.findAll(page);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -208,7 +239,7 @@ public enum ComputerService {
      */
     public long countComputers() throws ServiceException {
         try {
-            return this.computerDAO.count();
+            return computerDAO.count();
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
