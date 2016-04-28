@@ -28,7 +28,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputers}&nbsp;Computers found</h1>
+			<h1 id="homeTitle">${nbComputers}&nbsp;Computersfound</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -99,7 +99,6 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<!--<mylib:pagination current="${currentPage}" count="${nbComputers / maxPerPages}"/>-->
 				<mylib2:pagination2 current="${currentPage}" count="${nbPages}"
 					psize="${maxPerPages}" />
 			</ul>

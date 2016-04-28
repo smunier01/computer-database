@@ -17,13 +17,15 @@ $(function() {
 	};
 
 	var validateForm = function f() {
+		
+		var button = $('#buttonForm');
 
 		if (name && introduced && discontinued) {
-			$('#buttonForm').removeClass('disabled');
-			$('#buttonForm').removeAttr('disabled');
+			button.removeClass('disabled');
+			button.removeAttr('disabled');
 		} else {
-			$('#buttonForm').addClass('disabled');
-			$('#buttonForm').attr('disabled', 'disabled');
+			button.addClass('disabled');
+			button.attr('disabled', 'disabled');
 		}
 
 		return f;
@@ -48,13 +50,17 @@ $(function() {
 	});
 
 	$('#introduced').on('input', function() {
-		if (!validateDate($(this).val())) {
-			$(this).parent().first().addClass('has-error');
-			$(this).parent().first().removeClass('has-success');
+		
+		var elem = $(this);
+		var parent = elem.parent().first();
+		
+		if (!validateDate(elem.val())) {
+			parent.addClass('has-error');
+			parent.removeClass('has-success');
 			introduced = false;
 		} else {
-			$(this).parent().first().addClass('has-success');
-			$(this).parent().first().removeClass('has-error');
+			parent.addClass('has-success');
+			parent.removeClass('has-error');
 			introduced = true;
 		}
 
@@ -62,13 +68,17 @@ $(function() {
 	});
 
 	$('#discontinued').on('input', function() {
-		if (!validateDate($(this).val())) {
-			$(this).parent().first().addClass('has-error');
-			$(this).parent().first().removeClass('has-success');
+		
+		var elem = $(this);
+		var parent = elem.parent().first();
+		
+		if (!validateDate(elem.val())) {
+			parent.addClass('has-error');
+			parent.removeClass('has-success');
 			discontinued = false;
 		} else {
-			$(this).parent().first().addClass('has-success');
-			$(this).parent().first().removeClass('has-error');
+			parent.addClass('has-success');
+			parent.removeClass('has-error');
 			discontinued = true;
 		}
 

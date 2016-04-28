@@ -90,8 +90,7 @@ public enum ComputerService {
     public void updateComputer(final Long id, final String name, final LocalDate introduced,
             final LocalDate discontinued, final Long companyId) throws ServiceException {
 
-        // TODO introduced & discontinued should be valid even if null
-        if ((id == null) || (id <= 0) || "".equals(name) || (introduced == null) || (discontinued == null)) {
+        if ((id == null) || (id <= 0) || "".equals(name)) {
             ComputerService.LOGGER.warn("wrong parameter when updating computer");
             throw new IllegalArgumentException();
         }
