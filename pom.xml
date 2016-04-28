@@ -5,7 +5,7 @@
 	<groupId>com.excilys</groupId>
 	<artifactId>cdb</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<name>ComputerDatabase Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -17,12 +17,24 @@
 	</properties>
 
 	<dependencies>
+
+		<!-- dependencies for unit test (junit & mockito) -->
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- dependencies for logging -->
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -41,11 +53,17 @@
 			<version>1.1.7</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- mysql drivers -->
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.38</version>
 		</dependency>
+
+		<!-- dependencies for jsp & jstl -->
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -58,21 +76,36 @@
 			<version>2.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.10.19</version>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+
+		<!-- dependency for selenium -->
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.53.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>2.53.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>2.53.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+
+			<!-- plugin to use mvn tomcat:deploy -->
 
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
@@ -85,6 +118,7 @@
 			</plugin>
 
 			<!-- maven-compile-plugin to force use of java 8 -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -100,15 +134,12 @@
 	</build>
 
 	<reporting>
+		<!-- plugin to use mvn checkstyle:check -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
-				<configuration>
-					<suppressionsLocation>src/main/resources/suppressions.xml</suppressionsLocation>
-					<configLocation>src/main/resources/checkstyle.xml</configLocation>
-				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

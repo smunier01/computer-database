@@ -72,7 +72,7 @@ public class DashboardServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
         }
 
-        // create list of ComputerDTO
+        // convert to a list of ComputerDTO
 
         final List<ComputerDTO> dtos = new ArrayList<>();
 
