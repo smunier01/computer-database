@@ -14,11 +14,11 @@ public class Computer {
      * default constructor for a computer.
      */
     public Computer() {
-        this.id = 0L;
-        this.name = "";
-        this.introduced = null;
-        this.discontinued = null;
-        this.company = new Company();
+        id = 0L;
+        name = "";
+        introduced = null;
+        discontinued = null;
+        company = new Company();
     }
 
     /**
@@ -41,6 +41,46 @@ public class Computer {
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
+        this.company = company;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public LocalDate getIntroduced() {
+        return introduced;
+    }
+
+    public void setIntroduced(final LocalDate introduced) {
+        this.introduced = introduced;
+    }
+
+    public LocalDate getDiscontinued() {
+        return discontinued;
+    }
+
+    public void setDiscontinued(final LocalDate discontinued) {
+        this.discontinued = discontinued;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(final Company company) {
         this.company = company;
     }
 
@@ -129,57 +169,17 @@ public class Computer {
          * @return instance of the computer created by the builder
          */
         public Computer build() {
-            return new Computer(this.id, this.name, this.introduced, this.discontinued, this.company);
+            return new Computer(id, name, introduced, discontinued, company);
         }
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public LocalDate getIntroduced() {
-        return this.introduced;
-    }
-
-    public void setIntroduced(final LocalDate introduced) {
-        this.introduced = introduced;
-    }
-
-    public LocalDate getDiscontinued() {
-        return this.discontinued;
-    }
-
-    public void setDiscontinued(final LocalDate discontinued) {
-        this.discontinued = discontinued;
-    }
-
-    public Company getCompany() {
-        return this.company;
-    }
-
-    public void setCompany(final Company company) {
-        this.company = company;
     }
 
     @Override
     public String toString() {
 
-        final String intro = this.introduced == null ? "null" : this.introduced.toString();
-        final String discon = this.discontinued == null ? "null" : this.discontinued.toString();
+        final String intro = introduced == null ? "null" : introduced.toString();
+        final String discon = discontinued == null ? "null" : discontinued.toString();
 
-        return this.id + " " + this.name + " " + intro + " " + discon + " " + this.company.toString();
+        return id + " " + name + " " + intro + " " + discon + " " + company.toString();
     }
 
     /**
@@ -189,11 +189,11 @@ public class Computer {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((this.company == null) ? 0 : this.company.hashCode());
-        result = (prime * result) + ((this.discontinued == null) ? 0 : this.discontinued.hashCode());
-        result = (prime * result) + ((this.id == null) ? 0 : this.id.hashCode());
-        result = (prime * result) + ((this.introduced == null) ? 0 : this.introduced.hashCode());
-        result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+        result = (prime * result) + ((company == null) ? 0 : company.hashCode());
+        result = (prime * result) + ((discontinued == null) ? 0 : discontinued.hashCode());
+        result = (prime * result) + ((id == null) ? 0 : id.hashCode());
+        result = (prime * result) + ((introduced == null) ? 0 : introduced.hashCode());
+        result = (prime * result) + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
@@ -212,39 +212,39 @@ public class Computer {
             return false;
         }
         final Computer other = (Computer) obj;
-        if (this.company == null) {
+        if (company == null) {
             if (other.company != null) {
                 return false;
             }
-        } else if (!this.company.equals(other.company)) {
+        } else if (!company.equals(other.company)) {
             return false;
         }
-        if (this.discontinued == null) {
+        if (discontinued == null) {
             if (other.discontinued != null) {
                 return false;
             }
-        } else if (!this.discontinued.equals(other.discontinued)) {
+        } else if (!discontinued.equals(other.discontinued)) {
             return false;
         }
-        if (this.id == null) {
+        if (id == null) {
             if (other.id != null) {
                 return false;
             }
-        } else if (!this.id.equals(other.id)) {
+        } else if (!id.equals(other.id)) {
             return false;
         }
-        if (this.introduced == null) {
+        if (introduced == null) {
             if (other.introduced != null) {
                 return false;
             }
-        } else if (!this.introduced.equals(other.introduced)) {
+        } else if (!introduced.equals(other.introduced)) {
             return false;
         }
-        if (this.name == null) {
+        if (name == null) {
             if (other.name != null) {
                 return false;
             }
-        } else if (!this.name.equals(other.name)) {
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;
