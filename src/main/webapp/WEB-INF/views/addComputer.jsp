@@ -35,24 +35,22 @@
 								<label class="control-label" for="computerName">Computer
 									name</label> <input type="text" class="form-control"
 									name="computerName" id="computerName"
-									placeholder="Computer name" value="${computerName}"> <span
-									id="helpBlock2" class="help-block">A block of help text
-									that breaks onto a new line and may extend beyond one line.</span>
+									placeholder="Computer name" value="${computerName}">
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
+								<label class="control-label" for="introduced">Introduced date</label> <input
 									type="date" class="form-control" name="introduced"
 									id="introduced" placeholder="Introduced date"
 									value="${introduced}">
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
+								<label class="control-label" for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" name="discontinued"
 									id="discontinued" placeholder="Discontinued date"
 									value="${computerName}">
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
+								<label class="control-label" for="companyId">Company</label> <select
 									class="form-control" name="companyId" id="companyId">
 									<c:forEach items="${companies}" var="company">
 										<option value="${company.id}">${company.name}</option>
