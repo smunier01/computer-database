@@ -1,8 +1,9 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,9 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.MapperException;
-import com.excilys.cdb.model.Company;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -33,6 +35,8 @@ public class ComputerAddServlet extends HttpServlet {
 
     private final ComputerMapper computerMapper;
 
+    private final CompanyMapper companyMapper;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,6 +47,7 @@ public class ComputerAddServlet extends HttpServlet {
         computerService = ComputerService.getInstance();
         companyService = CompanyService.getInstance();
         computerMapper = ComputerMapper.getInstance();
+        companyMapper = CompanyMapper.getInstance();
 
     }
 
@@ -53,28 +58,21 @@ public class ComputerAddServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
-        // to display the add computer form, we only need the list of companies
-
-        List<Company> companies;
-
         try {
-            companies = companyService.getCompanies();
-        } catch (final ServiceException e) {
-            companies = new ArrayList<>();
+
+            // to display the add computer form, we only need the list of
+            // companies
+
+            List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
+                    .collect(Collectors.toList());
+
+            request.setAttribute("companies", companyDtos);
+
+            request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+
+        } catch (ServiceException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
-        // convert it to DTOs
-
-        final List<CompanyDTO> companyDtos = new ArrayList<>();
-
-        for (final Company c : companies) {
-            companyDtos.add(new CompanyDTO(c));
-        }
-
-        request.setAttribute("companies", companyDtos);
-
-        request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
-
     }
 
     /**
@@ -95,13 +93,12 @@ public class ComputerAddServlet extends HttpServlet {
                 // redirect to the main page on success
                 response.sendRedirect(request.getContextPath() + "/dashboard");
             } catch (ServiceException e) {
-                request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
         } catch (MapperException e1) {
             // if the mapper could not create the object, redisplay the form..
             request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
         }
-
     }
 }

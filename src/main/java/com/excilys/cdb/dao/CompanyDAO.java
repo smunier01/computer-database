@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
-import com.excilys.cdb.mapper.CompanyResultSetMapper;
+import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.util.PageParameters;
 
@@ -27,7 +27,7 @@ public class CompanyDAO extends DAO<Company> {
 
     private static volatile CompanyDAO instance = null;
 
-    private final CompanyResultSetMapper companyMapper = CompanyResultSetMapper.getInstance();
+    private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 

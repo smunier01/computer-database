@@ -1,8 +1,9 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,13 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.MapperException;
-import com.excilys.cdb.model.Company;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceException;
+import com.excilys.cdb.util.Util;
 
 /**
  * Servlet implementation class ComputerEditServlet.
@@ -33,6 +36,8 @@ public class ComputerEditServlet extends HttpServlet {
 
     private final ComputerMapper computerMapper;
 
+    private final CompanyMapper companyMapper;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -42,6 +47,7 @@ public class ComputerEditServlet extends HttpServlet {
         computerService = ComputerService.getInstance();
         companyService = CompanyService.getInstance();
         computerMapper = ComputerMapper.getInstance();
+        companyMapper = CompanyMapper.getInstance();
     }
 
     /**
@@ -51,41 +57,34 @@ public class ComputerEditServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
-        final String idStr = request.getParameter("id");
+        final long id = Util.getInt(request, "id", 0);
 
-        if (idStr != null) {
+        if (id == 0) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
-            final long id = Long.parseLong(idStr);
-            Computer computer = null;
-            List<Company> companies;
-            final List<CompanyDTO> companyDtos = new ArrayList<>();
+        try {
 
-            try {
+            // get the list of companies for the dropdown menu
+            // and convert it to DTOs.
+            List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
+                    .collect(Collectors.toList());
 
-                // we need the list of companies for the dropdown menu
-                companies = companyService.getCompanies();
+            // computer to display the current values
+            Computer computer = computerService.getComputer(id);
 
-                for (final Company c : companies) {
-                    companyDtos.add(new CompanyDTO(c));
-                }
-
-                // computer to display the current values
-                computer = computerService.getComputer(id);
-
-                if (computer == null) {
-                    // if this computer id doesn't exist, 404 page
-                    request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
-                } else {
-                    request.setAttribute("companies", companyDtos);
-                    request.setAttribute("computer", new ComputerDTO(computer));
-                    request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
-                }
-
-            } catch (final ServiceException e) {
-                request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+            if (computer == null) {
+                // if this computer id doesn't exist, 404 page
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } else {
+                request.setAttribute("companies", companyDtos);
+                request.setAttribute("computer", new ComputerDTO(computer));
+                request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
             }
-        } else {
-            request.getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
+
+        } catch (final ServiceException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -109,7 +108,7 @@ public class ComputerEditServlet extends HttpServlet {
             } catch (IllegalArgumentException e) {
                 request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
             } catch (ServiceException e) {
-                request.getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
         } catch (MapperException e1) {

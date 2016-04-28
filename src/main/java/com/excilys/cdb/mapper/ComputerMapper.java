@@ -7,10 +7,10 @@ import java.time.format.DateTimeParseException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
-import com.excilys.cdb.util.Util;
 
 public enum ComputerMapper {
 
@@ -30,6 +30,15 @@ public enum ComputerMapper {
      */
     public static ComputerMapper getInstance() {
         return INSTANCE;
+    }
+
+    /**
+     *
+     * @param computer
+     * @return
+     */
+    public ComputerDTO toDTO(final Computer computer) {
+        return new ComputerDTO(computer);
     }
 
     /**
