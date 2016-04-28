@@ -1,56 +1,81 @@
 $(function() {
-    
+
+    var name = false;
+    var introduced = false;
+    var discontinued = false;    
+
     var validateString = function(s) {
 	return s != "";
     };
 
     var validateDate = function(s) {
-	return (Date.parse(s) > 0);
+	return !isNaN(Date.parse(s)) || s == "";
     };
 
     var validateLong = function(s) {
 	return !isNaN(s);
     };
 
-    $('#computerName').on('input', function() {
-	if (!validateString($(this).val())) {
-	    $(this).parent().first().addClass('has-error');
-	    $(this).parent().first().removeClass('has-success');
+    var validateForm = function f() {
+
+	if (name && introduced && discontinued) {
+	    $('#buttonForm').removeClass('disabled');
+	    $('#buttonForm').removeAttr('disabled');
 	} else {
-	    console.log("ok");
-	    $(this).parent().first().addClass('has-success');
-	    $(this).parent().first().removeClass('has-error');
+	    $('#buttonForm').addClass('disabled');
+	    $('#buttonForm').attr('disabled','disabled');
 	}
-    });
+
+	return f;
+    }();
+
+    var onNameChange = function f() {
+
+	var elem = $('#introduced');
+	var parent = elem.parent().first();
+
+	if (!validateString(elem.val())) {
+	    parent.addClass('has-error');
+	    parent.removeClass('has-success');
+	    name = false;
+	} else {
+	    parent.addClass('has-success');
+	    parent.removeClass('has-error');
+	    name = true;
+	}
+
+	validateForm();
+
+	return f;
+    }();
+
+    $('#computerName').on('input', onNameChange);
 
     $('#introduced').on('input', function() {
 	if (!validateDate($(this).val())) {
 	    $(this).parent().first().addClass('has-error');
 	    $(this).parent().first().removeClass('has-success');
+	    introduced = false;
 	} else {
-	    console.log("ok");
 	    $(this).parent().first().addClass('has-success');
 	    $(this).parent().first().removeClass('has-error');
+	    introduced = true;
 	}
+
+	validateForm();
     });
 
     $('#discontinued').on('input', function() {
 	if (!validateDate($(this).val())) {
 	    $(this).parent().first().addClass('has-error');
 	    $(this).parent().first().removeClass('has-success');
+	    discontinued = false;
 	} else {
-	    console.log("ok");
 	    $(this).parent().first().addClass('has-success');
 	    $(this).parent().first().removeClass('has-error');
+	    discontinued = true;
 	}
-    });
 
-    $('#companyId').on('input', function() {
-	if (!validateLong($(this).val())) {
-	    $(this).parent().first().addClass('has-error');
-	} else {
-	    $(this).parent().first().removeClass('has-error');
-	}
-    });
-    
+	validateForm();
+    });    
 });

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/pagination.tld" prefix="mylib" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2" %>
+<%@ taglib uri="/WEB-INF/pagination.tld" prefix="mylib"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,14 +21,14 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand"
-				href="${pageContext.request.contextPath}/dashboard"> Application -
-				Computer Database </a>
+				href="${pageContext.request.contextPath}/dashboard"> Application
+				- Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputers} Computers found</h1>
+			<h1 id="homeTitle">${nbComputers}Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -100,13 +100,14 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<!--<mylib:pagination current="${currentPage}" count="${nbComputers / maxPerPages}"/>-->
-				<mylib2:pagination2 current="${currentPage}" count="${nbPages}" psize="${maxPerPages}"/>
+				<mylib2:pagination2 current="${currentPage}" count="${nbPages}"
+					psize="${maxPerPages}" />
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="?psize=10" class="btn btn-default">10</a>
-				<a href="?psize=50" class="btn btn-default">50</a>
-				<a href="?psize=100" class="btn btn-default">100</a>
+				<a href="?psize=10" class="btn btn-default">10</a> <a
+					href="?psize=50" class="btn btn-default">50</a> <a
+					href="?psize=100" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>

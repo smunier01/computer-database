@@ -15,6 +15,7 @@ public class CompanyDTO {
      * CompanyDTO constructor using a company as a template.
      *
      * @param company
+     *            company
      */
     public CompanyDTO(final Company company) {
         if (company != null) {
