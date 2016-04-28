@@ -4,17 +4,24 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class TimestampToLocalDate {
-	
-	public static LocalDate convert(Timestamp timestamp) {
-		
-		LocalDate date;
-		
-		if (timestamp == null) {
-			date = null;
-		} else {
-			date = timestamp.toLocalDateTime().toLocalDate();
-		}
-		
-		return date;
-	}
+
+    /**
+     * convert a timestamp to a LocalDate.
+     *
+     * @param timestamp
+     *            timestamp to convert
+     * @return the LocalDate
+     */
+    public static LocalDate convert(final Timestamp timestamp) {
+
+        LocalDate date;
+
+        if (timestamp == null) {
+            date = null;
+        } else {
+            date = timestamp.toLocalDateTime().toLocalDate();
+        }
+
+        return date;
+    }
 }

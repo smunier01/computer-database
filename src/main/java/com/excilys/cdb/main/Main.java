@@ -4,18 +4,25 @@ import java.util.Scanner;
 
 public class Main {
 
-	public static void main(String[] args) {
+    /**
+     * entry method for the CLI app.
+     *
+     * @param args
+     *            arguments
+     */
+    public static void main(final String[] args) {
 
-		Scanner sc = new Scanner(System.in);
-		sc.useDelimiter("\\n");
-		
-		Menu menu = new Menu(sc);
+        final Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\\n");
 
-		while (menu.pick()) {
-		}
+        final Menu menu = new Menu(sc);
 
-		sc.close();
+        while (menu.pick()) {
+            System.out.println("pick menu :");
+        }
 
-	}
+        sc.close();
+
+    }
 
 }

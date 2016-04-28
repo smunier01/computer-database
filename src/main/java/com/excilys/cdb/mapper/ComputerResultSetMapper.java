@@ -7,45 +7,40 @@ import java.time.LocalDate;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
-public class ComputerResultSetMapper implements ResultSetMapper<Computer> {
+public enum ComputerResultSetMapper implements ResultSetMapper<Computer> {
 
-    private volatile static ComputerResultSetMapper instance = null;
+    INSTANCE;
 
-    private ComputerResultSetMapper() {
-        super();
+    /**
+     * default constructor for the singleton.
+     */
+    ComputerResultSetMapper() {
+
     }
 
+    /**
+     * public accessor for the singleton.
+     *
+     * @return return unique instance of the singleton
+     */
     public static ComputerResultSetMapper getInstance() {
-        if (instance == null) {
-            synchronized (ComputerResultSetMapper.class) {
-                if (instance == null) {
-                    instance = new ComputerResultSetMapper();
-                }
-            }
-        }
-
-        return instance;
+        return INSTANCE;
     }
 
     @Override
-    public Computer map(ResultSet rs) throws SQLException {
+    public Computer map(final ResultSet rs) throws SQLException {
 
-        Long id = rs.getLong("id");
-        String name = rs.getString("name");
-        LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-        LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-        Long companyId = rs.getLong("company_id");
-        String companyName = rs.getString("company_name");
+        final Long id = rs.getLong("id");
+        final String name = rs.getString("name");
+        final LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
+        final LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
+        final Long companyId = rs.getLong("company_id") <= 0 ? null : rs.getLong("company_id");
+        final String companyName = rs.getString("company_name");
 
-        Company company = new Company(companyId, companyName);
-        
-        Computer computer = new Computer.ComputerBuilder()
-                .id(id)
-                .name(name)
-                .introduced(introduced)
-                .discontinued(discontinued)
-                .company(company)
-                .build();
+        final Company company = new Company(companyId, companyName);
+
+        final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
+                .discontinued(discontinued).company(company).build();
 
         return computer;
     }

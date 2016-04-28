@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -7,6 +8,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ComputerDatabase Webapp</name>
 	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -44,7 +52,23 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -54,6 +78,10 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<server>tomcatserver</server>
+				</configuration>
 			</plugin>
 
 			<!-- maven-compile-plugin to force use of java 8 -->
@@ -70,4 +98,18 @@
 
 		<finalName>cdb</finalName>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<suppressionsLocation>src/main/resources/suppressions.xml</suppressionsLocation>
+					<configLocation>src/main/resources/checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

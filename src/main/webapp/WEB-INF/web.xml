@@ -1,16 +1,51 @@
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-                        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
-
 	<display-name>Archetype Created Web Application</display-name>
+
 	<servlet>
-		<servlet-name>ComputerServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.ComputerServlet</servlet-class>
+		<servlet-name>DashboardServlet</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.DashboardServlet</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>ComputerAddServlet</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.ComputerAddServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ComputerEditServlet</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.ComputerEditServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ComputerDeleteServlet</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.ComputerDeleteServlet</servlet-class>
+	</servlet>
+
+	<!-- main page that display the list of computers -->
 	<servlet-mapping>
-		<servlet-name>ComputerServlet</servlet-name>
-		<url-pattern>/hello</url-pattern>
+		<servlet-name>DashboardServlet</servlet-name>
+		<url-pattern>/dashboard</url-pattern>
+	</servlet-mapping>
+
+	<!-- servlet to create a computer -->
+	<servlet-mapping>
+		<servlet-name>ComputerAddServlet</servlet-name>
+		<url-pattern>/computer/add</url-pattern>
+	</servlet-mapping>
+
+	<!-- servlet to modify an existing computer -->
+	<servlet-mapping>
+		<servlet-name>ComputerEditServlet</servlet-name>
+		<url-pattern>/computer/edit</url-pattern>
+	</servlet-mapping>
+
+	<!-- servlet to delete one or multiple computers -->
+	<servlet-mapping>
+		<servlet-name>ComputerDeleteServlet</servlet-name>
+		<url-pattern>/computer/delete</url-pattern>
 	</servlet-mapping>
 </web-app>

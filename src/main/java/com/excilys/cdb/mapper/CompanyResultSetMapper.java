@@ -5,30 +5,30 @@ import java.sql.SQLException;
 
 import com.excilys.cdb.model.Company;
 
-public class CompanyResultSetMapper implements ResultSetMapper<Company> {
+public enum CompanyResultSetMapper implements ResultSetMapper<Company> {
 
-    private volatile static CompanyResultSetMapper instance = null;
+    INSTANCE;
 
-    private CompanyResultSetMapper() {
-        super();
+    /**
+     * default constructor for the singleton.
+     */
+    CompanyResultSetMapper() {
+
     }
 
+    /**
+     * public accessor for the singleton.
+     *
+     * @return return unique instance of the singleton
+     */
     public static CompanyResultSetMapper getInstance() {
-        if (instance == null) {
-            synchronized (ComputerResultSetMapper.class) {
-                if (instance == null) {
-                    instance = new CompanyResultSetMapper();
-                }
-            }
-        }
-        
-        return instance;
+        return INSTANCE;
     }
-    
+
     @Override
-    public Company map(ResultSet rs) throws SQLException {
-        Long id = rs.getLong("id");
-        String name = rs.getString("name");
+    public Company map(final ResultSet rs) throws SQLException {
+        final Long id = rs.getLong("id");
+        final String name = rs.getString("name");
 
         return new Company(id, name);
     }
