@@ -12,8 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
-import com.excilys.cdb.mapper.CompanyResultSetMapper;
-import com.excilys.cdb.mapper.ComputerResultSetMapper;
+import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.util.PageParameters;
 
@@ -28,7 +27,7 @@ public class CompanyDAO extends DAO<Company> {
 
     private static volatile CompanyDAO instance = null;
 
-    private final CompanyResultSetMapper companyMapper = CompanyResultSetMapper.getInstance();
+    private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 
@@ -47,7 +46,7 @@ public class CompanyDAO extends DAO<Company> {
     public static CompanyDAO getInstance() {
 
         if (CompanyDAO.instance == null) {
-            synchronized (ComputerResultSetMapper.class) {
+            synchronized (CompanyDAO.class) {
                 if (CompanyDAO.instance == null) {
                     CompanyDAO.instance = new CompanyDAO();
                 }
@@ -67,13 +66,13 @@ public class CompanyDAO extends DAO<Company> {
         final String sql = "SELECT id, name FROM company WHERE id=?";
 
         PreparedStatement stmt = null;
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(sql);
 
-            this.setParams(stmt, id);
+            setParams(stmt, id);
 
             rs = stmt.executeQuery();
 
@@ -93,7 +92,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            closeAll(con, stmt, rs);
         }
 
         return company;
@@ -103,14 +102,14 @@ public class CompanyDAO extends DAO<Company> {
     public Company create(final Company obj) throws DAOException {
 
         final String sql = "INSERT INTO company (name) VALUES (?)";
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            this.setParams(stmt, obj.getName());
+            setParams(stmt, obj.getName());
 
             final int res = stmt.executeUpdate();
 
@@ -131,7 +130,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            closeAll(con, stmt);
         }
 
         return obj;
@@ -146,14 +145,14 @@ public class CompanyDAO extends DAO<Company> {
     public Company update(final Company obj) throws DAOException {
         final String sql = "UPDATE company SET name=? WHERE id=?";
 
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
 
             stmt = con.prepareStatement(sql);
 
-            this.setParams(stmt, obj.getName(), obj.getId());
+            setParams(stmt, obj.getName(), obj.getId());
 
             final int res = stmt.executeUpdate();
 
@@ -167,7 +166,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            closeAll(con, stmt);
         }
 
         return obj;
@@ -180,14 +179,14 @@ public class CompanyDAO extends DAO<Company> {
     public void delete(final Company obj) throws DAOException {
         final String sql = "DELETE FROM company WHERE id=?";
 
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
 
             stmt = con.prepareStatement(sql);
 
-            this.setParams(stmt, obj.getId());
+            setParams(stmt, obj.getId());
 
             final int res = stmt.executeUpdate();
 
@@ -201,7 +200,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            closeAll(con, stmt);
         }
     }
 
@@ -217,7 +216,7 @@ public class CompanyDAO extends DAO<Company> {
 
         final String sql = "SELECT id, name FROM company";
 
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -228,7 +227,7 @@ public class CompanyDAO extends DAO<Company> {
 
             while (rs.next()) {
 
-                final Company company = this.companyMapper.map(rs);
+                final Company company = companyMapper.map(rs);
 
                 result.add(company);
 
@@ -244,7 +243,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            closeAll(con, stmt, rs);
         }
 
         return result;
@@ -261,20 +260,20 @@ public class CompanyDAO extends DAO<Company> {
 
         final String sql = "SELECT id, name FROM company LIMIT ?,?";
 
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(sql);
 
-            this.setParams(stmt, page.getSize() * (page.getPageNumber() + 1), page.getSize());
+            setParams(stmt, page.getSize() * (page.getPageNumber() + 1), page.getSize());
 
             rs = stmt.executeQuery();
 
             while (rs.next()) {
 
-                final Company company = this.companyMapper.map(rs);
+                final Company company = companyMapper.map(rs);
 
                 result.add(company);
             }
@@ -289,7 +288,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            closeAll(con, stmt, rs);
         }
 
         return result;
@@ -302,7 +301,7 @@ public class CompanyDAO extends DAO<Company> {
     public long count() throws DAOException {
         final String sql = "SELECT count(id) as nb FROM company";
 
-        final Connection con = this.connectionFactory.create();
+        final Connection con = connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         long nb = 0;
@@ -320,7 +319,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            closeAll(con, stmt, rs);
         }
 
         return nb;

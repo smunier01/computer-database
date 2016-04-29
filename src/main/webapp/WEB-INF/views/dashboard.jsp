@@ -25,10 +25,9 @@
 				- Computer Database </a>
 		</div>
 	</header>
-
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputers}&nbsp;Computersfound</h1>
+			<h1 id="homeTitle">${nbComputers}&nbsp;Computers&nbsp;found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -98,16 +97,8 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<ul class="pagination">
-				<mylib2:pagination2 current="${currentPage}" count="${nbPages}"
-					psize="${maxPerPages}" />
-			</ul>
-
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="?psize=10" class="btn btn-default">10</a> <a
-					href="?psize=50" class="btn btn-default">50</a> <a
-					href="?psize=100" class="btn btn-default">100</a>
-			</div>
+			<mylib2:pagination2 current="${currentPage}" count="${nbPages}"
+				psize="${maxPerPages}" />
 		</div>
 	</footer>
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>

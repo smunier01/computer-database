@@ -1,18 +1,18 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.mapper;
 
 /**
- * Exception used when there is a problem in one of the Service classes.
+ * Exception used when an object could not be mapped.
  *
  * @author simon
  */
-public class ServiceException extends RuntimeException {
+public class MapperException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * default constructor.
      */
-    public ServiceException() {
+    public MapperException() {
         super();
     }
 
@@ -20,21 +20,21 @@ public class ServiceException extends RuntimeException {
      * constructor taking only a message.
      *
      * @param message
-     *            message
+     *            message for the exception
      */
-    public ServiceException(final String message) {
+    public MapperException(final String message) {
         super(message);
     }
 
     /**
-     * constructor taking a string message and a throwable.
+     * constructor taking a string message and un throwable.
      *
      * @param message
      *            message
      * @param cause
      *            throwable
      */
-    public ServiceException(final String message, final Throwable cause) {
+    public MapperException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -44,7 +44,7 @@ public class ServiceException extends RuntimeException {
      * @param cause
      *            throwable
      */
-    public ServiceException(final Throwable cause) {
+    public MapperException(final Throwable cause) {
         super(cause);
     }
 }
