@@ -51,11 +51,11 @@ public enum CompanyMapper {
      *            HttpServletRequest containing the information about the
      *            company.
      * @return instance of the company created.
-     * @throws MapperException
-     *             throws exception if the object could not be mapped
+     * @throws UnsupportedOperationException
+     *             not yet implemented
      */
-    public Company map(final HttpServletRequest request) throws MapperException {
-        throw new MapperException("not implemented");
+    public Company map(final HttpServletRequest request) {
+        throw new UnsupportedOperationException();
     }
 
     /**

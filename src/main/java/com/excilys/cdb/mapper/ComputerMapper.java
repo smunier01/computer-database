@@ -16,6 +16,8 @@ public enum ComputerMapper {
 
     INSTANCE;
 
+    private final Validator validator = Validator.getInstance();
+
     /**
      * default constructor for the singleton.
      */
@@ -97,16 +99,12 @@ public enum ComputerMapper {
         final String idStr = request.getParameter("id");
         final long id;
 
-        System.out.println(idStr);
         if (idStr == null) {
             id = 0L;
+        } else if (validator.validateInt(idStr)) {
+            id = Long.parseLong(idStr);
         } else {
-            try {
-                id = Long.parseLong(idStr);
-            } catch (final NumberFormatException e) {
-                // a non-valid id has been specified
-                throw new MapperException(e);
-            }
+            throw new MapperException();
         }
 
         // introduced date (optional)
@@ -117,13 +115,10 @@ public enum ComputerMapper {
 
         if ((introducedStr == null) || "".equals(introducedStr)) {
             introduced = null;
+        } else if (validator.validateDate(introducedStr)) {
+            introduced = LocalDate.parse(introducedStr);
         } else {
-            try {
-                introduced = LocalDate.parse(introducedStr);
-            } catch (final DateTimeParseException e) {
-                // a non-valid date has been specified
-                throw new MapperException(e);
-            }
+            throw new MapperException();
         }
 
         // discontinued date (optional)
@@ -134,34 +129,25 @@ public enum ComputerMapper {
 
         if ((discontinuedStr == null) || "".equals(discontinuedStr)) {
             discontinued = null;
+        } else if (validator.validateDate(discontinuedStr)) {
+            discontinued = LocalDate.parse(discontinuedStr);
         } else {
-            try {
-                discontinued = LocalDate.parse(discontinuedStr);
-            } catch (final DateTimeParseException e) {
-                // a non-valid date has been specified
-                throw new MapperException(e);
-            }
+            throw new MapperException();
         }
 
         // company (optional)
 
         final String companyIdStr = request.getParameter("companyId");
 
-        Company company = new Company();
+        Company company;
 
-        if ((companyIdStr != null) && !"".equals(companyIdStr)) {
-            try {
-                final long companyId = Long.parseLong(companyIdStr);
-
-                if (companyId != 0) {
-                    company = new Company();
-                    company.setId(companyId);
-                }
-
-            } catch (final NumberFormatException e) {
-                // a non-valid id has been specified
-                throw new MapperException(e);
-            }
+        if ((companyIdStr == null) || "".equals(companyIdStr)) {
+            company = null;
+        } else if (validator.validateInt(companyIdStr)) {
+            company = new Company();
+            company.setId(Long.parseLong(companyIdStr));
+        } else {
+            throw new MapperException();
         }
 
         return builder.id(id).name(nameStr).introduced(introduced).discontinued(discontinued).company(company).build();

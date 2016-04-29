@@ -97,8 +97,8 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<mylib2:pagination2 current="${page.pageNumber}" count="${nbPages}"
-				psize="${page.size}" />
+			<mylib2:pagination2 current="${pparam.pageNumber}" count="${nbPages}"
+				psize="${pparam.size}" />
 		</div>
 	</footer>
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>

@@ -17,17 +17,17 @@ import com.excilys.cdb.dao.ComputerDAO;
  *
  * @author excilys
  */
-public class ConnectionMySQLFactory {
+public enum ConnectionMySQLFactory {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+    INSTANCE;
 
-    private static String url;
+    private final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
-    private static String user;
+    private String url;
 
-    private static String passwd;
+    private String user;
 
-    private static volatile ConnectionMySQLFactory instance = null;
+    private String passwd;
 
     /**
      * constructor of the factory.
@@ -46,21 +46,21 @@ public class ConnectionMySQLFactory {
             in = ConnectionMySQLFactory.class.getClassLoader().getResourceAsStream("mysql.properties");
             props.load(in);
 
-            ConnectionMySQLFactory.url = props.getProperty("DB_URL");
-            ConnectionMySQLFactory.user = props.getProperty("DB_USERNAME");
-            ConnectionMySQLFactory.passwd = props.getProperty("DB_PASSWORD");
+            url = props.getProperty("DB_URL");
+            user = props.getProperty("DB_USERNAME");
+            passwd = props.getProperty("DB_PASSWORD");
 
         } catch (final IOException e) {
             // TODO not sure what to do here ?
-            ConnectionMySQLFactory.LOGGER.error("could not read mysql.properties");
+            LOGGER.error("could not read mysql.properties");
         } catch (final ClassNotFoundException e) {
             // TODO not sure what to do here ?
-            ConnectionMySQLFactory.LOGGER.error("mysql jdbc driver could not be loaded");
+            LOGGER.error("mysql jdbc driver could not be loaded");
         } finally {
             try {
                 in.close();
             } catch (final IOException e) {
-                ConnectionMySQLFactory.LOGGER.warn("could not close InputStream of the mysql property file");
+                LOGGER.warn("could not close InputStream of the mysql property file");
             }
         }
     }
@@ -71,16 +71,7 @@ public class ConnectionMySQLFactory {
      * @return unique instance of the factory
      */
     public static ConnectionMySQLFactory getInstance() {
-
-        if (ConnectionMySQLFactory.instance == null) {
-            synchronized (ConnectionMySQLFactory.class) {
-                if (ConnectionMySQLFactory.instance == null) {
-                    ConnectionMySQLFactory.instance = new ConnectionMySQLFactory();
-                }
-            }
-        }
-
-        return ConnectionMySQLFactory.instance;
+        return INSTANCE;
     }
 
     /**
@@ -93,11 +84,10 @@ public class ConnectionMySQLFactory {
         Connection con = null;
 
         try {
-            con = DriverManager.getConnection(ConnectionMySQLFactory.url, ConnectionMySQLFactory.user,
-                    ConnectionMySQLFactory.passwd);
+            con = DriverManager.getConnection(url, user, passwd);
         } catch (final SQLException e) {
             // TODO not sure what to do here
-            ConnectionMySQLFactory.LOGGER.error("could not get Connection");
+            LOGGER.error("could not get Connection");
         }
 
         return con;

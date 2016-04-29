@@ -54,7 +54,7 @@ public enum CompanyService {
 
         if ((id != null) && (id > 0)) {
             try {
-                company = this.companyDAO.find(id);
+                company = companyDAO.find(id);
             } catch (final DAOException e) {
                 throw new ServiceException(e);
             }
@@ -81,7 +81,7 @@ public enum CompanyService {
 
         if ((page.getSize() >= 0) && (page.getPageNumber() > 0)) {
             try {
-                companies = this.companyDAO.findAll(page);
+                companies = companyDAO.findAll(page);
             } catch (final DAOException e) {
                 throw new ServiceException(e);
             }
@@ -101,11 +101,10 @@ public enum CompanyService {
      *             exception
      */
     public List<Company> getCompanies() throws ServiceException {
-
         List<Company> companies;
 
         try {
-            companies = this.companyDAO.findAll();
+            companies = companyDAO.findAll();
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -125,7 +124,7 @@ public enum CompanyService {
         long nbCompanies = 0;
 
         try {
-            nbCompanies = this.companyDAO.count();
+            nbCompanies = companyDAO.count();
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
