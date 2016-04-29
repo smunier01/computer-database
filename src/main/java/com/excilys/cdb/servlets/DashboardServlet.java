@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.service.ComputerService;
@@ -21,6 +24,8 @@ import com.excilys.cdb.util.Util;
  * Servlet implementation class ComputerServlet.
  */
 public class DashboardServlet extends HttpServlet {
+
+    static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
     private static final long serialVersionUID = 1L;
 

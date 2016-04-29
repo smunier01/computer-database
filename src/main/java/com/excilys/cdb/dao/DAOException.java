@@ -5,7 +5,7 @@ package com.excilys.cdb.dao;
  *
  * @author simon
  */
-public class DAOException extends Exception {
+public class DAOException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

@@ -32,7 +32,8 @@ public enum CompanyMapper {
      * creates company object from a jdbc ResultSet.
      *
      * @param rs
-     * @return
+     *            ResultSet containing the information about the company.
+     * @return instance of the company created.
      * @throws SQLException
      *             throws exception if the object could not be mapped
      */
@@ -47,7 +48,9 @@ public enum CompanyMapper {
      * creates company object from a HttpServletRequest.
      *
      * @param request
-     * @return
+     *            HttpServletRequest containing the information about the
+     *            company.
+     * @return instance of the company created.
      * @throws MapperException
      *             throws exception if the object could not be mapped
      */
@@ -56,9 +59,10 @@ public enum CompanyMapper {
     }
 
     /**
-     * convert from Company to CompanyDTO
+     * convert from Company to CompanyDTO.
      *
      * @param company
+     *            company
      * @return CompanyDTO object
      */
     public CompanyDTO toDTO(final Company company) {

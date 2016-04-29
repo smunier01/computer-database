@@ -33,9 +33,11 @@ public enum ComputerMapper {
     }
 
     /**
+     * Creates a ComputerDTO object from a Computer.
      *
      * @param computer
-     * @return
+     *            computer
+     * @return ComputerDTo object
      */
     public ComputerDTO toDTO(final Computer computer) {
         return new ComputerDTO(computer);
@@ -45,8 +47,10 @@ public enum ComputerMapper {
      * Creates a Computer object from a jdbc ResultSet.
      *
      * @param rs
-     * @return
+     *            ResultSet containing the informations about the computer
+     * @return instance of the computer created
      * @throws SQLException
+     *             exception
      */
     public Computer map(final ResultSet rs) throws SQLException {
 
@@ -69,7 +73,9 @@ public enum ComputerMapper {
      * Creates a Computer object from a servlet HttpServletRequest.
      *
      * @param request
-     * @return
+     *            HttpServletRequest containing the informations about the
+     *            computer
+     * @return instance of the computer created
      * @throws MapperException
      *             throw exception if the object could not be mapped (wrong
      *             parameters etc..)
@@ -84,7 +90,7 @@ public enum ComputerMapper {
             throw new MapperException();
         }
 
-        ComputerBuilder builder = new Computer.ComputerBuilder();
+        final ComputerBuilder builder = new Computer.ComputerBuilder();
 
         // computer id (optional, when we want to create a computer)
 
@@ -145,7 +151,7 @@ public enum ComputerMapper {
 
         if ((companyIdStr != null) && !"".equals(companyIdStr)) {
             try {
-                long companyId = Long.parseLong(companyIdStr);
+                final long companyId = Long.parseLong(companyIdStr);
 
                 if (companyId != 0) {
                     company = new Company();
