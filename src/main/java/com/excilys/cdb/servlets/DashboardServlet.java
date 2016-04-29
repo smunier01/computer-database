@@ -34,8 +34,8 @@ public class DashboardServlet extends HttpServlet {
     public DashboardServlet() {
         super();
 
-        computerService = ComputerService.getInstance();
-        computerMapper = ComputerMapper.getInstance();
+        this.computerService = ComputerService.getInstance();
+        this.computerMapper = ComputerMapper.getInstance();
     }
 
     /**
@@ -49,26 +49,28 @@ public class DashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // page should be optional and 0 by default
-        int page = Util.getInt(request, "page", 0);
+        final int page = Util.getInt(request, "page", 0);
 
         // page size is stored in session variable, and is 10 by default
-        int psize = Util.getIntFromSession(request, "psize", 10);
+        final int psize = Util.getIntFromSession(request, "psize", 10);
+
+        // page parameters for the getComputers
+        final PageParameters pparam = new PageParameters(psize, page);
 
         try {
 
             // we need the total number of computers for the pagination
-            long nbComputers = computerService.countComputers();
+            final long nbComputers = this.computerService.countComputers();
 
-            List<ComputerDTO> computers = computerService.getComputers(new PageParameters(psize, page)).stream()
-                    .map(computerMapper::toDTO).collect(Collectors.toList());
+            final List<ComputerDTO> computers = this.computerService.getComputers(pparam).stream()
+                    .map(this.computerMapper::toDTO).collect(Collectors.toList());
 
             // set the attributes for the jsp
-            // TODO this should be a PageParameters object ...
-            request.setAttribute("currentPage", page);
+
             request.setAttribute("nbPages", nbComputers / psize);
-            request.setAttribute("maxPerPages", psize);
             request.setAttribute("nbComputers", nbComputers);
             request.setAttribute("computers", computers);
+            request.setAttribute("pparam", pparam);
 
             request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 

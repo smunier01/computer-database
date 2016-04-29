@@ -59,7 +59,6 @@
 										${computer.companyId}
 										<option value="${company.id}"
 											${company.id == computer.companyId ? 'selected' : ''}>${company.name}</option>
-
 									</c:forEach>
 								</select>
 							</div>
