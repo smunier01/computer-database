@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.LocalDateToTimestamp;
+import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
 
@@ -98,7 +99,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't find computer of id : " + id);
             }
 
-        } catch (final SQLException e) {
+        } catch (final SQLException | MapperException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -130,7 +131,7 @@ public class ComputerDAO extends DAO<Computer> {
 
             if (res > 0) {
                 rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
+                if (rs.first()) {
                     obj.setId(rs.getLong(1));
                     ComputerDAO.LOGGER.info("successfully created computer : " + obj.toString());
                 } else {
@@ -139,7 +140,8 @@ public class ComputerDAO extends DAO<Computer> {
                 }
 
             } else {
-                ComputerDAO.LOGGER.warn("couldn't create computer : " + obj.toString());
+                ComputerDAO.LOGGER.warn("Could not create computer : " + obj.toString());
+                throw new DAOException("Could not create computer.");
             }
 
         } catch (final SQLException e) {
@@ -166,14 +168,16 @@ public class ComputerDAO extends DAO<Computer> {
 
             final Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
 
-            setParams(stmt, obj.getName(), introduced, discontinued, obj.getCompany().getId(), obj.getId());
+            final Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
+
+            setParams(stmt, obj.getName(), introduced, discontinued, companyId, obj.getId());
 
             final int res = stmt.executeUpdate();
 
             if (res > 0) {
-                ComputerDAO.LOGGER.info("successfully updated computer : " + obj.toString());
+                ComputerDAO.LOGGER.info("Successfully updated computer : " + obj.toString());
             } else {
-                ComputerDAO.LOGGER.warn("couldn't update computer : " + obj.toString());
+                ComputerDAO.LOGGER.warn("Could not update computer : " + obj.toString());
             }
 
         } catch (final SQLException e) {
@@ -242,7 +246,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
             }
 
-        } catch (final SQLException e) {
+        } catch (final SQLException | MapperException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -269,11 +273,7 @@ public class ComputerDAO extends DAO<Computer> {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-
-                final Computer computer = mapper.map(rs);
-
-                result.add(computer);
-
+                result.add(mapper.map(rs));
             }
 
             if (result.size() > 0) {
@@ -282,7 +282,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
             }
 
-        } catch (final SQLException e) {
+        } catch (final SQLException | MapperException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {

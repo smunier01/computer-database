@@ -97,8 +97,7 @@ public enum ComputerService {
 
         try {
             // use a default company if id <= 0 or id == null*
-            final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+            final Company company = ((companyId == null) || (companyId <= 0)) ? null : companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
@@ -139,8 +138,7 @@ public enum ComputerService {
 
         try {
             // use a default company if id <= 0 or id == null
-            final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+            final Company company = ((companyId == null) || (companyId <= 0)) ? null : companyDAO.find(companyId);
 
             computer = new Computer.ComputerBuilder().name(name).introduced(introduced).discontinued(discontinued)
                     .company(company).build();
@@ -166,13 +164,6 @@ public enum ComputerService {
         if ((c.getName() == null) || "".equals(c.getName())) {
             LOGGER.warn("wrong parameters when creating computer");
             throw new IllegalArgumentException();
-        }
-
-        Company company = c.getCompany();
-
-        if (company == null) {
-            company = new Company();
-            c.setCompany(company);
         }
 
         try {

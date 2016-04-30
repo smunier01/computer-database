@@ -3,7 +3,6 @@ package com.excilys.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,22 +52,35 @@ public enum ComputerMapper {
      * @return instance of the computer created
      * @throws SQLException
      *             exception
+     * @throws MapperException
      */
-    public Computer map(final ResultSet rs) throws SQLException {
+    public Computer map(final ResultSet rs) throws SQLException, MapperException {
 
         final Long id = rs.getLong("id");
         final String name = rs.getString("name");
         final LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
         final LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-        final Long companyId = rs.getLong("company_id") <= 0 ? null : rs.getLong("company_id");
-        final String companyName = rs.getString("company_name");
 
-        final Company company = new Company(companyId, companyName);
+        Long companyId = rs.getLong("company_id");
 
-        final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
-                .discontinued(discontinued).company(company).build();
+        Company company = null;
 
-        return computer;
+        if (companyId > 0) {
+
+            String companyName = rs.getString("company_name");
+
+            if ((companyName == null) || "".equals(companyName)) {
+                // there should never be a null or empty name when the id is not
+                // null.
+                throw new MapperException();
+            } else {
+                company = new Company(companyId, companyName);
+            }
+
+        }
+
+        return new Computer.ComputerBuilder().id(id).name(name).introduced(introduced).discontinued(discontinued)
+                .company(company).build();
     }
 
     /**
