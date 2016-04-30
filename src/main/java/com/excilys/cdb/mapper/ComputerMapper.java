@@ -17,6 +17,8 @@ public enum ComputerMapper {
 
     private final Validator validator = Validator.getInstance();
 
+    private final LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
+
     /**
      * default constructor for the singleton.
      */
@@ -58,8 +60,9 @@ public enum ComputerMapper {
 
         final Long id = rs.getLong("id");
         final String name = rs.getString("name");
-        final LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-        final LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
+
+        final LocalDate introduced = localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
+        final LocalDate discontinued = localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
 
         Long companyId = rs.getLong("company_id");
 

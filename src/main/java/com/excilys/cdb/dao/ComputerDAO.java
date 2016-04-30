@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.mapper.ComputerMapper;
-import com.excilys.cdb.mapper.LocalDateToTimestamp;
+import com.excilys.cdb.mapper.LocalDateMapper;
 import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
@@ -30,6 +30,8 @@ public class ComputerDAO extends DAO<Computer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     private final ComputerMapper mapper = ComputerMapper.getInstance();
+
+    private final LocalDateMapper dateMapper = LocalDateMapper.getInstance();
 
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 
@@ -119,9 +121,9 @@ public class ComputerDAO extends DAO<Computer> {
         try {
             stmt = con.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
 
-            final Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
+            final Timestamp introduced = dateMapper.toTimestamp(obj.getIntroduced());
 
-            final Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
+            final Timestamp discontinued = dateMapper.toTimestamp(obj.getDiscontinued());
 
             final Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
@@ -164,9 +166,9 @@ public class ComputerDAO extends DAO<Computer> {
 
             stmt = con.prepareStatement(UPDATE);
 
-            final Timestamp introduced = LocalDateToTimestamp.convert(obj.getIntroduced());
+            final Timestamp introduced = dateMapper.toTimestamp(obj.getIntroduced());
 
-            final Timestamp discontinued = LocalDateToTimestamp.convert(obj.getDiscontinued());
+            final Timestamp discontinued = dateMapper.toTimestamp(obj.getDiscontinued());
 
             final Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
