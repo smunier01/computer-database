@@ -179,7 +179,7 @@ public class Computer {
         final String intro = introduced == null ? "null" : introduced.toString();
         final String discon = discontinued == null ? "null" : discontinued.toString();
 
-        return id + " " + name + " " + intro + " " + discon + " " + company.toString();
+        return id + " " + name + " " + intro + " " + discon + " " + (company != null ? company.toString() : "null");
     }
 
     /**
