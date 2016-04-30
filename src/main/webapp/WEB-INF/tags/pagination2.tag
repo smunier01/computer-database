@@ -4,6 +4,7 @@
 <%@ attribute name="count" required="true"%>
 <%@ attribute name="psize" required="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mytags"%>
 
 <c:set var="indexStart" value="0" />
 
@@ -36,7 +37,8 @@
 	</c:if>
 
 	<c:forEach var="i" begin="${indexStart}" end="${indexStop}">
-		<li ${current == i ? 'class="active"' : ''}><a href="?page=${i}">${i + 1}</a></li>
+		<!--  <li ${current == i ? 'class="active"' : ''}><a href="?page=${i}">${i + 1}</a></li> -->
+		<li ${current == i ? 'class="active"' : ''}><mytags:link target="" name="${i + 1}" page="${i}" psize="${psize}"/></li>
 	</c:forEach>
 
 	<c:if test="${indexStop < (count - 1)}">
