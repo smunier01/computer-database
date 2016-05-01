@@ -18,7 +18,7 @@ public enum PageParametersMapper {
 
         final int psize = Util.getInt(request, "psize", 10);
 
-        return new PageParameters(psize, page);
+        return new PageParameters(psize, page, request.getParameter("search"));
 
     }
 }

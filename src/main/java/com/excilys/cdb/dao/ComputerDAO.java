@@ -47,9 +47,11 @@ public class ComputerDAO extends DAO<Computer> {
 
     private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
-    private static final String FIND_ALL_LIMIT = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id LIMIT ?,?";
+    private static final String FIND_ALL_LIMIT = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? LIMIT ?,?";
 
     private static final String COUNT = "SELECT count(id) as nb FROM computer";
+
+    private static final String COUNT_SEARCH = "SELECT count(id) as nb FROM computer WHERE name like ?";
 
     /**
      * default constructor for the singleton.
@@ -270,7 +272,9 @@ public class ComputerDAO extends DAO<Computer> {
         try {
             stmt = con.prepareStatement(FIND_ALL_LIMIT);
 
-            setParams(stmt, page.getSize() * (page.getPageNumber() + 1), page.getSize());
+            String search = page.getSearch() == null ? "" : page.getSearch();
+
+            setParams(stmt, "%" + search + "%", page.getSize() * page.getPageNumber(), page.getSize());
 
             rs = stmt.executeQuery();
 
@@ -292,6 +296,34 @@ public class ComputerDAO extends DAO<Computer> {
         }
 
         return result;
+    }
+
+    public long count(PageParameters page) {
+
+        final Connection con = connectionFactory.create();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        long nb = 0;
+
+        try {
+            stmt = con.prepareStatement(COUNT_SEARCH);
+
+            setParams(stmt, page.getSearch());
+
+            rs = stmt.executeQuery();
+
+            if (rs.first()) {
+                nb = rs.getLong("nb");
+            }
+
+        } catch (final SQLException e) {
+            ComputerDAO.LOGGER.error(e.getMessage());
+            throw new DAOException(e);
+        } finally {
+            closeAll(con, stmt, rs);
+        }
+
+        return nb;
     }
 
     @Override
