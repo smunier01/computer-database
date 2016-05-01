@@ -26,10 +26,8 @@ public abstract class DAO<T> {
      * @param id
      *            of the object
      * @return instance of the object found
-     * @throws DAOException
-     *             exception
      */
-    public abstract T find(Long id) throws DAOException;
+    public abstract T find(Long id);
 
     /**
      * create a new object.
@@ -37,10 +35,8 @@ public abstract class DAO<T> {
      * @param obj
      *            object to create
      * @return instance of the object created
-     * @throws DAOException
-     *             exception
      */
-    public abstract T create(T obj) throws DAOException;
+    public abstract T create(T obj);
 
     /**
      * update an object.
@@ -48,29 +44,23 @@ public abstract class DAO<T> {
      * @param obj
      *            object to update
      * @return instance of the object updated
-     * @throws DAOException
-     *             exception
      */
-    public abstract T update(T obj) throws DAOException;
+    public abstract T update(T obj);
 
     /**
      * remove an object.
      *
      * @param obj
      *            object to remove
-     * @throws DAOException
-     *             exception
      */
-    public abstract void delete(T obj) throws DAOException;
+    public abstract void delete(T obj);
 
     /**
      * return all object.
      *
      * @return list containing the objects
-     * @throws DAOException
-     *             exception
      */
-    public abstract List<T> findAll() throws DAOException;
+    public abstract List<T> findAll();
 
     /**
      * return all object with an offset and a limit.
@@ -78,27 +68,21 @@ public abstract class DAO<T> {
      * @param params
      *            page parameters
      * @return the list of object
-     * @throws DAOException
-     *             exception
      */
-    public abstract List<T> findAll(PageParameters params) throws DAOException;
+    public abstract List<T> findAll(PageParameters params);
 
     /**
      * count the number of object in the table.
      *
      * @return number of object as long
-     * @throws DAOException
-     *             exception
      */
-    public abstract long count() throws DAOException;
+    public abstract long count();
 
     /**
      * close the list of resources given.
      *
      * @param resources
      *            resources to close
-     * @throws DAOException
-     *             exception
      */
     protected final void closeAll(final AutoCloseable... resources) {
         for (final AutoCloseable resource : resources) {
@@ -106,7 +90,7 @@ public abstract class DAO<T> {
                 try {
                     resource.close();
                 } catch (final Exception e) {
-                    DAO.LOGGER.error("couldn't close resource : " + resource.toString());
+                    LOGGER.error("couldn't close resource : " + resource.toString());
                 }
             }
         }

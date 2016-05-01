@@ -52,7 +52,7 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public void deleteComputer(final Long id) throws ServiceException {
+    public void deleteComputer(final Long id) {
 
         if ((id == null) || (id <= 0)) {
             ComputerService.LOGGER.warn("can't delete computer with id : " + id);
@@ -88,7 +88,7 @@ public enum ComputerService {
      *             exception
      */
     public void updateComputer(final Long id, final String name, final LocalDate introduced,
-            final LocalDate discontinued, final Long companyId) throws ServiceException {
+            final LocalDate discontinued, final Long companyId) {
 
         if ((id == null) || (id <= 0) || "".equals(name)) {
             ComputerService.LOGGER.warn("wrong parameter when updating computer");
@@ -97,8 +97,7 @@ public enum ComputerService {
 
         try {
             // use a default company if id <= 0 or id == null*
-            final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+            final Company company = ((companyId == null) || (companyId <= 0)) ? null : companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
@@ -127,7 +126,7 @@ public enum ComputerService {
      *             exception
      */
     public Computer createComputer(final String name, final LocalDate introduced, final LocalDate discontinued,
-            final Long companyId) throws ServiceException {
+            final Long companyId) {
 
         // check parameters and return if something is wrong
         if ("".equals(name)) {
@@ -139,8 +138,7 @@ public enum ComputerService {
 
         try {
             // use a default company if id <= 0 or id == null
-            final Company company = ((companyId == null) || (companyId <= 0)) ? new Company()
-                    : companyDAO.find(companyId);
+            final Company company = ((companyId == null) || (companyId <= 0)) ? null : companyDAO.find(companyId);
 
             computer = new Computer.ComputerBuilder().name(name).introduced(introduced).discontinued(discontinued)
                     .company(company).build();
@@ -162,17 +160,10 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public Computer createComputer(Computer c) throws ServiceException {
+    public Computer createComputer(Computer c) {
         if ((c.getName() == null) || "".equals(c.getName())) {
             LOGGER.warn("wrong parameters when creating computer");
             throw new IllegalArgumentException();
-        }
-
-        Company company = c.getCompany();
-
-        if (company == null) {
-            company = new Company();
-            c.setCompany(company);
         }
 
         try {
@@ -193,7 +184,7 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public Computer getComputer(final Long id) throws ServiceException {
+    public Computer getComputer(final Long id) {
 
         if ((id == null) || (id <= 0)) {
             ComputerService.LOGGER.warn("can't get computer with id : " + id);
@@ -217,7 +208,7 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public List<Computer> getComputers(final PageParameters page) throws ServiceException {
+    public List<Computer> getComputers(final PageParameters page) {
         if ((page.getPageNumber() < 0) || (page.getSize() <= 0)) {
             ComputerService.LOGGER.warn("can't get computers with page = " + page);
             throw new IllegalArgumentException();

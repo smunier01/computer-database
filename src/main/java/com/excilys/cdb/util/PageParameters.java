@@ -11,12 +11,15 @@ public class PageParameters {
 
     private long pageNumber;
 
+    private String search;
+
     /**
      * default constructor.
      */
     public PageParameters() {
-        this.size = 10;
-        this.pageNumber = 0;
+        size = 10;
+        pageNumber = 0;
+        search = null;
     }
 
     /**
@@ -30,6 +33,13 @@ public class PageParameters {
     public PageParameters(final long size, final long pageNumber) {
         this.size = size;
         this.pageNumber = pageNumber;
+        search = null;
+    }
+
+    public PageParameters(final long size, final long pageNumber, final String search) {
+        this.size = size;
+        this.pageNumber = pageNumber;
+        this.search = search;
     }
 
     /**
@@ -38,7 +48,7 @@ public class PageParameters {
      * @return new page number
      */
     public long incPage() {
-        return ++this.pageNumber;
+        return ++pageNumber;
     }
 
     /**
@@ -47,11 +57,11 @@ public class PageParameters {
      * @return new page number
      */
     public long decPage() {
-        return this.pageNumber > 0 ? this.pageNumber : 0;
+        return pageNumber > 0 ? pageNumber : 0;
     }
 
     public long getSize() {
-        return this.size;
+        return size;
     }
 
     public void setSize(final long size) {
@@ -59,48 +69,46 @@ public class PageParameters {
     }
 
     public long getPageNumber() {
-        return this.pageNumber;
+        return pageNumber;
     }
 
     public void setPageNumber(final long pageNumber) {
         this.pageNumber = pageNumber;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (this.pageNumber ^ (this.pageNumber >>> 32));
-        result = prime * result + (int) (this.size ^ (this.size >>> 32));
+        result = (prime * result) + (int) (pageNumber ^ (pageNumber >>> 32));
+        result = (prime * result) + ((search == null) ? 0 : search.hashCode());
+        result = (prime * result) + (int) (size ^ (size >>> 32));
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        final PageParameters other = (PageParameters) obj;
-        if (this.pageNumber != other.pageNumber) {
+        PageParameters other = (PageParameters) obj;
+        if (pageNumber != other.pageNumber) {
             return false;
         }
-        if (this.size != other.size) {
+        if (search == null) {
+            if (other.search != null) {
+                return false;
+            }
+        } else if (!search.equals(other.search)) {
+            return false;
+        }
+        if (size != other.size) {
             return false;
         }
         return true;
@@ -108,6 +116,15 @@ public class PageParameters {
 
     @Override
     public String toString() {
-        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + "]";
+        return "PageParameters [size=" + size + ", pageNumber=" + pageNumber + ", search=" + search + "]";
     }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
 }

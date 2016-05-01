@@ -21,8 +21,8 @@ public class Company {
      * company default constructor.
      */
     public Company() {
-        this.id = null;
-        this.name = "";
+        id = null;
+        name = "";
     }
 
     /**
@@ -35,11 +35,11 @@ public class Company {
      */
     public Company(final Long id, final String name) {
         this.id = id;
-        this.name = name == null ? "" : name;
+        this.name = name;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(final Long id) {
@@ -47,7 +47,7 @@ public class Company {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(final String name) {
@@ -59,7 +59,7 @@ public class Company {
      */
     @Override
     public String toString() {
-        return this.id + " " + this.name;
+        return id + " " + name;
     }
 
     /**
@@ -69,8 +69,8 @@ public class Company {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((this.id == null) ? 0 : this.id.hashCode());
-        result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+        result = (prime * result) + ((id == null) ? 0 : id.hashCode());
+        result = (prime * result) + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
@@ -89,18 +89,18 @@ public class Company {
             return false;
         }
         final Company other = (Company) obj;
-        if (this.id == null) {
+        if (id == null) {
             if (other.id != null) {
                 return false;
             }
-        } else if (!this.id.equals(other.id)) {
+        } else if (!id.equals(other.id)) {
             return false;
         }
-        if (this.name == null) {
+        if (name == null) {
             if (other.name != null) {
                 return false;
             }
-        } else if (!this.name.equals(other.name)) {
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;

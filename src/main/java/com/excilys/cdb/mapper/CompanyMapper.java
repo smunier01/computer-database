@@ -32,7 +32,8 @@ public enum CompanyMapper {
      * creates company object from a jdbc ResultSet.
      *
      * @param rs
-     * @return
+     *            ResultSet containing the information about the company.
+     * @return instance of the company created.
      * @throws SQLException
      *             throws exception if the object could not be mapped
      */
@@ -47,18 +48,21 @@ public enum CompanyMapper {
      * creates company object from a HttpServletRequest.
      *
      * @param request
-     * @return
-     * @throws MapperException
-     *             throws exception if the object could not be mapped
+     *            HttpServletRequest containing the information about the
+     *            company.
+     * @return instance of the company created.
+     * @throws UnsupportedOperationException
+     *             not yet implemented
      */
-    public Company map(final HttpServletRequest request) throws MapperException {
-        throw new MapperException("not implemented");
+    public Company map(final HttpServletRequest request) {
+        throw new UnsupportedOperationException();
     }
 
     /**
-     * convert from Company to CompanyDTO
+     * convert from Company to CompanyDTO.
      *
      * @param company
+     *            company
      * @return CompanyDTO object
      */
     public CompanyDTO toDTO(final Company company) {

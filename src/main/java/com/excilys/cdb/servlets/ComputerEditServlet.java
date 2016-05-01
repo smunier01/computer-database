@@ -16,18 +16,17 @@ import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.MapperException;
-
+import com.excilys.cdb.mapper.Validator;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ServiceException;
-import com.excilys.cdb.util.Util;
 
 /**
  * Servlet implementation class ComputerEditServlet.
  */
 @WebServlet("/ComputerEditServlet")
 public class ComputerEditServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     private final ComputerService computerService;
@@ -37,6 +36,8 @@ public class ComputerEditServlet extends HttpServlet {
     private final ComputerMapper computerMapper;
 
     private final CompanyMapper companyMapper;
+
+    private final Validator validator;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -48,6 +49,7 @@ public class ComputerEditServlet extends HttpServlet {
         companyService = CompanyService.getInstance();
         computerMapper = ComputerMapper.getInstance();
         companyMapper = CompanyMapper.getInstance();
+        validator = Validator.getInstance();
     }
 
     /**
@@ -57,34 +59,29 @@ public class ComputerEditServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
-        final long id = Util.getInt(request, "id", 0);
+        final String idStr = request.getParameter("id");
 
-        if (id == 0) {
+        if ((idStr == null) || !validator.validateInt(idStr)) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
+        } else {
 
-        try {
+            long id = Long.parseLong(idStr);
 
-            // get the list of companies for the dropdown menu
-            // and convert it to DTOs.
+            // get the list of companies for the dropdown menu and convert it to
+            // DTOs.
             List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
                     .collect(Collectors.toList());
 
-            // computer to display the current values
             Computer computer = computerService.getComputer(id);
 
             if (computer == null) {
-                // if this computer id doesn't exist, 404 page
+                // if this computer id doesn't exist, 404 not found page
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             } else {
                 request.setAttribute("companies", companyDtos);
                 request.setAttribute("computer", new ComputerDTO(computer));
                 request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
             }
-
-        } catch (final ServiceException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -100,16 +97,10 @@ public class ComputerEditServlet extends HttpServlet {
 
             Computer c = computerMapper.map(request);
 
-            try {
-                computerService.updateComputer(c.getId(), c.getName(), c.getIntroduced(), c.getDiscontinued(),
-                        c.getCompany().getId());
+            computerService.updateComputer(c.getId(), c.getName(), c.getIntroduced(), c.getDiscontinued(),
+                    c.getCompany().getId());
 
-                response.sendRedirect(request.getContextPath() + "/dashboard");
-            } catch (IllegalArgumentException e) {
-                request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
-            } catch (ServiceException e) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            response.sendRedirect(request.getContextPath() + "/dashboard");
 
         } catch (MapperException e1) {
             // if the mapper could not create the object, redisplay the form..

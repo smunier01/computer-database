@@ -19,7 +19,6 @@ import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ServiceException;
 
 /**
  * Servlet implementation class ComputerFormServlet.
@@ -58,21 +57,16 @@ public class ComputerAddServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
-        try {
+        // to display the add computer form, we only need the list of
+        // companies
 
-            // to display the add computer form, we only need the list of
-            // companies
+        List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
+                .collect(Collectors.toList());
 
-            List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
-                    .collect(Collectors.toList());
+        request.setAttribute("companies", companyDtos);
 
-            request.setAttribute("companies", companyDtos);
+        request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
-            request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
-
-        } catch (ServiceException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
     }
 
     /**
@@ -82,20 +76,12 @@ public class ComputerAddServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
-        Computer computer;
-
         try {
-            computer = computerMapper.map(request);
+            Computer computer = computerMapper.map(request);
 
-            try {
-                computerService.createComputer(computer);
+            computerService.createComputer(computer);
 
-                // redirect to the main page on success
-                response.sendRedirect(request.getContextPath() + "/dashboard");
-            } catch (ServiceException e) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
-
+            response.sendRedirect(request.getContextPath() + "/dashboard");
         } catch (MapperException e1) {
             // if the mapper could not create the object, redisplay the form..
             request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);

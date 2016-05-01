@@ -2,7 +2,6 @@ package com.excilys.cdb.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,8 +38,19 @@ public final class Util {
         return date;
     }
 
-    public static int getInt(HttpServletRequest request, String key, int def) {
-        String str = request.getParameter(key);
+    /**
+     * get integer from a HttpServletRequest object.
+     *
+     * @param request
+     *            the request
+     * @param key
+     *            key where the value should be
+     * @param def
+     *            default value in case the integer doesn't exist
+     * @return int retrieved
+     */
+    public static int getInt(final HttpServletRequest request, final String key, final int def) {
+        final String str = request.getParameter(key);
 
         int result;
 
@@ -49,7 +59,7 @@ public final class Util {
         } else {
             try {
                 result = Integer.parseInt(str);
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 result = def;
             }
         }
@@ -57,7 +67,18 @@ public final class Util {
         return result;
     }
 
-    public static int getIntFromSession(HttpServletRequest request, String key, int def) {
+    /**
+     * .
+     *
+     * @param request
+     *            request.
+     * @param key
+     *            key.
+     * @param def
+     *            default value.
+     * @return integer
+     */
+    public static int getIntFromSession(final HttpServletRequest request, final String key, final int def) {
         // true is used to create a new session if one doesn't already exist
         final HttpSession session = request.getSession(true);
 
@@ -82,10 +103,4 @@ public final class Util {
         return psize;
     }
 
-    public static Integer[] splitStringToInteger(String s, String regex) {
-
-        Stream<String> stream = Stream.of(s.split(regex));
-
-        return (Integer[]) stream.map(Long::parseLong).toArray();
-    }
 }

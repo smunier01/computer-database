@@ -14,11 +14,11 @@ public class Computer {
      * default constructor for a computer.
      */
     public Computer() {
-        id = 0L;
+        id = null;
         name = "";
         introduced = null;
         discontinued = null;
-        company = new Company();
+        company = null;
     }
 
     /**
@@ -90,11 +90,11 @@ public class Computer {
      * @author excilys
      */
     public static class ComputerBuilder {
-        private Long id = 0L;
+        private Long id = null;
         private String name = "";
         private LocalDate introduced = null;
         private LocalDate discontinued = null;
-        private Company company = new Company();
+        private Company company = null;
 
         /**
          * default constructor for the builder.
@@ -179,7 +179,7 @@ public class Computer {
         final String intro = introduced == null ? "null" : introduced.toString();
         final String discon = discontinued == null ? "null" : discontinued.toString();
 
-        return id + " " + name + " " + intro + " " + discon + " " + company.toString();
+        return id + " " + name + " " + intro + " " + discon + " " + (company != null ? company.toString() : "null");
     }
 
     /**

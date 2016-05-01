@@ -3,7 +3,6 @@ package com.excilys.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +14,10 @@ import com.excilys.cdb.model.Computer.ComputerBuilder;
 public enum ComputerMapper {
 
     INSTANCE;
+
+    private final Validator validator = Validator.getInstance();
+
+    private final LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
 
     /**
      * default constructor for the singleton.
@@ -33,9 +36,11 @@ public enum ComputerMapper {
     }
 
     /**
+     * Creates a ComputerDTO object from a Computer.
      *
      * @param computer
-     * @return
+     *            computer
+     * @return ComputerDTo object
      */
     public ComputerDTO toDTO(final Computer computer) {
         return new ComputerDTO(computer);
@@ -45,31 +50,49 @@ public enum ComputerMapper {
      * Creates a Computer object from a jdbc ResultSet.
      *
      * @param rs
-     * @return
+     *            ResultSet containing the informations about the computer
+     * @return instance of the computer created
      * @throws SQLException
+     *             exception
+     * @throws MapperException
      */
-    public Computer map(final ResultSet rs) throws SQLException {
+    public Computer map(final ResultSet rs) throws SQLException, MapperException {
 
         final Long id = rs.getLong("id");
         final String name = rs.getString("name");
-        final LocalDate introduced = TimestampToLocalDate.convert(rs.getTimestamp("introduced"));
-        final LocalDate discontinued = TimestampToLocalDate.convert(rs.getTimestamp("discontinued"));
-        final Long companyId = rs.getLong("company_id") <= 0 ? null : rs.getLong("company_id");
-        final String companyName = rs.getString("company_name");
 
-        final Company company = new Company(companyId, companyName);
+        final LocalDate introduced = localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
+        final LocalDate discontinued = localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
 
-        final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
-                .discontinued(discontinued).company(company).build();
+        Long companyId = rs.getLong("company_id");
 
-        return computer;
+        Company company = null;
+
+        if (companyId > 0) {
+
+            String companyName = rs.getString("company_name");
+
+            if ((companyName == null) || "".equals(companyName)) {
+                // there should never be a null or empty name when the id is not
+                // null.
+                throw new MapperException();
+            } else {
+                company = new Company(companyId, companyName);
+            }
+
+        }
+
+        return new Computer.ComputerBuilder().id(id).name(name).introduced(introduced).discontinued(discontinued)
+                .company(company).build();
     }
 
     /**
      * Creates a Computer object from a servlet HttpServletRequest.
      *
      * @param request
-     * @return
+     *            HttpServletRequest containing the informations about the
+     *            computer
+     * @return instance of the computer created
      * @throws MapperException
      *             throw exception if the object could not be mapped (wrong
      *             parameters etc..)
@@ -84,23 +107,19 @@ public enum ComputerMapper {
             throw new MapperException();
         }
 
-        ComputerBuilder builder = new Computer.ComputerBuilder();
+        final ComputerBuilder builder = new Computer.ComputerBuilder();
 
         // computer id (optional, when we want to create a computer)
 
         final String idStr = request.getParameter("id");
         final long id;
 
-        System.out.println(idStr);
         if (idStr == null) {
             id = 0L;
+        } else if (validator.validateInt(idStr)) {
+            id = Long.parseLong(idStr);
         } else {
-            try {
-                id = Long.parseLong(idStr);
-            } catch (final NumberFormatException e) {
-                // a non-valid id has been specified
-                throw new MapperException(e);
-            }
+            throw new MapperException();
         }
 
         // introduced date (optional)
@@ -111,13 +130,10 @@ public enum ComputerMapper {
 
         if ((introducedStr == null) || "".equals(introducedStr)) {
             introduced = null;
+        } else if (validator.validateDate(introducedStr)) {
+            introduced = LocalDate.parse(introducedStr);
         } else {
-            try {
-                introduced = LocalDate.parse(introducedStr);
-            } catch (final DateTimeParseException e) {
-                // a non-valid date has been specified
-                throw new MapperException(e);
-            }
+            throw new MapperException();
         }
 
         // discontinued date (optional)
@@ -128,34 +144,25 @@ public enum ComputerMapper {
 
         if ((discontinuedStr == null) || "".equals(discontinuedStr)) {
             discontinued = null;
+        } else if (validator.validateDate(discontinuedStr)) {
+            discontinued = LocalDate.parse(discontinuedStr);
         } else {
-            try {
-                discontinued = LocalDate.parse(discontinuedStr);
-            } catch (final DateTimeParseException e) {
-                // a non-valid date has been specified
-                throw new MapperException(e);
-            }
+            throw new MapperException();
         }
 
         // company (optional)
 
         final String companyIdStr = request.getParameter("companyId");
 
-        Company company = new Company();
+        Company company;
 
-        if ((companyIdStr != null) && !"".equals(companyIdStr)) {
-            try {
-                long companyId = Long.parseLong(companyIdStr);
-
-                if (companyId != 0) {
-                    company = new Company();
-                    company.setId(companyId);
-                }
-
-            } catch (final NumberFormatException e) {
-                // a non-valid id has been specified
-                throw new MapperException(e);
-            }
+        if ((companyIdStr == null) || "".equals(companyIdStr)) {
+            company = null;
+        } else if (validator.validateInt(companyIdStr)) {
+            company = new Company();
+            company.setId(Long.parseLong(companyIdStr));
+        } else {
+            throw new MapperException();
         }
 
         return builder.id(id).name(nameStr).introduced(introduced).discontinued(discontinued).company(company).build();
