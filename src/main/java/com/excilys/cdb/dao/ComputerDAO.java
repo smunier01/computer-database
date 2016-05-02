@@ -308,7 +308,7 @@ public class ComputerDAO extends DAO<Computer> {
         try {
             stmt = con.prepareStatement(COUNT_SEARCH);
 
-            this.setParams(stmt, page.getSearch());
+            this.setParams(stmt, "%" + page.getSearch() + "%");
 
             rs = stmt.executeQuery();
 

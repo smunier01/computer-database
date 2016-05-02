@@ -39,9 +39,9 @@ public class DashboardServlet extends HttpServlet {
     public DashboardServlet() {
         super();
 
-        computerService = ComputerService.getInstance();
-        computerMapper = ComputerMapper.getInstance();
-        pageMapper = PageParametersMapper.getInstance();
+        this.computerService = ComputerService.getInstance();
+        this.computerMapper = ComputerMapper.getInstance();
+        this.pageMapper = PageParametersMapper.getInstance();
     }
 
     /**
@@ -55,19 +55,17 @@ public class DashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // page parameters for the getComputers
-        final PageParameters pparam = pageMapper.map(request);
+        final PageParameters pparam = this.pageMapper.map(request);
 
         // we need the total number of computers for the pagination
-        final long nbComputers = computerService.countComputers();
+        final long nbComputers = this.computerService.countComputers(pparam);
 
-        final List<ComputerDTO> computers = computerService.getComputers(pparam).stream().map(computerMapper::toDTO)
-                .collect(Collectors.toList());
+        final List<ComputerDTO> computers = this.computerService.getComputers(pparam).stream()
+                .map(this.computerMapper::toDTO).collect(Collectors.toList());
 
         // set the attributes for the jsp
 
-        System.out.println(pparam.getPageNumber());
-
-        request.setAttribute("nbPages", nbComputers / pparam.getSize());
+        request.setAttribute("nbPages", Math.max(1, Math.ceil(nbComputers / (double) pparam.getSize())));
         request.setAttribute("nbComputers", nbComputers);
         request.setAttribute("computers", computers);
         request.setAttribute("pparam", pparam);

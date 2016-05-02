@@ -94,7 +94,12 @@ public class ComputerServiceTest {
 
     @Test
     public void testCount() throws ServiceException {
-        final long a = this.service.countComputers();
+
+        final PageParameters p = Mockito.mock(PageParameters.class);
+        Mockito.when(p.getPageNumber()).thenReturn(0L);
+        Mockito.when(p.getSize()).thenReturn(10L);
+
+        final long a = this.service.countComputers(p);
 
         Assert.assertTrue(a > 0);
 
@@ -108,7 +113,7 @@ public class ComputerServiceTest {
 
         // count again
 
-        final long b = this.service.countComputers();
+        final long b = this.service.countComputers(p);
 
         Assert.assertEquals(a, b - 1);
 

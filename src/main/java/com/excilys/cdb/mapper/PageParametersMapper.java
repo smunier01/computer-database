@@ -12,13 +12,15 @@ public enum PageParametersMapper {
         return INSTANCE;
     }
 
-    public PageParameters map(HttpServletRequest request) {
+    public PageParameters map(final HttpServletRequest request) {
 
         final int page = Util.getInt(request, "page", 0);
 
         final int psize = Util.getInt(request, "psize", 10);
 
-        return new PageParameters(psize, page, request.getParameter("search"));
+        final String search = request.getParameter("search") == null ? "" : request.getParameter("search");
+
+        return new PageParameters(psize, page, search);
 
     }
 }

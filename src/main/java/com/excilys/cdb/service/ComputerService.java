@@ -234,9 +234,9 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public long countComputers() throws ServiceException {
+    public long countComputers(final PageParameters page) throws ServiceException {
         try {
-            return this.computerDAO.count();
+            return this.computerDAO.count(page);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
