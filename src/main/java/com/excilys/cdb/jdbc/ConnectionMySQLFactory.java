@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.ComputerDAO;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Factory creating connection objects.
@@ -28,6 +30,8 @@ public enum ConnectionMySQLFactory {
     private String user;
 
     private String passwd;
+
+    private HikariDataSource ds;
 
     /**
      * constructor of the factory.
@@ -49,6 +53,16 @@ public enum ConnectionMySQLFactory {
             url = props.getProperty("DB_URL");
             user = props.getProperty("DB_USERNAME");
             passwd = props.getProperty("DB_PASSWORD");
+
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(url);
+            config.setUsername(user);
+            config.setPassword(passwd);
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+            ds = new HikariDataSource(config);
 
         } catch (final IOException e) {
             // TODO not sure what to do here ?
@@ -84,7 +98,8 @@ public enum ConnectionMySQLFactory {
         Connection con = null;
 
         try {
-            con = DriverManager.getConnection(url, user, passwd);
+            // con = DriverManager.getConnection(url, user, passwd);
+            con = ds.getConnection();
         } catch (final SQLException e) {
             // TODO not sure what to do here
             LOGGER.error("could not get Connection");

@@ -45,7 +45,7 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -81,6 +81,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${connector.mysql.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- hikariCP for the connection pool -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>2.4.5</version>
 		</dependency>
 
 		<!-- dependencies for jsp & jstl -->
