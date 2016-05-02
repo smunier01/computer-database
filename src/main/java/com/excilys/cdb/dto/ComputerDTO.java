@@ -1,7 +1,10 @@
 package com.excilys.cdb.dto;
 
+import java.time.LocalDate;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Computer.ComputerBuilder;
 
 /**
  * ComputerDTO class.
@@ -21,6 +24,16 @@ public class ComputerDTO {
     private String companyId;
 
     private String companyName;
+
+    public ComputerDTO(final String id, final String name, final String introduced, final String discontinued,
+            final String companyId, final String companyName) {
+        this.id = id;
+        this.name = name;
+        this.introduced = introduced;
+        this.discontinued = discontinued;
+        this.companyId = companyId;
+        this.companyName = companyName;
+    }
 
     /**
      * ComputerDTO constructor using a computer as a template.
@@ -91,6 +104,59 @@ public class ComputerDTO {
 
     public void setCompanyName(final String companyName) {
         this.companyName = companyName;
+    }
+
+    /**
+     * Builder pattern for a ComputerDTO.
+     *
+     * @author excilys
+     */
+    public static class Builder {
+        private String id = null;
+        private String name = null;
+        private String introduced = null;
+        private String discontinued = null;
+        private String companyId = null;
+        private String companyName = null;
+
+        public Builder() {
+
+        }
+
+        public Builder id(final String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder introduced(final String introduced) {
+            this.introduced = introduced;
+            return this;
+        }
+
+        public Builder discontinued(final String discontinued) {
+            this.discontinued = discontinued;
+            return this;
+        }
+
+        public Builder companyId(final String companyId) {
+            this.companyId = companyId;
+            return this;
+        }
+
+        public Builder companyName(final String companyName) {
+            this.companyName = companyName;
+            return this;
+        }
+
+        public ComputerDTO build() {
+            return new ComputerDTO(this.id, this.name, this.introduced, this.discontinued, this.companyId,
+                    this.companyName);
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.excilys.cdb.jdbc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -50,31 +49,31 @@ public enum ConnectionMySQLFactory {
             in = ConnectionMySQLFactory.class.getClassLoader().getResourceAsStream("mysql.properties");
             props.load(in);
 
-            url = props.getProperty("DB_URL");
-            user = props.getProperty("DB_USERNAME");
-            passwd = props.getProperty("DB_PASSWORD");
+            this.url = props.getProperty("DB_URL");
+            this.user = props.getProperty("DB_USERNAME");
+            this.passwd = props.getProperty("DB_PASSWORD");
 
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(url);
-            config.setUsername(user);
-            config.setPassword(passwd);
+            final HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(this.url);
+            config.setUsername(this.user);
+            config.setPassword(this.passwd);
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-            ds = new HikariDataSource(config);
+            this.ds = new HikariDataSource(config);
 
         } catch (final IOException e) {
             // TODO not sure what to do here ?
-            LOGGER.error("could not read mysql.properties");
+            this.LOGGER.error("could not read mysql.properties");
         } catch (final ClassNotFoundException e) {
             // TODO not sure what to do here ?
-            LOGGER.error("mysql jdbc driver could not be loaded");
+            this.LOGGER.error("mysql jdbc driver could not be loaded");
         } finally {
             try {
                 in.close();
             } catch (final IOException e) {
-                LOGGER.warn("could not close InputStream of the mysql property file");
+                this.LOGGER.warn("could not close InputStream of the mysql property file");
             }
         }
     }
@@ -99,10 +98,10 @@ public enum ConnectionMySQLFactory {
 
         try {
             // con = DriverManager.getConnection(url, user, passwd);
-            con = ds.getConnection();
+            con = this.ds.getConnection();
         } catch (final SQLException e) {
             // TODO not sure what to do here
-            LOGGER.error("could not get Connection");
+            this.LOGGER.error("could not get Connection");
         }
 
         return con;

@@ -2,6 +2,8 @@ package com.excilys.cdb.mapper;
 
 import java.util.regex.Pattern;
 
+import com.excilys.cdb.dto.ComputerDTO;
+
 public enum Validator {
     INSTANCE;
 
@@ -17,11 +19,54 @@ public enum Validator {
         return INSTANCE;
     }
 
-    public boolean validateInt(String s) {
-        return intRegex.matcher(s).matches();
+    public void validateInt(final String s) {
+        if (!this.intRegex.matcher(s).matches()) {
+            throw new IllegalArgumentException();
+        }
     }
 
-    public boolean validateDate(String s) {
-        return dateRegex.matcher(s).matches();
+    public void validateDate(final String s) {
+        if (!this.dateRegex.matcher(s).matches()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void validateComputerDTO(final ComputerDTO computer) {
+
+        // computer name
+
+        if ((computer.getName() == null) || "".equals(computer.getName())) {
+            throw new IllegalArgumentException();
+        }
+
+        // computer id
+        if (computer.getId() != null && !computer.getId().isEmpty()) {
+            this.validateInt(computer.getId());
+        }
+
+        // introduced date (optional)
+
+        if (computer.getIntroduced() != null & !"".equals(computer.getIntroduced())) {
+            this.validateDate(computer.getIntroduced());
+        }
+
+        // discontinued date (optional)
+
+        if (computer.getDiscontinued() != null && !"".equals(computer.getDiscontinued())) {
+            this.validateDate(computer.getDiscontinued());
+        }
+
+        // company id (optional)
+
+        if (computer.getCompanyId() != null && !"".equals(computer.getCompanyId())) {
+            this.validateInt(computer.getCompanyId());
+
+            /*
+             * if (computer.getCompanyName() == null ||
+             * "".equals(computer.getCompanyName())) { throw new
+             * IllegalArgumentException(); }
+             */
+        }
+
     }
 }

@@ -12,11 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.mapper.ComputerMapper;
-import com.excilys.cdb.mapper.MapperException;
-
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.mapper.Validator;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
@@ -36,6 +35,8 @@ public class ComputerAddServlet extends HttpServlet {
 
     private final CompanyMapper companyMapper;
 
+    private final Validator validator;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,10 +44,11 @@ public class ComputerAddServlet extends HttpServlet {
 
         super();
 
-        computerService = ComputerService.getInstance();
-        companyService = CompanyService.getInstance();
-        computerMapper = ComputerMapper.getInstance();
-        companyMapper = CompanyMapper.getInstance();
+        this.computerService = ComputerService.getInstance();
+        this.companyService = CompanyService.getInstance();
+        this.computerMapper = ComputerMapper.getInstance();
+        this.companyMapper = CompanyMapper.getInstance();
+        this.validator = Validator.getInstance();
 
     }
 
@@ -60,7 +62,7 @@ public class ComputerAddServlet extends HttpServlet {
         // to display the add computer form, we only need the list of
         // companies
 
-        List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
+        final List<CompanyDTO> companyDtos = this.companyService.getCompanies().stream().map(this.companyMapper::toDTO)
                 .collect(Collectors.toList());
 
         request.setAttribute("companies", companyDtos);
@@ -77,13 +79,17 @@ public class ComputerAddServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            Computer computer = computerMapper.map(request);
 
-            computerService.createComputer(computer);
+            final ComputerDTO computer = this.computerMapper.map(request);
+
+            this.validator.validateComputerDTO(computer);
+
+            this.computerService.createComputer(this.computerMapper.fromDTO(computer));
 
             response.sendRedirect(request.getContextPath() + "/dashboard");
-        } catch (MapperException e1) {
-            // if the mapper could not create the object, redisplay the form..
+
+        } catch (final IllegalArgumentException e1) {
+
             request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
         }
     }

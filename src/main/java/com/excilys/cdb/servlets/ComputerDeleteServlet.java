@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.mapper.Validator;
 import com.excilys.cdb.service.ComputerService;
 
 /**
@@ -22,16 +21,13 @@ public class ComputerDeleteServlet extends HttpServlet {
 
     private final ComputerService computerService;
 
-    private final Validator validator;
-
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ComputerDeleteServlet() {
         super();
 
-        computerService = ComputerService.getInstance();
-        validator = Validator.getInstance();
+        this.computerService = ComputerService.getInstance();
     }
 
     /**
@@ -44,10 +40,7 @@ public class ComputerDeleteServlet extends HttpServlet {
         final String selection = request.getParameter("selection");
 
         if (selection != null) {
-
-            Stream.of(selection.split(",")).filter(validator::validateInt).map(Long::parseLong)
-                    .forEach(computerService::deleteComputer);
-
+            Stream.of(selection.split(",")).map(Long::parseLong).forEach(this.computerService::deleteComputer);
         }
 
         response.sendRedirect(request.getContextPath() + "/dashboard");

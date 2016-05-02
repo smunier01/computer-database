@@ -61,10 +61,10 @@ public enum ComputerService {
 
         try {
             // we get the computer to see if it exists
-            final Computer computer = computerDAO.find(id);
+            final Computer computer = this.computerDAO.find(id);
 
             if (computer != null) {
-                computerDAO.delete(computer);
+                this.computerDAO.delete(computer);
             }
         } catch (final DAOException e) {
             throw new ServiceException(e);
@@ -97,17 +97,23 @@ public enum ComputerService {
 
         try {
             // use a default company if id <= 0 or id == null*
-            final Company company = ((companyId == null) || (companyId <= 0)) ? null : companyDAO.find(companyId);
+            final Company company = ((companyId == null) || (companyId <= 0)) ? null : this.companyDAO.find(companyId);
 
             final Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
                     .discontinued(discontinued).company(company).build();
 
-            computerDAO.update(computer);
+            this.computerDAO.update(computer);
 
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
 
+    }
+
+    public void updateComputer(final Computer computer) {
+        final Long companyId = computer.getCompany() == null ? null : computer.getCompany().getId();
+        this.updateComputer(computer.getId(), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(),
+                companyId);
     }
 
     /**
@@ -138,12 +144,12 @@ public enum ComputerService {
 
         try {
             // use a default company if id <= 0 or id == null
-            final Company company = ((companyId == null) || (companyId <= 0)) ? null : companyDAO.find(companyId);
+            final Company company = ((companyId == null) || (companyId <= 0)) ? null : this.companyDAO.find(companyId);
 
             computer = new Computer.ComputerBuilder().name(name).introduced(introduced).discontinued(discontinued)
                     .company(company).build();
 
-            computerDAO.create(computer);
+            this.computerDAO.create(computer);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -160,15 +166,15 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public Computer createComputer(Computer c) {
+    public Computer createComputer(final Computer c) {
         if ((c.getName() == null) || "".equals(c.getName())) {
             LOGGER.warn("wrong parameters when creating computer");
             throw new IllegalArgumentException();
         }
 
         try {
-            computerDAO.create(c);
-        } catch (DAOException e) {
+            this.computerDAO.create(c);
+        } catch (final DAOException e) {
             throw new ServiceException(e);
         }
 
@@ -192,7 +198,7 @@ public enum ComputerService {
         }
 
         try {
-            return computerDAO.find(id);
+            return this.computerDAO.find(id);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -215,7 +221,7 @@ public enum ComputerService {
         }
 
         try {
-            return computerDAO.findAll(page);
+            return this.computerDAO.findAll(page);
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }
@@ -230,7 +236,7 @@ public enum ComputerService {
      */
     public long countComputers() throws ServiceException {
         try {
-            return computerDAO.count();
+            return this.computerDAO.count();
         } catch (final DAOException e) {
             throw new ServiceException(e);
         }

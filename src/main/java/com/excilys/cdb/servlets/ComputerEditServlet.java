@@ -45,11 +45,11 @@ public class ComputerEditServlet extends HttpServlet {
     public ComputerEditServlet() {
         super();
 
-        computerService = ComputerService.getInstance();
-        companyService = CompanyService.getInstance();
-        computerMapper = ComputerMapper.getInstance();
-        companyMapper = CompanyMapper.getInstance();
-        validator = Validator.getInstance();
+        this.computerService = ComputerService.getInstance();
+        this.companyService = CompanyService.getInstance();
+        this.computerMapper = ComputerMapper.getInstance();
+        this.companyMapper = CompanyMapper.getInstance();
+        this.validator = Validator.getInstance();
     }
 
     /**
@@ -61,18 +61,17 @@ public class ComputerEditServlet extends HttpServlet {
 
         final String idStr = request.getParameter("id");
 
-        if ((idStr == null) || !validator.validateInt(idStr)) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        } else {
+        try {
+            this.validator.validateInt(idStr);
 
-            long id = Long.parseLong(idStr);
+            final long id = Long.parseLong(idStr);
 
             // get the list of companies for the dropdown menu and convert it to
             // DTOs.
-            List<CompanyDTO> companyDtos = companyService.getCompanies().stream().map(companyMapper::toDTO)
-                    .collect(Collectors.toList());
+            final List<CompanyDTO> companyDtos = this.companyService.getCompanies().stream()
+                    .map(this.companyMapper::toDTO).collect(Collectors.toList());
 
-            Computer computer = computerService.getComputer(id);
+            final Computer computer = this.computerService.getComputer(id);
 
             if (computer == null) {
                 // if this computer id doesn't exist, 404 not found page
@@ -82,6 +81,9 @@ public class ComputerEditServlet extends HttpServlet {
                 request.setAttribute("computer", new ComputerDTO(computer));
                 request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
             }
+
+        } catch (final IllegalArgumentException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
 
     }
@@ -95,14 +97,15 @@ public class ComputerEditServlet extends HttpServlet {
 
         try {
 
-            Computer c = computerMapper.map(request);
+            final ComputerDTO c = this.computerMapper.map(request);
 
-            computerService.updateComputer(c.getId(), c.getName(), c.getIntroduced(), c.getDiscontinued(),
-                    c.getCompany().getId());
+            this.validator.validateComputerDTO(c);
+
+            this.computerService.updateComputer(this.computerMapper.fromDTO(c));
 
             response.sendRedirect(request.getContextPath() + "/dashboard");
 
-        } catch (MapperException e1) {
+        } catch (final IllegalArgumentException e1) {
             // if the mapper could not create the object, redisplay the form..
             request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
         }
