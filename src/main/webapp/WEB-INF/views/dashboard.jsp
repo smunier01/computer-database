@@ -66,12 +66,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><mylib2:link target="" name="computer name" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="name"/></th>
+						<th><mylib2:link target="" name="introduced date" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="introduced"/></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><mylib2:link target="" name="discontinued name" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="discontinued"/></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><mylib2:link target="" name="company" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="company"/></th>
 
 					</tr>
 				</thead>

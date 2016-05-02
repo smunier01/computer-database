@@ -1,5 +1,7 @@
 package com.excilys.cdb.dao;
 
+import static com.excilys.cdb.util.PageParameters.Order;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,6 +50,8 @@ public class ComputerDAO extends DAO<Computer> {
     private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
     private static final String FIND_ALL_LIMIT = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? LIMIT ?,?";
+
+    private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s LIMIT ?,?";
 
     private static final String COUNT = "SELECT count(id) as nb FROM computer";
 
@@ -270,7 +274,28 @@ public class ComputerDAO extends DAO<Computer> {
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement(FIND_ALL_LIMIT);
+
+            String s;
+
+            switch (page.getOrder()) {
+            case NAME:
+                s = String.format(FIND_ALL_LIMIT_ORDER, "c.name");
+                break;
+            case COMPANY_NAME:
+                s = String.format(FIND_ALL_LIMIT_ORDER, "o.name");
+                break;
+            case INTRODUCED_DATE:
+                s = String.format(FIND_ALL_LIMIT_ORDER, "c.introduced");
+                break;
+            case DISCONTINUED_DATE:
+                s = String.format(FIND_ALL_LIMIT_ORDER, "c.discontinued");
+                break;
+            default:
+                s = String.format(FIND_ALL_LIMIT_ORDER, "c.name");
+                break;
+            }
+
+            stmt = con.prepareStatement(s);
 
             final String search = page.getSearch() == null ? "" : page.getSearch();
 
