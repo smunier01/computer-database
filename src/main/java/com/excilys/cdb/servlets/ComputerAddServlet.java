@@ -3,7 +3,6 @@ package com.excilys.cdb.servlets;
 import java.io.IOException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +17,7 @@ import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validation.Validator;
+import com.excilys.cdb.validation.ValidatorException;
 
 /**
  * Servlet implementation class ComputerFormServlet.
@@ -44,11 +44,11 @@ public class ComputerAddServlet extends HttpServlet {
 
         super();
 
-        this.computerService = ComputerService.getInstance();
-        this.companyService = CompanyService.getInstance();
-        this.computerMapper = ComputerMapper.getInstance();
-        this.companyMapper = CompanyMapper.getInstance();
-        this.validator = Validator.getInstance();
+        computerService = ComputerService.getInstance();
+        companyService = CompanyService.getInstance();
+        computerMapper = ComputerMapper.getInstance();
+        companyMapper = CompanyMapper.getInstance();
+        validator = Validator.getInstance();
 
     }
 
@@ -59,13 +59,11 @@ public class ComputerAddServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
-        // to display the add computer form, we only need the list of
-        // companies
+        // for the drop down menu, get the list of companies and convert it to a
+        // list of DTO
+        final List<CompanyDTO> companies = companyMapper.map(companyService.getCompanies());
 
-        final List<CompanyDTO> companyDtos = this.companyService.getCompanies().stream().map(this.companyMapper::toDTO)
-                .collect(Collectors.toList());
-
-        request.setAttribute("companies", companyDtos);
+        request.setAttribute("companies", companies);
 
         request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
@@ -80,17 +78,18 @@ public class ComputerAddServlet extends HttpServlet {
 
         try {
 
-            final ComputerDTO computer = this.computerMapper.map(request);
+            final ComputerDTO computer = computerMapper.map(request);
 
-            this.validator.validateComputerDTO(computer);
+            validator.validateComputerDTO(computer);
 
-            this.computerService.createComputer(this.computerMapper.fromDTO(computer));
+            computerService.createComputer(computerMapper.fromDTO(computer));
 
             response.sendRedirect(request.getContextPath() + "/dashboard");
 
-        } catch (final IllegalArgumentException e1) {
+        } catch (final ValidatorException e) {
 
             request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
         }
+
     }
 }

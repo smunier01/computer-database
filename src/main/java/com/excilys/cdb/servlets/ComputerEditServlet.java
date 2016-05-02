@@ -3,7 +3,6 @@ package com.excilys.cdb.servlets;
 import java.io.IOException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +18,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validation.Validator;
+import com.excilys.cdb.validation.ValidatorException;
 
 /**
  * Servlet implementation class ComputerEditServlet.
@@ -28,27 +28,21 @@ public class ComputerEditServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService;
+    private final ComputerService computerService = ComputerService.getInstance();
 
-    private final CompanyService companyService;
+    private final CompanyService companyService = CompanyService.getInstance();
 
-    private final ComputerMapper computerMapper;
+    private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 
-    private final CompanyMapper companyMapper;
+    private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
-    private final Validator validator;
+    private final Validator validator = Validator.getInstance();
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ComputerEditServlet() {
         super();
-
-        this.computerService = ComputerService.getInstance();
-        this.companyService = CompanyService.getInstance();
-        this.computerMapper = ComputerMapper.getInstance();
-        this.companyMapper = CompanyMapper.getInstance();
-        this.validator = Validator.getInstance();
     }
 
     /**
@@ -60,31 +54,22 @@ public class ComputerEditServlet extends HttpServlet {
 
         final String idStr = request.getParameter("id");
 
-        try {
-            this.validator.validateInt(idStr);
+        // @TODO not sure how useful this is...
+        validator.validateInt(idStr);
+        final long id = Long.parseLong(idStr);
 
-            final long id = Long.parseLong(idStr);
+        final List<CompanyDTO> companies = companyMapper.map(companyService.getCompanies());
 
-            // get the list of companies for the dropdown menu and convert it to
-            // DTOs.
-            final List<CompanyDTO> companyDtos = this.companyService.getCompanies().stream()
-                    .map(this.companyMapper::toDTO).collect(Collectors.toList());
+        final Computer computer = computerService.getComputer(id);
 
-            final Computer computer = this.computerService.getComputer(id);
-
-            if (computer == null) {
-                // if this computer id doesn't exist, 404 not found page
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else {
-                request.setAttribute("companies", companyDtos);
-                request.setAttribute("computer", new ComputerDTO(computer));
-                request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
-            }
-
-        } catch (final IllegalArgumentException e) {
+        if (computer == null) {
+            // if this computer id doesn't exist, 404 not found page
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            request.setAttribute("companies", companies);
+            request.setAttribute("computer", new ComputerDTO(computer));
+            request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
         }
-
     }
 
     /**
@@ -94,18 +79,19 @@ public class ComputerEditServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
+        final ComputerDTO c = computerMapper.map(request);
+
         try {
 
-            final ComputerDTO c = this.computerMapper.map(request);
+            validator.validateComputerDTO(c);
 
-            this.validator.validateComputerDTO(c);
-
-            this.computerService.updateComputer(this.computerMapper.fromDTO(c));
+            computerService.updateComputer(computerMapper.fromDTO(c));
 
             response.sendRedirect(request.getContextPath() + "/dashboard");
 
-        } catch (final IllegalArgumentException e1) {
-            // if the mapper could not create the object, redisplay the form..
+        } catch (final ValidatorException e) {
+            // if the object is not valid, redisplay the page
+            request.setAttribute("id", c.getId());
             request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
         }
     }

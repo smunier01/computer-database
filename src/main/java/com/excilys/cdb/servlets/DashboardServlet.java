@@ -2,7 +2,6 @@ package com.excilys.cdb.servlets;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +16,7 @@ import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.validation.Validator;
 
 /**
  * Servlet implementation class ComputerServlet.
@@ -27,21 +27,19 @@ public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService;
+    private final ComputerService computerService = ComputerService.getInstance();
 
-    private final ComputerMapper computerMapper;
+    private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 
-    private final PageParametersMapper pageMapper;
+    private final PageParametersMapper pageMapper = PageParametersMapper.getInstance();
+
+    private final Validator validator = Validator.getInstance();
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public DashboardServlet() {
         super();
-
-        this.computerService = ComputerService.getInstance();
-        this.computerMapper = ComputerMapper.getInstance();
-        this.pageMapper = PageParametersMapper.getInstance();
     }
 
     /**
@@ -55,17 +53,27 @@ public class DashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // page parameters for the getComputers
-        final PageParameters pparam = this.pageMapper.map(request);
+        final PageParameters pparam = pageMapper.map(request);
+
+        validator.validatePageParameters(pparam);
+
+        List<ComputerDTO> computers = computerMapper.map(computerService.getComputers(pparam));
 
         // we need the total number of computers for the pagination
-        final long nbComputers = this.computerService.countComputers(pparam);
+        final long nbComputers;
 
-        final List<ComputerDTO> computers = this.computerService.getComputers(pparam).stream()
-                .map(this.computerMapper::toDTO).collect(Collectors.toList());
+        // small optimization.. if we are on the first page and the number of
+        // computers returned is less than the page size, then there is no need
+        // to count the computers.
+        if ((computers.size() <= pparam.getSize()) && (pparam.getPageNumber() == 0)) {
+            nbComputers = computers.size();
+        } else {
+            nbComputers = computerService.countComputers(pparam);
+        }
 
         // set the attributes for the jsp
 
-        request.setAttribute("nbPages", Math.max(1, Math.ceil(nbComputers / (double) pparam.getSize())));
+        request.setAttribute("nbPages", Math.max(1, ((nbComputers + pparam.getSize()) - 1) / pparam.getSize()));
         request.setAttribute("nbComputers", nbComputers);
         request.setAttribute("computers", computers);
         request.setAttribute("pparam", pparam);

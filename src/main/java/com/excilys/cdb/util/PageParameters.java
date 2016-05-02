@@ -19,7 +19,7 @@ public class PageParameters {
     public PageParameters() {
         size = 10;
         pageNumber = 0;
-        search = null;
+        search = null; // @TODO it should probably be empty string
     }
 
     /**

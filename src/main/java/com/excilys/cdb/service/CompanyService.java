@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
-import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.validation.Validator;
 
 /**
  * enum singleton for the company service.
@@ -22,6 +22,8 @@ public enum CompanyService {
     static final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
 
     private final CompanyDAO companyDAO = CompanyDAO.getInstance();
+
+    private final Validator validator = Validator.getInstance();
 
     /**
      * default constructor for the singleton.
@@ -49,21 +51,8 @@ public enum CompanyService {
      *             exception
      */
     public Company getCompany(final Long id) throws ServiceException {
-
-        Company company = null;
-
-        if ((id != null) && (id > 0)) {
-            try {
-                company = companyDAO.find(id);
-            } catch (final DAOException e) {
-                throw new ServiceException(e);
-            }
-        } else {
-            ComputerService.LOGGER.warn("illegal argument when retrieving company, id : " + id);
-            throw new IllegalArgumentException();
-        }
-
-        return company;
+        validator.validateId(id);
+        return companyDAO.find(id);
     }
 
     /**
@@ -75,22 +64,9 @@ public enum CompanyService {
      * @throws ServiceException
      *             exception
      */
-    public List<Company> getCompanies(final PageParameters page) throws ServiceException {
-
-        List<Company> companies;
-
-        if ((page.getSize() >= 0) && (page.getPageNumber() > 0)) {
-            try {
-                companies = companyDAO.findAll(page);
-            } catch (final DAOException e) {
-                throw new ServiceException(e);
-            }
-        } else {
-            ComputerService.LOGGER.warn("can't get companies with page = " + page);
-            throw new IllegalArgumentException();
-        }
-
-        return companies;
+    public List<Company> getCompanies(final PageParameters page) {
+        validator.validatePageParameters(page);
+        return companyDAO.findAll(page);
     }
 
     /**
@@ -100,16 +76,8 @@ public enum CompanyService {
      * @throws ServiceException
      *             exception
      */
-    public List<Company> getCompanies() throws ServiceException {
-        List<Company> companies;
-
-        try {
-            companies = companyDAO.findAll();
-        } catch (final DAOException e) {
-            throw new ServiceException(e);
-        }
-
-        return companies;
+    public List<Company> getCompanies() {
+        return companyDAO.findAll();
     }
 
     /**
@@ -119,16 +87,7 @@ public enum CompanyService {
      * @throws ServiceException
      *             exception
      */
-    public long countCompanies() throws ServiceException {
-
-        long nbCompanies = 0;
-
-        try {
-            nbCompanies = companyDAO.count();
-        } catch (final DAOException e) {
-            throw new ServiceException(e);
-        }
-
-        return nbCompanies;
+    public long countCompanies() {
+        return companyDAO.count();
     }
 }

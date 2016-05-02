@@ -19,15 +19,13 @@ public class ComputerDeleteServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService;
+    private final ComputerService computerService = ComputerService.getInstance();
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ComputerDeleteServlet() {
         super();
-
-        this.computerService = ComputerService.getInstance();
     }
 
     /**
@@ -40,10 +38,9 @@ public class ComputerDeleteServlet extends HttpServlet {
         final String selection = request.getParameter("selection");
 
         if (selection != null) {
-            Stream.of(selection.split(",")).map(Long::parseLong).forEach(this.computerService::deleteComputer);
+            Stream.of(selection.split(",")).map(Long::parseLong).forEach(computerService::deleteComputer);
         }
 
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }
-
 }

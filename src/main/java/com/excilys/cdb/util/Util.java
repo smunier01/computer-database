@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * static methods used by multiple packages.
@@ -66,41 +65,4 @@ public final class Util {
 
         return result;
     }
-
-    /**
-     * .
-     *
-     * @param request
-     *            request.
-     * @param key
-     *            key.
-     * @param def
-     *            default value.
-     * @return integer
-     */
-    public static int getIntFromSession(final HttpServletRequest request, final String key, final int def) {
-        // true is used to create a new session if one doesn't already exist
-        final HttpSession session = request.getSession(true);
-
-        int psize = 0;
-
-        try {
-
-            psize = Integer.parseInt(request.getParameter(key));
-            session.setAttribute(key, psize);
-
-        } catch (final NumberFormatException e) {
-
-            final Object spsize = session.getAttribute(key);
-
-            if (spsize == null) {
-                psize = def;
-            } else {
-                psize = (Integer) spsize;
-            }
-        }
-
-        return psize;
-    }
-
 }

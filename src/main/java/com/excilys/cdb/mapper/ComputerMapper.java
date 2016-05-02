@@ -3,6 +3,8 @@ package com.excilys.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,19 +55,19 @@ public enum ComputerMapper {
 
         builder.name(computer.getName());
 
-        if (computer.getId() != null && !computer.getId().isEmpty()) {
+        if ((computer.getId() != null) && !computer.getId().isEmpty()) {
             builder.id(Long.parseLong(computer.getId()));
         }
 
-        if (computer.getIntroduced() != null && !"".equals(computer.getIntroduced())) {
+        if ((computer.getIntroduced() != null) && !"".equals(computer.getIntroduced())) {
             builder.introduced(LocalDate.parse(computer.getIntroduced()));
         }
 
-        if (computer.getDiscontinued() != null && !"".equals(computer.getDiscontinued())) {
+        if ((computer.getDiscontinued() != null) && !"".equals(computer.getDiscontinued())) {
             builder.discontinued(LocalDate.parse(computer.getDiscontinued()));
         }
 
-        if (computer.getCompanyId() != null && !"".equals(computer.getCompanyId())) {
+        if ((computer.getCompanyId() != null) && !"".equals(computer.getCompanyId())) {
             builder.company(new Company(Long.parseLong(computer.getCompanyId()), computer.getCompanyName()));
         }
 
@@ -87,8 +89,8 @@ public enum ComputerMapper {
         final Long id = rs.getLong("id");
         final String name = rs.getString("name");
 
-        final LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
-        final LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
+        final LocalDate introduced = localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
+        final LocalDate discontinued = localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
 
         final Long companyId = rs.getLong("company_id");
 
@@ -124,6 +126,10 @@ public enum ComputerMapper {
 
         return builder.build();
 
+    }
+
+    public List<ComputerDTO> map(final List<Computer> computers) {
+        return computers.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
 }

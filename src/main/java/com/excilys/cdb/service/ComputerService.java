@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.validation.Validator;
 
 /**
  *
@@ -22,10 +23,9 @@ public enum ComputerService {
 
     private final ComputerDAO computerDAO = ComputerDAO.getInstance();
 
-    /**
-     *
-     */
-    ComputerService() {
+    private final Validator validator = Validator.getInstance();
+
+    private ComputerService() {
 
     }
 
@@ -43,32 +43,29 @@ public enum ComputerService {
      *
      * @param id
      *            id of the computer to delete
-     * @throws ServiceException
+     * @throws IllegalArgumentException
      *             exception
      */
     public void deleteComputer(final Long id) {
+        validator.validateId(id);
 
-        if ((id == null) || (id <= 0)) {
-            ComputerService.LOGGER.warn("can't delete computer with id : " + id);
-            throw new IllegalArgumentException();
-        }
-
-        // we get the computer to see if it exists
-        final Computer computer = this.computerDAO.find(id);
+        final Computer computer = computerDAO.find(id);
 
         if (computer != null) {
-            this.computerDAO.delete(computer);
+            computerDAO.delete(computer);
         }
     }
 
+    /**
+     * update a computer
+     *
+     * @param computer
+     *            computer to update
+     */
     public void updateComputer(final Computer computer) {
-
-        if ((computer.getId() == null) || computer.getId() <= 0 || !computer.getName().isEmpty()) {
-            ComputerService.LOGGER.warn("wrong parameter when updating computer");
-            throw new IllegalArgumentException();
-        }
-
-        this.computerDAO.update(computer);
+        validator.validateId(computer.getId());
+        validator.validateComputer(computer);
+        computerDAO.update(computer);
     }
 
     /**
@@ -80,13 +77,9 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public Computer createComputer(final Computer c) {
-        if ((c.getName() == null) || "".equals(c.getName())) {
-            LOGGER.warn("wrong parameters when creating computer");
-            throw new IllegalArgumentException();
-        }
-
-        return this.computerDAO.create(c);
+    public Computer createComputer(final Computer computer) {
+        validator.validateComputer(computer);
+        return computerDAO.create(computer);
     }
 
     /**
@@ -99,14 +92,8 @@ public enum ComputerService {
      *             exception
      */
     public Computer getComputer(final Long id) {
-
-        if ((id == null) || (id <= 0)) {
-            ComputerService.LOGGER.warn("can't get computer with id : " + id);
-            throw new IllegalArgumentException();
-        }
-
-        return this.computerDAO.find(id);
-
+        validator.validateId(id);
+        return computerDAO.find(id);
     }
 
     /**
@@ -119,12 +106,8 @@ public enum ComputerService {
      *             exception
      */
     public List<Computer> getComputers(final PageParameters page) {
-        if ((page.getPageNumber() < 0) || (page.getSize() <= 0)) {
-            ComputerService.LOGGER.warn("can't get computers with page = " + page);
-            throw new IllegalArgumentException();
-        }
-
-        return this.computerDAO.findAll(page);
+        validator.validatePageParameters(page);
+        return computerDAO.findAll(page);
     }
 
     /**
@@ -134,7 +117,7 @@ public enum ComputerService {
      * @throws ServiceException
      *             exception
      */
-    public long countComputers(final PageParameters page) throws ServiceException {
-        return this.computerDAO.count(page);
+    public long countComputers(final PageParameters page) {
+        return computerDAO.count(page);
     }
 }

@@ -2,6 +2,8 @@ package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,6 +69,10 @@ public enum CompanyMapper {
      */
     public CompanyDTO toDTO(final Company company) {
         return new CompanyDTO(company);
+    }
+
+    public List<CompanyDTO> map(final List<Company> companies) {
+        return companies.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
 }
