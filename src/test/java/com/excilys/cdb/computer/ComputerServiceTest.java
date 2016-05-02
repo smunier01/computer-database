@@ -25,7 +25,7 @@ public class ComputerServiceTest {
     @Test
     public void testCreateComputer() throws ServiceException {
 
-        final Computer c = this.service.createComputer("MyComputer", null, null, null);
+        final Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("DefaultName").build());
 
         Assert.assertNotNull(c);
 
@@ -38,7 +38,7 @@ public class ComputerServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateComputer2() throws ServiceException {
-        final Computer c = this.service.createComputer("", null, null, null);
+        final Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("").build());
 
         // if it somehow did work... do some clean up
         if ((c != null) && (c.getId() > 0)) {
@@ -105,7 +105,7 @@ public class ComputerServiceTest {
 
         // create a computer
 
-        final Computer c = this.service.createComputer("MyComputer", null, null, null);
+        final Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("DefaultName").build());
 
         Assert.assertNotNull(c);
 

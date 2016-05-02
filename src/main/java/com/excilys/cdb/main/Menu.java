@@ -196,7 +196,9 @@ public class Menu {
 
             // create the new computer
             try {
-                this.computerService.createComputer(name, introduced, discontinued, companyId);
+                final Computer c = new Computer.ComputerBuilder().name(name).introduced(introduced)
+                        .discontinued(discontinued).company(new Company(companyId, "")).build();
+                this.computerService.createComputer(c);
             } catch (final ServiceException e) {
                 System.out.println("Could not create Computer :(");
             }
@@ -247,7 +249,9 @@ public class Menu {
             }
 
             try {
-                this.computerService.updateComputer(computerId, name, introduced, discontinued, companyId);
+                final Computer c = new Computer.ComputerBuilder().id(computerId).name(name).introduced(introduced)
+                        .discontinued(discontinued).company(new Company(companyId, "")).build();
+                this.computerService.updateComputer(c);
             } catch (final ServiceException e) {
                 System.out.println("Error updating computer.");
             }

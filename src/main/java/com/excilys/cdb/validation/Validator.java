@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import com.excilys.cdb.dto.ComputerDTO;
 
 public enum Validator {
+
     INSTANCE;
 
     private final Pattern intRegex = Pattern.compile("[0-9]*[1-9][0-9]*");
@@ -39,7 +40,7 @@ public enum Validator {
             throw new ValidatorException();
         }
 
-        // computer id
+        // computer id (optional)
         if (computer.getId() != null && !computer.getId().isEmpty()) {
             this.validateInt(computer.getId());
         }
