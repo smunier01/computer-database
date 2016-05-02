@@ -19,7 +19,7 @@ public enum ComputerService {
 
     INSTANCE;
 
-    static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
     private final ComputerDAO computerDAO = ComputerDAO.getInstance();
 

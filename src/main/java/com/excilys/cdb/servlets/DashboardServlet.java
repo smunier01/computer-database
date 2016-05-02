@@ -65,7 +65,7 @@ public class DashboardServlet extends HttpServlet {
         // small optimization.. if we are on the first page and the number of
         // computers returned is less than the page size, then there is no need
         // to count the computers.
-        if ((computers.size() <= pparam.getSize()) && (pparam.getPageNumber() == 0)) {
+        if ((computers.size() < pparam.getSize()) && (pparam.getPageNumber() == 0)) {
             nbComputers = computers.size();
         } else {
             nbComputers = computerService.countComputers(pparam);
