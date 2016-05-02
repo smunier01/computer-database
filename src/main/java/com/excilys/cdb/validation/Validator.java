@@ -1,4 +1,4 @@
-package com.excilys.cdb.mapper;
+package com.excilys.cdb.validation;
 
 import java.util.regex.Pattern;
 
@@ -21,13 +21,13 @@ public enum Validator {
 
     public void validateInt(final String s) {
         if (!this.intRegex.matcher(s).matches()) {
-            throw new IllegalArgumentException();
+            throw new ValidatorException();
         }
     }
 
     public void validateDate(final String s) {
         if (!this.dateRegex.matcher(s).matches()) {
-            throw new IllegalArgumentException();
+            throw new ValidatorException();
         }
     }
 
@@ -36,7 +36,7 @@ public enum Validator {
         // computer name
 
         if ((computer.getName() == null) || "".equals(computer.getName())) {
-            throw new IllegalArgumentException();
+            throw new ValidatorException();
         }
 
         // computer id
@@ -60,12 +60,6 @@ public enum Validator {
 
         if (computer.getCompanyId() != null && !"".equals(computer.getCompanyId())) {
             this.validateInt(computer.getCompanyId());
-
-            /*
-             * if (computer.getCompanyName() == null ||
-             * "".equals(computer.getCompanyName())) { throw new
-             * IllegalArgumentException(); }
-             */
         }
 
     }
