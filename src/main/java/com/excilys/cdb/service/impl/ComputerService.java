@@ -83,6 +83,7 @@ public enum ComputerService implements IComputerService {
     @Override
     public long countComputers(final PageParameters page) {
         LOGGER.debug("entering countComputers(page)");
+        this.validator.validatePageParameters(page);
         return this.computerDAO.count(page);
     }
 }

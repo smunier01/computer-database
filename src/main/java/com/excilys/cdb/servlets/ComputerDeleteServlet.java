@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
 
 /**
@@ -17,29 +21,28 @@ import com.excilys.cdb.service.impl.ComputerService;
 @WebServlet("/ComputerDeleteServlet")
 public class ComputerDeleteServlet extends HttpServlet {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDeleteServlet.class);
+
     private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService = ComputerService.getInstance();
-
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ComputerDeleteServlet() {
-        super();
-    }
+    private final IComputerService computerService = ComputerService.getInstance();
 
     /**
      * delete a list of computers.
      */
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        final String selection = request.getParameter("selection");
+        LOGGER.debug("Entering doPost()");
+
+        String selection = request.getParameter("selection");
 
         if (selection != null) {
-            Stream.of(selection.split(",")).map(Long::parseLong).forEach(computerService::deleteComputer);
+            Stream.of(selection.split(",")).map(Long::parseLong).forEach(this.computerService::deleteComputer);
         }
+
+        LOGGER.debug("Exiting doPost()");
 
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }

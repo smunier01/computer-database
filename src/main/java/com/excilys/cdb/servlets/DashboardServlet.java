@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
+import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
@@ -23,11 +24,11 @@ import com.excilys.cdb.validation.Validator;
  */
 public class DashboardServlet extends HttpServlet {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
     private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService = ComputerService.getInstance();
+    private final IComputerService computerService = ComputerService.getInstance();
 
     private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 
@@ -36,31 +37,26 @@ public class DashboardServlet extends HttpServlet {
     private final Validator validator = Validator.getInstance();
 
     /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DashboardServlet() {
-        super();
-    }
-
-    /**
      * get the list of computers to display on the dashboard.
      *
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        LOGGER.debug("Entering doGet()");
+
         // page parameters for the getComputers
-        final PageParameters pparam = pageMapper.map(request);
+        final PageParameters pparam = this.pageMapper.map(request);
 
-        validator.validatePageParameters(pparam);
+        this.validator.validatePageParameters(pparam);
 
-        List<ComputerDTO> computers = computerMapper.map(computerService.getComputers(pparam));
+        List<ComputerDTO> computers = this.computerMapper.map(this.computerService.getComputers(pparam));
 
         // we need the total number of computers for the pagination
-        final long nbComputers;
+        long nbComputers;
 
         // small optimization.. if we are on the first page and the number of
         // computers returned is less than the page size, then there is no need
@@ -68,7 +64,7 @@ public class DashboardServlet extends HttpServlet {
         if ((computers.size() < pparam.getSize()) && (pparam.getPageNumber() == 0)) {
             nbComputers = computers.size();
         } else {
-            nbComputers = computerService.countComputers(pparam);
+            nbComputers = this.computerService.countComputers(pparam);
         }
 
         // set the attributes for the jsp
@@ -79,6 +75,8 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("pparam", pparam);
 
         request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+
+        LOGGER.debug("Exiting doGet()");
 
     }
 }

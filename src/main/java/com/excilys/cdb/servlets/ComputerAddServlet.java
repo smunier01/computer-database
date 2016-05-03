@@ -10,10 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.mapper.ComputerMapper;
+import com.excilys.cdb.service.ICompanyService;
+import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.CompanyService;
 import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.validation.Validator;
@@ -25,47 +30,36 @@ import com.excilys.cdb.validation.ValidatorException;
 @WebServlet("/ComputerFormServlet")
 public class ComputerAddServlet extends HttpServlet {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDeleteServlet.class);
+
     private static final long serialVersionUID = 1L;
 
-    private final ComputerService computerService;
+    private final IComputerService computerService = ComputerService.getInstance();
 
-    private final CompanyService companyService;
+    private final ICompanyService companyService = CompanyService.getInstance();
 
-    private final ComputerMapper computerMapper;
+    private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 
-    private final CompanyMapper companyMapper;
+    private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
-    private final Validator validator;
-
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ComputerAddServlet() {
-
-        super();
-
-        computerService = ComputerService.getInstance();
-        companyService = CompanyService.getInstance();
-        computerMapper = ComputerMapper.getInstance();
-        companyMapper = CompanyMapper.getInstance();
-        validator = Validator.getInstance();
-
-    }
+    private final Validator validator = Validator.getInstance();
 
     /**
      * Display the form to create a new computer.
      */
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // for the drop down menu, get the list of companies and convert it to a
-        // list of DTO
-        final List<CompanyDTO> companies = companyMapper.map(companyService.getCompanies());
+        LOGGER.debug("Entering doGet()");
+
+        List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
 
         request.setAttribute("companies", companies);
 
         request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+
+        LOGGER.debug("Exiting doGet()");
 
     }
 
@@ -73,23 +67,27 @@ public class ComputerAddServlet extends HttpServlet {
      * Create a new computer.
      */
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        LOGGER.debug("Entering doPost()");
 
         try {
 
-            final ComputerDTO computer = computerMapper.map(request);
+            ComputerDTO computer = this.computerMapper.map(request);
 
-            validator.validateComputerDTO(computer);
+            this.validator.validateComputerDTO(computer);
 
-            computerService.createComputer(computerMapper.fromDTO(computer));
+            this.computerService.createComputer(this.computerMapper.fromDTO(computer));
 
             response.sendRedirect(request.getContextPath() + "/dashboard");
 
-        } catch (final ValidatorException e) {
+        } catch (ValidatorException e) {
 
             request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+
         }
 
+        LOGGER.debug("Exiting doPost()");
     }
 }

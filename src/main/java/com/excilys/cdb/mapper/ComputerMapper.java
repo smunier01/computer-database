@@ -22,7 +22,7 @@ public enum ComputerMapper {
     /**
      * default constructor for the singleton.
      */
-    ComputerMapper() {
+    private ComputerMapper() {
 
     }
 
@@ -86,8 +86,8 @@ public enum ComputerMapper {
         final Long id = rs.getLong("id");
         final String name = rs.getString("name");
 
-        final LocalDate introduced = localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
-        final LocalDate discontinued = localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
+        final LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
+        final LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
 
         final Long companyId = rs.getLong("company_id");
 

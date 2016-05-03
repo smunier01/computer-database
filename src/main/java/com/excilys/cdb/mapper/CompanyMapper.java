@@ -71,6 +71,12 @@ public enum CompanyMapper {
         return new CompanyDTO(company);
     }
 
+    /**
+     * convert a list of Company to a list of CompanyDTO.
+     *
+     * @param companies
+     * @return
+     */
     public List<CompanyDTO> map(final List<Company> companies) {
         return companies.stream().map(this::toDTO).collect(Collectors.toList());
     }
