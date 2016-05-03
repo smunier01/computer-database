@@ -26,7 +26,7 @@
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputers}&nbsp;Computers&nbsp;found</h1>
+			<h1 id="homeTitle"><span id="nbComputers">${nbComputers}</span>&nbsp;Computers&nbsp;found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">

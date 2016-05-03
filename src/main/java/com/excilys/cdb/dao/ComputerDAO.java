@@ -18,6 +18,7 @@ import com.excilys.cdb.mapper.LocalDateMapper;
 import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.util.PageParameters.Order;
 
 /**
  * ComputerDAO class.
@@ -300,27 +301,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         try {
 
-            String s;
-
-            switch (page.getOrder()) {
-            case NAME:
-                s = String.format(FIND_ALL_LIMIT_ORDER, "c.name");
-                break;
-            case COMPANY_NAME:
-                s = String.format(FIND_ALL_LIMIT_ORDER, "o.name");
-                break;
-            case INTRODUCED_DATE:
-                s = String.format(FIND_ALL_LIMIT_ORDER, "c.introduced");
-                break;
-            case DISCONTINUED_DATE:
-                s = String.format(FIND_ALL_LIMIT_ORDER, "c.discontinued");
-                break;
-            default:
-                s = String.format(FIND_ALL_LIMIT_ORDER, "c.name");
-                break;
-            }
-
-            stmt = con.prepareStatement(s);
+            stmt = con.prepareStatement(String.format(FIND_ALL_LIMIT_ORDER, this.orderToColumn(page.getOrder())));
 
             final String search = page.getSearch() == null ? "" : page.getSearch();
 
@@ -403,4 +384,25 @@ public class ComputerDAO extends DAO<Computer> {
         return nb;
     }
 
+    private String orderToColumn(final Order order) {
+        String result;
+        switch (order) {
+        case NAME:
+            result = "c.name";
+            break;
+        case COMPANY_NAME:
+            result = "o.name";
+            break;
+        case INTRODUCED_DATE:
+            result = "c.introduced";
+            break;
+        case DISCONTINUED_DATE:
+            result = "c.discontinued";
+            break;
+        default:
+            result = "c.name";
+            break;
+        }
+        return result;
+    }
 }

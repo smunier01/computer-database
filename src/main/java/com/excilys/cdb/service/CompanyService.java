@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
 
@@ -48,10 +47,9 @@ public enum CompanyService {
      * @param id
      *            of the company
      * @return null if invalid id or computer doesn't exist
-     * @throws ServiceException
-     *             exception
      */
-    public Company getCompany(final Long id) throws ServiceException {
+    public Company getCompany(final Long id) {
+        LOGGER.debug("entering getCompany()");
         this.validator.validateId(id);
         return this.companyDAO.find(id);
     }
@@ -62,15 +60,21 @@ public enum CompanyService {
      * @param page
      *            page parameters
      * @return the list of company
-     * @throws ServiceException
-     *             exception
      */
     public List<Company> getCompanies(final PageParameters page) {
+        LOGGER.debug("entering getCompanies(page)");
         this.validator.validatePageParameters(page);
         return this.companyDAO.findAll(page);
     }
 
+    /**
+     * delete a company from its ID.
+     *
+     * @param id
+     *            id of the company
+     */
     public void deleteCompany(final Long id) {
+        LOGGER.debug("entering deleteCompany()");
         this.validator.validateId(id);
 
         final Company company = this.companyDAO.find(id);
@@ -84,10 +88,9 @@ public enum CompanyService {
      * get the entire company list with no page parameters.
      *
      * @return list of company
-     * @throws ServiceException
-     *             exception
      */
     public List<Company> getCompanies() {
+        LOGGER.debug("entering getCompanies()");
         return this.companyDAO.findAll();
     }
 
@@ -95,10 +98,9 @@ public enum CompanyService {
      * get the number of companies.
      *
      * @return number of companies
-     * @throws ServiceException
-     *             exception
      */
     public long countCompanies() {
+        LOGGER.debug("entering countCompanies()");
         return this.companyDAO.count();
     }
 }

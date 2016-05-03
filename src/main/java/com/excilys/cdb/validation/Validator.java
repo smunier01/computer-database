@@ -24,67 +24,71 @@ public enum Validator {
     }
 
     public void validateInt(final String s) {
-        if (!intRegex.matcher(s).matches()) {
-            throw new ValidatorException();
+        if (!this.intRegex.matcher(s).matches()) {
+            throw new ValidatorException("Invalid ID : " + s);
         }
     }
 
     public void validateDate(final String s) {
-        if (!dateRegex.matcher(s).matches()) {
-            throw new ValidatorException();
+        if (!this.dateRegex.matcher(s).matches()) {
+            throw new ValidatorException("Invalid DATE : " + s);
         }
     }
 
     public void validateId(final Long id) {
         if ((id == null) || (id <= 0)) {
-            throw new ValidatorException();
+            throw new ValidatorException("Invalid ID : " + id);
         }
     }
 
-    public void validatePageParameters(PageParameters pparam) {
+    public void validatePageParameters(final PageParameters pparam) {
 
         // page number
         if (pparam.getPageNumber() < 0) {
-            throw new ValidatorException();
+            throw new ValidatorException("Invalid PageNumber : " + pparam.getPageNumber());
         }
 
         // page size
         if (pparam.getSize() <= 0) {
-            throw new ValidatorException();
+            throw new ValidatorException("Invalid PageSize : " + pparam.getSize());
         }
 
         // search
         if (pparam.getSearch() == null) {
-            throw new ValidatorException();
+            throw new ValidatorException("PageSearch cannot be null");
         }
 
+        // order
+        if (pparam.getOrder() == null) {
+            throw new ValidatorException("PageOrder cannot be null");
+        }
     }
 
     public void validateComputerDTO(final ComputerDTO computer) {
 
         // computer name (required)
         if ((computer.getName() == null) || "".equals(computer.getName())) {
-            throw new ValidatorException();
+            throw new ValidatorException("Invalid name : " + computer.getName());
         }
 
         // computer id (optional)
         if ((computer.getId() != null) && !computer.getId().isEmpty()) {
-            validateInt(computer.getId());
+            this.validateInt(computer.getId());
         }
 
         // introduced date (optional)
         if ((computer.getIntroduced() != null) & !"".equals(computer.getIntroduced())) {
-            validateDate(computer.getIntroduced());
+            this.validateDate(computer.getIntroduced());
         }
 
         // discontinued date (optional)
         if ((computer.getDiscontinued() != null) && !"".equals(computer.getDiscontinued())) {
-            validateDate(computer.getDiscontinued());
+            this.validateDate(computer.getDiscontinued());
         }
 
         // company id (optional)
         if ((computer.getCompanyId() != null) && !"".equals(computer.getCompanyId())) {
-            validateInt(computer.getCompanyId());
+            this.validateInt(computer.getCompanyId());
         }
 
     }
@@ -93,12 +97,12 @@ public enum Validator {
 
         // computer name (required)
         if ((computer.getName() == null) || computer.getName().isEmpty()) {
-            throw new ValidatorException();
+            throw new ValidatorException("Invalid name : " + computer.getName());
         }
 
         // computer id (optional)
         if (computer.getId() != null) {
-            validateId(computer.getId());
+            this.validateId(computer.getId());
         }
 
         // introduced date (optional)
@@ -113,14 +117,14 @@ public enum Validator {
 
         // company
         if (computer.getCompany() != null) {
-            validateCompany(computer.getCompany());
+            this.validateCompany(computer.getCompany());
         }
     }
 
     public void validateCompany(final Company company) {
 
         // company id (required)
-        validateId(company.getId());
+        this.validateId(company.getId());
 
         // @TODO name ???
     }

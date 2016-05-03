@@ -22,7 +22,7 @@
 
 	<c:choose>
 		<c:when test="${current == 0}">
-			<li class="disabled"><a aria-label="Previous"> <span
+			<li class="disabled"><a id="previous" aria-label="Previous"> <span
 					aria-hidden="true">&laquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
@@ -37,7 +37,6 @@
 	</c:if>
 
 	<c:forEach var="i" begin="${indexStart}" end="${indexStop}">
-		<!--  <li ${current == i ? 'class="active"' : ''}><a href="?page=${i}">${i + 1}</a></li> -->
 		<li ${current == i ? 'class="active"' : ''}><mytags:link target="" name="${i + 1}" page="${i}" psize="${psize}" search="${pparam.search}" order="${param.order}"/></li>
 	</c:forEach>
 
@@ -52,7 +51,7 @@
 					aria-hidden="true">&laquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="?page=${current + 1}" aria-label="Next"> <span
+			<li><a id="next" href="?page=${current + 1}" aria-label="Next"> <span
 					aria-hidden="true">&laquo;</span></a></li>
 		</c:otherwise>
 	</c:choose>

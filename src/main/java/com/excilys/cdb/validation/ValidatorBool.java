@@ -23,7 +23,7 @@ public enum ValidatorBool {
 
     public boolean validateDate(final String s) {
         try {
-            this.validator.validateInt(s);
+            this.validator.validateDate(s);
             return true;
         } catch (final ValidatorException e) {
             return false;

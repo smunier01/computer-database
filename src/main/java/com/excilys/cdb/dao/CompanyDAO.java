@@ -45,7 +45,7 @@ public class CompanyDAO extends DAO<Company> {
 
     private static final String COUNT = "SELECT count(id) as nb FROM company";
 
-    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ?";
+    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
 
     /**
      * default constructor for the singleton.

@@ -33,6 +33,15 @@ public enum ConnectionMySQLFactory {
     private HikariDataSource ds;
 
     /**
+     * accessor for the factory singleton.
+     *
+     * @return unique instance of the factory
+     */
+    public static ConnectionMySQLFactory getInstance() {
+        return INSTANCE;
+    }
+
+    /**
      * constructor of the factory.
      *
      * this is where the driver is loaded and the property file is read
@@ -79,15 +88,6 @@ public enum ConnectionMySQLFactory {
     }
 
     /**
-     * accessor for the factory singleton.
-     *
-     * @return unique instance of the factory
-     */
-    public static ConnectionMySQLFactory getInstance() {
-        return INSTANCE;
-    }
-
-    /**
      * factory main method, creates Connection objects.
      *
      * @return Connection object
@@ -105,6 +105,10 @@ public enum ConnectionMySQLFactory {
         }
 
         return con;
+    }
+
+    public void close() {
+        this.ds.close();
     }
 
 }
