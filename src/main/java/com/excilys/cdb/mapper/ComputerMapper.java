@@ -12,13 +12,10 @@ import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
-import com.excilys.cdb.validation.Validator;
 
 public enum ComputerMapper {
 
     INSTANCE;
-
-    private final Validator validator = Validator.getInstance();
 
     private final LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
 

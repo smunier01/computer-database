@@ -25,40 +25,17 @@ public enum PageParametersMapper {
         final String orderStr = request.getParameter("order");
 
         Order order = Order.NAME;
+
         if (orderStr != null) {
-            switch (orderStr) {
-            case "name":
-                order = Order.NAME;
-                break;
-            case "introduced":
-                order = Order.INTRODUCED_DATE;
-                break;
-            case "discontinued":
-                order = Order.DISCONTINUED_DATE;
-                break;
-            case "company":
-                order = Order.COMPANY_NAME;
-                break;
-            default:
-                order = Order.NAME;
-                break;
-            }
+            order = Order.valueOf(orderStr.toUpperCase());
         }
 
         Direction direction = Direction.ASC;
 
         final String dirStr = request.getParameter("dir");
+
         if (dirStr != null) {
-            switch (dirStr) {
-            case "asc":
-                direction = Direction.ASC;
-                break;
-            case "desc":
-                direction = Direction.DESC;
-                break;
-            default:
-                direction = Direction.ASC;
-            }
+            direction = Direction.valueOf(dirStr.toUpperCase());
         }
 
         return new PageParameters(psize, page, search, order, direction);

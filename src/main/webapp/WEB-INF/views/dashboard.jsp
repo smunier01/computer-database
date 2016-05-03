@@ -60,11 +60,11 @@
 						<!-- Table header for Discontinued Date -->
 						<th><mylib2:link target="" name="discontinued name"
 								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="discontinued" dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}"/></th>
+								search="${pparam.search}" order="discontinued" dir="${param.dir == 'asc' && param.order == 'discontinued' ? 'desc' : 'asc'}"/></th>
 						<!-- Table header for Company -->
 						<th><mylib2:link target="" name="company"
 								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="company" dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}"/></th>
+								search="${pparam.search}" order="company_name" dir="${param.dir == 'asc' && param.order == 'company_name' ? 'desc' : 'asc'}"/></th>
 
 					</tr>
 				</thead>

@@ -8,7 +8,7 @@ package com.excilys.cdb.util;
 public class PageParameters {
 
     public enum Order {
-        NAME, COMPANY_NAME, INTRODUCED_DATE, DISCONTINUED_DATE;
+        NAME, COMPANY_NAME, INTRODUCED, DISCONTINUED;
     }
 
     public enum Direction {
@@ -29,11 +29,11 @@ public class PageParameters {
      * default constructor.
      */
     public PageParameters() {
-        this.size = 10;
-        this.pageNumber = 0;
-        this.search = "";
-        this.order = Order.NAME;
-        this.direction = Direction.ASC;
+        size = 10;
+        pageNumber = 0;
+        search = "";
+        order = Order.NAME;
+        direction = Direction.ASC;
     }
 
     public PageParameters(final long size, final long pageNumber, final String search, final Order order,
@@ -47,18 +47,18 @@ public class PageParameters {
 
     @Override
     public String toString() {
-        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + ", search=" + this.search
-                + ", order=" + this.order + "]";
+        return "PageParameters [size=" + size + ", pageNumber=" + pageNumber + ", search=" + search
+                + ", order=" + order + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((this.order == null) ? 0 : this.order.hashCode());
-        result = (prime * result) + (int) (this.pageNumber ^ (this.pageNumber >>> 32));
-        result = (prime * result) + ((this.search == null) ? 0 : this.search.hashCode());
-        result = (prime * result) + (int) (this.size ^ (this.size >>> 32));
+        result = (prime * result) + ((order == null) ? 0 : order.hashCode());
+        result = (prime * result) + (int) (pageNumber ^ (pageNumber >>> 32));
+        result = (prime * result) + ((search == null) ? 0 : search.hashCode());
+        result = (prime * result) + (int) (size ^ (size >>> 32));
         return result;
     }
 
@@ -74,27 +74,27 @@ public class PageParameters {
             return false;
         }
         final PageParameters other = (PageParameters) obj;
-        if (this.order != other.order) {
+        if (order != other.order) {
             return false;
         }
-        if (this.pageNumber != other.pageNumber) {
+        if (pageNumber != other.pageNumber) {
             return false;
         }
-        if (this.search == null) {
+        if (search == null) {
             if (other.search != null) {
                 return false;
             }
-        } else if (!this.search.equals(other.search)) {
+        } else if (!search.equals(other.search)) {
             return false;
         }
-        if (this.size != other.size) {
+        if (size != other.size) {
             return false;
         }
         return true;
     }
 
     public String getSearch() {
-        return this.search;
+        return search;
     }
 
     public void setSearch(final String search) {
@@ -102,7 +102,7 @@ public class PageParameters {
     }
 
     public Order getOrder() {
-        return this.order;
+        return order;
     }
 
     public void setOrder(final Order order) {
@@ -115,7 +115,7 @@ public class PageParameters {
      * @return new page number
      */
     public long incPage() {
-        return ++this.pageNumber;
+        return ++pageNumber;
     }
 
     /**
@@ -124,7 +124,7 @@ public class PageParameters {
      * @return new page number
      */
     public long decPage() {
-        return this.pageNumber > 0 ? this.pageNumber : 0;
+        return pageNumber > 0 ? pageNumber : 0;
     }
 
     public static class Builder {
@@ -160,12 +160,12 @@ public class PageParameters {
         }
 
         public PageParameters build() {
-            return new PageParameters(this.size, this.pageNumber, this.search, this.order, this.direction);
+            return new PageParameters(size, pageNumber, search, order, direction);
         }
     }
 
     public long getSize() {
-        return this.size;
+        return size;
     }
 
     public void setSize(final long size) {
@@ -173,7 +173,7 @@ public class PageParameters {
     }
 
     public long getPageNumber() {
-        return this.pageNumber;
+        return pageNumber;
     }
 
     public void setPageNumber(final long pageNumber) {
@@ -181,7 +181,7 @@ public class PageParameters {
     }
 
     public Direction getDirection() {
-        return this.direction;
+        return direction;
     }
 
 }
