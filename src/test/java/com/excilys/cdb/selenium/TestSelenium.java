@@ -19,14 +19,13 @@ public class TestSelenium {
 
     @Test
     public void test() throws Exception {
-        this.driver.get(this.baseUrl + "/cdb/dashboard?page=1");
-        this.driver.findElement(By.linkText("1")).click();
-        this.driver.findElement(By.linkText("4")).click();
-        this.driver.findElement(By.linkText("7")).click();
-        this.driver.findElement(By.xpath("(//a[contains(@href, '?page=7')])[2]")).click();
-        this.driver.findElement(By.linkText("«")).click();
+        this.driver.get(this.baseUrl + "/cdb/dashboard");
         this.driver.findElement(By.cssSelector("a.navbar-brand")).click();
-        this.driver.get(this.baseUrl + "/cdb/dashboard?page=600");
+        this.driver.findElement(By.linkText("2")).click();
+        this.driver.findElement(By.xpath("//li[11]/a/span")).click();
+        this.driver.findElement(By.xpath("//li[12]/a/span")).click();
+        this.driver.findElement(By.linkText("58")).click();
+
     }
 
     @After

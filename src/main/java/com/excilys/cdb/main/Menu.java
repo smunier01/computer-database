@@ -8,6 +8,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
@@ -54,6 +55,7 @@ public class Menu {
         Menu.options.add("Create Computer");
         Menu.options.add("Update Computer");
         Menu.options.add("Delete Computer");
+        Menu.options.add("Delete Company");
         Menu.options.add("quit");
     }
 
@@ -273,6 +275,18 @@ public class Menu {
 
             break;
 
+        case 7:
+            while ((companyId = this.promptForLong("id : ")) <= 0) {
+                System.out.println("invalid id");
+            }
+
+            try {
+                this.companyService.deleteCompany(companyId);
+            } catch (final DAOException e) {
+                System.out.println("Eerror while deleting computer.");
+            }
+
+            break;
         // quit
         default:
             stop = true;

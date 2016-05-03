@@ -23,10 +23,10 @@ public class PageParameters {
      * default constructor.
      */
     public PageParameters() {
-        size = 10;
-        pageNumber = 0;
-        search = null; // @TODO it should probably be empty string
-        order = Order.NAME;
+        this.size = 10;
+        this.pageNumber = 0;
+        this.search = "";
+        this.order = Order.NAME;
     }
 
     /**
@@ -40,15 +40,15 @@ public class PageParameters {
     public PageParameters(final long size, final long pageNumber) {
         this.size = size;
         this.pageNumber = pageNumber;
-        search = null;
-        order = Order.NAME;
+        this.search = "";
+        this.order = Order.NAME;
     }
 
     public PageParameters(final long size, final long pageNumber, final String search) {
         this.size = size;
         this.pageNumber = pageNumber;
         this.search = search;
-        order = Order.NAME;
+        this.order = Order.NAME;
     }
 
     public PageParameters(final long size, final long pageNumber, final String search, final Order order) {
@@ -60,7 +60,7 @@ public class PageParameters {
 
     @Override
     public String toString() {
-        return "PageParameters [size=" + size + ", pageNumber=" + pageNumber + ", search=" + search + ", order=" + order
+        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + ", search=" + this.search + ", order=" + this.order
                 + "]";
     }
 
@@ -68,57 +68,57 @@ public class PageParameters {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((order == null) ? 0 : order.hashCode());
-        result = (prime * result) + (int) (pageNumber ^ (pageNumber >>> 32));
-        result = (prime * result) + ((search == null) ? 0 : search.hashCode());
-        result = (prime * result) + (int) (size ^ (size >>> 32));
+        result = (prime * result) + ((this.order == null) ? 0 : this.order.hashCode());
+        result = (prime * result) + (int) (this.pageNumber ^ (this.pageNumber >>> 32));
+        result = (prime * result) + ((this.search == null) ? 0 : this.search.hashCode());
+        result = (prime * result) + (int) (this.size ^ (this.size >>> 32));
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
-        PageParameters other = (PageParameters) obj;
-        if (order != other.order) {
+        final PageParameters other = (PageParameters) obj;
+        if (this.order != other.order) {
             return false;
         }
-        if (pageNumber != other.pageNumber) {
+        if (this.pageNumber != other.pageNumber) {
             return false;
         }
-        if (search == null) {
+        if (this.search == null) {
             if (other.search != null) {
                 return false;
             }
-        } else if (!search.equals(other.search)) {
+        } else if (!this.search.equals(other.search)) {
             return false;
         }
-        if (size != other.size) {
+        if (this.size != other.size) {
             return false;
         }
         return true;
     }
 
     public String getSearch() {
-        return search;
+        return this.search;
     }
 
-    public void setSearch(String search) {
+    public void setSearch(final String search) {
         this.search = search;
     }
 
     public Order getOrder() {
-        return order;
+        return this.order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(final Order order) {
         this.order = order;
     }
 
@@ -128,7 +128,7 @@ public class PageParameters {
      * @return new page number
      */
     public long incPage() {
-        return ++pageNumber;
+        return ++this.pageNumber;
     }
 
     /**
@@ -137,7 +137,7 @@ public class PageParameters {
      * @return new page number
      */
     public long decPage() {
-        return pageNumber > 0 ? pageNumber : 0;
+        return this.pageNumber > 0 ? this.pageNumber : 0;
     }
 
     public class Builder {
@@ -146,33 +146,33 @@ public class PageParameters {
         private String search;
         private Order order;
 
-        public Builder size(int size) {
+        public Builder size(final int size) {
             this.size = size;
             return this;
         }
 
-        public Builder pageNumber(int pageNumber) {
+        public Builder pageNumber(final int pageNumber) {
             this.pageNumber = pageNumber;
             return this;
         }
 
-        public Builder search(String search) {
+        public Builder search(final String search) {
             this.search = search;
             return this;
         }
 
-        public Builder order(Order order) {
+        public Builder order(final Order order) {
             this.order = order;
             return this;
         }
 
         public PageParameters build() {
-            return new PageParameters(size, pageNumber, search, order);
+            return new PageParameters(this.size, this.pageNumber, this.search, this.order);
         }
     }
 
     public long getSize() {
-        return size;
+        return this.size;
     }
 
     public void setSize(final long size) {
@@ -180,7 +180,7 @@ public class PageParameters {
     }
 
     public long getPageNumber() {
-        return pageNumber;
+        return this.pageNumber;
     }
 
     public void setPageNumber(final long pageNumber) {

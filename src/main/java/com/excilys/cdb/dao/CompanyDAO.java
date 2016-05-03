@@ -45,6 +45,8 @@ public class CompanyDAO extends DAO<Company> {
 
     private static final String COUNT = "SELECT count(id) as nb FROM company";
 
+    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ?";
+
     /**
      * default constructor for the singleton.
      */
@@ -79,13 +81,13 @@ public class CompanyDAO extends DAO<Company> {
         Company company = null;
 
         PreparedStatement stmt = null;
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(FIND_BY_ID);
 
-            setParams(stmt, id);
+            this.setParams(stmt, id);
 
             rs = stmt.executeQuery();
 
@@ -105,7 +107,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt, rs);
+            this.closeAll(con, stmt, rs);
         }
 
         return company;
@@ -114,14 +116,14 @@ public class CompanyDAO extends DAO<Company> {
     @Override
     public Company create(final Company obj) {
 
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
-            setParams(stmt, obj.getName());
+            this.setParams(stmt, obj.getName());
 
             final int res = stmt.executeUpdate();
 
@@ -142,7 +144,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt);
+            this.closeAll(con, stmt);
         }
 
         return obj;
@@ -156,14 +158,14 @@ public class CompanyDAO extends DAO<Company> {
     @Override
     public Company update(final Company obj) {
 
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
 
             stmt = con.prepareStatement(UPDATE);
 
-            setParams(stmt, obj.getName(), obj.getId());
+            this.setParams(stmt, obj.getName(), obj.getId());
 
             final int res = stmt.executeUpdate();
 
@@ -177,7 +179,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt);
+            this.closeAll(con, stmt);
         }
 
         return obj;
@@ -189,29 +191,50 @@ public class CompanyDAO extends DAO<Company> {
     @Override
     public void delete(final Company obj) {
 
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
+
+        PreparedStatement stmtDeleteComputers = null;
         PreparedStatement stmt = null;
 
         try {
 
+            con.setAutoCommit(false);
+
             stmt = con.prepareStatement(DELETE);
+            stmtDeleteComputers = con.prepareStatement(DELETE_COMPUTER);
 
-            setParams(stmt, obj.getId());
+            this.setParams(stmt, obj.getId());
+            this.setParams(stmtDeleteComputers, obj.getId());
 
-            final int res = stmt.executeUpdate();
+            stmt.executeUpdate();
+            stmtDeleteComputers.executeUpdate();
 
-            if (res > 0) {
-                CompanyDAO.LOGGER.info("succefully deleted company : " + obj.getName());
-            } else {
-                CompanyDAO.LOGGER.warn("couldn't delete company : " + obj.getName());
-            }
+            con.commit();
 
         } catch (final SQLException e) {
+
             CompanyDAO.LOGGER.error(e.getMessage());
+
+            try {
+                con.rollback();
+            } catch (final SQLException e1) {
+                LOGGER.error(e.getMessage());
+                throw new DAOException(e);
+            }
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt);
+            try {
+                con.setAutoCommit(true);
+            } catch (final SQLException e) {
+                LOGGER.error(e.getMessage());
+            }
+            this.closeAll(con, stmt, stmtDeleteComputers);
         }
+    }
+
+    @Override
+    public void deleteAll(final List<Long> objs) {
+
     }
 
     /**
@@ -224,7 +247,7 @@ public class CompanyDAO extends DAO<Company> {
 
         final List<Company> result = new ArrayList<>();
 
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -235,7 +258,7 @@ public class CompanyDAO extends DAO<Company> {
 
             while (rs.next()) {
 
-                final Company company = companyMapper.map(rs);
+                final Company company = this.companyMapper.map(rs);
 
                 result.add(company);
 
@@ -251,7 +274,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt, rs);
+            this.closeAll(con, stmt, rs);
         }
 
         return result;
@@ -266,20 +289,20 @@ public class CompanyDAO extends DAO<Company> {
     public List<Company> findAll(final PageParameters page) {
         final ArrayList<Company> result = new ArrayList<>();
 
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(FIND_ALL_LIMIT);
 
-            setParams(stmt, page.getSize() * (page.getPageNumber() + 1), page.getSize());
+            this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
 
             rs = stmt.executeQuery();
 
             while (rs.next()) {
 
-                final Company company = companyMapper.map(rs);
+                final Company company = this.companyMapper.map(rs);
 
                 result.add(company);
             }
@@ -294,7 +317,7 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt, rs);
+            this.closeAll(con, stmt, rs);
         }
 
         return result;
@@ -306,7 +329,7 @@ public class CompanyDAO extends DAO<Company> {
     @Override
     public long count() throws DAOException {
 
-        final Connection con = connectionFactory.create();
+        final Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -325,9 +348,10 @@ public class CompanyDAO extends DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            closeAll(con, stmt, rs);
+            this.closeAll(con, stmt, rs);
         }
 
         return nb;
     }
+
 }

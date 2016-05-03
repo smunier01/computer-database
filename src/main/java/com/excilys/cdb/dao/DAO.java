@@ -56,6 +56,11 @@ public abstract class DAO<T> {
     public abstract void delete(T obj);
 
     /**
+     * remove multiple object by their IDs
+     */
+    public abstract void deleteAll(List<Long> objs);
+
+    /**
      * return all object.
      *
      * @return list containing the objects

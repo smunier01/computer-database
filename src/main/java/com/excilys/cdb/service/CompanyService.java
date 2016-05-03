@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
 
@@ -51,8 +52,8 @@ public enum CompanyService {
      *             exception
      */
     public Company getCompany(final Long id) throws ServiceException {
-        validator.validateId(id);
-        return companyDAO.find(id);
+        this.validator.validateId(id);
+        return this.companyDAO.find(id);
     }
 
     /**
@@ -65,8 +66,18 @@ public enum CompanyService {
      *             exception
      */
     public List<Company> getCompanies(final PageParameters page) {
-        validator.validatePageParameters(page);
-        return companyDAO.findAll(page);
+        this.validator.validatePageParameters(page);
+        return this.companyDAO.findAll(page);
+    }
+
+    public void deleteCompany(final Long id) {
+        this.validator.validateId(id);
+
+        final Company company = this.companyDAO.find(id);
+
+        if (company != null) {
+            this.companyDAO.delete(company);
+        }
     }
 
     /**
@@ -77,7 +88,7 @@ public enum CompanyService {
      *             exception
      */
     public List<Company> getCompanies() {
-        return companyDAO.findAll();
+        return this.companyDAO.findAll();
     }
 
     /**
@@ -88,6 +99,6 @@ public enum CompanyService {
      *             exception
      */
     public long countCompanies() {
-        return companyDAO.count();
+        return this.companyDAO.count();
     }
 }
