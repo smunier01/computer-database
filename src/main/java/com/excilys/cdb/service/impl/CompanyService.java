@@ -1,4 +1,4 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.service.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.service.ICompanyService;
 import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
 
@@ -15,7 +16,7 @@ import com.excilys.cdb.validation.Validator;
  *
  * @author excilys
  */
-public enum CompanyService {
+public enum CompanyService implements ICompanyService {
 
     INSTANCE;
 
@@ -28,7 +29,7 @@ public enum CompanyService {
     /**
      * default constructor for the singleton.
      */
-    CompanyService() {
+    private CompanyService() {
 
     }
 
@@ -41,38 +42,21 @@ public enum CompanyService {
         return INSTANCE;
     }
 
-    /**
-     * get company by its id.
-     *
-     * @param id
-     *            of the company
-     * @return null if invalid id or computer doesn't exist
-     */
+    @Override
     public Company getCompany(final Long id) {
         LOGGER.debug("entering getCompany()");
         this.validator.validateId(id);
         return this.companyDAO.find(id);
     }
 
-    /**
-     * get list of company.
-     *
-     * @param page
-     *            page parameters
-     * @return the list of company
-     */
+    @Override
     public List<Company> getCompanies(final PageParameters page) {
         LOGGER.debug("entering getCompanies(page)");
         this.validator.validatePageParameters(page);
         return this.companyDAO.findAll(page);
     }
 
-    /**
-     * delete a company from its ID.
-     *
-     * @param id
-     *            id of the company
-     */
+    @Override
     public void deleteCompany(final Long id) {
         LOGGER.debug("entering deleteCompany()");
         this.validator.validateId(id);
@@ -84,21 +68,13 @@ public enum CompanyService {
         }
     }
 
-    /**
-     * get the entire company list with no page parameters.
-     *
-     * @return list of company
-     */
+    @Override
     public List<Company> getCompanies() {
         LOGGER.debug("entering getCompanies()");
         return this.companyDAO.findAll();
     }
 
-    /**
-     * get the number of companies.
-     *
-     * @return number of companies
-     */
+    @Override
     public long countCompanies() {
         LOGGER.debug("entering countCompanies()");
         return this.companyDAO.count();

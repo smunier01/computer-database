@@ -22,8 +22,9 @@
 
 	<c:choose>
 		<c:when test="${current == 0}">
-			<li class="disabled"><a id="previous" aria-label="Previous"> <span
-					aria-hidden="true">&laquo;</span></a></li>
+			<li class="disabled"><a id="previous" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+			</a></li>
 		</c:when>
 		<c:otherwise>
 			<li><a href="?page=${current - 1}" aria-label="Previous"> <span
@@ -37,7 +38,9 @@
 	</c:if>
 
 	<c:forEach var="i" begin="${indexStart}" end="${indexStop}">
-		<li ${current == i ? 'class="active"' : ''}><mytags:link target="" name="${i + 1}" page="${i}" psize="${psize}" search="${pparam.search}" order="${param.order}" dir="${param.dir}"/></li>
+		<li ${current == i ? 'class="active"' : ''}><mytags:link
+				target="" name="${i + 1}" page="${i}" psize="${psize}"
+				search="${pparam.search}" order="${param.order}" dir="${param.dir}" /></li>
 	</c:forEach>
 
 	<c:if test="${indexStop < (count - 1)}">
@@ -51,8 +54,9 @@
 					aria-hidden="true">&laquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
-			<li><a id="next" href="?page=${current + 1}" aria-label="Next"> <span
-					aria-hidden="true">&laquo;</span></a></li>
+			<li><a id="next" href="?page=${current + 1}" aria-label="Next">
+					<span aria-hidden="true">&laquo;</span>
+			</a></li>
 		</c:otherwise>
 	</c:choose>
 

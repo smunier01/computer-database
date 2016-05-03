@@ -11,9 +11,9 @@ import java.util.Scanner;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceException;
+import com.excilys.cdb.service.impl.CompanyService;
+import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.util.PageParameters;
 
 /**

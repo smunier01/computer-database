@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ServiceException;
+import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.util.PageParameters;
 
 public class ComputerServiceTest {

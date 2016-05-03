@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.impl.ComputerService;
 
 /**
  * Servlet implementation class ComputerDeleteServlet.

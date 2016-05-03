@@ -7,7 +7,7 @@
 
 <body>
 	<jsp:include page="header.jsp" />
-	
+
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -51,8 +51,9 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input id="buttonForm" type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
+							<input id="buttonForm" type="submit" value="Edit"
+								class="btn btn-primary"> or <a href="dashboard.html"
+								class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>

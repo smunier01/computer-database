@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
-import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
 
