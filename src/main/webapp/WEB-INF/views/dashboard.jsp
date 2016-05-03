@@ -53,18 +53,18 @@
 						</span></th>
 						<th><mylib2:link target="" name="computer name"
 								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="name" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
+								search="${pparam.search}" order="name" dir="${param.dir == 'asc' && param.order == 'name' ? 'desc' : 'asc'}"/></th>
 						<th><mylib2:link target="" name="introduced date"
 								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="introduced" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
+								search="${pparam.search}" order="introduced" dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}"/></th>
 						<!-- Table header for Discontinued Date -->
 						<th><mylib2:link target="" name="discontinued name"
 								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="discontinued" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
+								search="${pparam.search}" order="discontinued" dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}"/></th>
 						<!-- Table header for Company -->
 						<th><mylib2:link target="" name="company"
 								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="company" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
+								search="${pparam.search}" order="company" dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}"/></th>
 
 					</tr>
 				</thead>
