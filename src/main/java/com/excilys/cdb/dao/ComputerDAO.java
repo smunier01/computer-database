@@ -18,6 +18,7 @@ import com.excilys.cdb.mapper.LocalDateMapper;
 import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.util.PageParameters.Direction;
 import com.excilys.cdb.util.PageParameters.Order;
 
 /**
@@ -50,7 +51,7 @@ public class ComputerDAO extends DAO<Computer> {
 
     private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
-    private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s LIMIT ?,?";
+    private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s %s LIMIT ?,?";
 
     private static final String COUNT = "SELECT count(id) as nb FROM computer";
 
@@ -301,7 +302,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         try {
 
-            stmt = con.prepareStatement(String.format(FIND_ALL_LIMIT_ORDER, this.orderToColumn(page.getOrder())));
+            stmt = con.prepareStatement(String.format(FIND_ALL_LIMIT_ORDER, this.orderToColumn(page.getOrder()),
+                    this.directionToColumn(page.getDirection())));
 
             final String search = page.getSearch() == null ? "" : page.getSearch();
 
@@ -401,6 +403,22 @@ public class ComputerDAO extends DAO<Computer> {
             break;
         default:
             result = "c.name";
+            break;
+        }
+        return result;
+    }
+
+    private String directionToColumn(final Direction direction) {
+        String result;
+        switch (direction) {
+        case ASC:
+            result = "ASC";
+            break;
+        case DESC:
+            result = "DESC";
+            break;
+        default:
+            result = "ASC";
             break;
         }
         return result;

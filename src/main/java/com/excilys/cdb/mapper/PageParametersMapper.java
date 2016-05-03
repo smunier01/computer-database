@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.util.Util;
+import com.excilys.cdb.util.PageParameters.Direction;
 
 public enum PageParametersMapper {
     INSTANCE;
@@ -44,7 +45,23 @@ public enum PageParametersMapper {
             }
         }
 
-        return new PageParameters(psize, page, search, order);
+        Direction direction = Direction.ASC;
+
+        final String dirStr = request.getParameter("dir");
+        if (dirStr != null) {
+            switch (dirStr) {
+            case "asc":
+                direction = Direction.ASC;
+                break;
+            case "desc":
+                direction = Direction.DESC;
+                break;
+            default:
+                direction = Direction.ASC;
+            }
+        }
+
+        return new PageParameters(psize, page, search, order, direction);
 
     }
 }

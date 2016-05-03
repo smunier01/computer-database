@@ -11,6 +11,10 @@ public class PageParameters {
         NAME, COMPANY_NAME, INTRODUCED_DATE, DISCONTINUED_DATE;
     }
 
+    public enum Direction {
+        ASC, DESC;
+    }
+
     private long size;
 
     private long pageNumber;
@@ -18,6 +22,8 @@ public class PageParameters {
     private String search;
 
     private Order order;
+
+    private final Direction direction;
 
     /**
      * default constructor.
@@ -27,41 +33,22 @@ public class PageParameters {
         this.pageNumber = 0;
         this.search = "";
         this.order = Order.NAME;
+        this.direction = Direction.ASC;
     }
 
-    /**
-     * page parameters constructor.
-     *
-     * @param size
-     *            max size of the page
-     * @param pageNumber
-     *            current page number
-     */
-    public PageParameters(final long size, final long pageNumber) {
-        this.size = size;
-        this.pageNumber = pageNumber;
-        this.search = "";
-        this.order = Order.NAME;
-    }
-
-    public PageParameters(final long size, final long pageNumber, final String search) {
-        this.size = size;
-        this.pageNumber = pageNumber;
-        this.search = search;
-        this.order = Order.NAME;
-    }
-
-    public PageParameters(final long size, final long pageNumber, final String search, final Order order) {
+    public PageParameters(final long size, final long pageNumber, final String search, final Order order,
+            final Direction direction) {
         this.size = size;
         this.pageNumber = pageNumber;
         this.search = search;
         this.order = order;
+        this.direction = direction;
     }
 
     @Override
     public String toString() {
-        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + ", search=" + this.search + ", order=" + this.order
-                + "]";
+        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + ", search=" + this.search
+                + ", order=" + this.order + "]";
     }
 
     @Override
@@ -140,11 +127,12 @@ public class PageParameters {
         return this.pageNumber > 0 ? this.pageNumber : 0;
     }
 
-    public class Builder {
+    public static class Builder {
         private int size;
         private int pageNumber;
         private String search;
         private Order order;
+        private Direction direction;
 
         public Builder size(final int size) {
             this.size = size;
@@ -166,8 +154,13 @@ public class PageParameters {
             return this;
         }
 
+        public Builder direction(final Direction direction) {
+            this.direction = direction;
+            return this;
+        }
+
         public PageParameters build() {
-            return new PageParameters(this.size, this.pageNumber, this.search, this.order);
+            return new PageParameters(this.size, this.pageNumber, this.search, this.order, this.direction);
         }
     }
 
@@ -185,6 +178,10 @@ public class PageParameters {
 
     public void setPageNumber(final long pageNumber) {
         this.pageNumber = pageNumber;
+    }
+
+    public Direction getDirection() {
+        return this.direction;
     }
 
 }

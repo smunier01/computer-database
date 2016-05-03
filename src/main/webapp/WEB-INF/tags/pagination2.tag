@@ -37,7 +37,7 @@
 	</c:if>
 
 	<c:forEach var="i" begin="${indexStart}" end="${indexStop}">
-		<li ${current == i ? 'class="active"' : ''}><mytags:link target="" name="${i + 1}" page="${i}" psize="${psize}" search="${pparam.search}" order="${param.order}"/></li>
+		<li ${current == i ? 'class="active"' : ''}><mytags:link target="" name="${i + 1}" page="${i}" psize="${psize}" search="${pparam.search}" order="${param.order}" dir="${param.dir}"/></li>
 	</c:forEach>
 
 	<c:if test="${indexStop < (count - 1)}">

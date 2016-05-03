@@ -103,7 +103,7 @@ public class Menu {
         LocalDate introduced, discontinued;
         String name;
         Computer computer = null;
-        final PageParameters page;
+        PageParameters page;
 
         boolean stop = false;
 
@@ -111,7 +111,7 @@ public class Menu {
         // display the list of computers
         case 1:
 
-            page = new PageParameters(Menu.MAX_PER_PAGES, 0);
+            page = new PageParameters.Builder().size(Menu.MAX_PER_PAGES).pageNumber(0).build();
 
             // loop for pagination
             while (this.listComputers(page)) {
@@ -137,7 +137,7 @@ public class Menu {
 
         // display the list of companies
         case 2:
-            page = new PageParameters(Menu.MAX_PER_PAGES, 0);
+            page = new PageParameters.Builder().size(Menu.MAX_PER_PAGES).pageNumber(0).build();
 
             // loop for pagination
             while (this.listCompanies(page)) {

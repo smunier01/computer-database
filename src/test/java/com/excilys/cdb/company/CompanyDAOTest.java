@@ -161,7 +161,7 @@ public class CompanyDAOTest {
     @Test
     public void testFindAllWithLimit1() throws DAOException {
 
-        final PageParameters page = new PageParameters(20, 0);
+        final PageParameters page = new PageParameters.Builder().size(20).pageNumber(0).build();
 
         final List<Company> companies1 = this.companyDAO.findAll(page);
         final List<Company> companies2 = this.companyDAO.findAll();
@@ -179,7 +179,7 @@ public class CompanyDAOTest {
     @Test
     public void testFindAllWithLimit2() throws DAOException {
 
-        final PageParameters page = new PageParameters(7, 3);
+        final PageParameters page = new PageParameters.Builder().size(7).pageNumber(3).build();
 
         final List<Company> companies1 = this.companyDAO.findAll(page);
         final List<Company> companies2 = this.companyDAO.findAll();

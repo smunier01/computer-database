@@ -49,7 +49,7 @@ public class TestSelenium {
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTest");
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound = this.driver.findElement(By.id("nbComputers")).getText();
-        System.out.println(nbFound);
+
         Assert.assertTrue(nbFound.equals("1"));
 
         // remove it
@@ -66,7 +66,7 @@ public class TestSelenium {
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTest");
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound2 = this.driver.findElement(By.id("nbComputers")).getText();
-        System.out.println(nbFound2);
+
         Assert.assertTrue(nbFound2.equals("0"));
     }
 

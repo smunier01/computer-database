@@ -2,31 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
-	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
-	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css"
-	rel="stylesheet" media="screen">
-</head>
+
+<jsp:include page="top.jsp" />
+
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand"
-				href="${pageContext.request.contextPath}/dashboard"> Application
-				- Computer Database </a>
-		</div>
-	</header>
+	<jsp:include page="header.jsp" />
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle"><span id="nbComputers">${nbComputers}</span>&nbsp;Computers&nbsp;found</h1>
+			<h1 id="homeTitle">
+				<span id="nbComputers">${nbComputers}</span>&nbsp;Computers&nbsp;found
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -66,12 +51,20 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><mylib2:link target="" name="computer name" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="name"/></th>
-						<th><mylib2:link target="" name="introduced date" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="introduced"/></th>
+						<th><mylib2:link target="" name="computer name"
+								page="${pparam.pageNumber}" psize="${pparam.size}"
+								search="${pparam.search}" order="name" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
+						<th><mylib2:link target="" name="introduced date"
+								page="${pparam.pageNumber}" psize="${pparam.size}"
+								search="${pparam.search}" order="introduced" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
 						<!-- Table header for Discontinued Date -->
-						<th><mylib2:link target="" name="discontinued name" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="discontinued"/></th>
+						<th><mylib2:link target="" name="discontinued name"
+								page="${pparam.pageNumber}" psize="${pparam.size}"
+								search="${pparam.search}" order="discontinued" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
 						<!-- Table header for Company -->
-						<th><mylib2:link target="" name="company" page="${pparam.pageNumber}" psize="${pparam.size}" search="${pparam.search}" order="company"/></th>
+						<th><mylib2:link target="" name="company"
+								page="${pparam.pageNumber}" psize="${pparam.size}"
+								search="${pparam.search}" order="company" dir="${param.dir == 'asc' ? 'desc' : 'asc'}"/></th>
 
 					</tr>
 				</thead>
@@ -100,9 +93,6 @@
 				psize="${pparam.size}" />
 		</div>
 	</footer>
-	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
-
+	
 </body>
 </html>

@@ -62,6 +62,11 @@ public enum Validator {
         if (pparam.getOrder() == null) {
             throw new ValidatorException("PageOrder cannot be null");
         }
+
+        // order direction
+        if (pparam.getDirection() == null) {
+            throw new ValidatorException("OrderDirection cannot be null");
+        }
     }
 
     public void validateComputerDTO(final ComputerDTO computer) {

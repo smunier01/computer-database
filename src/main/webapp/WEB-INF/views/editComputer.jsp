@@ -1,26 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
-	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
-	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css"
-	rel="stylesheet" media="screen">
-</head>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
+
+<jsp:include page="top.jsp" />
+
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/dashboard"> Application -
-				Computer Database </a>
-		</div>
-	</header>
+	<jsp:include page="header.jsp" />
+	
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -64,7 +51,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
+							<input id="buttonForm" type="submit" value="Edit" class="btn btn-primary">
 							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
