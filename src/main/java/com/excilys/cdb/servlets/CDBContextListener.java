@@ -17,7 +17,7 @@ public class CDBContextListener implements ServletContextListener {
     private final ConnectionMySQLFactory factory = ConnectionMySQLFactory.getInstance();
 
     @Override
-    public void contextDestroyed(ServletContextEvent arg0) {
+    public void contextDestroyed(final ServletContextEvent arg0) {
         LOGGER.debug("ServletContextListener destroyed");
 
         this.factory.close();
@@ -25,7 +25,7 @@ public class CDBContextListener implements ServletContextListener {
     }
 
     @Override
-    public void contextInitialized(ServletContextEvent arg0) {
+    public void contextInitialized(final ServletContextEvent arg0) {
         LOGGER.debug("ServletContextListener started");
     }
 

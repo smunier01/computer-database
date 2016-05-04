@@ -58,6 +58,62 @@ public class TestSelenium {
         Assert.assertTrue(nbFound2.equals("0"));
     }
 
+    @Test
+    public void testUpdate() throws Exception {
+
+        // creates a computer with a name of "ComputerTest"
+
+        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.findElement(By.id("addComputer")).click();
+        this.driver.findElement(By.id("computerName")).clear();
+        this.driver.findElement(By.id("computerName")).sendKeys("ComputerTest");
+        this.driver.findElement(By.id("buttonForm")).click();
+
+        // check if it has been added
+
+        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTest");
+        this.driver.findElement(By.id("searchsubmit")).click();
+        String nbFound = this.driver.findElement(By.id("nbComputers")).getText();
+
+        Assert.assertTrue(nbFound.equals("1"));
+
+        // click on it
+
+        this.driver.findElement(By.linkText("ComputerTest")).click();
+
+        // Modify its value to "ComputerTestEdit"
+
+        this.driver.findElement(By.id("computerName")).sendKeys("ComputerTestEdited");
+        this.driver.findElement(By.id("buttonForm")).click();
+
+        // check if has been edited
+
+        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTestEdited");
+        this.driver.findElement(By.id("searchsubmit")).click();
+        nbFound = this.driver.findElement(By.id("nbComputers")).getText();
+
+        Assert.assertTrue(nbFound.equals("1"));
+
+        // clean up
+
+        this.driver.findElement(By.id("editComputer")).click();
+        this.driver.findElement(By.id("selectall")).click();
+        this.driver.findElement(By.id("deleteSelected")).click();
+        assertTrue(this.closeAlertAndGetItsText()
+                .matches("^Are you sure you want to delete the selected computers[\\s\\S]$"));
+
+        // check if it has been removed
+
+        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTestEdited");
+        this.driver.findElement(By.id("searchsubmit")).click();
+        final String nbFound2 = this.driver.findElement(By.id("nbComputers")).getText();
+
+        Assert.assertTrue(nbFound2.equals("0"));
+    }
+
     @After
     public void tearDown() throws Exception {
         this.driver.quit();
