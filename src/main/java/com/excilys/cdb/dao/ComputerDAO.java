@@ -57,6 +57,8 @@ public enum ComputerDAO implements DAO<Computer> {
 
     private static final String COUNT_SEARCH = "SELECT count(id) as nb FROM computer WHERE name like ?";
 
+    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
+
     /**
      * public accessor for the singleton.
      *
@@ -207,6 +209,22 @@ public enum ComputerDAO implements DAO<Computer> {
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
+        }
+    }
+
+    public void deleteByCompanyId(Connection con, Long id) {
+        PreparedStatement stmt = null;
+
+        try {
+
+            stmt = con.prepareStatement(DELETE_COMPUTER);
+
+            this.setParams(stmt, id);
+
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.closeAll(stmt);
         }
     }
 

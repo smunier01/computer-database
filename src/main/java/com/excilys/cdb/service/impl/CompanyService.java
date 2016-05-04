@@ -1,14 +1,20 @@
 package com.excilys.cdb.service.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
+import com.excilys.cdb.dao.ComputerDAO;
+import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ICompanyService;
+import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.validation.Validator;
 
 /**
@@ -23,6 +29,8 @@ public enum CompanyService implements ICompanyService {
     private final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
 
     private CompanyDAO companyDAO = CompanyDAO.getInstance();
+
+    private ComputerDAO computerDAO = ComputerDAO.getInstance();
 
     private Validator validator = Validator.getInstance();
 
@@ -62,9 +70,32 @@ public enum CompanyService implements ICompanyService {
         this.validator.validateId(id);
 
         Company company = this.companyDAO.find(id);
+        Connection con = ConnectionMySQLFactory.getInstance().create();
 
         if (company != null) {
-            this.companyDAO.delete(company);
+
+            try {
+
+                con.setAutoCommit(false);
+
+                this.computerDAO.deleteByCompanyId(con, id);
+                this.companyDAO.delete(company);
+
+                con.commit();
+
+            } catch (DAOException | SQLException e) {
+                try {
+                    con.rollback();
+                } catch (SQLException e1) {
+                    throw new ServiceException(e1);
+                }
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    throw new ServiceException(e);
+                }
+            }
         }
     }
 

@@ -71,6 +71,7 @@ public enum ConnectionMySQLFactory {
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            // config.setMaximumPoolSize(40);
 
             this.ds = new HikariDataSource(config);
 

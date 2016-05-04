@@ -18,7 +18,7 @@
 
 					<form action="${pageContext.request.contextPath}/computer/edit"
 						method="POST">
-						<input name="id" type="hidden" value="${computer.id}" />
+						<input id="id" name="id" type="hidden" value="${computer.id}" />
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input

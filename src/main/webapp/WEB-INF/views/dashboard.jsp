@@ -65,7 +65,7 @@
 								search="${pparam.search}" order="discontinued"
 								dir="${param.dir == 'asc' && param.order == 'discontinued' ? 'desc' : 'asc'}" /></th>
 						<!-- Table header for Company -->
-						<th><mylib2:link target="" name="company"
+						<th><mylib2:link target="" name="company" 
 								page="${pparam.pageNumber}" psize="${pparam.size}"
 								search="${pparam.search}" order="company_name"
 								dir="${param.dir == 'asc' && param.order == 'company_name' ? 'desc' : 'asc'}" /></th>
@@ -76,9 +76,9 @@
 				<tbody id="results">
 					<c:forEach items="${computers}" var="computer">
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
+							<td class="editMode"><input type="checkbox" name="cb"  id="${computer.name}_id"
 								class="cb" value="${computer.id}"></td>
-							<td><a
+							<td><a id="${computer.name}_name"
 								href="${pageContext.request.contextPath}/computer/edit?id=${computer.id}"
 								onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
