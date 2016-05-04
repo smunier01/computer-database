@@ -16,7 +16,7 @@ public class ValidatorException extends RuntimeException {
      * @param message
      *            message for the exception
      */
-    public ValidatorException(final String message) {
+    public ValidatorException(String message) {
         super(message);
     }
 
@@ -28,7 +28,7 @@ public class ValidatorException extends RuntimeException {
      * @param cause
      *            throwable
      */
-    public ValidatorException(final String message, final Throwable cause) {
+    public ValidatorException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -38,7 +38,7 @@ public class ValidatorException extends RuntimeException {
      * @param cause
      *            throwable
      */
-    public ValidatorException(final Throwable cause) {
+    public ValidatorException(Throwable cause) {
         super(cause);
     }
 }

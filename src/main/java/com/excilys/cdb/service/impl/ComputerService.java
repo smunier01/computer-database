@@ -20,11 +20,11 @@ public enum ComputerService implements IComputerService {
 
     INSTANCE;
 
-    static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
-    private final ComputerDAO computerDAO = ComputerDAO.getInstance();
+    private ComputerDAO computerDAO = ComputerDAO.getInstance();
 
-    private final Validator validator = Validator.getInstance();
+    private Validator validator = Validator.getInstance();
 
     private ComputerService() {
 
@@ -40,11 +40,11 @@ public enum ComputerService implements IComputerService {
     }
 
     @Override
-    public void deleteComputer(final Long id) {
-        LOGGER.debug("entering deleteComputer()");
+    public void deleteComputer(Long id) {
+        this.LOGGER.debug("entering deleteComputer()");
         this.validator.validateId(id);
 
-        final Computer computer = this.computerDAO.find(id);
+        Computer computer = this.computerDAO.find(id);
 
         if (computer != null) {
             this.computerDAO.delete(computer);
@@ -52,37 +52,37 @@ public enum ComputerService implements IComputerService {
     }
 
     @Override
-    public void updateComputer(final Computer computer) {
-        LOGGER.debug("entering updateComputer()");
+    public void updateComputer(Computer computer) {
+        this.LOGGER.debug("entering updateComputer()");
         this.validator.validateId(computer.getId());
         this.validator.validateComputer(computer);
         this.computerDAO.update(computer);
     }
 
     @Override
-    public Computer createComputer(final Computer computer) {
-        LOGGER.debug("entering createComputer()");
+    public Computer createComputer(Computer computer) {
+        this.LOGGER.debug("entering createComputer()");
         this.validator.validateComputer(computer);
         return this.computerDAO.create(computer);
     }
 
     @Override
-    public Computer getComputer(final Long id) {
-        LOGGER.debug("entering getComputer()");
+    public Computer getComputer(Long id) {
+        this.LOGGER.debug("entering getComputer()");
         this.validator.validateId(id);
         return this.computerDAO.find(id);
     }
 
     @Override
-    public List<Computer> getComputers(final PageParameters page) {
-        LOGGER.debug("entering getComputers(page)");
+    public List<Computer> getComputers(PageParameters page) {
+        this.LOGGER.debug("entering getComputers(page)");
         this.validator.validatePageParameters(page);
         return this.computerDAO.findAll(page);
     }
 
     @Override
-    public long countComputers(final PageParameters page) {
-        LOGGER.debug("entering countComputers(page)");
+    public long countComputers(PageParameters page) {
+        this.LOGGER.debug("entering countComputers(page)");
         this.validator.validatePageParameters(page);
         return this.computerDAO.count(page);
     }

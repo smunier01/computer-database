@@ -23,7 +23,7 @@ public class PageParameters {
 
     private Order order;
 
-    private final Direction direction;
+    private Direction direction;
 
     /**
      * default constructor.
@@ -36,8 +36,7 @@ public class PageParameters {
         this.direction = Direction.ASC;
     }
 
-    public PageParameters(final long size, final long pageNumber, final String search, final Order order,
-            final Direction direction) {
+    public PageParameters(long size, long pageNumber, String search, Order order, Direction direction) {
         this.size = size;
         this.pageNumber = pageNumber;
         this.search = search;
@@ -53,7 +52,7 @@ public class PageParameters {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        int prime = 31;
         int result = 1;
         result = (prime * result) + ((this.order == null) ? 0 : this.order.hashCode());
         result = (prime * result) + (int) (this.pageNumber ^ (this.pageNumber >>> 32));
@@ -63,7 +62,7 @@ public class PageParameters {
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -73,7 +72,7 @@ public class PageParameters {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        final PageParameters other = (PageParameters) obj;
+        PageParameters other = (PageParameters) obj;
         if (this.order != other.order) {
             return false;
         }
@@ -97,7 +96,7 @@ public class PageParameters {
         return this.search;
     }
 
-    public void setSearch(final String search) {
+    public void setSearch(String search) {
         this.search = search;
     }
 
@@ -105,7 +104,7 @@ public class PageParameters {
         return this.order;
     }
 
-    public void setOrder(final Order order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 
@@ -134,27 +133,27 @@ public class PageParameters {
         private Order order = Order.NAME;
         private Direction direction = Direction.ASC;
 
-        public Builder size(final int size) {
+        public Builder size(int size) {
             this.size = size;
             return this;
         }
 
-        public Builder pageNumber(final int pageNumber) {
+        public Builder pageNumber(int pageNumber) {
             this.pageNumber = pageNumber;
             return this;
         }
 
-        public Builder search(final String search) {
+        public Builder search(String search) {
             this.search = search;
             return this;
         }
 
-        public Builder order(final Order order) {
+        public Builder order(Order order) {
             this.order = order;
             return this;
         }
 
-        public Builder direction(final Direction direction) {
+        public Builder direction(Direction direction) {
             this.direction = direction;
             return this;
         }
@@ -168,7 +167,7 @@ public class PageParameters {
         return this.size;
     }
 
-    public void setSize(final long size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
@@ -176,7 +175,7 @@ public class PageParameters {
         return this.pageNumber;
     }
 
-    public void setPageNumber(final long pageNumber) {
+    public void setPageNumber(long pageNumber) {
         this.pageNumber = pageNumber;
     }
 

@@ -39,9 +39,9 @@ public enum CompanyMapper {
      * @throws SQLException
      *             throws exception if the object could not be mapped
      */
-    public Company map(final ResultSet rs) throws SQLException {
-        final Long id = rs.getLong("id");
-        final String name = rs.getString("name");
+    public Company map(ResultSet rs) throws SQLException {
+        Long id = rs.getLong("id");
+        String name = rs.getString("name");
 
         return new Company(id, name);
     }
@@ -56,7 +56,7 @@ public enum CompanyMapper {
      * @throws UnsupportedOperationException
      *             not yet implemented
      */
-    public Company map(final HttpServletRequest request) {
+    public Company map(HttpServletRequest request) {
         throw new UnsupportedOperationException();
     }
 
@@ -67,7 +67,7 @@ public enum CompanyMapper {
      *            company
      * @return CompanyDTO object
      */
-    public CompanyDTO toDTO(final Company company) {
+    public CompanyDTO toDTO(Company company) {
         return new CompanyDTO(company);
     }
 
@@ -77,7 +77,7 @@ public enum CompanyMapper {
      * @param companies
      * @return
      */
-    public List<CompanyDTO> map(final List<Company> companies) {
+    public List<CompanyDTO> map(List<Company> companies) {
         return companies.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

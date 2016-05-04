@@ -89,12 +89,12 @@ public abstract class DAO<T> {
      * @param resources
      *            resources to close
      */
-    protected final void closeAll(final AutoCloseable... resources) {
-        for (final AutoCloseable resource : resources) {
+    protected final void closeAll(AutoCloseable... resources) {
+        for (AutoCloseable resource : resources) {
             if (resource != null) {
                 try {
                     resource.close();
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     LOGGER.error("couldn't close resource : " + resource.toString());
                 }
             }
@@ -112,7 +112,7 @@ public abstract class DAO<T> {
      * @throws SQLException
      *             exception
      */
-    protected PreparedStatement setParams(final PreparedStatement stmt, final Object... params) throws SQLException {
+    protected PreparedStatement setParams(PreparedStatement stmt, Object... params) throws SQLException {
 
         int cnt = 0;
 

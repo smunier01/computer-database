@@ -81,11 +81,11 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public Computer find(final Long id) {
+    public Computer find(Long id) {
 
         Computer computer = null;
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -105,7 +105,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't find computer of id : " + id);
             }
 
-        } catch (final SQLException | MapperException e) {
+        } catch (SQLException | MapperException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -116,24 +116,24 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public Computer create(final Computer obj) {
+    public Computer create(Computer obj) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
 
-            final Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
+            Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
 
-            final Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
+            Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
 
-            final Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
+            Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
             this.setParams(stmt, obj.getName(), introduced, discontinued, companyId);
 
-            final int res = stmt.executeUpdate();
+            int res = stmt.executeUpdate();
 
             if (res > 0) {
                 rs = stmt.getGeneratedKeys();
@@ -150,7 +150,7 @@ public class ComputerDAO extends DAO<Computer> {
                 throw new DAOException("Could not create computer.");
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -161,24 +161,24 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public Computer update(final Computer obj) {
+    public Computer update(Computer obj) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
 
             stmt = con.prepareStatement(UPDATE);
 
-            final Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
+            Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
 
-            final Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
+            Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
 
-            final Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
+            Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
             this.setParams(stmt, obj.getName(), introduced, discontinued, companyId, obj.getId());
 
-            final int res = stmt.executeUpdate();
+            int res = stmt.executeUpdate();
 
             if (res > 0) {
                 ComputerDAO.LOGGER.info("Successfully updated computer : " + obj.toString());
@@ -186,7 +186,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("Could not update computer : " + obj.toString());
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -197,9 +197,9 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public void delete(final Computer obj) {
+    public void delete(Computer obj) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -208,7 +208,7 @@ public class ComputerDAO extends DAO<Computer> {
 
             this.setParams(stmt, obj.getId());
 
-            final int res = stmt.executeUpdate();
+            int res = stmt.executeUpdate();
 
             if (res > 0) {
                 ComputerDAO.LOGGER.info("successfully deleted computer : " + obj.toString());
@@ -216,7 +216,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't delete computer : " + obj.toString());
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -225,17 +225,17 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public void deleteAll(final List<Long> objs) {
+    public void deleteAll(List<Long> objs) {
 
-        final StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < objs.size(); i++) {
             builder.append("?,");
         }
 
-        final String s = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());
+        String s = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -244,7 +244,7 @@ public class ComputerDAO extends DAO<Computer> {
 
             stmt.executeUpdate();
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
             this.closeAll(con, stmt);
@@ -254,9 +254,9 @@ public class ComputerDAO extends DAO<Computer> {
     @Override
     public List<Computer> findAll() {
 
-        final ArrayList<Computer> result = new ArrayList<>();
+        ArrayList<Computer> result = new ArrayList<>();
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -267,7 +267,7 @@ public class ComputerDAO extends DAO<Computer> {
 
             while (rs.next()) {
 
-                final Computer computer = this.mapper.map(rs);
+                Computer computer = this.mapper.map(rs);
 
                 result.add(computer);
 
@@ -279,7 +279,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
             }
 
-        } catch (final SQLException | MapperException e) {
+        } catch (SQLException | MapperException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -290,11 +290,11 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    public List<Computer> findAll(final PageParameters page) {
+    public List<Computer> findAll(PageParameters page) {
 
-        final ArrayList<Computer> result = new ArrayList<>();
+        ArrayList<Computer> result = new ArrayList<>();
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -303,7 +303,7 @@ public class ComputerDAO extends DAO<Computer> {
             stmt = con.prepareStatement(
                     String.format(FIND_ALL_LIMIT_ORDER, page.getOrder().toString(), page.getDirection().toString()));
 
-            final String search = page.getSearch() == null ? "" : page.getSearch();
+            String search = page.getSearch() == null ? "" : page.getSearch();
 
             this.setParams(stmt, "%" + search + "%", page.getSize() * page.getPageNumber(), page.getSize());
 
@@ -319,7 +319,7 @@ public class ComputerDAO extends DAO<Computer> {
                 ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
             }
 
-        } catch (final SQLException | MapperException e) {
+        } catch (SQLException | MapperException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -329,9 +329,9 @@ public class ComputerDAO extends DAO<Computer> {
         return result;
     }
 
-    public long count(final PageParameters page) {
+    public long count(PageParameters page) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         long nb = 0;
@@ -347,7 +347,7 @@ public class ComputerDAO extends DAO<Computer> {
                 nb = rs.getLong("nb");
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -360,7 +360,7 @@ public class ComputerDAO extends DAO<Computer> {
     @Override
     public long count() {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         long nb = 0;
@@ -374,7 +374,7 @@ public class ComputerDAO extends DAO<Computer> {
                 nb = rs.getLong("nb");
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {

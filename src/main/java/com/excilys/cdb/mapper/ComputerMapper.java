@@ -17,7 +17,7 @@ public enum ComputerMapper {
 
     INSTANCE;
 
-    private final LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
+    private LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
 
     /**
      * default constructor for the singleton.
@@ -42,13 +42,13 @@ public enum ComputerMapper {
      *            computer
      * @return ComputerDTo object
      */
-    public ComputerDTO toDTO(final Computer computer) {
+    public ComputerDTO toDTO(Computer computer) {
         return new ComputerDTO(computer);
     }
 
-    public Computer fromDTO(final ComputerDTO computer) {
+    public Computer fromDTO(ComputerDTO computer) {
 
-        final ComputerBuilder builder = new Computer.ComputerBuilder();
+        ComputerBuilder builder = new Computer.ComputerBuilder();
 
         builder.name(computer.getName());
 
@@ -81,21 +81,21 @@ public enum ComputerMapper {
      *             exception
      * @throws MapperException
      */
-    public Computer map(final ResultSet rs) throws SQLException, MapperException {
+    public Computer map(ResultSet rs) throws SQLException, MapperException {
 
-        final Long id = rs.getLong("id");
-        final String name = rs.getString("name");
+        Long id = rs.getLong("id");
+        String name = rs.getString("name");
 
-        final LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
-        final LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
+        LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
+        LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
 
-        final Long companyId = rs.getLong("company_id");
+        Long companyId = rs.getLong("company_id");
 
         Company company = null;
 
         if (companyId > 0) {
 
-            final String companyName = rs.getString("company_name");
+            String companyName = rs.getString("company_name");
 
             if ((companyName == null) || "".equals(companyName)) {
                 // there should never be a null or empty name when the id is not
@@ -111,9 +111,9 @@ public enum ComputerMapper {
                 .company(company).build();
     }
 
-    public ComputerDTO map(final HttpServletRequest request) {
+    public ComputerDTO map(HttpServletRequest request) {
 
-        final ComputerDTO.Builder builder = new ComputerDTO.Builder();
+        ComputerDTO.Builder builder = new ComputerDTO.Builder();
 
         builder.id(request.getParameter("id"));
         builder.name(request.getParameter("computerName"));
@@ -125,7 +125,7 @@ public enum ComputerMapper {
 
     }
 
-    public List<ComputerDTO> map(final List<Computer> computers) {
+    public List<ComputerDTO> map(List<Computer> computers) {
         return computers.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

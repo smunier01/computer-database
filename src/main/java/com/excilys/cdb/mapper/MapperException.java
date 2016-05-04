@@ -22,7 +22,7 @@ public class MapperException extends Exception {
      * @param message
      *            message for the exception
      */
-    public MapperException(final String message) {
+    public MapperException(String message) {
         super(message);
     }
 
@@ -34,7 +34,7 @@ public class MapperException extends Exception {
      * @param cause
      *            throwable
      */
-    public MapperException(final String message, final Throwable cause) {
+    public MapperException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -44,7 +44,7 @@ public class MapperException extends Exception {
      * @param cause
      *            throwable
      */
-    public MapperException(final Throwable cause) {
+    public MapperException(Throwable cause) {
         super(cause);
     }
 }

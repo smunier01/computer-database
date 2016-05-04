@@ -4,7 +4,6 @@ import static com.excilys.cdb.util.PageParameters.Order;
 import javax.servlet.http.HttpServletRequest;
 
 import com.excilys.cdb.util.PageParameters;
-import com.excilys.cdb.util.Util;
 import com.excilys.cdb.util.PageParameters.Direction;
 
 public enum PageParametersMapper {
@@ -14,15 +13,15 @@ public enum PageParametersMapper {
         return INSTANCE;
     }
 
-    public PageParameters map(final HttpServletRequest request) {
+    public PageParameters map(HttpServletRequest request) {
 
-        final int page = Util.getInt(request, "page", 0);
+        int page = getIntWithDefault(request, "page", 0);
 
-        final int psize = Util.getInt(request, "psize", 10);
+        int psize = getIntWithDefault(request, "psize", 10);
 
-        final String search = request.getParameter("search") == null ? "" : request.getParameter("search");
+        String search = request.getParameter("search") == null ? "" : request.getParameter("search");
 
-        final String orderStr = request.getParameter("order");
+        String orderStr = request.getParameter("order");
 
         Order order = Order.NAME;
 
@@ -32,7 +31,7 @@ public enum PageParametersMapper {
 
         Direction direction = Direction.ASC;
 
-        final String dirStr = request.getParameter("dir");
+        String dirStr = request.getParameter("dir");
 
         if (dirStr != null) {
             direction = Direction.valueOf(dirStr.toUpperCase());
@@ -40,5 +39,23 @@ public enum PageParametersMapper {
 
         return new PageParameters(psize, page, search, order, direction);
 
+    }
+
+    public static int getIntWithDefault(final HttpServletRequest request, final String key, final int def) {
+        final String str = request.getParameter(key);
+
+        int result;
+
+        if (str == null) {
+            result = def;
+        } else {
+            try {
+                result = Integer.parseInt(str);
+            } catch (final NumberFormatException e) {
+                result = def;
+            }
+        }
+
+        return result;
     }
 }

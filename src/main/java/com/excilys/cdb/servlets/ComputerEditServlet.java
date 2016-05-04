@@ -54,7 +54,7 @@ public class ComputerEditServlet extends HttpServlet {
 
         LOGGER.debug("Entering doGet()");
 
-        final String idStr = request.getParameter("id");
+        String idStr = request.getParameter("id");
 
         // @TODO not sure how useful this is...
         this.validator.validateInt(idStr);

@@ -15,7 +15,7 @@ public interface IComputerService {
      * @throws IllegalArgumentException
      *             exception
      */
-    void deleteComputer(final Long id);
+    void deleteComputer(Long id);
 
     /**
      * update a computer
@@ -23,7 +23,7 @@ public interface IComputerService {
      * @param computer
      *            computer to update
      */
-    void updateComputer(final Computer computer);
+    void updateComputer(Computer computer);
 
     /**
      * add a new computer to the database based on a computer object.
@@ -32,7 +32,7 @@ public interface IComputerService {
      *            computer object to add to the database
      * @return instance of the computer with id updated
      */
-    Computer createComputer(final Computer computer);
+    Computer createComputer(Computer computer);
 
     /**
      * get computer by its id.
@@ -41,7 +41,7 @@ public interface IComputerService {
      *            id of the computer
      * @return computer or null if invalid id or computer doesn't exist
      */
-    Computer getComputer(final Long id);
+    Computer getComputer(Long id);
 
     /**
      * get list of computers.
@@ -50,12 +50,12 @@ public interface IComputerService {
      *            page parameters
      * @return the list of computers
      */
-    List<Computer> getComputers(final PageParameters page);
+    List<Computer> getComputers(PageParameters page);
 
     /**
      * get the number of computers.
      *
      * @return number of computers
      */
-    public long countComputers(final PageParameters page);
+    public long countComputers(PageParameters page);
 }

@@ -48,7 +48,7 @@ public enum ConnectionMySQLFactory {
      */
     private ConnectionMySQLFactory() {
 
-        final Properties props = new Properties();
+        Properties props = new Properties();
         InputStream in = null;
 
         try {
@@ -62,7 +62,7 @@ public enum ConnectionMySQLFactory {
             this.user = props.getProperty("DB_USERNAME");
             this.passwd = props.getProperty("DB_PASSWORD");
 
-            final HikariConfig config = new HikariConfig();
+            HikariConfig config = new HikariConfig();
             config.setJdbcUrl(this.url);
             config.setUsername(this.user);
             config.setPassword(this.passwd);
@@ -72,16 +72,16 @@ public enum ConnectionMySQLFactory {
 
             this.ds = new HikariDataSource(config);
 
-        } catch (final IOException e) {
+        } catch (IOException e) {
             // TODO not sure what to do here ?
             this.LOGGER.error("could not read mysql.properties");
-        } catch (final ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             // TODO not sure what to do here ?
             this.LOGGER.error("mysql jdbc driver could not be loaded");
         } finally {
             try {
                 in.close();
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 this.LOGGER.warn("could not close InputStream of the mysql property file");
             }
         }
@@ -99,7 +99,7 @@ public enum ConnectionMySQLFactory {
         try {
             // con = DriverManager.getConnection(url, user, passwd);
             con = this.ds.getConnection();
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             // TODO not sure what to do here
             this.LOGGER.error("could not get Connection");
         }
