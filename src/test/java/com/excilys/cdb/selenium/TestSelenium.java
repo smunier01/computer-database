@@ -21,18 +21,6 @@ public class TestSelenium {
     }
 
     @Test
-    public void testPagination() throws Exception {
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
-        try {
-            System.out.println(this.driver.findElement(By.id("prevjhjhjhjious")).getText());
-            Assert.assertTrue(false);
-        } catch (final Exception e) {
-            Assert.assertTrue(true);
-        }
-        this.driver.findElement(By.id("previous")).click();
-    }
-
-    @Test
     public void testCreateFindDelete() throws Exception {
 
         // creates a computer with a name of "ComputerTest"

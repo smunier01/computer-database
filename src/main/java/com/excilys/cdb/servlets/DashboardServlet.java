@@ -43,7 +43,7 @@ public class DashboardServlet extends HttpServlet {
      *      response)
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
         LOGGER.debug("Entering doGet()");
@@ -53,7 +53,7 @@ public class DashboardServlet extends HttpServlet {
 
         this.validator.validatePageParameters(pparam);
 
-        List<ComputerDTO> computers = this.computerMapper.map(this.computerService.getComputers(pparam));
+        final List<ComputerDTO> computers = this.computerMapper.map(this.computerService.getComputers(pparam));
 
         // we need the total number of computers for the pagination
         long nbComputers;
@@ -74,9 +74,9 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("computers", computers);
         request.setAttribute("pparam", pparam);
 
-        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-
         LOGGER.debug("Exiting doGet()");
+
+        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 
     }
 }

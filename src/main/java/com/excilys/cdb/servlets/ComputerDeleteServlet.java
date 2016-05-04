@@ -31,19 +31,19 @@ public class ComputerDeleteServlet extends HttpServlet {
      * delete a list of computers.
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
         LOGGER.debug("Entering doPost()");
 
-        String selection = request.getParameter("selection");
+        final String selection = request.getParameter("selection");
 
         if (selection != null) {
             Stream.of(selection.split(",")).map(Long::parseLong).forEach(this.computerService::deleteComputer);
         }
 
-        LOGGER.debug("Exiting doPost()");
-
         response.sendRedirect(request.getContextPath() + "/dashboard");
+
+        LOGGER.debug("Exiting doPost()");
     }
 }
