@@ -11,15 +11,15 @@ import java.util.Scanner;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.service.impl.CompanyService;
 import com.excilys.cdb.service.impl.ComputerService;
-import com.excilys.cdb.util.PageParameters;
 
 /**
  * class in charge of the CLI menu.
  *
- * @author excilys
+ * @author simon
  */
 public class Menu {
 

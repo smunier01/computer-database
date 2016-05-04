@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
+import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
-import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
 
 /**
@@ -43,17 +43,17 @@ public class DashboardServlet extends HttpServlet {
      *      response)
      */
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         LOGGER.debug("Entering doGet()");
 
         // page parameters for the getComputers
-        final PageParameters pparam = this.pageMapper.map(request);
+        PageParameters pparam = this.pageMapper.map(request);
 
         this.validator.validatePageParameters(pparam);
 
-        final List<ComputerDTO> computers = this.computerMapper.map(this.computerService.getComputers(pparam));
+        List<ComputerDTO> computers = this.computerMapper.map(this.computerService.getComputers(pparam));
 
         // we need the total number of computers for the pagination
         long nbComputers;

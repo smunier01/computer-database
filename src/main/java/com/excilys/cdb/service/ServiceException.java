@@ -22,7 +22,7 @@ public class ServiceException extends RuntimeException {
      * @param message
      *            message
      */
-    public ServiceException(final String message) {
+    public ServiceException(String message) {
         super(message);
     }
 
@@ -34,7 +34,7 @@ public class ServiceException extends RuntimeException {
      * @param cause
      *            throwable
      */
-    public ServiceException(final String message, final Throwable cause) {
+    public ServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -44,7 +44,7 @@ public class ServiceException extends RuntimeException {
      * @param cause
      *            throwable
      */
-    public ServiceException(final Throwable cause) {
+    public ServiceException(Throwable cause) {
         super(cause);
     }
 }

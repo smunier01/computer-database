@@ -14,18 +14,20 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
- * CompanyDAO class.
+ * Singleton for the CompanyDAO.
  *
- * @author excilys
+ * implements all the CRUD operations defined in DAO<>.
+ *
+ * @author simon
  */
-public class CompanyDAO extends DAO<Company> {
+public enum CompanyDAO implements DAO<Company> {
+
+    INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
-
-    private static volatile CompanyDAO instance = null;
 
     private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
@@ -48,35 +50,16 @@ public class CompanyDAO extends DAO<Company> {
     private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
 
     /**
-     * default constructor for the singleton.
-     */
-    private CompanyDAO() {
-        super();
-    }
-
-    /**
      * getInstance accessor for the singleton.
      *
      * @return the unique instance of CompanyDAO
      */
     public static CompanyDAO getInstance() {
-
-        if (instance == null) {
-            synchronized (CompanyDAO.class) {
-                if (instance == null) {
-                    instance = new CompanyDAO();
-                }
-            }
-        }
-
-        return instance;
+        return INSTANCE;
     }
 
-    /**
-     * get a company by its id.
-     */
     @Override
-    public Company find(final Long id) {
+    public Company find(Long id) {
 
         Company company = null;
 
@@ -103,7 +86,7 @@ public class CompanyDAO extends DAO<Company> {
                 CompanyDAO.LOGGER.warn("couldn't find company of id : " + id);
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -114,9 +97,9 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public Company create(final Company obj) {
+    public Company create(Company obj) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -125,7 +108,7 @@ public class CompanyDAO extends DAO<Company> {
 
             this.setParams(stmt, obj.getName());
 
-            final int res = stmt.executeUpdate();
+            int res = stmt.executeUpdate();
 
             if (res > 0) {
                 rs = stmt.getGeneratedKeys();
@@ -140,7 +123,7 @@ public class CompanyDAO extends DAO<Company> {
                 CompanyDAO.LOGGER.warn("couldn't create company : " + obj.getName());
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -150,15 +133,10 @@ public class CompanyDAO extends DAO<Company> {
         return obj;
     }
 
-    /**
-     * update an existing company.
-     *
-     * @return instance of the company updated
-     */
     @Override
-    public Company update(final Company obj) {
+    public Company update(Company obj) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
 
         try {
@@ -175,7 +153,7 @@ public class CompanyDAO extends DAO<Company> {
                 CompanyDAO.LOGGER.warn("couldn't update company : " + obj.getId());
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -185,11 +163,8 @@ public class CompanyDAO extends DAO<Company> {
         return obj;
     }
 
-    /**
-     * delete a company.
-     */
     @Override
-    public void delete(final Company obj) {
+    public void delete(Company obj) {
 
         final Connection con = this.connectionFactory.create();
 
@@ -211,13 +186,13 @@ public class CompanyDAO extends DAO<Company> {
 
             con.commit();
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
 
             CompanyDAO.LOGGER.error(e.getMessage());
 
             try {
                 con.rollback();
-            } catch (final SQLException e1) {
+            } catch (SQLException e1) {
                 LOGGER.error(e.getMessage());
                 throw new DAOException(e);
             }
@@ -225,7 +200,7 @@ public class CompanyDAO extends DAO<Company> {
         } finally {
             try {
                 con.setAutoCommit(true);
-            } catch (final SQLException e) {
+            } catch (SQLException e) {
                 LOGGER.error(e.getMessage());
             }
             this.closeAll(con, stmt, stmtDeleteComputers);
@@ -233,21 +208,16 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    public void deleteAll(final List<Long> objs) {
-
+    public void deleteAll(List<Long> objs) {
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * get all the companies.
-     *
-     * @return list of company
-     */
     @Override
     public List<Company> findAll() {
 
-        final List<Company> result = new ArrayList<>();
+        List<Company> result = new ArrayList<>();
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -270,7 +240,7 @@ public class CompanyDAO extends DAO<Company> {
                 CompanyDAO.LOGGER.warn("couldn't retrieve any companies");
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -280,16 +250,11 @@ public class CompanyDAO extends DAO<Company> {
         return result;
     }
 
-    /**
-     * get companies using an offset and a limit.
-     *
-     * @return list of company
-     */
     @Override
-    public List<Company> findAll(final PageParameters page) {
-        final ArrayList<Company> result = new ArrayList<>();
+    public List<Company> findAll(PageParameters page) {
+        ArrayList<Company> result = new ArrayList<>();
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -302,7 +267,7 @@ public class CompanyDAO extends DAO<Company> {
 
             while (rs.next()) {
 
-                final Company company = this.companyMapper.map(rs);
+                Company company = this.companyMapper.map(rs);
 
                 result.add(company);
             }
@@ -313,7 +278,7 @@ public class CompanyDAO extends DAO<Company> {
                 CompanyDAO.LOGGER.warn("couldn't retrieve any companies");
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
@@ -323,13 +288,10 @@ public class CompanyDAO extends DAO<Company> {
         return result;
     }
 
-    /**
-     * @return number of companies
-     */
     @Override
     public long count() throws DAOException {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.connectionFactory.create();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -344,7 +306,7 @@ public class CompanyDAO extends DAO<Company> {
                 nb = rs.getLong("nb");
             }
 
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {

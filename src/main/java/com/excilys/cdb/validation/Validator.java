@@ -5,8 +5,13 @@ import java.util.regex.Pattern;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
+/**
+ * Singleton class implementing methods to validate different values or objects.
+ *
+ * @author simon
+ */
 public enum Validator {
 
     INSTANCE;
@@ -23,25 +28,25 @@ public enum Validator {
         return INSTANCE;
     }
 
-    public void validateInt(final String s) {
+    public void validateInt(String s) {
         if (!this.intRegex.matcher(s).matches()) {
             throw new ValidatorException("Invalid ID : " + s);
         }
     }
 
-    public void validateDate(final String s) {
+    public void validateDate(String s) {
         if (!this.dateRegex.matcher(s).matches()) {
             throw new ValidatorException("Invalid DATE : " + s);
         }
     }
 
-    public void validateId(final Long id) {
+    public void validateId(Long id) {
         if ((id == null) || (id <= 0)) {
             throw new ValidatorException("Invalid ID : " + id);
         }
     }
 
-    public void validatePageParameters(final PageParameters pparam) {
+    public void validatePageParameters(PageParameters pparam) {
 
         // page number
         if (pparam.getPageNumber() < 0) {
@@ -69,7 +74,7 @@ public enum Validator {
         }
     }
 
-    public void validateComputerDTO(final ComputerDTO computer) {
+    public void validateComputerDTO(ComputerDTO computer) {
 
         // computer name (required)
         if ((computer.getName() == null) || "".equals(computer.getName())) {
@@ -98,7 +103,7 @@ public enum Validator {
 
     }
 
-    public void validateComputer(final Computer computer) {
+    public void validateComputer(Computer computer) {
 
         // computer name (required)
         if ((computer.getName() == null) || computer.getName().isEmpty()) {
@@ -112,12 +117,12 @@ public enum Validator {
 
         // introduced date (optional)
         if (computer.getIntroduced() != null) {
-            // @TODO ompare to min/max timestamp ?
+            // TODO compare to min/max timestamp
         }
 
         // discontinued date (optional)
         if (computer.getDiscontinued() != null) {
-            // @TODO compare to min/max timestamp ?
+            // TODO compare to min/max timestamp
         }
 
         // company
@@ -126,11 +131,11 @@ public enum Validator {
         }
     }
 
-    public void validateCompany(final Company company) {
+    public void validateCompany(Company company) {
 
         // company id (required)
         this.validateId(company.getId());
 
-        // @TODO name ???
+        // TODO name ???
     }
 }

@@ -25,18 +25,18 @@ public class ComputerDeleteServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private final IComputerService computerService = ComputerService.getInstance();
+    private IComputerService computerService = ComputerService.getInstance();
 
     /**
      * delete a list of computers.
      */
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         LOGGER.debug("Entering doPost()");
 
-        final String selection = request.getParameter("selection");
+        String selection = request.getParameter("selection");
 
         if (selection != null) {
             Stream.of(selection.split(",")).map(Long::parseLong).forEach(this.computerService::deleteComputer);

@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 public class CompanyDAOTest {
 

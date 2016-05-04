@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 public class ComputerDAOTest {
 

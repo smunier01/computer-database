@@ -7,16 +7,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
  * abstract class describing methods of a dao object.
  *
- * @author excilys
+ * @author simon
  *
  * @param <T>
  */
-public abstract class DAO<T> {
+public interface DAO<T> {
 
     static final Logger LOGGER = LoggerFactory.getLogger(DAO.class);
 
@@ -84,17 +84,17 @@ public abstract class DAO<T> {
     public abstract long count();
 
     /**
-     * close the list of resources given.
+     * close the list of resources given as parameters.
      *
      * @param resources
-     *            resources to close
+     *            varargs containing the AutCloseable resources to close
      */
-    protected final void closeAll(final AutoCloseable... resources) {
-        for (final AutoCloseable resource : resources) {
+    default void closeAll(AutoCloseable... resources) {
+        for (AutoCloseable resource : resources) {
             if (resource != null) {
                 try {
                     resource.close();
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     LOGGER.error("couldn't close resource : " + resource.toString());
                 }
             }
@@ -112,7 +112,7 @@ public abstract class DAO<T> {
      * @throws SQLException
      *             exception
      */
-    protected PreparedStatement setParams(final PreparedStatement stmt, final Object... params) throws SQLException {
+    default PreparedStatement setParams(PreparedStatement stmt, Object... params) throws SQLException {
 
         int cnt = 0;
 

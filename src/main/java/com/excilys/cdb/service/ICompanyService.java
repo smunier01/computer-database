@@ -3,7 +3,7 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
  * CompanyService interface.
@@ -28,7 +28,7 @@ public interface ICompanyService {
      *            page parameters
      * @return the list of company
      */
-    List<Company> getCompanies(final PageParameters page);
+    List<Company> getCompanies(PageParameters page);
 
     /**
      * delete a company based on its ID.
@@ -36,7 +36,7 @@ public interface ICompanyService {
      * @param id
      *            id of the company to delete
      */
-    void deleteCompany(final Long id);
+    void deleteCompany(Long id);
 
     /**
      * get the entire company list with no page parameters.

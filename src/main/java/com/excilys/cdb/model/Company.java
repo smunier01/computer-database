@@ -3,26 +3,20 @@ package com.excilys.cdb.model;
 /**
  * Company Class.
  *
- * @author excilys
+ * @author simon
  */
 public class Company {
 
-    /**
-     * id of the company.
-     */
     private Long id;
 
-    /**
-     * name of the company.
-     */
     private String name;
 
     /**
      * company default constructor.
      */
     public Company() {
-        id = null;
-        name = "";
+        this.id = null;
+        this.name = "";
     }
 
     /**
@@ -33,24 +27,24 @@ public class Company {
      * @param name
      *            name of the company
      */
-    public Company(final Long id, final String name) {
+    public Company(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -59,7 +53,7 @@ public class Company {
      */
     @Override
     public String toString() {
-        return id + " " + name;
+        return this.id + " " + this.name;
     }
 
     /**
@@ -67,10 +61,10 @@ public class Company {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
+        int prime = 31;
         int result = 1;
-        result = (prime * result) + ((id == null) ? 0 : id.hashCode());
-        result = (prime * result) + ((name == null) ? 0 : name.hashCode());
+        result = (prime * result) + ((this.id == null) ? 0 : this.id.hashCode());
+        result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
         return result;
     }
 
@@ -78,7 +72,7 @@ public class Company {
      * auto-generated equals.
      */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -88,19 +82,19 @@ public class Company {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        final Company other = (Company) obj;
-        if (id == null) {
+        Company other = (Company) obj;
+        if (this.id == null) {
             if (other.id != null) {
                 return false;
             }
-        } else if (!id.equals(other.id)) {
+        } else if (!this.id.equals(other.id)) {
             return false;
         }
-        if (name == null) {
+        if (this.name == null) {
             if (other.name != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (!this.name.equals(other.name)) {
             return false;
         }
         return true;
