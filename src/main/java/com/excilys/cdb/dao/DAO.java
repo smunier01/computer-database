@@ -7,7 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
  * abstract class describing methods of a dao object.

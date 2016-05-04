@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
  * CompanyDAO class.

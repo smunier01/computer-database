@@ -3,7 +3,7 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
  * CompanyService interface.

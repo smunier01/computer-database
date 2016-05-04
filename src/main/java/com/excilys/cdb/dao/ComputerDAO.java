@@ -17,7 +17,7 @@ import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.LocalDateMapper;
 import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 /**
  * ComputerDAO class.

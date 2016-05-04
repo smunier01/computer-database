@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ICompanyService;
-import com.excilys.cdb.util.PageParameters;
 import com.excilys.cdb.validation.Validator;
 
 /**

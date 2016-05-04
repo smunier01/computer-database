@@ -1,10 +1,11 @@
 package com.excilys.cdb.mapper;
 
-import static com.excilys.cdb.util.PageParameters.Order;
+import static com.excilys.cdb.model.PageParameters.Order;
+
 import javax.servlet.http.HttpServletRequest;
 
-import com.excilys.cdb.util.PageParameters;
-import com.excilys.cdb.util.PageParameters.Direction;
+import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.model.PageParameters.Direction;
 
 public enum PageParametersMapper {
     INSTANCE;

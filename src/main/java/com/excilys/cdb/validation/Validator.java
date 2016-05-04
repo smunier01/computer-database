@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.util.PageParameters;
+import com.excilys.cdb.model.PageParameters;
 
 public enum Validator {
 
