@@ -2,6 +2,14 @@ package com.excilys.cdb.validation;
 
 import com.excilys.cdb.dto.ComputerDTO;
 
+/**
+ * Same as the Validator class, except it returns booleans instead of
+ * exceptions.
+ *
+ * This is useful to use with the stream API & lambdas.
+ *
+ * @author simon
+ */
 public enum ValidatorBool {
 
     INSTANCE;

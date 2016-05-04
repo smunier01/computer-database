@@ -13,6 +13,11 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
 
+/**
+ * implements different mapping methods to create or convert a Computer object.
+ *
+ * @author excilys
+ */
 public enum ComputerMapper {
 
     INSTANCE;
@@ -46,6 +51,13 @@ public enum ComputerMapper {
         return new ComputerDTO(computer);
     }
 
+    /**
+     * Creates a Computer object form a ComputerDTO object.
+     *
+     * @param computer
+     *            ComputerDTO instance to convert.
+     * @return instance of a Computer
+     */
     public Computer fromDTO(ComputerDTO computer) {
 
         ComputerBuilder builder = new Computer.ComputerBuilder();
@@ -111,6 +123,12 @@ public enum ComputerMapper {
                 .company(company).build();
     }
 
+    /**
+     * Creates a ComputerDTO object from a HttpServletRequest.
+     *
+     * @param request
+     * @return
+     */
     public ComputerDTO map(HttpServletRequest request) {
 
         ComputerDTO.Builder builder = new ComputerDTO.Builder();
@@ -125,6 +143,12 @@ public enum ComputerMapper {
 
     }
 
+    /**
+     * convert a list of Computer to a list of ComputerDTO.
+     *
+     * @param companies
+     * @return
+     */
     public List<ComputerDTO> map(List<Computer> computers) {
         return computers.stream().map(this::toDTO).collect(Collectors.toList());
     }

@@ -3,9 +3,9 @@ package com.excilys.cdb.dto;
 import com.excilys.cdb.model.Company;
 
 /**
- * CompanyDTO class.
+ * DTO for the Company Class.
  *
- * @author excilys
+ * @author simon
  */
 public class CompanyDTO {
 
@@ -81,6 +81,11 @@ public class CompanyDTO {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyDTO [id=" + this.id + ", name=" + this.name + "]";
     }
 
 }

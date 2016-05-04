@@ -4,7 +4,7 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 /**
- * ComputerDTO class.
+ * DTO for the Computer Class.
  *
  * @author excilys
  */
@@ -109,12 +109,13 @@ public class ComputerDTO {
      * @author excilys
      */
     public static class Builder {
-        private String id = null;
-        private String name = null;
-        private String introduced = null;
-        private String discontinued = null;
-        private String companyId = null;
-        private String companyName = null;
+
+        private String id;
+        private String name;
+        private String introduced;
+        private String discontinued;
+        private String companyId;
+        private String companyName;
 
         public Builder() {
 
@@ -154,6 +155,13 @@ public class ComputerDTO {
             return new ComputerDTO(this.id, this.name, this.introduced, this.discontinued, this.companyId,
                     this.companyName);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ComputerDTO [id=" + this.id + ", name=" + this.name + ", introduced=" + this.introduced
+                + ", discontinued=" + this.discontinued + ", companyId=" + this.companyId + ", companyName="
+                + this.companyName + "]";
     }
 
     @Override

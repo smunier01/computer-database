@@ -7,6 +7,11 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
 
+/**
+ * Singleton class implementing methods to validate different values or objects.
+ *
+ * @author simon
+ */
 public enum Validator {
 
     INSTANCE;
@@ -112,12 +117,12 @@ public enum Validator {
 
         // introduced date (optional)
         if (computer.getIntroduced() != null) {
-            // @TODO ompare to min/max timestamp ?
+            // TODO compare to min/max timestamp
         }
 
         // discontinued date (optional)
         if (computer.getDiscontinued() != null) {
-            // @TODO compare to min/max timestamp ?
+            // TODO compare to min/max timestamp
         }
 
         // company
@@ -131,6 +136,6 @@ public enum Validator {
         // company id (required)
         this.validateId(company.getId());
 
-        // @TODO name ???
+        // TODO name ???
     }
 }

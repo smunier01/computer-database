@@ -10,14 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
 
+/**
+ * implements different mapping methods to create or convert a Company object.
+ *
+ * @author simon
+ */
 public enum CompanyMapper {
 
     INSTANCE;
 
     /**
-     * default constructor for the singleton.
+     * set default constructor as private for the singleton.
      */
-    CompanyMapper() {
+    private CompanyMapper() {
 
     }
 

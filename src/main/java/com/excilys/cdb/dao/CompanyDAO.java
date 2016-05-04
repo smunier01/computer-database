@@ -17,15 +17,17 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 
 /**
- * CompanyDAO class.
+ * Singleton for the CompanyDAO.
  *
- * @author excilys
+ * implements all the CRUD operations defined in DAO<>.
+ *
+ * @author simon
  */
-public class CompanyDAO extends DAO<Company> {
+public enum CompanyDAO implements DAO<Company> {
+
+    INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
-
-    private static volatile CompanyDAO instance = null;
 
     private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
@@ -48,33 +50,14 @@ public class CompanyDAO extends DAO<Company> {
     private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
 
     /**
-     * default constructor for the singleton.
-     */
-    private CompanyDAO() {
-        super();
-    }
-
-    /**
      * getInstance accessor for the singleton.
      *
      * @return the unique instance of CompanyDAO
      */
     public static CompanyDAO getInstance() {
-
-        if (instance == null) {
-            synchronized (CompanyDAO.class) {
-                if (instance == null) {
-                    instance = new CompanyDAO();
-                }
-            }
-        }
-
-        return instance;
+        return INSTANCE;
     }
 
-    /**
-     * get a company by its id.
-     */
     @Override
     public Company find(Long id) {
 
@@ -150,11 +133,6 @@ public class CompanyDAO extends DAO<Company> {
         return obj;
     }
 
-    /**
-     * update an existing company.
-     *
-     * @return instance of the company updated
-     */
     @Override
     public Company update(Company obj) {
 
@@ -185,9 +163,6 @@ public class CompanyDAO extends DAO<Company> {
         return obj;
     }
 
-    /**
-     * delete a company.
-     */
     @Override
     public void delete(Company obj) {
 
@@ -237,11 +212,6 @@ public class CompanyDAO extends DAO<Company> {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * get all the companies.
-     *
-     * @return list of company
-     */
     @Override
     public List<Company> findAll() {
 
@@ -280,11 +250,6 @@ public class CompanyDAO extends DAO<Company> {
         return result;
     }
 
-    /**
-     * get companies using an offset and a limit.
-     *
-     * @return list of company
-     */
     @Override
     public List<Company> findAll(PageParameters page) {
         ArrayList<Company> result = new ArrayList<>();
@@ -323,9 +288,6 @@ public class CompanyDAO extends DAO<Company> {
         return result;
     }
 
-    /**
-     * @return number of companies
-     */
     @Override
     public long count() throws DAOException {
 

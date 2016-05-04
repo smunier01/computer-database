@@ -14,15 +14,17 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 /**
- * Factory creating connection objects.
+ * Factory creating mysql connections using Hikari for the connection pool.
  *
- * @author excilys
+ * @author simon
  */
 public enum ConnectionMySQLFactory {
 
     INSTANCE;
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+
+    private final String PROPERTY_FILE = "mysql.properties";
 
     private String url;
 
@@ -55,7 +57,7 @@ public enum ConnectionMySQLFactory {
 
             Class.forName("com.mysql.jdbc.Driver");
 
-            in = ConnectionMySQLFactory.class.getClassLoader().getResourceAsStream("mysql.properties");
+            in = ConnectionMySQLFactory.class.getClassLoader().getResourceAsStream(this.PROPERTY_FILE);
             props.load(in);
 
             this.url = props.getProperty("DB_URL");
@@ -88,7 +90,7 @@ public enum ConnectionMySQLFactory {
     }
 
     /**
-     * factory main method, creates Connection objects.
+     * Factory main method, creates Connection objects.
      *
      * @return Connection object
      */
@@ -107,6 +109,11 @@ public enum ConnectionMySQLFactory {
         return con;
     }
 
+    /**
+     * close the connection pool.
+     *
+     * this should only be called when the application is shuting down.
+     */
     public void close() {
         this.ds.close();
     }

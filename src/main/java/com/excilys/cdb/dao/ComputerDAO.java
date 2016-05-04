@@ -20,12 +20,16 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
 
 /**
- * ComputerDAO class.
+ * Singleton for the ComputerDAO.
  *
- * @author excilys
+ * implements all the CRUD operations defined in DAO<>.
+ *
+ * @author simon
  *
  */
-public class ComputerDAO extends DAO<Computer> {
+public enum ComputerDAO implements DAO<Computer> {
+
+    INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
@@ -34,8 +38,6 @@ public class ComputerDAO extends DAO<Computer> {
     private final LocalDateMapper dateMapper = LocalDateMapper.getInstance();
 
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
-
-    private static volatile ComputerDAO instance = null;
 
     private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
@@ -56,28 +58,12 @@ public class ComputerDAO extends DAO<Computer> {
     private static final String COUNT_SEARCH = "SELECT count(id) as nb FROM computer WHERE name like ?";
 
     /**
-     * default constructor for the singleton.
-     */
-    private ComputerDAO() {
-        super();
-    }
-
-    /**
      * public accessor for the singleton.
      *
      * @return unique instance of the class
      */
     public static ComputerDAO getInstance() {
-
-        if (ComputerDAO.instance == null) {
-            synchronized (ComputerDAO.class) {
-                if (ComputerDAO.instance == null) {
-                    ComputerDAO.instance = new ComputerDAO();
-                }
-            }
-        }
-
-        return ComputerDAO.instance;
+        return INSTANCE;
     }
 
     @Override

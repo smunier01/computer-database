@@ -3,18 +3,12 @@ package com.excilys.cdb.model;
 /**
  * Company Class.
  *
- * @author excilys
+ * @author simon
  */
 public class Company {
 
-    /**
-     * id of the company.
-     */
     private Long id;
 
-    /**
-     * name of the company.
-     */
     private String name;
 
     /**

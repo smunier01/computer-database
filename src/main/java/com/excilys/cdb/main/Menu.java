@@ -19,7 +19,7 @@ import com.excilys.cdb.service.impl.ComputerService;
 /**
  * class in charge of the CLI menu.
  *
- * @author excilys
+ * @author simon
  */
 public class Menu {
 

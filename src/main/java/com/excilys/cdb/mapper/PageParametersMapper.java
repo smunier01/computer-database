@@ -7,6 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.model.PageParameters.Direction;
 
+/**
+ * Implements different mapping methods to create or convert a PageParameters
+ * objects.
+ *
+ * @author excilys
+ */
 public enum PageParametersMapper {
     INSTANCE;
 
