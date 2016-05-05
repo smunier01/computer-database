@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.validation.Validator;
@@ -78,6 +79,27 @@ public enum ComputerService implements IComputerService {
         this.LOGGER.debug("entering getComputers(page)");
         this.validator.validatePageParameters(page);
         return this.computerDAO.findAll(page);
+    }
+
+    @Override
+    public Page<Computer> getComputersPage(PageParameters param) {
+        this.LOGGER.debug("entering getComputersPage()");
+        this.validator.validatePageParameters(param);
+        List<Computer> computers = this.computerDAO.findAll(param);
+
+        // we need the total number of computers for the pagination
+        long nbComputers;
+
+        // small optimization.. if we are on the first page and the number of
+        // computers returned is less than the page size, then there is no need
+        // to count the computers.
+        if ((computers.size() < param.getSize()) && (param.getPageNumber() == 0)) {
+            nbComputers = computers.size();
+        } else {
+            nbComputers = this.countComputers(param);
+        }
+
+        return new Page.Builder<Computer>().list(computers).totalCount(nbComputers).params(param).build();
     }
 
     @Override

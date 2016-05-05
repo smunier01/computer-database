@@ -3,6 +3,7 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 
 public interface IComputerService {
@@ -58,4 +59,12 @@ public interface IComputerService {
      * @return number of computers
      */
     public long countComputers(PageParameters page);
+
+    /**
+     *
+     *
+     * @param param
+     * @return
+     */
+    public Page<Computer> getComputersPage(PageParameters param);
 }

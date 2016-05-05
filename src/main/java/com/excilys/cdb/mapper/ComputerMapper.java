@@ -12,6 +12,7 @@ import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
+import com.excilys.cdb.model.Page;
 
 /**
  * implements different mapping methods to create or convert a Computer object.
@@ -151,6 +152,12 @@ public enum ComputerMapper {
      */
     public List<ComputerDTO> map(List<Computer> computers) {
         return computers.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public Page<ComputerDTO> map(Page<Computer> page) {
+
+        return new Page.Builder<ComputerDTO>().list(this.map(page.getList())).params(page.getParams())
+                .totalCount(page.getTotalCount()).build();
     }
 
 }

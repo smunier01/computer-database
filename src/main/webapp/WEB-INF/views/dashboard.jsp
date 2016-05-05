@@ -10,7 +10,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<span id="nbComputers">${nbComputers}</span>&nbsp;Computers&nbsp;found
+				<span id="nbComputers">${page.totalCount}</span>&nbsp;Computers&nbsp;found
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -52,29 +52,29 @@
 							</a>
 						</span></th>
 						<th><mylib2:link target="" name="computer name"
-								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="name"
+								page="${page.params.pageNumber}" psize="${page.params.size}"
+								search="${page.params.search}" order="name"
 								dir="${param.dir == 'asc' && param.order == 'name' ? 'desc' : 'asc'}" /></th>
 						<th><mylib2:link target="" name="introduced date"
-								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="introduced"
+								page="${page.params.pageNumber}" psize="${page.params.size}"
+								search="${page.params.search}" order="introduced"
 								dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}" /></th>
 						<!-- Table header for Discontinued Date -->
 						<th><mylib2:link target="" name="discontinued name"
-								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="discontinued"
+								page="${page.params.pageNumber}" psize="${page.params.size}"
+								search="${page.params.search}" order="discontinued"
 								dir="${param.dir == 'asc' && param.order == 'discontinued' ? 'desc' : 'asc'}" /></th>
 						<!-- Table header for Company -->
 						<th><mylib2:link target="" name="company" 
-								page="${pparam.pageNumber}" psize="${pparam.size}"
-								search="${pparam.search}" order="company_name"
+								page="${page.params.pageNumber}" psize="${pparam.size}"
+								search="${page.params.search}" order="company_name"
 								dir="${param.dir == 'asc' && param.order == 'company_name' ? 'desc' : 'asc'}" /></th>
 
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${computers}" var="computer">
+					<c:forEach items="${page.list}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"  id="${computer.name}_id"
 								class="cb" value="${computer.id}"></td>
@@ -93,8 +93,8 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<mylib2:pagination2 current="${pparam.pageNumber}" count="${nbPages}"
-				psize="${pparam.size}" />
+			<mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
+				psize="${page.params.size}" />
 		</div>
 	</footer>
 

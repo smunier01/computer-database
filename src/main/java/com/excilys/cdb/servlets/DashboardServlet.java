@@ -1,8 +1,6 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
@@ -48,31 +47,13 @@ public class DashboardServlet extends HttpServlet {
 
         LOGGER.debug("Entering doGet()");
 
-        // page parameters for the getComputers
-        PageParameters pparam = this.pageMapper.map(request);
+        PageParameters params = this.pageMapper.map(request);
 
-        this.validator.validatePageParameters(pparam);
+        this.validator.validatePageParameters(params);
 
-        List<ComputerDTO> computers = this.computerMapper.map(this.computerService.getComputers(pparam));
+        Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
 
-        // we need the total number of computers for the pagination
-        long nbComputers;
-
-        // small optimization.. if we are on the first page and the number of
-        // computers returned is less than the page size, then there is no need
-        // to count the computers.
-        if ((computers.size() < pparam.getSize()) && (pparam.getPageNumber() == 0)) {
-            nbComputers = computers.size();
-        } else {
-            nbComputers = this.computerService.countComputers(pparam);
-        }
-
-        // set the attributes for the jsp
-
-        request.setAttribute("nbPages", Math.max(1, ((nbComputers + pparam.getSize()) - 1) / pparam.getSize()));
-        request.setAttribute("nbComputers", nbComputers);
-        request.setAttribute("computers", computers);
-        request.setAttribute("pparam", pparam);
+        request.setAttribute("page", computerPage);
 
         LOGGER.debug("Exiting doGet()");
 

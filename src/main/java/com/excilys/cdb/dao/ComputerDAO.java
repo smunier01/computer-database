@@ -53,6 +53,10 @@ public enum ComputerDAO implements DAO<Computer> {
 
     private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s %s LIMIT ?,?";
 
+    private static final String FIND_NO_SEARCH = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id ORDER BY %s %s LIMIT ?,?";
+
+    private static final String FIND_ALL2 = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE MATCH(c.name) AGAINST (? IN BOOLEAN MODE) ORDER BY %s %s LIMIT ?,?";
+
     private static final String COUNT = "SELECT count(id) as nb FROM computer";
 
     private static final String COUNT_SEARCH = "SELECT count(id) as nb FROM computer WHERE name like ?";
@@ -304,12 +308,16 @@ public enum ComputerDAO implements DAO<Computer> {
 
         try {
 
-            stmt = con.prepareStatement(
-                    String.format(FIND_ALL_LIMIT_ORDER, page.getOrder().toString(), page.getDirection().toString()));
-
             String search = page.getSearch() == null ? "" : page.getSearch();
 
-            this.setParams(stmt, "%" + search + "%", page.getSize() * page.getPageNumber(), page.getSize());
+            stmt = con.prepareStatement(String.format(search.isEmpty() ? FIND_NO_SEARCH : FIND_ALL_LIMIT_ORDER,
+                    page.getOrder().toString(), page.getDirection().toString()));
+
+            if (search.isEmpty()) {
+                this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
+            } else {
+                this.setParams(stmt, search + "%", page.getSize() * page.getPageNumber(), page.getSize());
+            }
 
             rs = stmt.executeQuery();
 
