@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
+import com.excilys.cdb.jdbc.ITransactionManager;
+import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
@@ -32,6 +34,8 @@ public enum CompanyDAO implements DAO<Company> {
     private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
+
+    private final ITransactionManager transactionManager = TransactionManager.getInstance();
 
     private static final String FIND_BY_ID = "SELECT id, name FROM company WHERE id=?";
 
@@ -166,44 +170,25 @@ public enum CompanyDAO implements DAO<Company> {
     @Override
     public void delete(Company obj) {
 
-        final Connection con = this.connectionFactory.create();
+        Connection con = this.transactionManager.get();
 
-        PreparedStatement stmtDeleteComputers = null;
         PreparedStatement stmt = null;
 
         try {
 
-            con.setAutoCommit(false);
-
             stmt = con.prepareStatement(DELETE);
-            stmtDeleteComputers = con.prepareStatement(DELETE_COMPUTER);
 
             this.setParams(stmt, obj.getId());
-            this.setParams(stmtDeleteComputers, obj.getId());
 
             stmt.executeUpdate();
-            stmtDeleteComputers.executeUpdate();
-
-            con.commit();
 
         } catch (SQLException e) {
 
             CompanyDAO.LOGGER.error(e.getMessage());
 
-            try {
-                con.rollback();
-            } catch (SQLException e1) {
-                LOGGER.error(e.getMessage());
-                throw new DAOException(e);
-            }
             throw new DAOException(e);
         } finally {
-            try {
-                con.setAutoCommit(true);
-            } catch (SQLException e) {
-                LOGGER.error(e.getMessage());
-            }
-            this.closeAll(con, stmt, stmtDeleteComputers);
+            this.closeAll(stmt);
         }
     }
 

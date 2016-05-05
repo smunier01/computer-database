@@ -1,6 +1,5 @@
 package com.excilys.cdb.service.impl;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -9,12 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.ComputerDAO;
-import com.excilys.cdb.dao.DAOException;
-import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
+import com.excilys.cdb.jdbc.ITransactionManager;
+import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ICompanyService;
-import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.validation.Validator;
 
 /**
@@ -66,37 +64,28 @@ public enum CompanyService implements ICompanyService {
 
     @Override
     public void deleteCompany(Long id) {
+
         this.LOGGER.debug("entering deleteCompany()");
-        this.validator.validateId(id);
+
+        ITransactionManager tm = TransactionManager.getInstance();
+        tm.init();
 
         Company company = this.companyDAO.find(id);
-        Connection con = ConnectionMySQLFactory.getInstance().create();
 
         if (company != null) {
+            this.computerDAO.deleteByCompanyId(id);
+            this.companyDAO.delete(company);
 
             try {
-
-                con.setAutoCommit(false);
-
-                this.computerDAO.deleteByCompanyId(con, id);
-                this.companyDAO.delete(company);
-
-                con.commit();
-
-            } catch (DAOException | SQLException e) {
-                try {
-                    con.rollback();
-                } catch (SQLException e1) {
-                    throw new ServiceException(e1);
-                }
+                tm.commit();
+            } catch (SQLException e) {
+                tm.rollback();
             } finally {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    throw new ServiceException(e);
-                }
+                tm.close();
             }
+
         }
+
     }
 
     @Override

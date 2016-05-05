@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
+import com.excilys.cdb.jdbc.ITransactionManager;
+import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.LocalDateMapper;
 import com.excilys.cdb.mapper.MapperException;
@@ -39,6 +41,8 @@ public enum ComputerDAO implements DAO<Computer> {
 
     private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
 
+    private final ITransactionManager transactionManager = TransactionManager.getInstance();
+
     private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
     private static final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
@@ -54,8 +58,6 @@ public enum ComputerDAO implements DAO<Computer> {
     private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s %s LIMIT ?,?";
 
     private static final String FIND_NO_SEARCH = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id ORDER BY %s %s LIMIT ?,?";
-
-    private static final String FIND_ALL2 = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE MATCH(c.name) AGAINST (? IN BOOLEAN MODE) ORDER BY %s %s LIMIT ?,?";
 
     private static final String COUNT = "SELECT count(id) as nb FROM computer";
 
@@ -216,14 +218,18 @@ public enum ComputerDAO implements DAO<Computer> {
         }
     }
 
-    public void deleteByCompanyId(Connection con, Long id) {
+    public void deleteByCompanyId(Long id) {
         PreparedStatement stmt = null;
+
+        Connection con = this.transactionManager.get();
 
         try {
 
             stmt = con.prepareStatement(DELETE_COMPUTER);
 
             this.setParams(stmt, id);
+
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new DAOException(e);
