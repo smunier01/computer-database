@@ -20,6 +20,7 @@ import com.excilys.cdb.mapper.LocalDateMapper;
 import com.excilys.cdb.mapper.MapperException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.model.PageParameters.Order;
 
 /**
  * Singleton for the ComputerDAO.
@@ -55,13 +56,13 @@ public enum ComputerDAO implements DAO<Computer> {
 
     private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
-    private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s %s LIMIT ?,?";
+    private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c %s left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s %s LIMIT ?,?";
 
-    private static final String FIND_NO_SEARCH = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c left join company o ON c.company_id=o.id ORDER BY %s %s LIMIT ?,?";
+    private static final String FIND_NO_SEARCH = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c %s left join company o ON c.company_id=o.id ORDER BY %s %s LIMIT ?,?";
 
     private static final String COUNT = "SELECT count(id) as nb FROM computer";
 
-    private static final String COUNT_SEARCH = "SELECT count(id) as nb FROM computer WHERE name like ?";
+    private static final String COUNT_SEARCH = "SELECT count(name) as nb FROM computer WHERE name like ?";
 
     private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
 
@@ -316,8 +317,18 @@ public enum ComputerDAO implements DAO<Computer> {
 
             String search = page.getSearch() == null ? "" : page.getSearch();
 
+            String forceIndex = "";
+
+            if (page.getOrder() == Order.NAME) {
+                forceIndex = "force index (ix_name)";
+            } else if (page.getOrder() == Order.DISCONTINUED) {
+                forceIndex = "force index (ix_discontinued)";
+            } else if (page.getOrder() == Order.INTRODUCED) {
+                forceIndex = "force index (ix_introduced)";
+            }
+
             stmt = con.prepareStatement(String.format(search.isEmpty() ? FIND_NO_SEARCH : FIND_ALL_LIMIT_ORDER,
-                    page.getOrder().toString(), page.getDirection().toString()));
+                    forceIndex, page.getOrder().toString(), page.getDirection().toString()));
 
             if (search.isEmpty()) {
                 this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
@@ -357,7 +368,7 @@ public enum ComputerDAO implements DAO<Computer> {
         try {
             stmt = con.prepareStatement(COUNT_SEARCH);
 
-            this.setParams(stmt, "%" + page.getSearch() + "%");
+            this.setParams(stmt, page.getSearch() + "%");
 
             rs = stmt.executeQuery();
 

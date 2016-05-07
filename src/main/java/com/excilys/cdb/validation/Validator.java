@@ -1,5 +1,7 @@
 package com.excilys.cdb.validation;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.excilys.cdb.dto.ComputerDTO;
@@ -34,10 +36,18 @@ public enum Validator {
         }
     }
 
+    public boolean isIdValid(String s) {
+        return this.intRegex.matcher(s).matches();
+    }
+
     public void validateDate(String s) {
         if (!this.dateRegex.matcher(s).matches()) {
             throw new ValidatorException("Invalid DATE : " + s);
         }
+    }
+
+    public boolean isDateValid(String s) {
+        return this.dateRegex.matcher(s).matches();
     }
 
     public void validateId(Long id) {
@@ -74,32 +84,51 @@ public enum Validator {
         }
     }
 
-    public void validateComputerDTO(ComputerDTO computer) {
+    /**
+     * check the validity of a computerDTO object.
+     *
+     * @param computer
+     *            computerDTO to check
+     * @return set of field with errors
+     */
+    public Set<String> validateComputerDTO(ComputerDTO computer) {
+
+        Set<String> errors = new HashSet<String>();
 
         // computer name (required)
         if ((computer.getName() == null) || "".equals(computer.getName())) {
-            throw new ValidatorException("Invalid name : " + computer.getName());
+            errors.add("name");
         }
 
         // computer id (optional)
         if ((computer.getId() != null) && !computer.getId().isEmpty()) {
-            this.validateInt(computer.getId());
+            if (!this.isIdValid(computer.getId())) {
+                errors.add("id");
+            }
         }
 
         // introduced date (optional)
         if ((computer.getIntroduced() != null) & !"".equals(computer.getIntroduced())) {
-            this.validateDate(computer.getIntroduced());
+            if (!this.isDateValid(computer.getIntroduced())) {
+                errors.add("introduced");
+            }
         }
 
         // discontinued date (optional)
         if ((computer.getDiscontinued() != null) && !"".equals(computer.getDiscontinued())) {
-            this.validateDate(computer.getDiscontinued());
+            if (!this.isDateValid(computer.getDiscontinued())) {
+                errors.add("discontinued");
+            }
         }
 
         // company id (optional)
         if ((computer.getCompanyId() != null) && !"".equals(computer.getCompanyId())) {
-            this.validateInt(computer.getCompanyId());
+            if (!this.isIdValid(computer.getCompanyId())) {
+                errors.add("companyId");
+            }
         }
+
+        return errors;
 
     }
 

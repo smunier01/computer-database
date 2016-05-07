@@ -3,6 +3,7 @@ package com.excilys.cdb.servlets;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +23,6 @@ import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.CompanyService;
 import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.validation.Validator;
-import com.excilys.cdb.validation.ValidatorException;
 
 /**
  * Servlet implementation class ComputerFormServlet.
@@ -72,20 +72,19 @@ public class ComputerAddServlet extends HttpServlet {
 
         LOGGER.debug("Entering doPost()");
 
-        try {
+        ComputerDTO computer = this.computerMapper.map(request);
 
-            ComputerDTO computer = this.computerMapper.map(request);
+        Set<String> errors = this.validator.validateComputerDTO(computer);
 
-            this.validator.validateComputerDTO(computer);
-
+        if (errors.isEmpty()) {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
-
             response.sendRedirect(request.getContextPath() + "/dashboard");
+        } else {
 
-        } catch (ValidatorException e) {
+            request.setAttribute("computer", computer);
+            request.setAttribute("errors", errors);
 
-            request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
-
+            this.doGet(request, response);
         }
 
         LOGGER.debug("Exiting doPost()");

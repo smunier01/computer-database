@@ -1,6 +1,6 @@
 # computer-database
 
-## gatling benchmark
+## gatling stress test
 
 all the test run without any errors (browse, search, add, edit, delete).
 
@@ -34,7 +34,7 @@ all the test run without any errors (browse, search, add, edit, delete).
 | Optimization | users | gain | 95th percentile | comment |
 | --- | :---:  | :---:  | :---: | --- |
 | initial configuration | 50 users | 0% | 5 310ms | the mean value was lot lower (~800ms) some queries were simply extremely slow (max: 25sec) |
-| activate mysql query cache | 50 users | 0% | 954ms | with the cache, most queries became very fast (~4ms) but it doesn't solve my problem that some are extremely slow (max: 17sec) |
+| activate mysql query cache | 50 users | 0% | 954ms | with the cache, most queries became very fast (~4ms) but it doesn't solve my problem that some are still too slow (max: 17sec) |
 | mount `/tmp` in RAM (tmpfs) | 50 users | 0% | 344ms | everything is faster, but the slow requests are still too slow (max: 1.3sec) |
 
 ### 4 -
@@ -44,11 +44,9 @@ all the test run without any errors (browse, search, add, edit, delete).
 
 | Optimization | users | gain | 95th percentile | comment |
 | --- | :---:  | :---:  | :---: | --- |
-| Increased number of connections in mysql & the hikari connection pool to prevent crashing | 500 users | 0% | 31 310ms | The number of connection etc.. was probably wrong. I think some requests were stuck waiting for a connection for too long. Everything run without any errors. Or something else is wrong (cpu, memory & heap are fine).|
+| Increased number of connections in mysql & the hikari connection pool to prevent crashing | 500 users | 0% | 31 310ms | The number of connection etc.. was probably wrong. I think some requests were stuck waiting for a connection for too long. Or something else is wrong (cpu, memory & heap are fine).|
 | force index used in some queries | 500 users | 0% | 7 800ms | Looking at the mysql logs, I noticed that for some queries mysql was not using the correct index. In the preparedStatement, I manually added a `force index (index_name)` depending on which column was being sorted. (I didn't have much time to test it, maybe it didn't help and the result was simply random luck) |
 
 ### 5 - notes
  - In our current version of mysql, the query cache doesn't work if there is a `-` in the database name.
- - I'm not sure why the `force index` is needed. When I execute the query directly from mysqlclient and check with `explain`, the correct index is used. Maybe there is different configs between mysqlclient and mysqld?
- - I noticed that the query cache doesn't work on `SELECT count(*) FROM computer;`. Once again, the cache works when I execute it directly from mysqlclient. 
- - Caching the count statement could easily be handly directly from the application.
+ - mysql doesn't use the correct index if the offset (in the LIMIT) is too big. Using `force index` fix that. 

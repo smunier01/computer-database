@@ -1,6 +1,8 @@
 package com.excilys.cdb.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,8 @@ public enum ComputerService implements IComputerService {
 
     private Validator validator = Validator.getInstance();
 
+    private final Map<String, Long> queryCounts = new ConcurrentHashMap<String, Long>(1000);
+
     private ComputerService() {
 
     }
@@ -49,6 +53,7 @@ public enum ComputerService implements IComputerService {
 
         if (computer != null) {
             this.computerDAO.delete(computer);
+            this.decTotalCount();
         }
     }
 
@@ -64,7 +69,9 @@ public enum ComputerService implements IComputerService {
     public Computer createComputer(Computer computer) {
         this.LOGGER.debug("entering createComputer()");
         this.validator.validateComputer(computer);
-        return this.computerDAO.create(computer);
+        Computer c = this.computerDAO.create(computer);
+        this.incTotalCount();
+        return c;
     }
 
     @Override
@@ -106,6 +113,39 @@ public enum ComputerService implements IComputerService {
     public long countComputers(PageParameters page) {
         this.LOGGER.debug("entering countComputers(page)");
         this.validator.validatePageParameters(page);
-        return this.computerDAO.count(page);
+
+        long result = 0;
+
+        if (page.getSearch().isEmpty()) {
+            Long cnt = this.queryCounts.get("total");
+
+            if (cnt == null) {
+                result = this.computerDAO.count(page);
+                this.queryCounts.put("total", result);
+            } else {
+                result = cnt;
+            }
+        } else {
+            result = this.computerDAO.count(page);
+            this.queryCounts.put("total", result);
+        }
+
+        return result;
+    }
+
+    private void decTotalCount() {
+        Long cnt = this.queryCounts.get("total");
+
+        if (cnt != null) {
+            this.queryCounts.put("total", cnt - 1);
+        }
+    }
+
+    private void incTotalCount() {
+        Long cnt = this.queryCounts.get("total");
+
+        if (cnt != null) {
+            this.queryCounts.put("total", cnt + 1);
+        }
     }
 }

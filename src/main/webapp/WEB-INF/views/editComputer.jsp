@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <jsp:include page="top.jsp" />
 
@@ -20,25 +21,25 @@
 						method="POST">
 						<input id="id" name="id" type="hidden" value="${computer.id}" />
 						<fieldset>
-							<div class="form-group">
+							<div class="form-group ${fn:contains(errors, 'name') ? 'has-error': ''}">
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" name="computerName"
 									id="computerName" placeholder="Computer name"
 									value="${computer.name}">
 							</div>
-							<div class="form-group">
+							<div class="form-group ${fn:contains(errors, 'introduced') ? 'has-error': ''}">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" name="introduced"
+									 class="form-control" name="introduced"
 									id="introduced" placeholder="Introduced date"
 									value="${computer.introduced}">
 							</div>
-							<div class="form-group">
+							<div class="form-group ${fn:contains(errors, 'discontinued') ? 'has-error': ''}">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" name="discontinued"
+									 class="form-control" name="discontinued"
 									id="discontinued" placeholder="Discontinued date"
 									value="${computer.discontinued}">
 							</div>
-							<div class="form-group">
+							<div class="form-group ${fn:contains(errors, 'companyId') ? 'has-error': ''}">
 								<label for="companyId">Company</label> <select
 									class="form-control" name="companyId" id="companyId">
 									<option value="">--</option>

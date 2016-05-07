@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <jsp:include page="top.jsp" />
 
@@ -18,25 +19,30 @@
 					<form action="${pageContext.request.contextPath}/computer/add"
 						method="POST">
 						<fieldset>
-							<div class="form-group">
+							<div
+								class="form-group ${fn:contains(errors, 'name') ? 'has-error': ''}">
 								<label class="control-label" for="computerName">Computer
 									name</label> <input type="text" class="form-control"
 									name="computerName" id="computerName"
-									placeholder="Computer name" value="${computerName}">
+									placeholder="Computer name" value="${computer.name}">
 							</div>
-							<div class="form-group">
+							<div
+								class="form-group ${fn:contains(errors, 'introduced') ? 'has-error': ''}">
 								<label class="control-label" for="introduced">Introduced
 									date</label> <input type="date" class="form-control" name="introduced"
 									id="introduced" placeholder="Introduced date"
-									value="${introduced}">
+									value="${computer.introduced}">
 							</div>
-							<div class="form-group">
+							<div
+								class="form-group ${fn:contains(errors, 'discontinued') ? 'has-error': ''}">
 								<label class="control-label" for="discontinued">Discontinued
 									date</label> <input type="date" class="form-control"
 									name="discontinued" id="discontinued"
-									placeholder="Discontinued date" value="${computerName}">
+									placeholder="Discontinued date"
+									value="${computer.discontinued}">
 							</div>
-							<div class="form-group">
+							<div
+								class="form-group ${fn:contains(errors, 'companyId') ? 'has-error': ''}">
 								<label class="control-label" for="companyId">Company</label> <select
 									class="form-control" name="companyId" id="companyId">
 									<option value="">--</option>

@@ -137,7 +137,7 @@ public enum ComputerMapper {
         builder.id(request.getParameter("id"));
         builder.name(request.getParameter("computerName"));
         builder.introduced(request.getParameter("introduced"));
-        builder.introduced(request.getParameter("discontinued"));
+        builder.discontinued(request.getParameter("discontinued"));
         builder.companyId(request.getParameter("companyId"));
 
         return builder.build();

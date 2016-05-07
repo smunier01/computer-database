@@ -3,6 +3,7 @@ package com.excilys.cdb.servlets;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,13 +18,11 @@ import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.mapper.ComputerMapper;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.ICompanyService;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.CompanyService;
 import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.validation.Validator;
-import com.excilys.cdb.validation.ValidatorException;
 
 /**
  * Servlet implementation class ComputerEditServlet.
@@ -56,22 +55,25 @@ public class ComputerEditServlet extends HttpServlet {
 
         String idStr = request.getParameter("id");
 
-        // @TODO not sure how useful this is...
-        this.validator.validateInt(idStr);
-        long id = Long.parseLong(idStr);
+        if (!this.validator.isIdValid(idStr)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
 
         List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
 
-        Computer computer = this.computerService.getComputer(id);
+        if (request.getAttribute("computer") == null) {
 
-        if (computer == null) {
-            // if this computer id doesn't exist, 404 not found page
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        } else {
-            request.setAttribute("companies", companies);
-            request.setAttribute("computer", new ComputerDTO(computer));
-            request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+            ComputerDTO computer = this.computerMapper.toDTO(this.computerService.getComputer(Long.parseLong(idStr)));
+
+            if (computer == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } else {
+                request.setAttribute("computer", computer);
+            }
         }
+
+        request.setAttribute("companies", companies);
+        request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 
         LOGGER.debug("Exiting doGet()");
     }
@@ -85,20 +87,17 @@ public class ComputerEditServlet extends HttpServlet {
 
         LOGGER.debug("Entering doPost()");
 
-        final ComputerDTO c = this.computerMapper.map(request);
+        ComputerDTO computer = this.computerMapper.map(request);
 
-        try {
+        Set<String> errors = this.validator.validateComputerDTO(computer);
 
-            this.validator.validateComputerDTO(c);
-
-            this.computerService.updateComputer(this.computerMapper.fromDTO(c));
-
+        if (errors.isEmpty()) {
+            this.computerService.updateComputer(this.computerMapper.fromDTO(computer));
             response.sendRedirect(request.getContextPath() + "/dashboard");
-
-        } catch (ValidatorException e) {
-            // if the object is not valid, redisplay the page
-            request.setAttribute("id", c.getId());
-            request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+        } else {
+            request.setAttribute("computer", computer);
+            request.setAttribute("errors", errors);
+            this.doGet(request, response);
         }
 
         LOGGER.debug("Exiting doPost()");
