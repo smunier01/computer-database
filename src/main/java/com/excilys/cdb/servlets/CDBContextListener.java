@@ -21,7 +21,6 @@ public class CDBContextListener implements ServletContextListener {
         LOGGER.debug("ServletContextListener destroyed");
 
         this.factory.close();
-
     }
 
     @Override

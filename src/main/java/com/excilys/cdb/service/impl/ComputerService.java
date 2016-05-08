@@ -3,7 +3,6 @@ package com.excilys.cdb.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ public enum ComputerService implements IComputerService {
 
     private Validator validator = Validator.getInstance();
 
-    private final Map<String, Long> queryCounts = new ConcurrentHashMap<String, Long>(1000);
+    private final Map<String, Long> queryCounts = new ConcurrentHashMap<String, Long>(1);
 
     private ComputerService() {
 
@@ -121,13 +120,12 @@ public enum ComputerService implements IComputerService {
 
             if (cnt == null) {
                 result = this.computerDAO.count(page);
-                this.queryCounts.put("total", result);
+                this.queryCounts.putIfAbsent("total", result);
             } else {
                 result = cnt;
             }
         } else {
             result = this.computerDAO.count(page);
-            this.queryCounts.put("total", result);
         }
 
         return result;
@@ -147,5 +145,6 @@ public enum ComputerService implements IComputerService {
         if (cnt != null) {
             this.queryCounts.put("total", cnt + 1);
         }
+
     }
 }
