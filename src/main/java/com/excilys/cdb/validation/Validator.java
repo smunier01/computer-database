@@ -1,5 +1,6 @@
 package com.excilys.cdb.validation;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -22,64 +23,83 @@ public enum Validator {
 
     private final Pattern dateRegex = Pattern.compile("((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])");
 
-    private Validator() {
+    public static LocalDate minTimestamp = LocalDate.parse("1970-01-01");
 
-    }
+    public static LocalDate maxTimestamp = LocalDate.parse("2037-12-31");
 
     public static Validator getInstance() {
         return INSTANCE;
     }
 
-    public void validateInt(String s) {
-        if (!this.intRegex.matcher(s).matches()) {
-            throw new ValidatorException("Invalid ID : " + s);
-        }
-    }
-
+    /**
+     * Use a regex to check if an ID is valid.
+     *
+     * @param s
+     *            String representing the ID.
+     * @return true if valid
+     */
     public boolean isIdValid(String s) {
         return this.intRegex.matcher(s).matches();
     }
 
-    public void validateDate(String s) {
-        if (!this.dateRegex.matcher(s).matches()) {
-            throw new ValidatorException("Invalid DATE : " + s);
-        }
-    }
-
+    /**
+     * Use a regex to check if a date is valid.
+     *
+     * @param s
+     *            String representing the date.
+     * @return true if valid
+     */
     public boolean isDateValid(String s) {
         return this.dateRegex.matcher(s).matches();
     }
 
+    /**
+     * Check for the legality of an ID
+     *
+     * @param id
+     *            the id
+     * @throws ValidatorException
+     *             ValidatorException if the id is illegal.
+     *
+     */
     public void validateId(Long id) {
         if ((id == null) || (id <= 0)) {
-            throw new ValidatorException("Invalid ID : " + id);
+            throw new ValidatorException("Illegal ID : " + id);
         }
     }
 
-    public void validatePageParameters(PageParameters pparam) {
+    /**
+     * Check the illegality of a PageParameter object.
+     *
+     * @param params
+     *            page parameter object to check
+     * @throws ValidatorException
+     *             ValidatorException if the PageParameters is illegal.
+     */
+    public void validatePageParameters(PageParameters params) {
 
         // page number
-        if (pparam.getPageNumber() < 0) {
-            throw new ValidatorException("Invalid PageNumber : " + pparam.getPageNumber());
+        if (params.getPageNumber() < 0) {
+            throw new ValidatorException("Invalid PageNumber : " + params.getPageNumber());
         }
 
         // page size
-        if (pparam.getSize() <= 0) {
-            throw new ValidatorException("Invalid PageSize : " + pparam.getSize());
+        if (params.getSize() <= 0) {
+            throw new ValidatorException("Invalid PageSize : " + params.getSize());
         }
 
         // search
-        if (pparam.getSearch() == null) {
+        if (params.getSearch() == null) {
             throw new ValidatorException("PageSearch cannot be null");
         }
 
         // order
-        if (pparam.getOrder() == null) {
+        if (params.getOrder() == null) {
             throw new ValidatorException("PageOrder cannot be null");
         }
 
         // order direction
-        if (pparam.getDirection() == null) {
+        if (params.getDirection() == null) {
             throw new ValidatorException("OrderDirection cannot be null");
         }
     }
@@ -132,7 +152,17 @@ public enum Validator {
 
     }
 
+    /**
+     * Check for the legality of a Computer.
+     *
+     * @param computer
+     *            computer object to check.
+     * @throws ValidatorException
+     *             ValidatorException if the Computer is illegal.
+     */
     public void validateComputer(Computer computer) {
+
+        LocalDate d;
 
         // computer name (required)
         if ((computer.getName() == null) || computer.getName().isEmpty()) {
@@ -145,13 +175,17 @@ public enum Validator {
         }
 
         // introduced date (optional)
-        if (computer.getIntroduced() != null) {
-            // TODO compare to min/max timestamp
+        if ((d = computer.getIntroduced()) != null) {
+            if (d.isBefore(minTimestamp) || d.isAfter(maxTimestamp)) {
+                throw new ValidatorException("Invalid timestamp : " + d);
+            }
         }
 
         // discontinued date (optional)
-        if (computer.getDiscontinued() != null) {
-            // TODO compare to min/max timestamp
+        if ((d = computer.getDiscontinued()) != null) {
+            if (d.isBefore(minTimestamp) || d.isAfter(maxTimestamp)) {
+                throw new ValidatorException("Invalid timestamp : " + d);
+            }
         }
 
         // company

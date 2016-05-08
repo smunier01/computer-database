@@ -57,11 +57,7 @@ public class ComputerEditServlet extends HttpServlet {
 
         if (!this.validator.isIdValid(idStr)) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-
-        List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
-
-        if (request.getAttribute("computer") == null) {
+        } else if (request.getAttribute("computer") == null) {
 
             ComputerDTO computer = this.computerMapper.toDTO(this.computerService.getComputer(Long.parseLong(idStr)));
 
@@ -72,6 +68,7 @@ public class ComputerEditServlet extends HttpServlet {
             }
         }
 
+        List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
         request.setAttribute("companies", companies);
         request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 

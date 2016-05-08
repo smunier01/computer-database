@@ -54,9 +54,7 @@ public class ComputerAddServlet extends HttpServlet {
         LOGGER.debug("Entering doGet()");
 
         List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
-
         request.setAttribute("companies", companies);
-
         request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
         LOGGER.debug("Exiting doGet()");
@@ -80,7 +78,6 @@ public class ComputerAddServlet extends HttpServlet {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
             response.sendRedirect(request.getContextPath() + "/dashboard");
         } else {
-
             request.setAttribute("computer", computer);
             request.setAttribute("errors", errors);
 

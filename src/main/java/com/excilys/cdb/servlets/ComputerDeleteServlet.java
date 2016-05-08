@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
+import com.excilys.cdb.validation.Validator;
 
 /**
  * Servlet implementation class ComputerDeleteServlet.
@@ -27,6 +28,8 @@ public class ComputerDeleteServlet extends HttpServlet {
 
     private IComputerService computerService = ComputerService.getInstance();
 
+    private Validator validator = Validator.getInstance();
+
     /**
      * delete a list of computers.
      */
@@ -39,7 +42,10 @@ public class ComputerDeleteServlet extends HttpServlet {
         String selection = request.getParameter("selection");
 
         if (selection != null) {
-            Stream.of(selection.split(",")).map(Long::parseLong).forEach(this.computerService::deleteComputer);
+            Stream.of(selection.split(","))
+                    .filter(this.validator::isIdValid)
+                    .map(Long::parseLong)
+                    .forEach(this.computerService::deleteComputer);
         }
 
         response.sendRedirect(request.getContextPath() + "/dashboard");
