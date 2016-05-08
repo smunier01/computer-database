@@ -43,12 +43,12 @@ public interface ICompanyService {
      *
      * @return list of company
      */
-    public List<Company> getCompanies();
+    List<Company> getCompanies();
 
     /**
      * get the number of companies.
      *
      * @return number of companies
      */
-    public long countCompanies();
+    long countCompanies();
 }

@@ -30,10 +30,6 @@ public enum ComputerService implements IComputerService {
 
     private final Map<String, Long> queryCounts = new ConcurrentHashMap<String, Long>(1);
 
-    private ComputerService() {
-
-    }
-
     /**
      * accessor for the ComputerService singleton.
      *
@@ -130,6 +126,9 @@ public enum ComputerService implements IComputerService {
         return result;
     }
 
+    /**
+     * decrement the cached value for the total number of computers.
+     */
     private void decTotalCount() {
         Long cnt = this.queryCounts.get("total");
 
@@ -138,6 +137,9 @@ public enum ComputerService implements IComputerService {
         }
     }
 
+    /**
+     * increment the cached value for the total number of computers.
+     */
     private void incTotalCount() {
         Long cnt = this.queryCounts.get("total");
 

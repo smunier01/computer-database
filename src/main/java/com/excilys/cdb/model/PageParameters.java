@@ -36,6 +36,20 @@ public class PageParameters {
         this.direction = Direction.ASC;
     }
 
+    /**
+     * PageParameters constructor.
+     *
+     * @param size
+     *            size of a page.
+     * @param pageNumber
+     *            current page number.
+     * @param search
+     *            string search for the query.
+     * @param order
+     *            enum corresponding to the column name for the order by.
+     * @param direction
+     *            direction of the order by (asc, desc).
+     */
     public PageParameters(long size, long pageNumber, String search, Order order, Direction direction) {
         this.size = size;
         this.pageNumber = pageNumber;
@@ -126,6 +140,9 @@ public class PageParameters {
         return this.pageNumber > 0 ? this.pageNumber : 0;
     }
 
+    /**
+     * Builder pattern for the page parameters.
+     */
     public static class Builder {
         private int size = 10;
         private int pageNumber = 0;

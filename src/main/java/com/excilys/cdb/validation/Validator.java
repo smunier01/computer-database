@@ -54,7 +54,7 @@ public enum Validator {
     }
 
     /**
-     * Check for the legality of an ID
+     * Check for the legality of an ID.
      *
      * @param id
      *            the id
@@ -194,6 +194,12 @@ public enum Validator {
         }
     }
 
+    /**
+     * Check for the legality of a Computer.
+     *
+     * @param company
+     *            company object to check.
+     */
     public void validateCompany(Company company) {
 
         // company id (required)

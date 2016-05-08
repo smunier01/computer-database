@@ -48,7 +48,7 @@ public enum ConnectionMySQLFactory {
      *
      * this is where the driver is loaded and the property file is read
      */
-    private ConnectionMySQLFactory() {
+    ConnectionMySQLFactory() {
 
         Properties props = new Properties();
         InputStream in = null;

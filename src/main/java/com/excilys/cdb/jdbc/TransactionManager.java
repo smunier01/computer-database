@@ -9,7 +9,7 @@ public enum TransactionManager implements ITransactionManager {
 
     ConnectionMySQLFactory factory = ConnectionMySQLFactory.getInstance();
 
-    public static final ThreadLocal<Connection> threadConnection = new ThreadLocal<Connection>();
+    public static ThreadLocal<Connection> threadConnection = new ThreadLocal<Connection>();
 
     public static ITransactionManager getInstance() {
         return INSTANCE;

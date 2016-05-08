@@ -219,6 +219,12 @@ public enum ComputerDAO implements DAO<Computer> {
         }
     }
 
+    /**
+     * Delete computers based on their company.
+     *
+     * @param id
+     *            id of the company to whom the computers to delete belong.
+     */
     public void deleteByCompanyId(Long id) {
         PreparedStatement stmt = null;
 
@@ -358,6 +364,13 @@ public enum ComputerDAO implements DAO<Computer> {
         return result;
     }
 
+    /**
+     * Count number of computers using a page parameters.
+     *
+     * @param page
+     *            parameters for the query.
+     * @return number of computers.
+     */
     public long count(PageParameters page) {
 
         Connection con = this.connectionFactory.create();

@@ -11,7 +11,7 @@ import com.excilys.cdb.model.PageParameters.Direction;
  * Implements different mapping methods to create or convert a PageParameters
  * objects.
  *
- * @author excilys
+ * @author simon
  */
 public enum PageParametersMapper {
     INSTANCE;
@@ -20,6 +20,16 @@ public enum PageParametersMapper {
         return INSTANCE;
     }
 
+    /**
+     * map a HttpServletRequest to a PageParameters.
+     *
+     * TODO validation should be move to anothing method (like for computer &
+     * company)
+     *
+     * @param request
+     *            httpservletrequest to map.
+     * @return page parameters object.
+     */
     public PageParameters map(HttpServletRequest request) {
 
         int page = getIntWithDefault(request, "page", 0);
@@ -48,6 +58,17 @@ public enum PageParametersMapper {
 
     }
 
+    /**
+     * helper to get an int inside a HttpServletRequest object.
+     *
+     * @param request
+     *            object containing the int
+     * @param key
+     *            key where the int we want to get is
+     * @param def
+     *            value to return if they key doesn't exists
+     * @return int, or def if key doesn't exists
+     */
     public static int getIntWithDefault(final HttpServletRequest request, final String key, final int def) {
         final String str = request.getParameter(key);
 

@@ -19,7 +19,7 @@ public interface IComputerService {
     void deleteComputer(Long id);
 
     /**
-     * update a computer
+     * update a computer.
      *
      * @param computer
      *            computer to update
@@ -29,7 +29,7 @@ public interface IComputerService {
     /**
      * add a new computer to the database based on a computer object.
      *
-     * @param c
+     * @param computer
      *            computer object to add to the database
      * @return instance of the computer with id updated
      */
@@ -56,15 +56,19 @@ public interface IComputerService {
     /**
      * get the number of computers.
      *
+     * @param page
+     *            parameters for the count query.
+     *
      * @return number of computers
      */
-    public long countComputers(PageParameters page);
+    long countComputers(PageParameters page);
 
     /**
-     *
+     * returns the page of computer corresponding to the page parameters given.
      *
      * @param param
-     * @return
+     *            parameters for the query.
+     * @return page of computers.
      */
-    public Page<Computer> getComputersPage(PageParameters param);
+    Page<Computer> getComputersPage(PageParameters param);
 }

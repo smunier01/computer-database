@@ -17,20 +17,13 @@ import com.excilys.cdb.model.Page;
 /**
  * implements different mapping methods to create or convert a Computer object.
  *
- * @author excilys
+ * @author simon
  */
 public enum ComputerMapper {
 
     INSTANCE;
 
     private LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
-
-    /**
-     * default constructor for the singleton.
-     */
-    private ComputerMapper() {
-
-    }
 
     /**
      * public accessor for the singleton.
@@ -93,6 +86,7 @@ public enum ComputerMapper {
      * @throws SQLException
      *             exception
      * @throws MapperException
+     *             exception
      */
     public Computer map(ResultSet rs) throws SQLException, MapperException {
 
@@ -128,7 +122,8 @@ public enum ComputerMapper {
      * Creates a ComputerDTO object from a HttpServletRequest.
      *
      * @param request
-     * @return
+     *            httpservletrequest containing the computer
+     * @return ComputerDTO
      */
     public ComputerDTO map(HttpServletRequest request) {
 
@@ -148,7 +143,8 @@ public enum ComputerMapper {
      * convert a list of Computer to a list of ComputerDTO.
      *
      * @param companies
-     * @return
+     *            list of Computer
+     * @return list of ComputerDTO
      */
     public List<ComputerDTO> map(List<Computer> computers) {
         return computers.stream().map(this::toDTO).collect(Collectors.toList());

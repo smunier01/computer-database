@@ -18,7 +18,7 @@ import com.excilys.cdb.model.PageParameters;
  */
 public interface DAO<T> {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(DAO.class);
+    Logger LOGGER = LoggerFactory.getLogger(DAO.class);
 
     /**
      * find an object by its id.
@@ -27,7 +27,7 @@ public interface DAO<T> {
      *            of the object
      * @return instance of the object found
      */
-    public abstract T find(Long id);
+    T find(Long id);
 
     /**
      * create a new object.
@@ -36,7 +36,7 @@ public interface DAO<T> {
      *            object to create
      * @return instance of the object created
      */
-    public abstract T create(T obj);
+    T create(T obj);
 
     /**
      * update an object.
@@ -45,7 +45,7 @@ public interface DAO<T> {
      *            object to update
      * @return instance of the object updated
      */
-    public abstract T update(T obj);
+    T update(T obj);
 
     /**
      * remove an object.
@@ -53,19 +53,22 @@ public interface DAO<T> {
      * @param obj
      *            object to remove
      */
-    public abstract void delete(T obj);
+    void delete(T obj);
 
     /**
-     * remove multiple object by their IDs
+     * remove multiple object by their IDs.
+     *
+     * @param objs
+     *            list of the object ids to remove
      */
-    public abstract void deleteAll(List<Long> objs);
+    void deleteAll(List<Long> objs);
 
     /**
      * return all object.
      *
      * @return list containing the objects
      */
-    public abstract List<T> findAll();
+    List<T> findAll();
 
     /**
      * return all object with an offset and a limit.
@@ -74,14 +77,14 @@ public interface DAO<T> {
      *            page parameters
      * @return the list of object
      */
-    public abstract List<T> findAll(PageParameters params);
+    List<T> findAll(PageParameters params);
 
     /**
      * count the number of object in the table.
      *
      * @return number of object as long
      */
-    public abstract long count();
+    long count();
 
     /**
      * close the list of resources given as parameters.

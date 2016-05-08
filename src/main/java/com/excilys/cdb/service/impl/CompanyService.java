@@ -33,13 +33,6 @@ public enum CompanyService implements ICompanyService {
     private Validator validator = Validator.getInstance();
 
     /**
-     * default constructor for the singleton.
-     */
-    private CompanyService() {
-
-    }
-
-    /**
      * accessor for the CompanyService singleton.
      *
      * @return unique instance of CompanyService
