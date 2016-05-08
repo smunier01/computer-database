@@ -3,17 +3,37 @@ package com.excilys.cdb.computer;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.model.PageParameters.Direction;
+import com.excilys.cdb.model.PageParameters.Order;
 import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.service.impl.ComputerService;
+import com.excilys.cdb.validation.ValidatorException;
 
 public class ComputerServiceTest {
 
-    private final ComputerService service = ComputerService.getInstance();
+    private ComputerService service = ComputerService.getInstance();
+
+    private PageParameters pageMock;
+
+    private Computer defaultComputer;
+
+    @Before
+    public void testBeforeClass() {
+        this.pageMock = Mockito.mock(PageParameters.class);
+        Mockito.when(this.pageMock.getPageNumber()).thenReturn(0L);
+        Mockito.when(this.pageMock.getSize()).thenReturn(10L);
+        Mockito.when(this.pageMock.getSearch()).thenReturn("");
+        Mockito.when(this.pageMock.getOrder()).thenReturn(Order.NAME);
+        Mockito.when(this.pageMock.getDirection()).thenReturn(Direction.ASC);
+
+        this.defaultComputer = new Computer.ComputerBuilder().name("DefaultName").build();
+    }
 
     @Test
     public void testSingleton() {
@@ -25,7 +45,7 @@ public class ComputerServiceTest {
     @Test
     public void testCreateComputer() throws ServiceException {
 
-        final Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("DefaultName").build());
+        final Computer c = this.service.createComputer(this.defaultComputer);
 
         Assert.assertNotNull(c);
 
@@ -36,9 +56,12 @@ public class ComputerServiceTest {
         this.service.deleteComputer(c.getId());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorException.class)
     public void testCreateComputer2() throws ServiceException {
-        final Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("").build());
+
+        this.defaultComputer.setName("");
+
+        Computer c = this.service.createComputer(this.defaultComputer);
 
         // if it somehow did work... do some clean up
         if ((c != null) && (c.getId() > 0)) {
@@ -46,12 +69,12 @@ public class ComputerServiceTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorException.class)
     public void testGetComputerError1() throws ServiceException {
         this.service.getComputer(-1L);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorException.class)
     public void testGetComputerError2() throws ServiceException {
         this.service.getComputer(0L);
     }
@@ -63,49 +86,28 @@ public class ComputerServiceTest {
         Assert.assertNull(c);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorException.class)
     public void testGetComputersError1() throws ServiceException {
-        final PageParameters p = Mockito.mock(PageParameters.class);
-        Mockito.when(p.getPageNumber()).thenReturn(0L);
-        Mockito.when(p.getSize()).thenReturn(0L);
-
-        this.service.getComputers(p);
+        Mockito.when(this.pageMock.getSize()).thenReturn(0L);
+        this.service.getComputers(this.pageMock);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorException.class)
     public void testGetComputersError2() throws ServiceException {
-
-        final PageParameters p = Mockito.mock(PageParameters.class);
-        Mockito.when(p.getPageNumber()).thenReturn(10L);
-        Mockito.when(p.getSize()).thenReturn(-10L);
-
-        this.service.getComputers(p);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetComputersError3() throws ServiceException {
-
-        final PageParameters p = Mockito.mock(PageParameters.class);
-        Mockito.when(p.getPageNumber()).thenReturn(0L);
-        Mockito.when(p.getSize()).thenReturn(-10L);
-
-        this.service.getComputers(p);
+        Mockito.when(this.pageMock.getSize()).thenReturn(-10L);
+        this.service.getComputers(this.pageMock);
     }
 
     @Test
     public void testCount() throws ServiceException {
 
-        final PageParameters p = Mockito.mock(PageParameters.class);
-        Mockito.when(p.getPageNumber()).thenReturn(0L);
-        Mockito.when(p.getSize()).thenReturn(10L);
-
-        final long a = this.service.countComputers(p);
+        long a = this.service.countComputers(this.pageMock);
 
         Assert.assertTrue(a > 0);
 
         // create a computer
 
-        final Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("DefaultName").build());
+        Computer c = this.service.createComputer(new Computer.ComputerBuilder().name("DefaultName").build());
 
         Assert.assertNotNull(c);
 
@@ -113,7 +115,7 @@ public class ComputerServiceTest {
 
         // count again
 
-        final long b = this.service.countComputers(p);
+        long b = this.service.countComputers(this.pageMock);
 
         Assert.assertEquals(a, b - 1);
 
@@ -125,11 +127,7 @@ public class ComputerServiceTest {
     @Test
     public void testGetComputers1() throws ServiceException {
 
-        final PageParameters p = Mockito.mock(PageParameters.class);
-        Mockito.when(p.getPageNumber()).thenReturn(0L);
-        Mockito.when(p.getSize()).thenReturn(10L);
-
-        final List<Computer> computers = this.service.getComputers(p);
+        final List<Computer> computers = this.service.getComputers(this.pageMock);
 
         Assert.assertEquals(10, computers.size());
 
@@ -138,11 +136,9 @@ public class ComputerServiceTest {
     @Test
     public void testGetComputers2() throws ServiceException {
 
-        final PageParameters p = Mockito.mock(PageParameters.class);
-        Mockito.when(p.getPageNumber()).thenReturn(1L);
-        Mockito.when(p.getSize()).thenReturn(10L);
+        Mockito.when(this.pageMock.getPageNumber()).thenReturn(1L);
 
-        final List<Computer> computers = this.service.getComputers(p);
+        final List<Computer> computers = this.service.getComputers(this.pageMock);
 
         Assert.assertEquals(10, computers.size());
 
@@ -160,20 +156,20 @@ public class ComputerServiceTest {
 
         long firstCount = this.service.countComputers(p);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             tmp = new Computer.ComputerBuilder().name("test").build();
             created.add(tmp);
         }
 
         created.stream().parallel().forEach(this.service::createComputer);
 
-        Assert.assertEquals(100, created.size());
+        Assert.assertEquals(10, created.size());
 
         // should be 100 more computer inside now
 
         long secondCount = this.service.countComputers(p);
 
-        Assert.assertEquals(firstCount + 100, secondCount);
+        Assert.assertEquals(firstCount + 10, secondCount);
 
         // delete all using parallel stream
 
@@ -198,20 +194,20 @@ public class ComputerServiceTest {
 
         long firstCount = this.service.countComputers(p);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             tmp = new Computer.ComputerBuilder().name("test").build();
             this.service.createComputer(tmp);
             Assert.assertTrue(tmp.getId() > 0);
             created.add(tmp.getId());
         }
 
-        Assert.assertEquals(100, created.size());
+        Assert.assertEquals(10, created.size());
 
         // should be 100 more computer inside now
 
         long secondCount = this.service.countComputers(p);
 
-        Assert.assertEquals(firstCount + 100, secondCount);
+        Assert.assertEquals(firstCount + 10, secondCount);
 
         // delete all using parallel stream
 

@@ -114,7 +114,6 @@ public enum ComputerService implements IComputerService {
         this.validator.validatePageParameters(page);
 
         long result = 0;
-
         if (page.getSearch().isEmpty()) {
             Long cnt = this.queryCounts.get("total");
 
