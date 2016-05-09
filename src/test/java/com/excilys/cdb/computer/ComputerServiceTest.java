@@ -156,20 +156,20 @@ public class ComputerServiceTest {
 
         long firstCount = this.service.countComputers(p);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             tmp = new Computer.ComputerBuilder().name("test").build();
             created.add(tmp);
         }
 
         created.stream().parallel().forEach(this.service::createComputer);
 
-        Assert.assertEquals(10, created.size());
+        Assert.assertEquals(100, created.size());
 
         // should be 100 more computer inside now
 
         long secondCount = this.service.countComputers(p);
 
-        Assert.assertEquals(firstCount + 10, secondCount);
+        Assert.assertEquals(firstCount + 100, secondCount);
 
         // delete all using parallel stream
 
@@ -194,20 +194,20 @@ public class ComputerServiceTest {
 
         long firstCount = this.service.countComputers(p);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             tmp = new Computer.ComputerBuilder().name("test").build();
             this.service.createComputer(tmp);
             Assert.assertTrue(tmp.getId() > 0);
             created.add(tmp.getId());
         }
 
-        Assert.assertEquals(10, created.size());
+        Assert.assertEquals(100, created.size());
 
         // should be 100 more computer inside now
 
         long secondCount = this.service.countComputers(p);
 
-        Assert.assertEquals(firstCount + 10, secondCount);
+        Assert.assertEquals(firstCount + 100, secondCount);
 
         // delete all using parallel stream
 

@@ -3,6 +3,9 @@ package com.excilys.cdb.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +31,9 @@ public enum ComputerService implements IComputerService {
 
     private Validator validator = Validator.getInstance();
 
-    private final Map<String, Long> queryCounts = new ConcurrentHashMap<String, Long>(1);
+    private final Map<String, Long> queryCounts = new ConcurrentHashMap<>(1);
+
+    private volatile AtomicLong count;
 
     /**
      * accessor for the ComputerService singleton.
@@ -111,13 +116,13 @@ public enum ComputerService implements IComputerService {
 
         long result = 0;
         if (page.getSearch().isEmpty()) {
-            Long cnt = this.queryCounts.get("total");
-
-            if (cnt == null) {
+            if (this.count == null) {
+                this.count = new AtomicLong();
                 result = this.computerDAO.count(page);
                 this.queryCounts.putIfAbsent("total", result);
+                this.count.set(result);
             } else {
-                result = cnt;
+                result = this.count.get();
             }
         } else {
             result = this.computerDAO.count(page);
@@ -130,22 +135,25 @@ public enum ComputerService implements IComputerService {
      * decrement the cached value for the total number of computers.
      */
     private void decTotalCount() {
-        Long cnt = this.queryCounts.get("total");
+        /*
+         * Long cnt = this.queryCounts.get("total");
+         *
+         * if (cnt != null) { this.queryCounts.put("total", cnt - 1); }
+         */
 
-        if (cnt != null) {
-            this.queryCounts.put("total", cnt - 1);
-        }
+        this.count.decrementAndGet();
     }
 
     /**
      * increment the cached value for the total number of computers.
      */
     private void incTotalCount() {
-        Long cnt = this.queryCounts.get("total");
+        /*
+         * Long cnt = this.queryCounts.get("total");
+         *
+         * if (cnt != null) { this.queryCounts.put("total", cnt + 1); }
+         */
 
-        if (cnt != null) {
-            this.queryCounts.put("total", cnt + 1);
-        }
-
+        this.count.incrementAndGet();
     }
 }

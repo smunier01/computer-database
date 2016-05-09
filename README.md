@@ -54,7 +54,6 @@ all the test run without any errors (browse, search, add, edit, delete).
 | --- | :---:  | :---:  | :---: | --- |
 | original configuration | 2500 users | 0% | 500ms | |
 
-
 ### 6 - notes
  - In our current version of mysql, the query cache doesn't work if there is a `-` in the database name.
  - mysql doesn't use the correct index if the offset (in the LIMIT) is too big. Using `force index` fix that. 
