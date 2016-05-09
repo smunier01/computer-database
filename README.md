@@ -46,7 +46,15 @@ all the test run without any errors (browse, search, add, edit, delete).
 | --- | :---:  | :---:  | :---: | --- |
 | Increased number of connections in mysql & the hikari connection pool to prevent crashing | 500 users | 0% | 31 310ms | The number of connection etc.. was probably wrong. I think some requests were stuck waiting for a connection for too long. Or something else is wrong (cpu, memory & heap are fine).|
 | force index used in some queries | 500 users | 75% | 7 800ms | Looking at the mysql logs, I noticed that for some queries mysql was not using the correct index. In the preparedStatement, I manually added a `force index (index_name)` depending on which column was being sorted. (I didn't have much time to test it, maybe it didn't help and the result was simply random luck) |
+| create a cache in java for the count() query | 500 users | 99% | 30ms ||
 
-### 5 - notes
+### 5 - 
+
+| Optimization | users | gain | 95th percentile | comment |
+| --- | :---:  | :---:  | :---: | --- |
+| original configuration | 2500 users | 0% | 500ms | |
+
+
+### 6 - notes
  - In our current version of mysql, the query cache doesn't work if there is a `-` in the database name.
  - mysql doesn't use the correct index if the offset (in the LIMIT) is too big. Using `force index` fix that. 
