@@ -1,9 +1,6 @@
 package com.excilys.cdb.service.impl;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -31,9 +28,7 @@ public enum ComputerService implements IComputerService {
 
     private Validator validator = Validator.getInstance();
 
-    private final Map<String, Long> queryCounts = new ConcurrentHashMap<>(1);
-
-    private volatile AtomicLong count;
+    private AtomicLong count;
 
     /**
      * accessor for the ComputerService singleton.
@@ -119,7 +114,6 @@ public enum ComputerService implements IComputerService {
             if (this.count == null) {
                 this.count = new AtomicLong();
                 result = this.computerDAO.count(page);
-                this.queryCounts.putIfAbsent("total", result);
                 this.count.set(result);
             } else {
                 result = this.count.get();
@@ -135,12 +129,6 @@ public enum ComputerService implements IComputerService {
      * decrement the cached value for the total number of computers.
      */
     private void decTotalCount() {
-        /*
-         * Long cnt = this.queryCounts.get("total");
-         *
-         * if (cnt != null) { this.queryCounts.put("total", cnt - 1); }
-         */
-
         this.count.decrementAndGet();
     }
 
@@ -148,12 +136,6 @@ public enum ComputerService implements IComputerService {
      * increment the cached value for the total number of computers.
      */
     private void incTotalCount() {
-        /*
-         * Long cnt = this.queryCounts.get("total");
-         *
-         * if (cnt != null) { this.queryCounts.put("total", cnt + 1); }
-         */
-
         this.count.incrementAndGet();
     }
 }
