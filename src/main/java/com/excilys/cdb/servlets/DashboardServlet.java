@@ -23,7 +23,8 @@ import com.excilys.cdb.validation.Validator;
  */
 public class DashboardServlet extends HttpServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
+    // private static final Logger LOGGER =
+    // LoggerFactory.getLogger(DashboardServlet.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +34,7 @@ public class DashboardServlet extends HttpServlet {
 
     private final PageParametersMapper pageMapper = PageParametersMapper.getInstance();
 
-    private final Validator validator = Validator.getInstance();
+    // private final Validator validator = Validator.getInstance();
 
     /**
      * get the list of computers to display on the dashboard.
@@ -45,17 +46,17 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        LOGGER.debug("Entering doGet()");
+        // LOGGER.debug("Entering doGet()");
 
         PageParameters params = this.pageMapper.map(request);
 
-        this.validator.validatePageParameters(params);
+        // this.validator.validatePageParameters(params);
 
         Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
 
         request.setAttribute("page", computerPage);
 
-        LOGGER.debug("Exiting doGet()");
+        // LOGGER.debug("Exiting doGet()");
 
         request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 

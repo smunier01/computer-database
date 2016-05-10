@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.excilys.cdb.dao.ComputerDAO;
@@ -29,6 +30,7 @@ public class ComputerDAOTest {
     }
 
     @Test
+    @Ignore
     public void testCreateFindDelete() throws DAOException {
 
         // create a computer

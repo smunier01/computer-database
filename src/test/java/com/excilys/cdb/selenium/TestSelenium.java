@@ -7,6 +7,7 @@ import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+@Ignore
 public class TestSelenium {
     private WebDriver driver;
     private String baseUrl;
@@ -20,8 +21,8 @@ public class TestSelenium {
         this.driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
-    @Test
-    public void testCreateFindDelete() throws Exception {
+    @Ignore
+    void testCreateFindDelete() throws Exception {
 
         // creates a computer with a name of "ComputerTest"
 
@@ -38,7 +39,7 @@ public class TestSelenium {
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound = this.driver.findElement(By.id("nbComputers")).getText();
 
-        Assert.assertTrue(nbFound.equals("1"));
+        Assert.assertEquals(nbFound, "1");
 
         // remove it
 
@@ -55,10 +56,10 @@ public class TestSelenium {
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound2 = this.driver.findElement(By.id("nbComputers")).getText();
 
-        Assert.assertTrue(nbFound2.equals("0"));
+        Assert.assertEquals(nbFound2, "0");
     }
 
-    @Test
+    @Ignore
     public void testUpdate() throws Exception {
 
         // creates a computer with a name of "ComputerTest"

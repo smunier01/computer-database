@@ -53,6 +53,7 @@ all the test run without any errors (browse, search, add, edit, delete).
 | Optimization | users | gain | 95th percentile | comment |
 | --- | :---:  | :---:  | :---: | --- |
 | original configuration | 2500 users | 0% | 500ms | |
+| original configuration | 3500 users | 0% | 1200ms | |
 
 ### 6 - notes
  - In our current version of mysql, the query cache doesn't work if there is a `-` in the database name.

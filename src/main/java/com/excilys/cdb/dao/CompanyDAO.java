@@ -51,8 +51,6 @@ public enum CompanyDAO implements DAO<Company> {
 
     private static final String COUNT = "SELECT count(id) as nb FROM company";
 
-    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
-
     /**
      * getInstance accessor for the singleton.
      *

@@ -1,5 +1,6 @@
 package com.excilys.cdb.company;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -7,6 +8,7 @@ import org.junit.Test;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 
@@ -28,7 +30,7 @@ public class CompanyDAOTest {
     }
 
     @Test
-    public void testCreateFindDelete() throws DAOException {
+    public void testCreateFindDelete() throws DAOException, SQLException {
 
         // create a company
 
@@ -50,7 +52,11 @@ public class CompanyDAOTest {
 
         // delete the computer
 
+        TransactionManager.getInstance().init();
+
         this.companyDAO.delete(b);
+
+        TransactionManager.getInstance().commit();
 
         // try to find it again
 

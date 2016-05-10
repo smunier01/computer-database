@@ -49,6 +49,8 @@ public enum ComputerService implements IComputerService {
         if (computer != null) {
             this.computerDAO.delete(computer);
             this.decTotalCount();
+        } else {
+            System.out.println("aa");
         }
     }
 
