@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.excilys.cdb.dao.CompanyDAO;
@@ -65,6 +66,7 @@ public class CompanyDAOTest {
         Assert.assertNull(c);
     }
 
+    @Ignore
     @Test
     public void testUpdate() throws DAOException {
 
@@ -115,6 +117,7 @@ public class CompanyDAOTest {
         Assert.assertTrue(companies.size() > 0);
     }
 
+    @Ignore
     @Test
     public void testFindAllWithCreate() throws DAOException {
 
