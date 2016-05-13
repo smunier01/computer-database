@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.19.1">
+      <projectUrl>https://github.com/smunier01/computer-database.git/</projectUrl>
+      <displayName></displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/smunier01/computer-database.git</url>
+        <credentialsId>ac5de4ed-5241-4916-92dd-dc326f5475c8</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.19.1">
+      <spec></spec>
+    </com.cloudbees.jenkins.GitHubPushTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#Initialization containers
+
+docker ps
+present=`docker ps -aq -f name=mysql-test-container`
+echo $present
+if [ -z &quot;$present&quot; ]; then
+	 echo &quot;******************* dind not present *********************&quot;
+	 docker network create dind-test-network;
+     docker network ls;
+     docker run -d --net dind-test-network --name=mysql-test-container smunier/mysql-img;
+     docker run -dit --net dind-test-network --name=maven-container smunier/maven-img /bin/bash;
+     docker ps
+     docker ps -a
+else 
+	 echo &quot;******************* dind present *********************&quot;
+fi
+
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># copy database properties to maven container
+
+docker ps
+docker cp . maven-container:/computer-database
+docker exec maven-container ls
+
+# test_ip = $(docker inspect --format &apos;{{ .NetworkSettings.IPAddress }}&apos; mysql-test-container)
+docker exec maven-container cp /home/mysql.properties /computer-database/src/test/resources/mysql.properties
+docker exec maven-container sed -i -e &apos;s/{{INSERT_IP}}/172.19.0.2/g&apos; /computer-database/src/test/resources/mysql.properties
+
+# dev_ip = $(docker inspect --format &apos;{{ .NetworkSettings.IPAddress }}&apos; mysql-dev-container)
+docker exec maven-container cp /home/mysql.properties /computer-database/src/main/resources/mysql.properties
+docker exec maven-container sed -i -e &apos;s/{{INSERT_IP}}/172.17.0.5/g&apos; /computer-database/src/main/resources/mysql.properties</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>docker exec maven-container cat /computer-database/src/test/resources/mysql.properties
+docker inspect mysql-test-container | grep &quot;IPAddress&quot;
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>docker exec maven-container mvn -f /computer-database/pom.xml clean install test</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Post build success, Tomcat deployment
+
+present=`docker ps -aq -f name=tomtom`
+echo $present
+if [ -z &quot;$present&quot; ]; then
+	 echo &quot;******************* tomtom not present *********************&quot;
+else 
+	 echo &quot;******************* tomtom present *********************&quot;
+     docker rm -f tomtom
+fi
+
+docker run -dit --name=tomtom smunier/tomcat-img
+docker cp maven-container:/computer-database/target/cdb.war /
+docker cp /cdb.war tomtom:/usr/local/tomcat/webapps
+docker exec tomtom ls /
+docker exec tomtom ls /usr/local/tomcat/webapps
+docker login --username=smunier --password=azerty #please dont use the password PLEEEEEASE
+docker commit tomtom smunier/tomcat-img
+docker push smunier/tomcat-img</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
