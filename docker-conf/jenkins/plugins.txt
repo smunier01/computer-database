@@ -1,0 +1,9 @@
+icon-shim:2.0.2
+credentials:1.25
+git-client:1.18.0
+scm-api:0.2 
+git:2.4.0
+token-macro:1.5.1
+plain-credentials:1.1
+github-api:1.69
+github:1.19.1
