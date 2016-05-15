@@ -21,22 +21,28 @@ function configure_jenkins {
 
     # 1 - creates folder in ~/jenkins
 
-    if [ -d "$JENKINS_CONF_FOLDER" ]; then
-        rm -r $JENKINS_CONF_FOLDER
-    fi
+    # if [ -d "$JENKINS_CONF_FOLDER" ]; then
+    #    rm -r $JENKINS_CONF_FOLDER
+    # fi
 
     mkdir -p $JENKINS_CONF_FOLDER
 
     # 2 - copy config.xml to $CONF/jobs/github-job/
 
-    mkdir -p $JENKINS_CONF_FOLDER/jobs/github-job/
-    cp config.xml $JENKINS_CONF_FOLDER/jobs/github-job/
+    # mkdir -p $JENKINS_CONF_FOLDER/jobs/github-job/
+    # cp config.xml $JENKINS_CONF_FOLDER/jobs/github-job/
+
+    cp -r ./jenkins/jobs $JENKINS_CONF_FOLDER
+    
+    # cp --parents ./jenkins/jobs/github-job/config.xml $JENKINS_CONF_FOLDER/jobs/github-job
+    # cp --parents ./jenkins/jobs/deploy-job/config.xml $JENKINS_CONF_FOLDER/jobs/deploy-job
 }
 
 #
 # pull & run jenkins
 #
 function run_jenkins {
+    docker rm -f $JENKINS_CONTAINER_NAME
     docker pull $DOCKER_HUB_JENKINS
     docker run --name $JENKINS_CONTAINER_NAME -p $JENKINS_PORT:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v $JENKINS_CONF_FOLDER:/var/jenkins_home $DOCKER_HUB_JENKINS
 }
@@ -78,9 +84,6 @@ function clean {
 
 if [ "$1" == "" ]; then
     echo "1 parameter is required"
-    echo "build : build and push images to docker hub."
-    echo "conf : configure jenkins environment."
-    echo "run : run jenkins."
     exit
 fi
 

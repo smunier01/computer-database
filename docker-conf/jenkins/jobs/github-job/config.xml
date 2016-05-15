@@ -99,7 +99,7 @@
 
         dev_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql-dev-container)
         docker exec maven-container cp /home/mysql.properties /computer-database/src/main/resources/mysql.properties
-        docker exec maven-container sed -i -e 's/{{INSERT_IP}}/'$dev_it'/g' /computer-database/src/main/resources/mysql.properties
+        docker exec maven-container sed -i -e 's/{{INSERT_IP}}/'$dev_ip'/g' /computer-database/src/main/resources/mysql.properties
       </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
