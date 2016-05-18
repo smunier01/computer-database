@@ -55,7 +55,8 @@
 	echo "******************* mysql_test_container not present *********************"
         docker pull smunier/mysql-img
         docker run -d --net dind-test-network --name=mysql-test-container smunier/mysql-img;
-        else 
+        else
+	docker start mysql-test-container
 	echo "******************* mysql_test_container present *********************"
         fi
 
@@ -67,7 +68,8 @@
 	echo "******************* maven_container not present *********************"
         docker pull smunier/maven-img
         docker run -dit --net dind-test-network --name=maven-container smunier/maven-img /bin/bash;
-        else 
+        else
+	docker start maven-container
 	echo "******************* maven_container present *********************"
         fi
 
@@ -79,7 +81,8 @@
 	echo "******************* mysql_dev_containernot present *********************"
         docker pull smunier/mysql-img
         docker run -d --name=mysql-dev-container smunier/mysql-img;
-        else 
+        else
+	docker start mysql-dev-container
 	echo "******************* mysql_dev_container present *********************"
         fi
 

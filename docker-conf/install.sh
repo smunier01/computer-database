@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # tools to set the computer-database docker environment
 #
