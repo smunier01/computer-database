@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.jdbc.ITransactionManager;
@@ -25,9 +27,8 @@ import com.excilys.cdb.model.PageParameters;
  *
  * @author simon
  */
-public enum CompanyDAO implements DAO<Company> {
-
-    INSTANCE;
+@Component
+public class CompanyDAO implements DAO<Company> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
@@ -50,15 +51,6 @@ public enum CompanyDAO implements DAO<Company> {
     private static final String DELETE = "DELETE FROM company WHERE id=?";
 
     private static final String COUNT = "SELECT count(id) as nb FROM company";
-
-    /**
-     * getInstance accessor for the singleton.
-     *
-     * @return the unique instance of CompanyDAO
-     */
-    public static CompanyDAO getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     public Company find(Long id) {

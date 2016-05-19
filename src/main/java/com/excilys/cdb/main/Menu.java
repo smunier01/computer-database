@@ -8,6 +8,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -31,9 +33,11 @@ public class Menu {
 
     private Scanner sc = null;
 
-    private final ComputerService computerService;
+    @Autowired
+    private ComputerService computerService;
 
-    private final CompanyService companyService;
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * Menu constructor.
@@ -44,8 +48,6 @@ public class Menu {
     public Menu(final Scanner sc) {
 
         this.sc = sc;
-        this.computerService = ComputerService.getInstance();
-        this.companyService = CompanyService.getInstance();
 
         Menu.options = new ArrayList<>();
 

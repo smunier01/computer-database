@@ -11,10 +11,11 @@ import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.service.impl.ComputerService;
 
 public class ComputerDAOTest {
 
-    private final ComputerDAO computerDAO = ComputerDAO.getInstance();
+    private final ComputerDAO computerDAO = new ComputerDAO();
 
     @Test
     public void testFindShouldHaveValidId() throws DAOException {

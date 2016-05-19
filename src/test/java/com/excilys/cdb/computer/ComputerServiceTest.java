@@ -17,7 +17,7 @@ import com.excilys.cdb.validation.ValidatorException;
 
 public class ComputerServiceTest {
 
-    private ComputerService service = ComputerService.getInstance();
+    private ComputerService service = new ComputerService();
 
     private PageParameters pageMock;
 
@@ -37,7 +37,7 @@ public class ComputerServiceTest {
 
     @Test
     public void testSingleton() {
-        final ComputerService cs1 = ComputerService.getInstance();
+        final ComputerService cs1 = new ComputerService();
 
         Assert.assertTrue(cs1 == this.service);
     }

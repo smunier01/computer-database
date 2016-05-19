@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Computer;
@@ -18,26 +21,17 @@ import com.excilys.cdb.validation.Validator;
  * @author excilys
  *
  */
-public enum ComputerService implements IComputerService {
-
-    INSTANCE;
+@Component
+public class ComputerService implements IComputerService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
-    private ComputerDAO computerDAO = ComputerDAO.getInstance();
+    @Autowired
+    private ComputerDAO computerDAO;
 
     private Validator validator = Validator.getInstance();
 
     private AtomicLong count;
-
-    /**
-     * accessor for the ComputerService singleton.
-     *
-     * @return unique instance of ComputerService
-     */
-    public static ComputerService getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     public void deleteComputer(Long id) {

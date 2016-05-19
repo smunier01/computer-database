@@ -11,6 +11,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.jdbc.ITransactionManager;
@@ -30,9 +33,8 @@ import com.excilys.cdb.model.PageParameters.Order;
  * @author simon
  *
  */
-public enum ComputerDAO implements DAO<Computer> {
-
-    INSTANCE;
+@Component
+public class ComputerDAO implements DAO<Computer> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
@@ -66,13 +68,8 @@ public enum ComputerDAO implements DAO<Computer> {
 
     private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
 
-    /**
-     * public accessor for the singleton.
-     *
-     * @return unique instance of the class
-     */
-    public static ComputerDAO getInstance() {
-        return INSTANCE;
+    public ComputerDAO() {
+
     }
 
     @Override

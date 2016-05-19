@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.ComputerDAO;
@@ -20,26 +22,18 @@ import com.excilys.cdb.validation.Validator;
  *
  * @author excilys
  */
-public enum CompanyService implements ICompanyService {
-
-    INSTANCE;
+@Component
+public class CompanyService implements ICompanyService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
 
-    private CompanyDAO companyDAO = CompanyDAO.getInstance();
+    @Autowired
+    private CompanyDAO companyDAO;
 
-    private ComputerDAO computerDAO = ComputerDAO.getInstance();
+    @Autowired
+    private ComputerDAO computerDAO;
 
     private Validator validator = Validator.getInstance();
-
-    /**
-     * accessor for the CompanyService singleton.
-     *
-     * @return unique instance of CompanyService
-     */
-    public static CompanyService getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     public Company getCompany(Long id) {

@@ -1,6 +1,9 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
+
+import javax.jws.WebService;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,19 +11,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
-import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
-import com.excilys.cdb.validation.Validator;
 
 /**
  * Servlet implementation class ComputerServlet.
  */
+@Configurable
 public class DashboardServlet extends HttpServlet {
 
     // private static final Logger LOGGER =
@@ -28,13 +35,19 @@ public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private final IComputerService computerService = ComputerService.getInstance();
+    @Autowired
+    private ComputerService computerService;
 
     private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 
     private final PageParametersMapper pageMapper = PageParametersMapper.getInstance();
 
-    // private final Validator validator = Validator.getInstance();
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+
+    }
 
     /**
      * get the list of computers to display on the dashboard.
@@ -51,8 +64,9 @@ public class DashboardServlet extends HttpServlet {
         PageParameters params = this.pageMapper.map(request);
 
         // this.validator.validatePageParameters(params);
+        Page<Computer> computers = this.computerService.getComputersPage(params);
 
-        Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
+        Page<ComputerDTO> computerPage = this.computerMapper.map(computers);
 
         request.setAttribute("page", computerPage);
 
