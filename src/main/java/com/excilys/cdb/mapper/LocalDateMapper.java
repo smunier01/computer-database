@@ -3,12 +3,10 @@ package com.excilys.cdb.mapper;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-public enum LocalDateMapper {
-    INSTANCE;
+import org.springframework.stereotype.Component;
 
-    public static LocalDateMapper getInstance() {
-        return INSTANCE;
-    }
+@Component
+public class LocalDateMapper {
 
     public LocalDate fromTimestamp(Timestamp timestamp) {
         LocalDate date;

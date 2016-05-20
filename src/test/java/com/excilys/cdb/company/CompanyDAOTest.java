@@ -6,7 +6,10 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.DAOException;
@@ -14,6 +17,8 @@ import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 
+@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class CompanyDAOTest {
 
     @Autowired

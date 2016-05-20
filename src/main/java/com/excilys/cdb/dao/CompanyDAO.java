@@ -8,8 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -33,11 +37,11 @@ public class CompanyDAO implements DAO<Company> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
-    private final CompanyMapper companyMapper = CompanyMapper.getInstance();
+    @Autowired
+    private CompanyMapper companyMapper;
 
-    private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
-
-    private final ITransactionManager transactionManager = TransactionManager.getInstance();
+    @Resource
+    private DriverManagerDataSource dataSource;
 
     private static final String FIND_BY_ID = "SELECT id, name FROM company WHERE id=?";
 
@@ -59,10 +63,11 @@ public class CompanyDAO implements DAO<Company> {
         Company company = null;
 
         PreparedStatement stmt = null;
-        final Connection con = this.connectionFactory.create();
+        Connection con = null;
         ResultSet rs = null;
 
         try {
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(FIND_BY_ID);
 
             this.setParams(stmt, id);
@@ -94,11 +99,12 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public Company create(Company obj) {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
             this.setParams(stmt, obj.getName());
@@ -131,11 +137,11 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public Company update(Company obj) {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
 
         try {
-
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(UPDATE);
 
             this.setParams(stmt, obj.getName(), obj.getId());
@@ -161,12 +167,13 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public void delete(Company obj) {
 
-        Connection con = this.transactionManager.get();
+        Connection con = null;
 
         PreparedStatement stmt = null;
 
         try {
 
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(DELETE);
 
             this.setParams(stmt, obj.getId());
@@ -193,11 +200,13 @@ public class CompanyDAO implements DAO<Company> {
 
         List<Company> result = new ArrayList<>();
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(FIND_ALL);
 
             rs = stmt.executeQuery();
@@ -230,11 +239,13 @@ public class CompanyDAO implements DAO<Company> {
     public List<Company> findAll(PageParameters page) {
         ArrayList<Company> result = new ArrayList<>();
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(FIND_ALL_LIMIT);
 
             this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
@@ -267,13 +278,14 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public long count() throws DAOException {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         long nb = 0;
 
         try {
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(COUNT);
 
             rs = stmt.executeQuery();

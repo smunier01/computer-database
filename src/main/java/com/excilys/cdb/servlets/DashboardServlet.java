@@ -26,6 +26,7 @@ import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
+import com.excilys.cdb.validation.Validator;
 
 /**
  * Servlet implementation class ComputerServlet.
@@ -33,17 +34,21 @@ import com.excilys.cdb.service.impl.ComputerService;
 @Controller
 public class DashboardServlet extends HttpServlet {
 
-    // private static final Logger LOGGER =
-    // LoggerFactory.getLogger(DashboardServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
     private static final long serialVersionUID = 1L;
 
     @Autowired
     private IComputerService computerService;
 
-    private final ComputerMapper computerMapper = ComputerMapper.getInstance();
+    @Autowired
+    private ComputerMapper computerMapper;
 
-    private final PageParametersMapper pageMapper = PageParametersMapper.getInstance();
+    @Autowired
+    private PageParametersMapper pageMapper;
+
+    @Autowired
+    private Validator validator;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -62,18 +67,17 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // LOGGER.debug("Entering doGet()");
+        LOGGER.debug("Entering doGet()");
 
         PageParameters params = this.pageMapper.map(request);
 
-        // this.validator.validatePageParameters(params);
-        Page<Computer> computers = this.computerService.getComputersPage(params);
+        this.validator.validatePageParameters(params);
 
-        Page<ComputerDTO> computerPage = this.computerMapper.map(computers);
+        Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
 
         request.setAttribute("page", computerPage);
 
-        // LOGGER.debug("Exiting doGet()");
+        LOGGER.debug("Exiting doGet()");
 
         request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 

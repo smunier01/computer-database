@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -19,20 +22,11 @@ import com.excilys.cdb.model.Page;
  *
  * @author simon
  */
-public enum ComputerMapper {
+@Component
+public class ComputerMapper {
 
-    INSTANCE;
-
-    private LocalDateMapper localDateMapper = LocalDateMapper.getInstance();
-
-    /**
-     * public accessor for the singleton.
-     *
-     * @return return unique instance of the singleton
-     */
-    public static ComputerMapper getInstance() {
-        return INSTANCE;
-    }
+    @Autowired
+    private LocalDateMapper localDateMapper;
 
     /**
      * Creates a ComputerDTO object from a Computer.

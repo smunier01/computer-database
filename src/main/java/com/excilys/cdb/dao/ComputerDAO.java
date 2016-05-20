@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
@@ -43,9 +44,11 @@ public class ComputerDAO implements DAO<Computer> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
-    private final ComputerMapper mapper = ComputerMapper.getInstance();
+    @Autowired
+    private ComputerMapper mapper;
 
-    private final LocalDateMapper dateMapper = LocalDateMapper.getInstance();
+    @Autowired
+    private LocalDateMapper dateMapper;
 
     @Resource
     private DriverManagerDataSource dataSource;
@@ -71,10 +74,6 @@ public class ComputerDAO implements DAO<Computer> {
     private static final String COUNT_SEARCH = "SELECT count(name) as nb FROM computer WHERE name like ?";
 
     private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
-
-    public ComputerDAO() {
-
-    }
 
     @Override
     public Computer find(Long id) {

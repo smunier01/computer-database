@@ -44,9 +44,10 @@ public class ComputerEditServlet extends HttpServlet {
     @Autowired
     private ICompanyService companyService;
 
-    private final ComputerMapper computerMapper = ComputerMapper.getInstance();
+    @Autowired
+    private ComputerMapper computerMapper;
 
-    private final CompanyMapper companyMapper = CompanyMapper.getInstance();
+    private CompanyMapper companyMapper;
 
     @Autowired
     private Validator validator;

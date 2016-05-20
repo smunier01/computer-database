@@ -4,6 +4,8 @@ import static com.excilys.cdb.model.PageParameters.Order;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.model.PageParameters.Direction;
 
@@ -13,12 +15,8 @@ import com.excilys.cdb.model.PageParameters.Direction;
  *
  * @author simon
  */
-public enum PageParametersMapper {
-    INSTANCE;
-
-    public static PageParametersMapper getInstance() {
-        return INSTANCE;
-    }
+@Component
+public class PageParametersMapper {
 
     /**
      * map a HttpServletRequest to a PageParameters.

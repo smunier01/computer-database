@@ -3,11 +3,17 @@ package com.excilys.cdb.computer;
 import java.time.LocalDate;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
+@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerTest {
 
     @Test
@@ -26,7 +32,6 @@ public class ComputerTest {
         LocalDate d2 = d1.plusYears(2);
 
         Company company = new Company(2L, "DefaultCompany");
-
 
         Computer comp = (new Computer.ComputerBuilder()).id(1L).name("MyComputerName").introduced(d1).discontinued(d2)
                 .company(company).build();

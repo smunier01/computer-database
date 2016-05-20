@@ -6,6 +6,10 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.dao.DAOException;
@@ -13,9 +17,12 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.impl.ComputerService;
 
+@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDAOTest {
 
-    private final ComputerDAO computerDAO = new ComputerDAO();
+    @Autowired
+    private ComputerDAO computerDAO;
 
     @Test
     public void testFindShouldHaveValidId() throws DAOException {

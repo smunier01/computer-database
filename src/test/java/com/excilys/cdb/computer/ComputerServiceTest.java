@@ -5,19 +5,26 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.model.PageParameters.Direction;
 import com.excilys.cdb.model.PageParameters.Order;
+import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.ServiceException;
-import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.validation.ValidatorException;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerServiceTest {
 
-    private ComputerService service = new ComputerService();
+    @Autowired
+    private IComputerService service;
 
     private PageParameters pageMock;
 
@@ -33,13 +40,6 @@ public class ComputerServiceTest {
         Mockito.when(this.pageMock.getDirection()).thenReturn(Direction.ASC);
 
         this.defaultComputer = new Computer.ComputerBuilder().name("DefaultName").build();
-    }
-
-    @Test
-    public void testSingleton() {
-        final ComputerService cs1 = new ComputerService();
-
-        Assert.assertTrue(cs1 == this.service);
     }
 
     @Test

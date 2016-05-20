@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
 
@@ -15,25 +17,8 @@ import com.excilys.cdb.model.Company;
  *
  * @author simon
  */
-public enum CompanyMapper {
-
-    INSTANCE;
-
-    /**
-     * set default constructor as private for the singleton.
-     */
-    private CompanyMapper() {
-
-    }
-
-    /**
-     * public accessor for the singleton.
-     *
-     * @return return unique instance of the singleton
-     */
-    public static CompanyMapper getInstance() {
-        return INSTANCE;
-    }
+@Component
+public class CompanyMapper {
 
     /**
      * creates company object from a jdbc ResultSet.
