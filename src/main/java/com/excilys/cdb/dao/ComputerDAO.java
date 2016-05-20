@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import com.excilys.cdb.jdbc.ConnectionManager;
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.jdbc.ITransactionManager;
 import com.excilys.cdb.jdbc.TransactionManager;
@@ -51,7 +52,7 @@ public class ComputerDAO implements DAO<Computer> {
     private LocalDateMapper dateMapper;
 
     @Resource
-    private DriverManagerDataSource dataSource;
+    private ConnectionManager connectionManager;
 
     private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
@@ -86,7 +87,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
 
             stmt = con.prepareStatement(FIND_BY_ID);
 
@@ -107,7 +108,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return computer;
@@ -122,7 +123,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
 
             stmt = con.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
 
@@ -155,7 +156,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return obj;
@@ -169,7 +170,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(UPDATE);
 
             Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
@@ -192,7 +193,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            this.closeAll(stmt);
         }
 
         return obj;
@@ -206,7 +207,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(DELETE);
 
             this.setParams(stmt, obj.getId());
@@ -223,7 +224,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            this.closeAll(stmt);
         }
     }
 
@@ -240,7 +241,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(DELETE_COMPUTER);
 
             this.setParams(stmt, id);
@@ -269,7 +270,7 @@ public class ComputerDAO implements DAO<Computer> {
         PreparedStatement stmt = null;
 
         try {
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(s);
 
             stmt.executeUpdate();
@@ -277,7 +278,7 @@ public class ComputerDAO implements DAO<Computer> {
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            this.closeAll(stmt);
         }
     }
 
@@ -292,7 +293,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(FIND_ALL);
 
             rs = stmt.executeQuery();
@@ -315,7 +316,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return result;
@@ -332,7 +333,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
 
             String search = page.getSearch() == null ? "" : page.getSearch();
 
@@ -371,7 +372,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return result;
@@ -393,7 +394,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(COUNT_SEARCH);
 
             this.setParams(stmt, page.getSearch() + "%");
@@ -408,7 +409,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return nb;
@@ -424,7 +425,7 @@ public class ComputerDAO implements DAO<Computer> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(COUNT);
 
             rs = stmt.executeQuery();
@@ -437,7 +438,7 @@ public class ComputerDAO implements DAO<Computer> {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return nb;

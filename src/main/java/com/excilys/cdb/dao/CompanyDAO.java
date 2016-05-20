@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import com.excilys.cdb.jdbc.ConnectionManager;
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
 import com.excilys.cdb.jdbc.ITransactionManager;
 import com.excilys.cdb.jdbc.TransactionManager;
@@ -40,8 +41,8 @@ public class CompanyDAO implements DAO<Company> {
     @Autowired
     private CompanyMapper companyMapper;
 
-    @Resource
-    private DriverManagerDataSource dataSource;
+    @Autowired
+    private ConnectionManager connectionManager;
 
     private static final String FIND_BY_ID = "SELECT id, name FROM company WHERE id=?";
 
@@ -67,7 +68,7 @@ public class CompanyDAO implements DAO<Company> {
         ResultSet rs = null;
 
         try {
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(FIND_BY_ID);
 
             this.setParams(stmt, id);
@@ -90,7 +91,7 @@ public class CompanyDAO implements DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return company;
@@ -104,7 +105,7 @@ public class CompanyDAO implements DAO<Company> {
         ResultSet rs = null;
 
         try {
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
             this.setParams(stmt, obj.getName());
@@ -128,7 +129,7 @@ public class CompanyDAO implements DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            this.closeAll(stmt);
         }
 
         return obj;
@@ -141,7 +142,7 @@ public class CompanyDAO implements DAO<Company> {
         PreparedStatement stmt = null;
 
         try {
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(UPDATE);
 
             this.setParams(stmt, obj.getName(), obj.getId());
@@ -158,7 +159,7 @@ public class CompanyDAO implements DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt);
+            this.closeAll(stmt);
         }
 
         return obj;
@@ -173,7 +174,7 @@ public class CompanyDAO implements DAO<Company> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(DELETE);
 
             this.setParams(stmt, obj.getId());
@@ -206,7 +207,7 @@ public class CompanyDAO implements DAO<Company> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(FIND_ALL);
 
             rs = stmt.executeQuery();
@@ -229,7 +230,7 @@ public class CompanyDAO implements DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return result;
@@ -245,7 +246,7 @@ public class CompanyDAO implements DAO<Company> {
 
         try {
 
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(FIND_ALL_LIMIT);
 
             this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
@@ -269,7 +270,7 @@ public class CompanyDAO implements DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return result;
@@ -285,7 +286,7 @@ public class CompanyDAO implements DAO<Company> {
         long nb = 0;
 
         try {
-            con = this.dataSource.getConnection();
+            con = this.connectionManager.getConnection();
             stmt = con.prepareStatement(COUNT);
 
             rs = stmt.executeQuery();
@@ -298,7 +299,7 @@ public class CompanyDAO implements DAO<Company> {
             CompanyDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         } finally {
-            this.closeAll(con, stmt, rs);
+            this.closeAll(stmt, rs);
         }
 
         return nb;

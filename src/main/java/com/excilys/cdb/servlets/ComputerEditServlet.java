@@ -47,6 +47,7 @@ public class ComputerEditServlet extends HttpServlet {
     @Autowired
     private ComputerMapper computerMapper;
 
+    @Autowired
     private CompanyMapper companyMapper;
 
     @Autowired
