@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Computer;
@@ -21,7 +22,8 @@ import com.excilys.cdb.validation.Validator;
  * @author excilys
  *
  */
-@Component
+@Service
+@Transactional
 public class ComputerService implements IComputerService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
@@ -29,11 +31,13 @@ public class ComputerService implements IComputerService {
     @Autowired
     private ComputerDAO computerDAO;
 
-    private Validator validator = Validator.getInstance();
+    @Autowired
+    private Validator validator;
 
     private AtomicLong count;
 
     @Override
+    @Transactional
     public void deleteComputer(Long id) {
         this.LOGGER.debug("entering deleteComputer()");
         this.validator.validateId(id);
@@ -42,13 +46,12 @@ public class ComputerService implements IComputerService {
 
         if (computer != null) {
             this.computerDAO.delete(computer);
-            this.decTotalCount();
-        } else {
-            System.out.println("aa");
+            this.count.decrementAndGet();
         }
     }
 
     @Override
+    @Transactional
     public void updateComputer(Computer computer) {
         this.LOGGER.debug("entering updateComputer()");
         this.validator.validateId(computer.getId());
@@ -57,15 +60,17 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
+    @Transactional
     public Computer createComputer(Computer computer) {
         this.LOGGER.debug("entering createComputer()");
         this.validator.validateComputer(computer);
         Computer c = this.computerDAO.create(computer);
-        this.incTotalCount();
+        this.count.incrementAndGet();
         return c;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Computer getComputer(Long id) {
         this.LOGGER.debug("entering getComputer()");
         this.validator.validateId(id);
@@ -73,6 +78,7 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Computer> getComputers(PageParameters page) {
         this.LOGGER.debug("entering getComputers(page)");
         this.validator.validatePageParameters(page);
@@ -80,6 +86,7 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Computer> getComputersPage(PageParameters param) {
         this.LOGGER.debug("entering getComputersPage()");
         this.validator.validatePageParameters(param);
@@ -121,17 +128,4 @@ public class ComputerService implements IComputerService {
         return result;
     }
 
-    /**
-     * decrement the cached value for the total number of computers.
-     */
-    private void decTotalCount() {
-        this.count.decrementAndGet();
-    }
-
-    /**
-     * increment the cached value for the total number of computers.
-     */
-    private void incTotalCount() {
-        this.count.incrementAndGet();
-    }
 }

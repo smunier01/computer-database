@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -15,9 +18,8 @@ import com.excilys.cdb.model.PageParameters;
  *
  * @author simon
  */
-public enum Validator {
-
-    INSTANCE;
+@Service
+public class Validator {
 
     private final Pattern intRegex = Pattern.compile("[0-9]*[1-9][0-9]*");
 
@@ -26,10 +28,6 @@ public enum Validator {
     public static LocalDate minTimestamp = LocalDate.parse("1970-01-01");
 
     public static LocalDate maxTimestamp = LocalDate.parse("2037-12-31");
-
-    public static Validator getInstance() {
-        return INSTANCE;
-    }
 
     /**
      * Use a regex to check if an ID is valid.
@@ -113,7 +111,7 @@ public enum Validator {
      */
     public Set<String> validateComputerDTO(ComputerDTO computer) {
 
-        Set<String> errors = new HashSet<String>();
+        Set<String> errors = new HashSet<>();
 
         // computer name (required)
         if ((computer.getName() == null) || "".equals(computer.getName())) {

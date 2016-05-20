@@ -2,10 +2,14 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 
+@Service
 public interface IComputerService {
 
     /**

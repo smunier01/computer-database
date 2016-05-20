@@ -39,16 +39,17 @@ public class ComputerEditServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Autowired
-    private ComputerService computerService;
+    private IComputerService computerService;
 
     @Autowired
-    private CompanyService companyService;
+    private ICompanyService companyService;
 
     private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 
     private final CompanyMapper companyMapper = CompanyMapper.getInstance();
 
-    private final Validator validator = Validator.getInstance();
+    @Autowired
+    private Validator validator;
 
     @Override
     public void init(ServletConfig config) throws ServletException {

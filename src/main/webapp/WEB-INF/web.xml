@@ -7,9 +7,12 @@
 
 	<display-name>Archetype Created Web Application</display-name>
 	
-  
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<listener>
+	    <listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
 	</listener>
 	
 	<servlet>

@@ -44,6 +44,7 @@
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-context</artifactId>
 		    <version>${spring.version}</version>
+	        <scope>runtime</scope>
 		</dependency>
 		
 		<dependency>
@@ -63,10 +64,21 @@
 		    <artifactId>spring-web</artifactId>
 		    <version>${spring.version}</version>
 		</dependency>
-		
-
-		<!-- dependencies for unit test (junit & mockito) -->
-
+		 
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-jdbc</artifactId>
+	        <version>${spring.version}</version>
+	    </dependency>
+		 
+		<dependency>
+	        <groupId>commons-dbcp</groupId>
+	        <artifactId>commons-dbcp</artifactId>
+	        <version>1.4</version>
+	    </dependency>
+	    
+	    <!-- tests -->
+	    
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -84,17 +96,32 @@
 		<!-- dependencies for logging -->
 
 		<dependency>
+		    <groupId>org.logback-extensions</groupId>
+		    <artifactId>logback-ext-spring</artifactId>
+		    <version>0.1.4</version>
+		</dependency>
+
+		<dependency>
+	      <groupId>org.slf4j</groupId>
+	      <artifactId>jcl-over-slf4j</artifactId>
+	      <version>1.7.0</version>
+	      <scope>runtime</scope>
+	   </dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${logback.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -112,6 +139,7 @@
 		</dependency>
 
 		<!-- hikariCP for the connection pool -->
+		
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
@@ -155,12 +183,14 @@
 			<version>${selenium.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>${selenium.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 
 	<build>

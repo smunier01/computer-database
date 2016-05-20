@@ -13,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.dto.ComputerDTO;
@@ -22,12 +24,13 @@ import com.excilys.cdb.mapper.PageParametersMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.impl.ComputerService;
 
 /**
  * Servlet implementation class ComputerServlet.
  */
-@Configurable
+@Controller
 public class DashboardServlet extends HttpServlet {
 
     // private static final Logger LOGGER =
@@ -36,7 +39,7 @@ public class DashboardServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Autowired
-    private ComputerService computerService;
+    private IComputerService computerService;
 
     private final ComputerMapper computerMapper = ComputerMapper.getInstance();
 

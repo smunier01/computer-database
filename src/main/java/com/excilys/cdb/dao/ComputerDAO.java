@@ -9,10 +9,15 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
@@ -33,7 +38,7 @@ import com.excilys.cdb.model.PageParameters.Order;
  * @author simon
  *
  */
-@Component
+@Repository
 public class ComputerDAO implements DAO<Computer> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
@@ -42,9 +47,8 @@ public class ComputerDAO implements DAO<Computer> {
 
     private final LocalDateMapper dateMapper = LocalDateMapper.getInstance();
 
-    private final ConnectionMySQLFactory connectionFactory = ConnectionMySQLFactory.getInstance();
-
-    private final ITransactionManager transactionManager = TransactionManager.getInstance();
+    @Resource
+    private DriverManagerDataSource dataSource;
 
     private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
@@ -77,11 +81,14 @@ public class ComputerDAO implements DAO<Computer> {
 
         Computer computer = null;
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+
+            con = this.dataSource.getConnection();
+
             stmt = con.prepareStatement(FIND_BY_ID);
 
             this.setParams(stmt, id);
@@ -110,11 +117,14 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public Computer create(Computer obj) {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+
+            con = this.dataSource.getConnection();
+
             stmt = con.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
 
             Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
@@ -155,11 +165,12 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public Computer update(Computer obj) {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
 
         try {
 
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(UPDATE);
 
             Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
@@ -191,11 +202,12 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public void delete(Computer obj) {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
 
         try {
 
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(DELETE);
 
             this.setParams(stmt, obj.getId());
@@ -223,12 +235,13 @@ public class ComputerDAO implements DAO<Computer> {
      *            id of the company to whom the computers to delete belong.
      */
     public void deleteByCompanyId(Long id) {
-        PreparedStatement stmt = null;
 
-        Connection con = this.transactionManager.get();
+        PreparedStatement stmt = null;
+        Connection con = null;
 
         try {
 
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(DELETE_COMPUTER);
 
             this.setParams(stmt, id);
@@ -253,11 +266,11 @@ public class ComputerDAO implements DAO<Computer> {
 
         String s = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
 
         try {
-
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(s);
 
             stmt.executeUpdate();
@@ -274,11 +287,13 @@ public class ComputerDAO implements DAO<Computer> {
 
         ArrayList<Computer> result = new ArrayList<>();
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(FIND_ALL);
 
             rs = stmt.executeQuery();
@@ -312,11 +327,13 @@ public class ComputerDAO implements DAO<Computer> {
 
         ArrayList<Computer> result = new ArrayList<>();
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
+
+            con = this.dataSource.getConnection();
 
             String search = page.getSearch() == null ? "" : page.getSearch();
 
@@ -370,12 +387,14 @@ public class ComputerDAO implements DAO<Computer> {
      */
     public long count(PageParameters page) {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         long nb = 0;
 
         try {
+
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(COUNT_SEARCH);
 
             this.setParams(stmt, page.getSearch() + "%");
@@ -399,12 +418,14 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public long count() {
 
-        Connection con = this.connectionFactory.create();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         long nb = 0;
 
         try {
+
+            con = this.dataSource.getConnection();
             stmt = con.prepareStatement(COUNT);
 
             rs = stmt.executeQuery();

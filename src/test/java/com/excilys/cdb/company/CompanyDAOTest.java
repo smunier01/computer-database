@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.DAOException;
@@ -15,7 +16,8 @@ import com.excilys.cdb.model.PageParameters;
 
 public class CompanyDAOTest {
 
-    private final CompanyDAO companyDAO = CompanyDAO.getInstance();
+    @Autowired
+    private CompanyDAO companyDAO;
 
     @Test
     public void testFindShouldHaveValidId() throws DAOException {

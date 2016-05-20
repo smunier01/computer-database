@@ -31,9 +31,10 @@ public class ComputerDeleteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Autowired
-    private ComputerService computerService;
+    private IComputerService computerService;
 
-    private Validator validator = Validator.getInstance();
+    @Autowired
+    private Validator validator;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
