@@ -43,7 +43,7 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-
+						
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
@@ -69,7 +69,7 @@
 								page="${page.params.pageNumber}" psize="${pparam.size}"
 								search="${page.params.search}" order="company_name"
 								dir="${param.dir == 'asc' && param.order == 'company_name' ? 'desc' : 'asc'}" /></th>
-
+						
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -92,7 +92,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center">
+		<div class="container text-center"> 
 			<mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
 				psize="${page.params.size}" />
 		</div>

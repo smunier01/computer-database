@@ -71,7 +71,7 @@ public class DashboardServlet extends HttpServlet {
 
         PageParameters params = this.pageMapper.map(request);
 
-        this.validator.validatePageParameters(params);
+        //this.validator.validatePageParameters(params);
 
         Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
 

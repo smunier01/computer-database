@@ -43,404 +43,394 @@ import com.excilys.cdb.model.PageParameters.Order;
 @Repository
 public class ComputerDAO implements DAO<Computer> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
-    @Autowired
-    private ComputerMapper mapper;
+	@Autowired
+	private ComputerMapper mapper;
 
-    @Autowired
-    private LocalDateMapper dateMapper;
+	@Autowired
+	private LocalDateMapper dateMapper;
 
-    @Resource
-    private ConnectionManager connectionManager;
+	@Resource
+	private ConnectionManager connectionManager;
 
-    private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
+	private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
 
-    private static final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
+	private static final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
 
-    private static final String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+	private static final String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 
-    private static final String DELETE = "DELETE FROM computer WHERE id=?";
+	private static final String DELETE = "DELETE FROM computer WHERE id=?";
 
-    private static final String DELETE_LIST = "DELETE FROM computer WHERE id IN %s";
+	private static final String DELETE_LIST = "DELETE FROM computer WHERE id IN %s";
 
-    private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
+	private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
-    private static final String FIND_ALL_LIMIT_ORDER = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c %s left join company o ON c.company_id=o.id WHERE c.name like ? ORDER BY %s %s LIMIT ?,?";
+	private static final String FIND_ALL_BETTER = "SELECT B.id, B.name, B.introduced, B.discontinued, B.company_id, C.name as company_name FROM (SELECT id FROM computer WHERE name like ? ORDER BY %s %s LIMIT ?, ?) A LEFT JOIN computer B on B.id=A.id LEFT JOIN company C on B.company_id=C.id";
 
-    private static final String FIND_NO_SEARCH = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c %s left join company o ON c.company_id=o.id ORDER BY %s %s LIMIT ?,?";
+	private static final String FIND_ALL_BETTER_NO_SEARCH = "SELECT B.id, B.name, B.introduced, B.discontinued, B.company_id, C.name as company_name FROM (SELECT id FROM computer ORDER BY %s %s LIMIT ?, ?) A LEFT JOIN computer B on B.id=A.id LEFT JOIN company C on B.company_id=C.id";
+	
+	private static final String COUNT = "SELECT count(id) as nb FROM computer";
 
-    private static final String COUNT = "SELECT count(id) as nb FROM computer";
+	private static final String COUNT_SEARCH = "SELECT count(name) as nb FROM computer WHERE name like ?";
 
-    private static final String COUNT_SEARCH = "SELECT count(name) as nb FROM computer WHERE name like ?";
+	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
 
-    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?";
+	@Override
+	public Computer find(Long id) {
 
-    @Override
-    public Computer find(Long id) {
+		Computer computer = null;
 
-        Computer computer = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
 
-            con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(FIND_BY_ID);
 
-            stmt = con.prepareStatement(FIND_BY_ID);
+			this.setParams(stmt, id);
 
-            this.setParams(stmt, id);
+			rs = stmt.executeQuery();
 
-            rs = stmt.executeQuery();
+			if (rs.first()) {
 
-            if (rs.first()) {
+				computer = this.mapper.map(rs);
 
-                computer = this.mapper.map(rs);
+				ComputerDAO.LOGGER.info("succefully found computer of id : " + id);
+			} else {
+				ComputerDAO.LOGGER.warn("couldn't find computer of id : " + id);
+			}
 
-                ComputerDAO.LOGGER.info("succefully found computer of id : " + id);
-            } else {
-                ComputerDAO.LOGGER.warn("couldn't find computer of id : " + id);
-            }
+		} catch (SQLException | MapperException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt, rs);
+		}
 
-        } catch (SQLException | MapperException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
-        }
+		return computer;
+	}
 
-        return computer;
-    }
+	@Override
+	public Computer create(Computer obj) {
 
-    @Override
-    public Computer create(Computer obj) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
 
-            con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
 
-            stmt = con.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
+			Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
 
-            Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
+			Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
 
-            Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
+			Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
-            Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
+			this.setParams(stmt, obj.getName(), introduced, discontinued, companyId);
 
-            this.setParams(stmt, obj.getName(), introduced, discontinued, companyId);
+			int res = stmt.executeUpdate();
 
-            int res = stmt.executeUpdate();
+			if (res > 0) {
+				rs = stmt.getGeneratedKeys();
+				if (rs.first()) {
+					obj.setId(rs.getLong(1));
+					ComputerDAO.LOGGER.info("successfully created computer : " + obj.toString());
+				} else {
+					ComputerDAO.LOGGER.error("Computer created but no ID could be obtained.");
+					throw new DAOException("Computer created but no ID could be obtained.");
+				}
 
-            if (res > 0) {
-                rs = stmt.getGeneratedKeys();
-                if (rs.first()) {
-                    obj.setId(rs.getLong(1));
-                    ComputerDAO.LOGGER.info("successfully created computer : " + obj.toString());
-                } else {
-                    ComputerDAO.LOGGER.error("Computer created but no ID could be obtained.");
-                    throw new DAOException("Computer created but no ID could be obtained.");
-                }
+			} else {
+				ComputerDAO.LOGGER.warn("Could not create computer : " + obj.toString());
+				throw new DAOException("Could not create computer.");
+			}
 
-            } else {
-                ComputerDAO.LOGGER.warn("Could not create computer : " + obj.toString());
-                throw new DAOException("Could not create computer.");
-            }
+		} catch (SQLException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt, rs);
+		}
 
-        } catch (SQLException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
-        }
+		return obj;
+	}
 
-        return obj;
-    }
+	@Override
+	public Computer update(Computer obj) {
 
-    @Override
-    public Computer update(Computer obj) {
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(UPDATE);
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(UPDATE);
+			Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
 
-            Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
+			Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
 
-            Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
+			Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
-            Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
+			this.setParams(stmt, obj.getName(), introduced, discontinued, companyId, obj.getId());
 
-            this.setParams(stmt, obj.getName(), introduced, discontinued, companyId, obj.getId());
+			int res = stmt.executeUpdate();
 
-            int res = stmt.executeUpdate();
+			if (res > 0) {
+				ComputerDAO.LOGGER.info("Successfully updated computer : " + obj.toString());
+			} else {
+				ComputerDAO.LOGGER.warn("Could not update computer : " + obj.toString());
+			}
 
-            if (res > 0) {
-                ComputerDAO.LOGGER.info("Successfully updated computer : " + obj.toString());
-            } else {
-                ComputerDAO.LOGGER.warn("Could not update computer : " + obj.toString());
-            }
+		} catch (SQLException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt);
+		}
 
-        } catch (SQLException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
-        }
+		return obj;
+	}
 
-        return obj;
-    }
+	@Override
+	public void delete(Computer obj) {
 
-    @Override
-    public void delete(Computer obj) {
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(DELETE);
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(DELETE);
+			this.setParams(stmt, obj.getId());
 
-            this.setParams(stmt, obj.getId());
+			int res = stmt.executeUpdate();
 
-            int res = stmt.executeUpdate();
+			if (res > 0) {
+				ComputerDAO.LOGGER.info("successfully deleted computer : " + obj.toString());
+			} else {
+				ComputerDAO.LOGGER.warn("couldn't delete computer : " + obj.toString());
+			}
 
-            if (res > 0) {
-                ComputerDAO.LOGGER.info("successfully deleted computer : " + obj.toString());
-            } else {
-                ComputerDAO.LOGGER.warn("couldn't delete computer : " + obj.toString());
-            }
+		} catch (SQLException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt);
+		}
+	}
 
-        } catch (SQLException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
-        }
-    }
+	/**
+	 * Delete computers based on their company.
+	 *
+	 * @param id
+	 *            id of the company to whom the computers to delete belong.
+	 */
+	public void deleteByCompanyId(Long id) {
 
-    /**
-     * Delete computers based on their company.
-     *
-     * @param id
-     *            id of the company to whom the computers to delete belong.
-     */
-    public void deleteByCompanyId(Long id) {
+		PreparedStatement stmt = null;
+		Connection con = null;
 
-        PreparedStatement stmt = null;
-        Connection con = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(DELETE_COMPUTER);
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(DELETE_COMPUTER);
+			this.setParams(stmt, id);
 
-            this.setParams(stmt, id);
+			stmt.executeUpdate();
 
-            stmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt);
+		}
+	}
 
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
-        }
-    }
+	@Override
+	public void deleteAll(List<Long> objs) {
 
-    @Override
-    public void deleteAll(List<Long> objs) {
+		StringBuilder builder = new StringBuilder();
 
-        StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < objs.size(); i++) {
+			builder.append("?,");
+		}
 
-        for (int i = 0; i < objs.size(); i++) {
-            builder.append("?,");
-        }
+		String s = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());
 
-        String s = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
+		try {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(s);
 
-        try {
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(s);
+			stmt.executeUpdate();
 
-            stmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt);
+		}
+	}
 
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
-        }
-    }
+	@Override
+	public List<Computer> findAll() {
 
-    @Override
-    public List<Computer> findAll() {
+		ArrayList<Computer> result = new ArrayList<>();
 
-        ArrayList<Computer> result = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(FIND_ALL);
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(FIND_ALL);
+			rs = stmt.executeQuery();
 
-            rs = stmt.executeQuery();
+			while (rs.next()) {
 
-            while (rs.next()) {
+				Computer computer = this.mapper.map(rs);
 
-                Computer computer = this.mapper.map(rs);
+				result.add(computer);
 
-                result.add(computer);
+			}
 
-            }
+			if (result.size() > 0) {
+				ComputerDAO.LOGGER.info("successfully retrieved " + result.size() + " computer(s)");
+			} else {
+				ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
+			}
 
-            if (result.size() > 0) {
-                ComputerDAO.LOGGER.info("successfully retrieved " + result.size() + " computer(s)");
-            } else {
-                ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
-            }
+		} catch (SQLException | MapperException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt, rs);
+		}
 
-        } catch (SQLException | MapperException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
-        }
+		return result;
+	}
 
-        return result;
-    }
+	@Override
+	public List<Computer> findAll(PageParameters page) {
 
-    @Override
-    public List<Computer> findAll(PageParameters page) {
+		ArrayList<Computer> result = new ArrayList<>();
 
-        ArrayList<Computer> result = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+		try {
 
-        try {
+			con = this.connectionManager.getConnection();
 
-            con = this.connectionManager.getConnection();
+			String search = page.getSearch() == null ? "" : page.getSearch();
 
-            String search = page.getSearch() == null ? "" : page.getSearch();
+			stmt = con.prepareStatement(String.format(search.isEmpty() ? FIND_ALL_BETTER_NO_SEARCH : FIND_ALL_BETTER,
+					page.getOrder().toString(), page.getDirection().toString()));
 
-            String forceIndex = "";
+			if (search.isEmpty()) {
+				this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
+			} else {
+				this.setParams(stmt, search + "%", page.getSize() * page.getPageNumber(), page.getSize());
+			}
 
-            if (page.getOrder() == Order.NAME) {
-                forceIndex = "force index (ix_name)";
-            } else if (page.getOrder() == Order.DISCONTINUED) {
-                forceIndex = "force index (ix_discontinued)";
-            } else if (page.getOrder() == Order.INTRODUCED) {
-                forceIndex = "force index (ix_introduced)";
-            }
+			rs = stmt.executeQuery();
 
-            stmt = con.prepareStatement(String.format(search.isEmpty() ? FIND_NO_SEARCH : FIND_ALL_LIMIT_ORDER,
-                    forceIndex, page.getOrder().toString(), page.getDirection().toString()));
+			while (rs.next()) {
+				result.add(this.mapper.map(rs));
+			}
 
-            if (search.isEmpty()) {
-                this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
-            } else {
-                this.setParams(stmt, search + "%", page.getSize() * page.getPageNumber(), page.getSize());
-            }
+			if (result.size() > 0) {
+				ComputerDAO.LOGGER.info("successfully retrieved " + result.size() + " computer(s)");
+			} else {
+				ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
+			}
 
-            rs = stmt.executeQuery();
+		} catch (SQLException | MapperException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt, rs);
+		}
 
-            while (rs.next()) {
-                result.add(this.mapper.map(rs));
-            }
+		return result;
+	}
 
-            if (result.size() > 0) {
-                ComputerDAO.LOGGER.info("successfully retrieved " + result.size() + " computer(s)");
-            } else {
-                ComputerDAO.LOGGER.warn("couldn't retrieve any computers");
-            }
+	/**
+	 * Count number of computers using a page parameters.
+	 *
+	 * @param page
+	 *            parameters for the query.
+	 * @return number of computers.
+	 */
+	public long count(PageParameters page) {
 
-        } catch (SQLException | MapperException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
-        }
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		long nb = 0;
 
-        return result;
-    }
+		try {
 
-    /**
-     * Count number of computers using a page parameters.
-     *
-     * @param page
-     *            parameters for the query.
-     * @return number of computers.
-     */
-    public long count(PageParameters page) {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(COUNT_SEARCH);
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        long nb = 0;
+			this.setParams(stmt, page.getSearch() + "%");
 
-        try {
+			rs = stmt.executeQuery();
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(COUNT_SEARCH);
+			if (rs.first()) {
+				nb = rs.getLong("nb");
+			}
 
-            this.setParams(stmt, page.getSearch() + "%");
+		} catch (SQLException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt, rs);
+		}
 
-            rs = stmt.executeQuery();
+		return nb;
+	}
 
-            if (rs.first()) {
-                nb = rs.getLong("nb");
-            }
+	@Override
+	public long count() {
 
-        } catch (SQLException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
-        }
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		long nb = 0;
 
-        return nb;
-    }
+		try {
 
-    @Override
-    public long count() {
+			con = this.connectionManager.getConnection();
+			stmt = con.prepareStatement(COUNT);
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        long nb = 0;
+			rs = stmt.executeQuery();
 
-        try {
+			if (rs.first()) {
+				nb = rs.getLong("nb");
+			}
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(COUNT);
+		} catch (SQLException e) {
+			ComputerDAO.LOGGER.error(e.getMessage());
+			throw new DAOException(e);
+		} finally {
+			this.closeAll(stmt, rs);
+		}
 
-            rs = stmt.executeQuery();
-
-            if (rs.first()) {
-                nb = rs.getLong("nb");
-            }
-
-        } catch (SQLException e) {
-            ComputerDAO.LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
-        }
-
-        return nb;
-    }
+		return nb;
+	}
 }

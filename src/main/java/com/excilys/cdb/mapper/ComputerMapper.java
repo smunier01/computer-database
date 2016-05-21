@@ -83,20 +83,20 @@ public class ComputerMapper {
      *             exception
      */
     public Computer map(ResultSet rs) throws SQLException, MapperException {
+    	
+        Long id = rs.getLong(1);
+        String name = rs.getString(2);
 
-        Long id = rs.getLong("id");
-        String name = rs.getString("name");
+        LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp(3));
+        LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp(4));
 
-        LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp("introduced"));
-        LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp("discontinued"));
-
-        Long companyId = rs.getLong("company_id");
+        Long companyId = rs.getLong(5);
 
         Company company = null;
 
         if (companyId > 0) {
 
-            String companyName = rs.getString("company_name");
+            String companyName = rs.getString(6);
 
             if ((companyName == null) || "".equals(companyName)) {
                 // there should never be a null or empty name when the id is not
