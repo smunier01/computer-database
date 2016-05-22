@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConnectionManager {
 
-    @Resource
+    @Resource(name="HikariDatasource")
     private DataSource dataSource;
 
     public Connection getConnection() {

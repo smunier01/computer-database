@@ -43,7 +43,7 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-						
+
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
@@ -52,32 +52,24 @@
 							</a>
 						</span></th>
 						<th><mylib2:link target="" name="computer name"
-								page="${page.params.pageNumber}" psize="${page.params.size}"
-								search="${page.params.search}" order="name"
-								dir="${param.dir == 'asc' && param.order == 'name' ? 'desc' : 'asc'}" /></th>
+								params="${page.params}" order="name" /></th>
 						<th><mylib2:link target="" name="introduced date"
-								page="${page.params.pageNumber}" psize="${page.params.size}"
-								search="${page.params.search}" order="introduced"
-								dir="${param.dir == 'asc' && param.order == 'introduced' ? 'desc' : 'asc'}" /></th>
+								params="${page.params}" order="introduced" /></th>
 						<!-- Table header for Discontinued Date -->
 						<th><mylib2:link target="" name="discontinued name"
-								page="${page.params.pageNumber}" psize="${page.params.size}"
-								search="${page.params.search}" order="discontinued"
-								dir="${param.dir == 'asc' && param.order == 'discontinued' ? 'desc' : 'asc'}" /></th>
+								params="${page.params}" order="discontinued" /></th>
 						<!-- Table header for Company -->
-						<th><mylib2:link target="" name="company" 
-								page="${page.params.pageNumber}" psize="${pparam.size}"
-								search="${page.params.search}" order="company_name"
-								dir="${param.dir == 'asc' && param.order == 'company_name' ? 'desc' : 'asc'}" /></th>
-						
+						<th><mylib2:link target="" name="company"
+								params="${page.params}" order="company_name" /></th>
+
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 					<c:forEach items="${page.list}" var="computer">
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"  id="${computer.name}_id"
-								class="cb" value="${computer.id}"></td>
+							<td class="editMode"><input type="checkbox" name="cb"
+								id="${computer.name}_id" class="cb" value="${computer.id}"></td>
 							<td><a id="${computer.name}_name"
 								href="${pageContext.request.contextPath}/computer/edit?id=${computer.id}"
 								onclick="">${computer.name}</a></td>
@@ -92,9 +84,9 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center"> 
-			<mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
-				psize="${page.params.size}" />
+		<div class="container text-center">
+			<mylib2:pagination2 current="${page.params.pageNumber}"
+				count="${page.numberOfPages()}" psize="${page.params.size}" />
 		</div>
 	</footer>
 

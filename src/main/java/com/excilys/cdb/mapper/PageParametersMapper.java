@@ -34,14 +34,14 @@ public class PageParametersMapper {
         int page = getIntWithDefault(request, "page", 0);
 
         int psize = getIntWithDefault(request, "psize", 10);
-
+        
         String search = request.getParameter("search") == null ? "" : request.getParameter("search");
 
         String orderStr = request.getParameter("order");
 
         Order order = Order.NAME;
 
-        if (orderStr != null) {
+        if (orderStr != null && !orderStr.isEmpty()) {
             order = Order.valueOf(orderStr.toUpperCase());
         }
 
@@ -49,7 +49,7 @@ public class PageParametersMapper {
 
         String dirStr = request.getParameter("dir");
 
-        if (dirStr != null) {
+        if (dirStr != null && !dirStr.isEmpty()) {
             direction = Direction.valueOf(dirStr.toUpperCase());
         }
 

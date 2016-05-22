@@ -2,7 +2,6 @@ package com.excilys.cdb.servlets;
 
 import java.io.IOException;
 
-import javax.jws.WebService;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,20 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.mapper.PageParametersMapper;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
-import com.excilys.cdb.service.impl.ComputerService;
 import com.excilys.cdb.validation.Validator;
 
 /**
@@ -71,7 +65,7 @@ public class DashboardServlet extends HttpServlet {
 
         PageParameters params = this.pageMapper.map(request);
 
-        //this.validator.validatePageParameters(params);
+        this.validator.validatePageParameters(params);
 
         Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
 

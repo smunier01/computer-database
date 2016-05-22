@@ -51,7 +51,7 @@ public class ComputerDAO implements DAO<Computer> {
 	@Autowired
 	private LocalDateMapper dateMapper;
 
-	@Resource
+	@Autowired
 	private ConnectionManager connectionManager;
 
 	private static final String FIND_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o on c.company_id=o.id WHERE c.id=?";
@@ -62,7 +62,7 @@ public class ComputerDAO implements DAO<Computer> {
 
 	private static final String DELETE = "DELETE FROM computer WHERE id=?";
 
-	private static final String DELETE_LIST = "DELETE FROM computer WHERE id IN %s";
+	private static final String DELETE_LIST = "DELETE FROM computer WHERE id IN (%s)";
 
 	private static final String FIND_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, o.name as company_name FROM computer c LEFT JOIN company o ON c.company_id=o.id";
 
@@ -261,7 +261,7 @@ public class ComputerDAO implements DAO<Computer> {
 		StringBuilder builder = new StringBuilder();
 
 		for (int i = 0; i < objs.size(); i++) {
-			builder.append("?,");
+			builder.append(objs.get(i) + ",");
 		}
 
 		String s = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());

@@ -21,6 +21,11 @@ public interface IComputerService {
      *             exception
      */
     void deleteComputer(Long id);
+    
+    /**
+     * delete a list of computers.
+     */
+    void deleteComputers(List<Long> ids);
 
     /**
      * update a computer.

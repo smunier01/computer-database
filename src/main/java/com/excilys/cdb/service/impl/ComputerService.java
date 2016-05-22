@@ -49,6 +49,13 @@ public class ComputerService implements IComputerService {
             this.count.decrementAndGet();
         }
     }
+    
+    @Override
+    @Transactional
+    public void deleteComputers(List<Long> ids) {
+    	this.LOGGER.debug("entering deleteComputers(List<Long>)");
+    	this.computerDAO.deleteAll(ids);
+    }
 
     @Override
     @Transactional

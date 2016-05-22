@@ -25,7 +25,7 @@
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
-		<property name="maximumPoolSize" value="150" />
+		<property name="maximumPoolSize" value="250" />
 
 		<property name="dataSourceProperties">
 			<props>
@@ -39,7 +39,7 @@
 		</property>
 	</bean>
 
-	<bean id="datasource" class="com.zaxxer.hikari.HikariDataSource">
+	<bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
 		<constructor-arg ref="hikariConfig" />
 	</bean>
 
@@ -47,7 +47,7 @@
 
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="datasource" />
+		<property name="dataSource" ref="HikariDatasource" />
 	</bean>
 
 </beans>
