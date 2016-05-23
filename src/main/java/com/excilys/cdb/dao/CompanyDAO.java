@@ -8,20 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.jdbc.ConnectionManager;
-import com.excilys.cdb.jdbc.ConnectionMySQLFactory;
-import com.excilys.cdb.jdbc.ITransactionManager;
-import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;

@@ -64,11 +64,8 @@ public class DashboardServlet extends HttpServlet {
         LOGGER.debug("Entering doGet()");
 
         PageParameters params = this.pageMapper.map(request);
-
         this.validator.validatePageParameters(params);
-
         Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(params));
-
         request.setAttribute("page", computerPage);
 
         LOGGER.debug("Exiting doGet()");
