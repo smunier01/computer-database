@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.DAOException;
-import com.excilys.cdb.jdbc.TransactionManager;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 
@@ -60,11 +59,7 @@ public class CompanyDAOTest {
 
         // delete the computer
 
-        TransactionManager.getInstance().init();
-
         this.companyDAO.delete(b);
-
-        TransactionManager.getInstance().commit();
 
         // try to find it again
 
