@@ -19,7 +19,7 @@ import com.excilys.cdb.model.PageParameters;
  * @author simon
  */
 @Service
-public class Validator {
+public class ValidatorUtil {
 
     private final Pattern intRegex = Pattern.compile("[0-9]*[1-9][0-9]*");
 

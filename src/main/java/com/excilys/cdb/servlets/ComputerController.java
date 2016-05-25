@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
@@ -29,7 +28,8 @@ import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ICompanyService;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.validation.ComputerValidator;
-import com.excilys.cdb.validation.Validator;
+import com.excilys.cdb.validation.PageParametersValidator;
+import com.excilys.cdb.validation.ValidatorUtil;
 
 @Controller
 @RequestMapping("/")
@@ -42,7 +42,7 @@ public class ComputerController {
     private ComputerMapper computerMapper;
 
     @Autowired
-    private Validator validator;
+    private ValidatorUtil validator;
 
     @Autowired
     private PageParametersMapper pageParamMapper;
@@ -56,6 +56,9 @@ public class ComputerController {
     @Autowired
     private ComputerValidator computerValidator;
 
+    @Autowired
+    private PageParametersValidator paramsValidator;
+
     /**
      * Display the dashboard with the list of computers.
      *
@@ -66,12 +69,17 @@ public class ComputerController {
      * @return servlet name
      */
     @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
-    public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param) {
+    public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors) {
 
-        PageParameters p = this.pageParamMapper.fromDTO(param);
-        System.out.println(p);
-        Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(p));
-        model.addAttribute("page", computerPage);
+        this.paramsValidator.validate(param, errors);
+
+        if (!errors.hasErrors()) {
+            PageParameters p = this.pageParamMapper.fromDTO(param);
+            Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(p));
+            model.addAttribute("page", computerPage);
+        } else {
+            throw new IllegalArgumentException();
+        }
 
         return "dashboard";
     }

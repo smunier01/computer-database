@@ -13,7 +13,7 @@ import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ICompanyService;
-import com.excilys.cdb.validation.Validator;
+import com.excilys.cdb.validation.ValidatorUtil;
 
 /**
  * enum singleton for the company service.
@@ -33,7 +33,7 @@ public class CompanyService implements ICompanyService {
     private ComputerDAO computerDAO;
 
     @Autowired
-    private Validator validator;
+    private ValidatorUtil validator;
 
     @Override
     @Transactional(readOnly = true)

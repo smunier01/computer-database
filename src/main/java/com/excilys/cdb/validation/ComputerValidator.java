@@ -12,18 +12,15 @@ import com.excilys.cdb.dto.ComputerDTO;
 public class ComputerValidator implements Validator {
 
     @Autowired
-    private com.excilys.cdb.validation.Validator validator;
+    private ValidatorUtil validator;
 
     @Override
     public boolean supports(Class c) {
         return ComputerDTO.class.equals(c);
-        // return ComputerDTO.class.isAssignableFrom(c);
     }
 
     @Override
     public void validate(Object obj, Errors err) {
-
-        System.out.println("hello");
 
         // computer name (required)
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "name", "invalid name");

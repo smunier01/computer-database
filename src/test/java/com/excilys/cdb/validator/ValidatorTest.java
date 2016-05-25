@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.cdb.validation.Validator;
+import com.excilys.cdb.validation.ValidatorUtil;
 
 @ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ValidatorTest {
 
     @Autowired
-    private Validator v;
+    private ValidatorUtil v;
 
     @Ignore
     @Test

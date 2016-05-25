@@ -14,7 +14,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
-import com.excilys.cdb.validation.Validator;
+import com.excilys.cdb.validation.ValidatorUtil;
 
 /**
  *
@@ -31,7 +31,7 @@ public class ComputerService implements IComputerService {
     private ComputerDAO computerDAO;
 
     @Autowired
-    private Validator validator;
+    private ValidatorUtil validator;
 
     private AtomicLong count;
 
