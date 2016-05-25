@@ -2,8 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <jsp:include page="top.jsp" />
+
+<c:set var="context" value="${pageContext.request.contextPath}" />
+
+<spring:message code="errors.name" text="default text" />
 
 <body>
 	<jsp:include page="header.jsp" />
@@ -24,7 +29,7 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="${pageContext.request.contextPath}/computer/add">Add
+						href="${context}/computer/add">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -32,7 +37,7 @@
 		</div>
 
 		<form id="deleteForm"
-			action="${pageContext.request.contextPath}/computer/delete"
+			action="${context}/computer/delete"
 			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
@@ -61,7 +66,7 @@
 						<!-- Table header for Company -->
 						<th><mylib2:link target="" name="company"
 								params="${page.params}" order="company_name" /></th>
-
+						
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -71,11 +76,11 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								id="${computer.name}_id" class="cb" value="${computer.id}"></td>
 							<td><a id="${computer.name}_name"
-								href="${pageContext.request.contextPath}/computer/edit?id=${computer.id}"
+								href="${context}/computer/edit?id=${computer.id}"
 								onclick="">${computer.name}</a></td>
-							<td>${computer.introduced}</td>
-							<td>${computer.discontinued}</td>
-							<td>${computer.companyName}</td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</c:forEach>
 				</tbody>

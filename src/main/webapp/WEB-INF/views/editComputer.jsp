@@ -3,9 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <jsp:include page="top.jsp" />
-
+<spring:message code="test.name.error" text="default text" />
 <body>
 	<jsp:include page="header.jsp" />
 
@@ -21,25 +22,25 @@
 						method="POST">
 						<input id="id" name="id" type="hidden" value="${computer.id}" />
 						<fieldset>
-							<div class="form-group ${fn:contains(errors, 'name') ? 'has-error': ''}">
+							<div class="form-group ${errors.hasFieldErrors('name') ? 'has-error': ''}">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" name="computerName"
+									type="text" class="form-control" name="name"
 									id="computerName" placeholder="Computer name"
 									value="${computer.name}">
 							</div>
-							<div class="form-group ${fn:contains(errors, 'introduced') ? 'has-error': ''}">
+							<div class="form-group ${errors.hasFieldErrors('introduced') ? 'has-error': ''}">
 								<label for="introduced">Introduced date</label> <input
 									 class="form-control" name="introduced"
 									id="introduced" placeholder="Introduced date"
 									value="${computer.introduced}">
 							</div>
-							<div class="form-group ${fn:contains(errors, 'discontinued') ? 'has-error': ''}">
+							<div class="form-group ${errors.hasFieldErrors('discontinued') ? 'has-error': ''}">
 								<label for="discontinued">Discontinued date</label> <input
 									 class="form-control" name="discontinued"
 									id="discontinued" placeholder="Discontinued date"
 									value="${computer.discontinued}">
 							</div>
-							<div class="form-group ${fn:contains(errors, 'companyId') ? 'has-error': ''}">
+							<div class="form-group ${errors.hasFieldErrors('companyId') ? 'has-error': ''}">
 								<label for="companyId">Company</label> <select
 									class="form-control" name="companyId" id="companyId">
 									<option value="">--</option>

@@ -39,7 +39,7 @@
 
 	<c:forEach var="i" begin="${indexStart}" end="${indexStop}">
 		<li ${current == i ? 'class="active"' : ''}><a
-			href="?page=${i}&psize=${psize}&search=${pparam.search}&order=${param.order}&dir=${param.dir}">${i + 1}</a></li>
+			href="?pageNumber=${i}&size=${psize}&search=${pparam.search}&order=${param.order}&dir=${param.dir}">${i + 1}</a></li>
 	</c:forEach>
 
 	<c:if test="${indexStop < (count - 1)}">

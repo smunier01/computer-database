@@ -122,24 +122,13 @@ public class ComputerDAOTest {
     }
 
     @Test
-    public void testFindAll() throws DAOException {
-        final List<Computer> computers = this.computerDAO.findAll();
-
-        Assert.assertNotNull(computers);
-        Assert.assertTrue(computers.size() > 0);
-    }
-
-    @Test
     public void testFindAllWithCreate() throws DAOException {
 
         // count the number of computers with findAll
 
-        final List<Computer> computers1 = this.computerDAO.findAll();
+        long sizeA = this.computerDAO.count();
 
-        Assert.assertNotNull(computers1);
-        Assert.assertTrue(computers1.size() > 0);
-
-        final long sizeA = computers1.size();
+        Assert.assertTrue(sizeA > 0);
 
         // create a computer
 
@@ -155,12 +144,9 @@ public class ComputerDAOTest {
 
         // count again, and compare the sizes
 
-        final List<Computer> computers2 = this.computerDAO.findAll();
+        long sizeB = this.computerDAO.count();
 
-        Assert.assertNotNull(computers2);
-        Assert.assertTrue(computers2.size() > 0);
-
-        final long sizeB = computers2.size();
+        Assert.assertTrue(sizeB > 0);
 
         Assert.assertEquals(sizeA + 1L, sizeB);
 
@@ -170,12 +156,9 @@ public class ComputerDAOTest {
 
         // count and compare sizes
 
-        final List<Computer> computers3 = this.computerDAO.findAll();
+        long sizeC = this.computerDAO.count();
 
-        Assert.assertNotNull(computers3);
-        Assert.assertTrue(computers3.size() > 0);
-
-        final long sizeC = computers3.size();
+        Assert.assertTrue(sizeC > 0);
 
         Assert.assertEquals(sizeA, sizeC);
     }
@@ -185,15 +168,14 @@ public class ComputerDAOTest {
         final PageParameters page = new PageParameters.Builder().size(20).pageNumber(0).build();
 
         final List<Computer> computers1 = this.computerDAO.findAll(page);
-        final List<Computer> computers2 = this.computerDAO.findAll();
+        long res = this.computerDAO.count();
 
         Assert.assertNotNull(computers1);
-        Assert.assertNotNull(computers2);
 
-        if (computers2.size() > 20) {
+        if (res > 20) {
             Assert.assertTrue(computers1.size() == 20);
         } else {
-            Assert.assertTrue(computers1.size() == computers2.size());
+            Assert.assertTrue(computers1.size() == res);
         }
     }
 
@@ -202,15 +184,14 @@ public class ComputerDAOTest {
         final PageParameters page = new PageParameters.Builder().size(7).pageNumber(3).build();
 
         final List<Computer> computers1 = this.computerDAO.findAll(page);
-        final List<Computer> computers2 = this.computerDAO.findAll();
+        long res = this.computerDAO.count();
 
         Assert.assertNotNull(computers1);
-        Assert.assertNotNull(computers2);
 
-        if (computers2.size() > (3 * 7)) {
+        if (res > (3 * 7)) {
             Assert.assertTrue(computers1.size() == 7);
         } else {
-            Assert.assertTrue(computers1.size() == (computers2.size() - (2 * 7)));
+            Assert.assertTrue(computers1.size() == (res - (2 * 7)));
         }
     }
 }

@@ -8,9 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.jdbc.ConnectionManager;
@@ -33,9 +41,6 @@ public class CompanyDAO implements DAO<Company> {
     @Autowired
     private CompanyMapper companyMapper;
 
-    @Autowired
-    private ConnectionManager connectionManager;
-
     private static final String FIND_BY_ID = "SELECT id, name FROM company WHERE id=?";
 
     private static final String FIND_ALL = "SELECT id, name FROM company";
@@ -50,40 +55,23 @@ public class CompanyDAO implements DAO<Company> {
 
     private static final String COUNT = "SELECT count(id) as nb FROM company";
 
+    private JdbcTemplate jdbcTemplate;
+
+    @Resource(name = "HikariDatasource")
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
     @Override
     public Company find(Long id) {
 
         Company company = null;
 
-        PreparedStatement stmt = null;
-        Connection con = null;
-        ResultSet rs = null;
-
         try {
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(FIND_BY_ID);
-
-            this.setParams(stmt, id);
-
-            rs = stmt.executeQuery();
-
-            if (rs.first()) {
-
-                final String name = rs.getString("name");
-
-                company = new Company(id, name);
-
-                CompanyDAO.LOGGER.info("successfully found company of id : " + id);
-
-            } else {
-                CompanyDAO.LOGGER.warn("couldn't find company of id : " + id);
-            }
-
-        } catch (SQLException e) {
-            CompanyDAO.LOGGER.error(e.getMessage());
+            company = this.jdbcTemplate.queryForObject(FIND_BY_ID, Company.class, id);
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
         }
 
         return company;
@@ -92,36 +80,26 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public Company create(Company obj) {
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
         try {
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            KeyHolder keyHolder = new GeneratedKeyHolder();
 
-            this.setParams(stmt, obj.getName());
-
-            int res = stmt.executeUpdate();
+            int res = this.jdbcTemplate.update((PreparedStatementCreator) connection -> {
+                PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+                this.setParams(ps, obj.getName());
+                return ps;
+            }, keyHolder);
 
             if (res > 0) {
-                rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    obj.setId(rs.getLong(1));
-                    CompanyDAO.LOGGER.info("successfully created company : " + obj.toString());
-                } else {
-                    CompanyDAO.LOGGER.error("Company created but no ID could be obtained.");
-                    throw new DAOException("Company created but no ID could be obtained.");
-                }
+                obj.setId(keyHolder.getKey().longValue());
+                LOGGER.info("successfully created computer : " + obj.toString());
             } else {
-                CompanyDAO.LOGGER.warn("couldn't create company : " + obj.getName());
+                LOGGER.warn("Could not create computer : " + obj.toString());
+                throw new DAOException("Could not create computer.");
             }
 
-        } catch (SQLException e) {
-            CompanyDAO.LOGGER.error(e.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
         }
 
         return obj;
@@ -130,16 +108,9 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public Company update(Company obj) {
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-
         try {
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(UPDATE);
 
-            this.setParams(stmt, obj.getName(), obj.getId());
-
-            final int res = stmt.executeUpdate();
+            int res = this.jdbcTemplate.update(UPDATE, obj.getName(), obj.getId());
 
             if (res > 0) {
                 CompanyDAO.LOGGER.info("succefully updated company : " + obj.getId());
@@ -147,11 +118,9 @@ public class CompanyDAO implements DAO<Company> {
                 CompanyDAO.LOGGER.warn("couldn't update company : " + obj.getId());
             }
 
-        } catch (SQLException e) {
-            CompanyDAO.LOGGER.error(e.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
         }
 
         return obj;
@@ -160,26 +129,13 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public void delete(Company obj) {
 
-        Connection con = null;
-
-        PreparedStatement stmt = null;
-
         try {
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(DELETE);
+            this.jdbcTemplate.update(DELETE, obj.getId());
 
-            this.setParams(stmt, obj.getId());
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-
-            CompanyDAO.LOGGER.error(e.getMessage());
-
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt);
         }
     }
 
@@ -191,38 +147,15 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public List<Company> findAll() {
 
-        List<Company> result = new ArrayList<>();
-
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        List<Company> result = null;
 
         try {
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(FIND_ALL);
+            result = this.jdbcTemplate.query(FIND_ALL, (rs, rowNum) -> this.companyMapper.map(rs));
 
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-
-                final Company company = this.companyMapper.map(rs);
-
-                result.add(company);
-
-            }
-
-            if (result.size() > 0) {
-                CompanyDAO.LOGGER.info("successfully retrieved " + result.size() + " companies");
-            } else {
-                CompanyDAO.LOGGER.warn("couldn't retrieve any companies");
-            }
-
-        } catch (SQLException e) {
-            CompanyDAO.LOGGER.error(e.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
         }
 
         return result;
@@ -230,39 +163,15 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public List<Company> findAll(PageParameters page) {
-        ArrayList<Company> result = new ArrayList<>();
-
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        List<Company> result;
 
         try {
 
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(FIND_ALL_LIMIT);
+            result = this.jdbcTemplate.query(FIND_ALL_LIMIT, (rs, rowNum) -> this.companyMapper.map(rs), page.getSize() * page.getPageNumber(), page.getSize());
 
-            this.setParams(stmt, page.getSize() * page.getPageNumber(), page.getSize());
-
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-
-                Company company = this.companyMapper.map(rs);
-
-                result.add(company);
-            }
-
-            if (result.size() > 0) {
-                CompanyDAO.LOGGER.info("successfully retrieved " + result.size() + " companies");
-            } else {
-                CompanyDAO.LOGGER.warn("couldn't retrieve any companies");
-            }
-
-        } catch (SQLException e) {
-            CompanyDAO.LOGGER.error(e.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
         }
 
         return result;
@@ -271,27 +180,15 @@ public class CompanyDAO implements DAO<Company> {
     @Override
     public long count() throws DAOException {
 
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
         long nb = 0;
 
         try {
-            con = this.connectionManager.getConnection();
-            stmt = con.prepareStatement(COUNT);
 
-            rs = stmt.executeQuery();
+            this.jdbcTemplate.queryForObject(COUNT, Long.class);
 
-            if (rs.first()) {
-                nb = rs.getLong("nb");
-            }
-
-        } catch (SQLException e) {
-            CompanyDAO.LOGGER.error(e.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
             throw new DAOException(e);
-        } finally {
-            this.closeAll(stmt, rs);
         }
 
         return nb;

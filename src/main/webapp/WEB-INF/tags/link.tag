@@ -9,11 +9,11 @@
 
 
 <c:if test="${!empty params.pageNumber}">
-	<c:set var="myVar" value="${myVar}page=${params.pageNumber}&" />
+	<c:set var="myVar" value="${myVar}pageNumber=${params.pageNumber}&" />
 </c:if>
 
 <c:if test="${!empty params.size}">
-	<c:set var="myVar" value="${myVar}psize=${params.size}&" />
+	<c:set var="myVar" value="${myVar}size=${params.size}&" />
 </c:if>
 
 <c:if test="${!empty params.search}">

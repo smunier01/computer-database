@@ -23,7 +23,7 @@
 								class="form-group ${fn:contains(errors, 'name') ? 'has-error': ''}">
 								<label class="control-label" for="computerName">Computer
 									name</label> <input type="text" class="form-control"
-									name="computerName" id="computerName"
+									name="computerName" id="name"
 									placeholder="Computer name" value="${computer.name}">
 							</div>
 							<div
@@ -64,6 +64,5 @@
 	</section>
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/addComputer.js"></script>
 </body>
 </html>

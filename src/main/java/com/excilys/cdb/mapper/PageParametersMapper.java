@@ -2,11 +2,18 @@ package com.excilys.cdb.mapper;
 
 import static com.excilys.cdb.model.PageParameters.Order;
 
+import java.time.LocalDate;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
+import com.excilys.cdb.dto.PageParametersDTO;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.model.Computer.ComputerBuilder;
 import com.excilys.cdb.model.PageParameters.Direction;
 
 /**
@@ -30,11 +37,10 @@ public class PageParametersMapper {
      */
     public PageParameters map(HttpServletRequest request) {
 
-    	
         int page = getIntWithDefault(request, "page", 0);
 
         int psize = getIntWithDefault(request, "psize", 10);
-        
+
         String search = request.getParameter("search") == null ? "" : request.getParameter("search");
 
         String orderStr = request.getParameter("order");
@@ -55,6 +61,29 @@ public class PageParametersMapper {
 
         return new PageParameters(psize, page, search, order, direction);
 
+    }
+
+    public PageParameters fromDTO(PageParametersDTO dto) {
+
+        PageParameters.Builder builder = new PageParameters.Builder();
+
+        if (dto.getSearch() != null && !dto.getSearch().isEmpty()) {
+            builder.search(dto.getSearch());
+        }
+
+        builder.size(dto.getSize());
+
+        builder.pageNumber(dto.getPageNumber());
+
+        if (dto.getDirection() != null && !dto.getDirection().isEmpty()) {
+            builder.direction(Direction.valueOf(dto.getDirection().toUpperCase()));
+        }
+
+        if (dto.getOrder() != null && !dto.getOrder().isEmpty()) {
+            builder.order(Order.valueOf(dto.getOrder().toUpperCase()));
+        }
+
+        return builder.build();
     }
 
     /**

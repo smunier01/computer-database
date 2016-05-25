@@ -6,67 +6,33 @@
                             http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<display-name>Archetype Created Web Application</display-name>
-	
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
+
 	<listener>
-	    <listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+		<listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
 	</listener>
-	
-	<servlet>
-		<servlet-name>DashboardServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.DashboardServlet</servlet-class>
-	</servlet>
 
 	<servlet>
-		<servlet-name>ComputerAddServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.ComputerAddServlet</servlet-class>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/applicationContext.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>throwExceptionIfNoHandlerFound</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-	<servlet>
-		<servlet-name>ComputerEditServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.ComputerEditServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>ComputerDeleteServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.servlets.ComputerDeleteServlet</servlet-class>
-	</servlet>
-
-	<!-- main page that display the list of computers -->
 	<servlet-mapping>
-		<servlet-name>DashboardServlet</servlet-name>
-		<url-pattern>/dashboard</url-pattern>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<!-- servlet to create a computer -->
-	<servlet-mapping>
-		<servlet-name>ComputerAddServlet</servlet-name>
-		<url-pattern>/computer/add</url-pattern>
-	</servlet-mapping>
-
-	<!-- servlet to modify an existing computer -->
-	<servlet-mapping>
-		<servlet-name>ComputerEditServlet</servlet-name>
-		<url-pattern>/computer/edit</url-pattern>
-	</servlet-mapping>
-
-	<!-- servlet to delete one or multiple computers -->
-	<servlet-mapping>
-		<servlet-name>ComputerDeleteServlet</servlet-name>
-		<url-pattern>/computer/delete</url-pattern>
-	</servlet-mapping>
-
-	<error-page>
-		<error-code>500</error-code>
-		<location>/WEB-INF/views/500.html</location>
-	</error-page>
-
-	<error-page>
-		<error-code>404</error-code>
-		<location>/WEB-INF/views/404.html</location>
-	</error-page>
 
 </web-app>
