@@ -15,11 +15,6 @@ import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.ICompanyService;
 import com.excilys.cdb.validation.ValidatorUtil;
 
-/**
- * enum singleton for the company service.
- *
- * @author excilys
- */
 @Service
 @Transactional
 public class CompanyService implements ICompanyService {

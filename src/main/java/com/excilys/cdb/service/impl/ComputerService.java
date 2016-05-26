@@ -16,11 +16,6 @@ import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.validation.ValidatorUtil;
 
-/**
- *
- * @author excilys
- *
- */
 @Service
 @Transactional
 public class ComputerService implements IComputerService {

@@ -15,9 +15,9 @@ import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.service.ICompanyService;
+import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.service.ServiceException;
-import com.excilys.cdb.service.impl.CompanyService;
-import com.excilys.cdb.service.impl.ComputerService;
 
 /**
  * class in charge of the CLI menu.
@@ -36,24 +36,14 @@ public class Menu {
     private Scanner sc = null;
 
     @Autowired
-    private ComputerService computerService;
+    private IComputerService computerService;
 
     @Autowired
-    private CompanyService companyService;
+    private ICompanyService companyService;
 
     public Menu() {
-
-    }
-
-    /**
-     * Menu constructor.
-     *
-     * @param sc
-     *            scanner used of the CLI
-     */
-    public Menu(final Scanner sc) {
-
-        this.sc = sc;
+        this.sc = new Scanner(System.in);
+        this.sc.useDelimiter("\\n");
 
         Menu.options = new ArrayList<>();
 
@@ -65,6 +55,12 @@ public class Menu {
         Menu.options.add("Delete Computer");
         Menu.options.add("Delete Company");
         Menu.options.add("quit");
+    }
+
+    public void close() {
+        if (this.sc != null) {
+            this.sc.close();
+        }
     }
 
     /**

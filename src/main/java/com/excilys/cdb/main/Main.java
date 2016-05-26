@@ -1,7 +1,5 @@
 package com.excilys.cdb.main;
 
-import java.util.Scanner;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.ConfigurableApplicationContext;
@@ -35,14 +33,11 @@ public class Main {
 
     private void start(String[] args) {
 
-        final Scanner sc = new Scanner(System.in);
-        sc.useDelimiter("\\n");
-
         while (this.menu.pick()) {
             System.out.println("pick menu :");
         }
 
-        sc.close();
+        this.menu.close();
     }
 
 }

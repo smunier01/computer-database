@@ -83,7 +83,7 @@ public class ComputerMapper {
      *             exception
      */
     public Computer map(ResultSet rs) throws SQLException, MapperException {
-    	
+
         Long id = rs.getLong(1);
         String name = rs.getString(2);
 
@@ -108,8 +108,13 @@ public class ComputerMapper {
 
         }
 
-        return new Computer.ComputerBuilder().id(id).name(name).introduced(introduced).discontinued(discontinued)
-                .company(company).build();
+        return new Computer.ComputerBuilder()
+                .id(id)
+                .name(name)
+                .introduced(introduced)
+                .discontinued(discontinued)
+                .company(company)
+                .build();
     }
 
     /**

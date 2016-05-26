@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.CompanyDTO;
@@ -34,20 +32,6 @@ public class CompanyMapper {
         String name = rs.getString("name");
 
         return new Company(id, name);
-    }
-
-    /**
-     * creates company object from a HttpServletRequest.
-     *
-     * @param request
-     *            HttpServletRequest containing the information about the
-     *            company.
-     * @return instance of the company created.
-     * @throws UnsupportedOperationException
-     *             not yet implemented
-     */
-    public Company map(HttpServletRequest request) {
-        throw new UnsupportedOperationException();
     }
 
     /**
