@@ -41,7 +41,7 @@ public class PageParametersValidator implements Validator {
             }
         }
 
-        // introduced date (optional)
+        // direction (optional)
         if ((params.getDirection() != null) & !"".equals(params.getDirection())) {
             if (!directions.contains(params.getDirection())) {
                 err.reject("dir", "errors.dir");

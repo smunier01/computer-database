@@ -76,19 +76,14 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public Computer find(Long id) {
-
-        Computer computer = null;
-
         try {
-            computer = this.jdbcTemplate.queryForObject(FIND_BY_ID, (rs1, rowNum) -> ComputerDAO.this.mapper.map(rs1), id);
+            return this.jdbcTemplate.queryForObject(FIND_BY_ID, (rs1, rowNum) -> ComputerDAO.this.mapper.map(rs1), id);
         } catch (EmptyResultDataAccessException e) {
             return null;
         } catch (DataAccessException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         }
-
-        return computer;
     }
 
     @Override
@@ -97,9 +92,7 @@ public class ComputerDAO implements DAO<Computer> {
         try {
 
             Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
-
             Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
-
             Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -159,7 +152,6 @@ public class ComputerDAO implements DAO<Computer> {
      *            id of the company to whom the computers to delete belong.
      */
     public void deleteByCompanyId(Long id) {
-
         try {
             this.jdbcTemplate.update(DELETE_COMPUTER, id);
         } catch (DataAccessException e) {
@@ -180,7 +172,7 @@ public class ComputerDAO implements DAO<Computer> {
         String sql = String.format(DELETE_LIST, builder.deleteCharAt(builder.length() - 1).toString());
 
         try {
-            this.jdbcTemplate.update(sql);
+            this.jdbcTemplate.update(sql, objs);
         } catch (DataAccessException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
@@ -195,9 +187,8 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public List<Computer> findAll(PageParameters page) {
         try {
-            String search = page.getSearch() == null ? "" : page.getSearch();
             String sql = String.format(FIND_ALL_BETTER, page.getOrder().toString(), page.getDirection().toString());
-            return this.jdbcTemplate.query(sql, (rs, rowNum) -> ComputerDAO.this.mapper.map(rs), new Object[] { search + "%", page.getSize() * page.getPageNumber(), page.getSize() });
+            return this.jdbcTemplate.query(sql, (rs, rowNum) -> ComputerDAO.this.mapper.map(rs), new Object[] { page.getSearch() + "%", page.getSize() * page.getPageNumber(), page.getSize() });
         } catch (DataAccessException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
@@ -222,18 +213,11 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public long count() {
-
-        long nb = 0;
-
         try {
-
-            nb = this.jdbcTemplate.queryForObject(COUNT, Long.class);
-
+            return this.jdbcTemplate.queryForObject(COUNT, Long.class);
         } catch (DataAccessException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
         }
-
-        return nb;
     }
 }

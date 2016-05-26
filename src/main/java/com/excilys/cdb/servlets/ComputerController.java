@@ -175,7 +175,6 @@ public class ComputerController {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
             return "redirect:/dashboard";
         } else {
-            System.out.println(errors);
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
             return this.getAddComputer(model);
@@ -194,13 +193,11 @@ public class ComputerController {
     @RequestMapping(path = "/computer/delete", method = RequestMethod.POST)
     public String postDeleteComputer(ModelMap model, @RequestParam String selection) {
 
-        if (selection != null) {
-            this.computerService.deleteComputers(
-                    Stream.of(selection.split(","))
-                            .filter(this.validator::isIdValid)
-                            .map(Long::parseLong)
-                            .collect(Collectors.toList()));
-        }
+        this.computerService.deleteComputers(
+        		Stream.of(selection.split(","))
+                        .filter(this.validator::isIdValid)
+                        .map(Long::parseLong)
+                        .collect(Collectors.toList()));
 
         return "redirect:/dashboard";
     }

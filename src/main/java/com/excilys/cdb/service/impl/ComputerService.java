@@ -55,7 +55,6 @@ public class ComputerService implements IComputerService {
     @Transactional
     public void updateComputer(Computer computer) {
         this.LOGGER.debug("entering updateComputer()");
-        this.validator.validateId(computer.getId());
         this.validator.validateComputer(computer);
         this.computerDAO.update(computer);
     }

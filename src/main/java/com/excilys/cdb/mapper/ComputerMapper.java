@@ -40,7 +40,7 @@ public class ComputerMapper {
     }
 
     /**
-     * Creates a Computer object form a ComputerDTO object.
+     * Creates a Computer object from a ComputerDTO object.
      *
      * @param computer
      *            ComputerDTO instance to convert.

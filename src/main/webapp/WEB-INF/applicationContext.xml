@@ -14,6 +14,10 @@
 		http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+	<context:component-scan base-package="com.excilys.cdb" use-default-filters="false">
+		<context:include-filter expression="org.springframework.stereotype.Component" type="annotation" />
+        <context:include-filter expression="org.springframework.stereotype.Service" type="annotation" />
+    </context:component-scan>
 
 	<!-- datasource configuration file -->
 
@@ -31,7 +35,7 @@
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="dataSourceClassName"
 			value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
-		<property name="maximumPoolSize" value="25" />
+		<property name="maximumPoolSize" value="100" />
 
 		<property name="dataSourceProperties">
 			<props>
@@ -48,4 +52,11 @@
 	<bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
 		<constructor-arg ref="hikariConfig" />
 	</bean>
+	
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="HikariDatasource" />
+	</bean>
+
 </beans>
