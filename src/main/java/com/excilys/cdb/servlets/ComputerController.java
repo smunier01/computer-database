@@ -29,6 +29,7 @@ import com.excilys.cdb.service.ICompanyService;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.validation.ComputerValidator;
 import com.excilys.cdb.validation.PageParametersValidator;
+import com.excilys.cdb.validation.ValidatorException;
 import com.excilys.cdb.validation.ValidatorUtil;
 
 @Controller
@@ -78,7 +79,7 @@ public class ComputerController {
             Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(p));
             model.addAttribute("page", computerPage);
         } else {
-            throw new IllegalArgumentException();
+            throw new ValidatorException(errors);
         }
 
         return "dashboard";

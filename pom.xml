@@ -5,7 +5,7 @@
 	<groupId>com.excilys</groupId>
 	<artifactId>cdb</artifactId>
 	<packaging>war</packaging>
-	<version>0.4.0-RELEASE</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<name>ComputerDatabase Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -27,7 +27,12 @@
 		<jstl.version>1.2</jstl.version>
 		<selenium.version>2.53.0</selenium.version>
 		<spring.version>4.2.6.RELEASE</spring.version>
-
+		<hibernate>5.0.1.Final</hibernate>
+		<javax.validation>1.1.0.Final</javax.validation>
+		<hikari>2.4.5</hikari>
+		<logback.spring>0.1.4</logback.spring>
+		<slf4j.spring>1.7.0</slf4j.spring>
+		
 		<!-- plugins versions -->
 
 		<tomcat.plugin.version>2.2</tomcat.plugin.version>
@@ -76,24 +81,18 @@
 			<version>${spring.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency>
-
 		<!-- http://mvnrepository.com/artifact/javax.validation/validation-api -->
 
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
+			<version>${javax.validation}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.0.1.Final</version>
+			<version>${hibernate}</version>
 		</dependency>
 
 		<!-- tests -->
@@ -117,13 +116,13 @@
 		<dependency>
 			<groupId>org.logback-extensions</groupId>
 			<artifactId>logback-ext-spring</artifactId>
-			<version>0.1.4</version>
+			<version>${logback.spring}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.7.0</version>
+			<version>${slf4j.spring}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -162,7 +161,7 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>2.4.5</version>
+			<version>${hikari}</version>
 		</dependency>
 
 		<!-- dependencies for jsp & jstl -->

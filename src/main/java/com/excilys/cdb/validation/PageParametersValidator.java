@@ -17,7 +17,7 @@ public class PageParametersValidator implements Validator {
     private static Set<String> directions = new HashSet<>(Arrays.asList("asc", "desc"));
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return PageParametersDTO.class.equals(clazz);
     }
 

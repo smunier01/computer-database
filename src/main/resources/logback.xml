@@ -27,7 +27,7 @@
 	
 	<appender name="consoleAppender" class="ch.qos.logback.ext.spring.DelegatingLogbackAppender"/>
 
-	<root level="DEBUG">
+	<root level="ERROR">
 		<appender-ref ref="STDERR" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="consoleAppender"/>

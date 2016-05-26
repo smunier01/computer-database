@@ -1,14 +1,10 @@
 package com.excilys.cdb.validation;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
@@ -100,54 +96,6 @@ public class ValidatorUtil {
         if (params.getDirection() == null) {
             throw new ValidatorException("OrderDirection cannot be null");
         }
-    }
-
-    /**
-     * check the validity of a computerDTO object.
-     *
-     * @param computer
-     *            computerDTO to check
-     * @return set of field with errors
-     */
-    public Set<String> validateComputerDTO(ComputerDTO computer) {
-
-        Set<String> errors = new HashSet<>();
-
-        // computer name (required)
-        if ((computer.getName() == null) || "".equals(computer.getName())) {
-            errors.add("name");
-        }
-
-        // computer id (optional)
-        if ((computer.getId() != null) && !computer.getId().isEmpty()) {
-            if (!this.isIdValid(computer.getId())) {
-                errors.add("id");
-            }
-        }
-
-        // introduced date (optional)
-        if ((computer.getIntroduced() != null) & !"".equals(computer.getIntroduced())) {
-            if (!this.isDateValid(computer.getIntroduced())) {
-                errors.add("introduced");
-            }
-        }
-
-        // discontinued date (optional)
-        if ((computer.getDiscontinued() != null) && !"".equals(computer.getDiscontinued())) {
-            if (!this.isDateValid(computer.getDiscontinued())) {
-                errors.add("discontinued");
-            }
-        }
-
-        // company id (optional)
-        if ((computer.getCompanyId() != null) && !"".equals(computer.getCompanyId())) {
-            if (!this.isIdValid(computer.getCompanyId())) {
-                errors.add("companyId");
-            }
-        }
-
-        return errors;
-
     }
 
     /**

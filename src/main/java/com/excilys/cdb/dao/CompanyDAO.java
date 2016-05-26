@@ -1,11 +1,7 @@
 package com.excilys.cdb.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,7 +17,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.jdbc.ConnectionManager;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
@@ -146,52 +141,32 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public List<Company> findAll() {
-
-        List<Company> result = null;
-
         try {
-
-            result = this.jdbcTemplate.query(FIND_ALL, (rs, rowNum) -> this.companyMapper.map(rs));
-
+            return this.jdbcTemplate.query(FIND_ALL, (rs, rowNum) -> this.companyMapper.map(rs));
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage());
             throw new DAOException(e);
         }
-
-        return result;
     }
 
     @Override
     public List<Company> findAll(PageParameters page) {
-        List<Company> result;
-
         try {
-
-            result = this.jdbcTemplate.query(FIND_ALL_LIMIT, (rs, rowNum) -> this.companyMapper.map(rs), page.getSize() * page.getPageNumber(), page.getSize());
-
+            return this.jdbcTemplate.query(FIND_ALL_LIMIT, (rs, rowNum) -> this.companyMapper.map(rs), page.getSize() * page.getPageNumber(), page.getSize());
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage());
             throw new DAOException(e);
         }
-
-        return result;
     }
 
     @Override
     public long count() throws DAOException {
-
-        long nb = 0;
-
         try {
-
-            this.jdbcTemplate.queryForObject(COUNT, Long.class);
-
+            return this.jdbcTemplate.queryForObject(COUNT, Long.class);
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage());
             throw new DAOException(e);
         }
-
-        return nb;
     }
 
 }

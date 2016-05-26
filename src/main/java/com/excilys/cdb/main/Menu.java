@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
@@ -23,6 +24,7 @@ import com.excilys.cdb.service.impl.ComputerService;
  *
  * @author simon
  */
+@Component
 public class Menu {
 
     private static final int MAX_PER_PAGES = 20;
@@ -38,6 +40,10 @@ public class Menu {
 
     @Autowired
     private CompanyService companyService;
+
+    public Menu() {
+
+    }
 
     /**
      * Menu constructor.

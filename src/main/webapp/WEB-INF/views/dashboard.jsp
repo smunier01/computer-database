@@ -8,14 +8,22 @@
 
 <c:set var="context" value="${pageContext.request.contextPath}" />
 
-<spring:message code="errors.name" text="default text" />
+<spring:message code="column.name" var="columnName" />
+<spring:message code="column.introduced" var="columnIntroduced" />
+<spring:message code="column.discontinued" var="columnDiscontinued" />
+<spring:message code="column.company" var="columnCompany" />
+<spring:message code="dashboard.filterbyname" var="filterByName" />
+<spring:message code="dashboard.addcomputer" var="addComputer" />
+<spring:message code="dashboard.edit" var="editComputer" />
+<spring:message code="dashboard.found" var="foundComputer" />
+<spring:message code="delete.confirmation" var="deleteConfirmation" />
 
 <body>
 	<jsp:include page="header.jsp" />
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<span id="nbComputers">${page.totalCount}</span>&nbsp;Computers&nbsp;found
+				<span id="nbComputers">${page.totalCount}</span>&nbsp<span>${foundComputer}</span>
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -23,15 +31,14 @@
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							type="submit" id="searchsubmit" value="${filterByName}"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="${context}/computer/add">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						href="${context}/computer/add">${addComputer}</a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();">${editComputer}</a>
 				</div>
 			</div>
 		</div>
@@ -52,19 +59,19 @@
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+								id="deleteSelected" onclick="$.fn.deleteSelected('${deleteConfirmation}');"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><mylib2:link target="" name="computer name"
+						<th><mylib2:link target="" name="${columnName}"
 								params="${page.params}" order="name" /></th>
-						<th><mylib2:link target="" name="introduced date"
+						<th><mylib2:link target="" name="${columnIntroduced}"
 								params="${page.params}" order="introduced" /></th>
 						<!-- Table header for Discontinued Date -->
-						<th><mylib2:link target="" name="discontinued name"
+						<th><mylib2:link target="" name="${columnDiscontinued}"
 								params="${page.params}" order="discontinued" /></th>
 						<!-- Table header for Company -->
-						<th><mylib2:link target="" name="company"
+						<th><mylib2:link target="" name="${columnCompany}"
 								params="${page.params}" order="company_name" /></th>
 						
 					</tr>
@@ -78,9 +85,9 @@
 							<td><a id="${computer.name}_name"
 								href="${context}/computer/edit?id=${computer.id}"
 								onclick="">${computer.name}</a></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td>${computer.introduced}</td>
+							<td>${computer.discontinued}</td>
+							<td>${computer.companyName}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

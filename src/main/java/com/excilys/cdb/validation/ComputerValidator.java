@@ -15,7 +15,7 @@ public class ComputerValidator implements Validator {
     private ValidatorUtil validator;
 
     @Override
-    public boolean supports(Class c) {
+    public boolean supports(Class<?> c) {
         return ComputerDTO.class.equals(c);
     }
 

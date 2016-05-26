@@ -1,10 +1,5 @@
 $(function() {
-
-    $('#introduced').datepicker({
-	format: 'yyyy-mm-dd',
-	startDate: '-3d'
-    });
-    
+	
     var name = false;
     var introduced = true;
     var discontinued = true;
