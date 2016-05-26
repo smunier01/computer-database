@@ -1,6 +1,7 @@
 package com.excilys.cdb.dto;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,6 +31,10 @@ public class ComputerDTO {
     private String companyId;
 
     private String companyName;
+
+    public ComputerDTO() {
+
+    }
 
     public ComputerDTO(final String id, final String name, final String introduced, final String discontinued,
             final String companyId, final String companyName) {

@@ -6,7 +6,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <jsp:include page="top.jsp" />
-<spring:message code="test.name.error" text="default text" />
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
+<spring:message code="form.cancel" var="cancel" />
+<spring:message code="form.or" var="formOr" />
+<spring:message code="edit.computer" var="editComputer" />
+<spring:message code="column.name" var="columnName" />
+<spring:message code="column.introduced" var="columnIntroduced" />
+<spring:message code="column.discontinued" var="columnDiscontinued" />
+<spring:message code="column.company" var="columnCompany" />
+
 <body>
 	<jsp:include page="header.jsp" />
 
@@ -16,32 +26,32 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
 						${computer.id}</div>
-					<h1>Edit Computer</h1>
+					<h1>${editComputer}</h1>
 
-					<form action="${pageContext.request.contextPath}/computer/edit"
+					<form action="${contextPath}/computer/edit"
 						method="POST">
 						<input id="id" name="id" type="hidden" value="${computer.id}" />
 						<fieldset>
 							<div class="form-group ${errors.hasFieldErrors('name') ? 'has-error': ''}">
-								<label for="computerName">Computer name</label> <input
+								<label for="computerName">${columnName}</label> <input
 									type="text" class="form-control" name="name"
-									id="computerName" placeholder="Computer name"
+									id="computerName" placeholder="${columnName}"
 									value="${computer.name}">
 							</div>
 							<div class="form-group ${errors.hasFieldErrors('introduced') ? 'has-error': ''}">
-								<label for="introduced">Introduced date</label> <input
+								<label for="introduced">${columnIntroduced}</label> <input
 									 class="form-control" name="introduced"
-									id="introduced" placeholder="Introduced date"
+									id="introduced" placeholder="${columnIntroduced}"
 									value="${computer.introduced}">
 							</div>
 							<div class="form-group ${errors.hasFieldErrors('discontinued') ? 'has-error': ''}">
-								<label for="discontinued">Discontinued date</label> <input
+								<label for="discontinued">${columnDiscontinued}</label> <input
 									 class="form-control" name="discontinued"
-									id="discontinued" placeholder="Discontinued date"
+									id="discontinued" placeholder="${columnDiscontinued}"
 									value="${computer.discontinued}">
 							</div>
 							<div class="form-group ${errors.hasFieldErrors('companyId') ? 'has-error': ''}">
-								<label for="companyId">Company</label> <select
+								<label for="companyId">${columnCompany}</label> <select
 									class="form-control" name="companyId" id="companyId">
 									<option value="">--</option>
 									<c:forEach items="${companies}" var="company">
@@ -54,8 +64,8 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input id="buttonForm" type="submit" value="Edit"
-								class="btn btn-primary"> or <a href="dashboard.html"
-								class="btn btn-default">Cancel</a>
+								class="btn btn-primary"> ${formOr} <a href="dashboard.html"
+								class="btn btn-default">${cancel}</a>
 						</div>
 					</form>
 				</div>

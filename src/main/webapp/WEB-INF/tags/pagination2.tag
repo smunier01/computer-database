@@ -62,7 +62,7 @@
 </ul>
 
 <div class="btn-group btn-group-sm pull-right" role="group">
-	<a href="?psize=10" class="btn btn-default">10</a> <a href="?psize=50"
-		class="btn btn-default">50</a> <a href="?psize=100"
+	<a href="?size=10" class="btn btn-default">10</a> <a href="?size=50"
+		class="btn btn-default">50</a> <a href="?size=100"
 		class="btn btn-default">100</a>
 </div>

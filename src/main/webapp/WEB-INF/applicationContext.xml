@@ -11,46 +11,10 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx.xsd
-		
-                           http://www.springframework.org/schema/mvc
-                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-	
-	<mvc:annotation-driven />
-	<context:annotation-config />
-	<context:component-scan base-package="com.excilys.cdb"></context:component-scan>
+		http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<mvc:resources mapping="/js/**" location="/js/" />
-	<mvc:resources mapping="/css/**" location="/css/" />
-	<mvc:resources mapping="/fonts/**" location="/fonts/" />
 
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/WEB-INF/views/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
-	</bean>
-	
-	<!-- i18n configuration -->
-
-	<bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-		<property name="defaultLocale" value="en" />
-	</bean>
-
-	<mvc:interceptors>
-		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-			<property name="paramName" value="lang" />
-		</bean>
-	</mvc:interceptors>
-
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename" value="messages" />
-	</bean>
-	
 	<!-- datasource configuration file -->
 
 	<bean id="propertyConfigurer"
@@ -61,11 +25,12 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- hikari configuration -->
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+		<property name="dataSourceClassName"
+			value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
 		<property name="maximumPoolSize" value="25" />
 
 		<property name="dataSourceProperties">
@@ -83,14 +48,4 @@
 	<bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
 		<constructor-arg ref="hikariConfig" />
 	</bean>
-	
-	<!-- transaction configuration using the hikari datasource -->
-
-	<tx:annotation-driven transaction-manager="txManager" />
-
-	<bean id="txManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="HikariDatasource" />
-	</bean>
-
 </beans>

@@ -175,6 +175,7 @@ public class ComputerController {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
             return "redirect:/dashboard";
         } else {
+            System.out.println(errors);
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
             return this.getAddComputer(model);
