@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd
@@ -11,55 +11,53 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx.xsd
-		
-                           http://www.springframework.org/schema/mvc
-                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-	
-	<mvc:annotation-driven />
-	<!-- <context:annotation-config /> -->
-	<context:component-scan base-package="com.excilys.cdb"></context:component-scan>
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<!-- datasource configuration file -->
+    <mvc:annotation-driven />
+    <context:component-scan base-package="com.excilys.cdb"></context:component-scan>
 
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list value-type="org.springframework.core.io.Resource">
-				<value>classpath:mysql.properties</value>
-			</list>
-		</property>
-	</bean>
-	
-	<!-- hikari configuration -->
+    <!-- datasource configuration file -->
 
-	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="dataSourceClassName"
-			value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
-		<property name="maximumPoolSize" value="100" />
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list value-type="org.springframework.core.io.Resource">
+                <value>classpath:mysql.properties</value>
+            </list>
+        </property>
+    </bean>
 
-		<property name="dataSourceProperties">
-			<props>
-				<prop key="url">${DB_URL}</prop>
-				<prop key="user">${DB_USERNAME}</prop>
-				<prop key="password">${DB_PASSWORD}</prop>
-				<prop key="cachePrepStmts">true</prop>
-				<prop key="prepStmtCacheSize">250</prop>
-				<prop key="prepStmtCacheSqlLimit">2048</prop>
-			</props>
-		</property>
-	</bean>
+    <!-- hikari configuration -->
 
-	<bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
-		<constructor-arg ref="hikariConfig" />
-	</bean>
-	
-	<!-- transaction configuration using the hikari datasource -->
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="dataSourceClassName"
+            value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+        <property name="maximumPoolSize" value="100" />
 
-	<tx:annotation-driven transaction-manager="txManager" />
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="url">${DB_URL}</prop>
+                <prop key="user">${DB_USERNAME}</prop>
+                <prop key="password">${DB_PASSWORD}</prop>
+                <prop key="cachePrepStmts">true</prop>
+                <prop key="prepStmtCacheSize">250</prop>
+                <prop key="prepStmtCacheSqlLimit">2048</prop>
+            </props>
+        </property>
+    </bean>
 
-	<bean id="txManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="HikariDatasource" />
-	</bean>
+    <bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+
+    <!-- transaction configuration using the hikari datasource -->
+
+    <tx:annotation-driven transaction-manager="txManager" />
+
+    <bean id="txManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="HikariDatasource" />
+    </bean>
 
 </beans>

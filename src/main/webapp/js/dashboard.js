@@ -62,7 +62,7 @@ $(function() {
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ( $ ) {
     $.fn.deleteSelected = function(msg) {
-        if (confirm(msg)) { 
+        if (confirm($.springMessages.deleteConfirmation)) { 
             $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
             $('#deleteForm').submit();
         }

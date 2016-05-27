@@ -50,6 +50,8 @@ public class CompanyDAO implements DAO<Company> {
 
     private static final String COUNT = "SELECT count(id) as nb FROM company";
 
+    private static final String COUNT_SEARCH = "SELECT count(id) nb FROM company WHERE name like ?";
+
     private JdbcTemplate jdbcTemplate;
 
     @Resource(name = "HikariDatasource")
@@ -74,7 +76,6 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public Company create(Company obj) {
-
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -102,9 +103,7 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public Company update(Company obj) {
-
         try {
-
             int res = this.jdbcTemplate.update(UPDATE, obj.getName(), obj.getId());
 
             if (res > 0) {
@@ -112,7 +111,6 @@ public class CompanyDAO implements DAO<Company> {
             } else {
                 CompanyDAO.LOGGER.warn("couldn't update company : " + obj.getId());
             }
-
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage());
             throw new DAOException(e);
@@ -123,11 +121,18 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public void delete(Company obj) {
-
         try {
-
             this.jdbcTemplate.update(DELETE, obj.getId());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage());
+            throw new DAOException(e);
+        }
+    }
 
+    @Override
+    public long count(PageParameters page) {
+        try {
+            return this.jdbcTemplate.queryForObject(COUNT_SEARCH, Long.class, page.getSearch() + "%");
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage());
             throw new DAOException(e);

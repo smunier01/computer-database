@@ -194,7 +194,7 @@ public class ComputerController {
     public String postDeleteComputer(ModelMap model, @RequestParam String selection) {
 
         this.computerService.deleteComputers(
-        		Stream.of(selection.split(","))
+                Stream.of(selection.split(","))
                         .filter(this.validator::isIdValid)
                         .map(Long::parseLong)
                         .collect(Collectors.toList()));

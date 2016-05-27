@@ -88,9 +88,7 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public Computer create(Computer obj) {
-
         try {
-
             Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
             Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
             Long companyId = obj.getCompany() == null ? null : obj.getCompany().getId();
@@ -110,7 +108,6 @@ public class ComputerDAO implements DAO<Computer> {
                 LOGGER.warn("Could not create computer : " + obj.toString());
                 throw new DAOException("Could not create computer.");
             }
-
         } catch (DataAccessException e) {
             ComputerDAO.LOGGER.error(e.getMessage());
             throw new DAOException(e);
@@ -121,7 +118,6 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public Computer update(Computer obj) {
-
         try {
             Timestamp introduced = this.dateMapper.toTimestamp(obj.getIntroduced());
             Timestamp discontinued = this.dateMapper.toTimestamp(obj.getDiscontinued());
@@ -162,7 +158,6 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public void deleteAll(List<Long> objs) {
-
         StringBuilder builder = new StringBuilder();
 
         for (Long id : objs) {
@@ -195,13 +190,7 @@ public class ComputerDAO implements DAO<Computer> {
         }
     }
 
-    /**
-     * Count number of computers using a page parameters.
-     *
-     * @param page
-     *            parameters for the query.
-     * @return number of computers.
-     */
+    @Override
     public long count(PageParameters page) {
         try {
             return this.jdbcTemplate.queryForObject(COUNT_SEARCH, Long.class, page.getSearch() + "%");

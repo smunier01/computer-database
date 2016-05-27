@@ -82,9 +82,18 @@ public interface DAO<T> {
     /**
      * count the number of object in the table.
      *
-     * @return number of object as long
+     * @return number of object
      */
     long count();
+
+    /**
+     * Count number of object using a page parameters.
+     *
+     * @param page
+     *            parameters for the query.
+     * @return number of object
+     */
+    long count(PageParameters params);
 
     /**
      * close the list of resources given as parameters.
