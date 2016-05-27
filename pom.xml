@@ -1,255 +1,255 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.excilys</groupId>
-	<artifactId>cdb</artifactId>
-	<packaging>war</packaging>
-	<version>0.5.0-SNAPSHOT</version>
-	<name>ComputerDatabase Webapp</name>
-	<url>http://maven.apache.org</url>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.excilys</groupId>
+    <artifactId>cdb</artifactId>
+    <packaging>war</packaging>
+    <version>0.5.0-RELEASE</version>
+    <name>ComputerDatabase Webapp</name>
+    <url>http://maven.apache.org</url>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
 
-		<!-- dependencies versions -->
+        <!-- dependencies versions -->
 
-		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
-		<slf4j.version>1.7.21</slf4j.version>
-		<logback.version>1.1.7</logback.version>
-		<connector.mysql.version>5.1.38</connector.mysql.version>
-		<jsp.api.version>2.0</jsp.api.version>
-		<servlet.api.version>3.1.0</servlet.api.version>
-		<jstl.version>1.2</jstl.version>
-		<selenium.version>2.53.0</selenium.version>
-		<spring.version>4.2.6.RELEASE</spring.version>
-		<hibernate>5.0.1.Final</hibernate>
-		<javax.validation>1.1.0.Final</javax.validation>
-		<hikari>2.4.5</hikari>
-		<logback.spring>0.1.4</logback.spring>
-		<slf4j.spring>1.7.0</slf4j.spring>
-		
-		<!-- plugins versions -->
+        <junit.version>4.12</junit.version>
+        <mockito.version>1.10.19</mockito.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <logback.version>1.1.7</logback.version>
+        <connector.mysql.version>5.1.38</connector.mysql.version>
+        <jsp.api.version>2.0</jsp.api.version>
+        <servlet.api.version>3.1.0</servlet.api.version>
+        <jstl.version>1.2</jstl.version>
+        <selenium.version>2.53.0</selenium.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
+        <hibernate>5.0.1.Final</hibernate>
+        <javax.validation>1.1.0.Final</javax.validation>
+        <hikari>2.4.5</hikari>
+        <logback.spring>0.1.4</logback.spring>
+        <slf4j.spring>1.7.0</slf4j.spring>
 
-		<tomcat.plugin.version>2.2</tomcat.plugin.version>
-		<compiler.plugin.version>3.5.1</compiler.plugin.version>
-		<checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+        <!-- plugins versions -->
 
-	</properties>
+        <tomcat.plugin.version>2.2</tomcat.plugin.version>
+        <compiler.plugin.version>3.5.1</compiler.plugin.version>
+        <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
 
-	<dependencies>
+    </properties>
 
-		<!-- spring -->
+    <dependencies>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <!-- spring -->
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-		<!-- http://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${javax.validation}</version>
-		</dependency>
+        <!-- http://mvnrepository.com/artifact/javax.validation/validation-api -->
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate}</version>
-		</dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation}</version>
+        </dependency>
 
-		<!-- tests -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <!-- tests -->
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- dependencies for logging -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.logback-extensions</groupId>
-			<artifactId>logback-ext-spring</artifactId>
-			<version>${logback.spring}</version>
-		</dependency>
+        <!-- dependencies for logging -->
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.spring}</version>
-			<scope>runtime</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+            <version>${logback.spring}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.spring}</version>
+            <scope>runtime</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${logback.version}</version>
-			<scope>runtime</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-			<scope>runtime</scope>
-		</dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
-		<!-- mysql drivers -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${connector.mysql.version}</version>
-			<scope>runtime</scope>
-		</dependency>
+        <!-- mysql drivers -->
 
-		<!-- hikariCP for the connection pool -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${connector.mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${hikari}</version>
-		</dependency>
+        <!-- hikariCP for the connection pool -->
 
-		<!-- dependencies for jsp & jstl -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet.api.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- dependencies for jsp & jstl -->
 
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>${jsp.api.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>${jsp.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- dependency for selenium -->
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>${selenium.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-firefox-driver</artifactId>
-			<version>${selenium.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <!-- dependency for selenium -->
 
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-server</artifactId>
-			<version>${selenium.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-	<build>
-		<plugins>
+    </dependencies>
 
-			<!-- plugin to use mvn tomcat:deploy -->
+    <build>
+        <plugins>
 
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>${tomcat.plugin.version}</version>
-				<configuration>
-					<url>http://localhost:8080/manager/text</url>
-					<server>tomcatserver</server>
-				</configuration>
-			</plugin>
+            <!-- plugin to use mvn tomcat:deploy -->
 
-			<!-- maven-compile-plugin to force use of java 8 -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.plugin.version}</version>
+                <configuration>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>tomcatserver</server>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compiler.plugin.version}</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-		</plugins>
+            <!-- maven-compile-plugin to force use of java 8 -->
 
-		<finalName>cdb</finalName>
-	</build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
 
-	<reporting>
-		<!-- plugin to use mvn checkstyle:check -->
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>${checkstyle.plugin.version}</version>
-			</plugin>
-		</plugins>
-	</reporting>
+        <finalName>cdb</finalName>
+    </build>
+
+    <reporting>
+        <!-- plugin to use mvn checkstyle:check -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

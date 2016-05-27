@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util
@@ -11,16 +10,16 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <mvc:annotation-driven />
-    <context:component-scan base-package="com.excilys.cdb"></context:component-scan>
+    <context:component-scan base-package="com.excilys.cdb">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
 
     <!-- datasource configuration file -->
 
-    <bean id="propertyConfigurer"
-        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list value-type="org.springframework.core.io.Resource">
                 <value>classpath:mysql.properties</value>
@@ -31,8 +30,7 @@
     <!-- hikari configuration -->
 
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-        <property name="dataSourceClassName"
-            value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+        <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
         <property name="maximumPoolSize" value="100" />
 
         <property name="dataSourceProperties">
@@ -50,13 +48,12 @@
     <bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
         <constructor-arg ref="hikariConfig" />
     </bean>
-
-    <!-- transaction configuration using the hikari datasource -->
-
+    
+    <!-- transaction manager -->
+    
     <tx:annotation-driven transaction-manager="txManager" />
 
-    <bean id="txManager"
-        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="HikariDatasource" />
     </bean>
 
