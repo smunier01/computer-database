@@ -60,12 +60,16 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = false)
     public Computer createComputer(Computer computer) {
         this.LOGGER.debug("entering createComputer()");
         this.validator.validateComputer(computer);
         Computer c = this.computerDAO.create(computer);
-        this.count.incrementAndGet();
+
+        if (this.count != null) {
+            this.count.incrementAndGet();
+        }
+
         return c;
     }
 

@@ -2,12 +2,33 @@ package com.excilys.cdb.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "computer")
 public class Computer {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String name;
+
+    @Column(nullable = true)
     private LocalDate introduced;
+
+    @Column(nullable = true)
     private LocalDate discontinued;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(nullable = true, name = "company_id")
     private Company company;
 
     /**

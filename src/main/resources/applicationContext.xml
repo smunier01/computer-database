@@ -27,6 +27,30 @@
         </property>
     </bean>
 
+    <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="HikariDatasource" />
+        <property name="packagesToScan" value="com.excilys.cdb.model" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="myEmf" />
+    </bean>
+
+    <tx:annotation-driven />
+
+    <!-- <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" 
+        /> -->
+
     <!-- hikari configuration -->
 
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
@@ -48,13 +72,10 @@
     <bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
         <constructor-arg ref="hikariConfig" />
     </bean>
-    
-    <!-- transaction manager -->
-    
-    <tx:annotation-driven transaction-manager="txManager" />
 
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="HikariDatasource" />
-    </bean>
+    <!-- transaction manager -->
+
+    <!-- <tx:annotation-driven transaction-manager="txManager" /> <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+        <property name="dataSource" ref="HikariDatasource" /> </bean> -->
 
 </beans>

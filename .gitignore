@@ -3,6 +3,9 @@
 
 ### properties files ###
 
+.idea
+*.iml
+
 # mysql.properties
 
 ### log files ###
