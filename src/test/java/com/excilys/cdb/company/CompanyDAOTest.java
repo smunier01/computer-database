@@ -16,7 +16,7 @@ import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.PageParameters;
 
-@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@ContextConfiguration("file:../../../../../../main/webapp/WEB-INF/spring/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class CompanyDAOTest {
 

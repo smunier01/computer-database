@@ -1,21 +1,5 @@
 package com.excilys.cdb.servlets;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.dto.PageParametersDTO;
@@ -31,6 +15,23 @@ import com.excilys.cdb.validation.ComputerValidator;
 import com.excilys.cdb.validation.PageParametersValidator;
 import com.excilys.cdb.validation.ValidatorException;
 import com.excilys.cdb.validation.ValidatorUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/")
@@ -201,4 +202,44 @@ public class ComputerController {
 
         return "redirect:/dashboard";
     }
+
+    //Logout mapping
+    @RequestMapping(path = "/logout")
+    public String showLoggedout(HttpServletRequest request){
+        logout(request);
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return "logout";
+    }
+
+    public static void logout(HttpServletRequest request) {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        removeCookies(request);
+   /*     SecurityContextHolder.clearContext();
+        HttpSession hs = request.getSession();
+        Enumeration e = hs.getAttributeNames();
+        while (e.hasMoreElements()) {
+            String attr = (String)e.nextElement();
+            hs.setAttribute(attr, null);
+        }
+        removeCookies(request);
+        hs.invalidate();*/
+    }
+    public static void removeCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length > 0) {
+            for (int i = 0; i < cookies.length; i++) {
+                System.out.println("clearing cookie : " + i + " : " + cookies[i].getName());
+                cookies[i].setValue("1");
+            }
+        }
+    }
+/*
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+
+            *//*new SecurityContextLogoutHandler().logout(request, response, auth);*//*
+        }
+    }*/
 }

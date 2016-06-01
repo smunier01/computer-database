@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.cdb.validation.ValidatorUtil;
 
-@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@ContextConfiguration("file:../../../../../../main/webapp/WEB-INF/spring/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ValidatorTest {
 

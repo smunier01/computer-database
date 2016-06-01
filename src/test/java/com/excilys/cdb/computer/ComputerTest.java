@@ -3,7 +3,6 @@ package com.excilys.cdb.computer;
 import java.time.LocalDate;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -12,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
-@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@ContextConfiguration("file:../../../../../../main/webapp/WEB-INF/spring/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerTest {
 

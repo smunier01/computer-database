@@ -1,30 +1,15 @@
 package com.excilys.cdb.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.List;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.PageParameters;
+import com.excilys.cdb.model.QCompany;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
-import javax.sql.DataSource;
-
-import com.excilys.cdb.model.QCompany;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
-
-import com.excilys.cdb.mapper.CompanyMapper;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.PageParameters;
+import java.util.List;
 
 /**
  * Singleton for the CompanyDAO.
@@ -35,11 +20,6 @@ import com.excilys.cdb.model.PageParameters;
  */
 @Repository
 public class CompanyDAO implements DAO<Company> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
-
-    @Autowired
-    private CompanyMapper companyMapper;
 
     private EntityManager em;
 

@@ -15,9 +15,8 @@ import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.PageParameters;
-import com.excilys.cdb.service.impl.ComputerService;
 
-@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@ContextConfiguration("file:../../../../../../main/webapp/WEB-INF/spring/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDAOTest {
 

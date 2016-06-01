@@ -1,0 +1,89 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--    <http auto-config="true" >
+            <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        </http>
+
+        <authentication-manager >
+            <authentication-provider user-service-ref="customUserDetailsService"/>
+        </authentication-manager>
+
+        <b:bean id="customUserDetailsService" class="com.excilys.cdb.service.impl.UserAuthService" />-->
+
+    <!--<http auto-config="true" >
+        <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        <csrf/>
+    </http>-->
+
+<!--    <http auto-config="true">
+        <intercept-url pattern="/logout" access="permitAll" />
+        <intercept-url pattern="/**" access="hasRole('AZD_USER')" />
+    </http>-->
+
+    <http create-session="stateless" entry-point-ref="digestEntryPoint">
+        <intercept-url pattern="/fonts/**" access="permitAll" />
+        <intercept-url pattern="/js/**" access="permitAll" />
+        <intercept-url pattern="/css/**" access="permitAll" />
+        <intercept-url pattern="/logout" access="permitAll" />
+        <intercept-url pattern="/computer/**" access="hasRole('ROLE_USER')" />
+        <!--<logout invalidate-session="true" logout-success-url="/auth/login" logout-url="/logout" />-->
+        <logout logout-success-url="/logout" delete-cookies="JSESSIONID" />
+        <http-basic />
+        <!--<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>-->
+    </http>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="customUserDetailsService" />
+    </authentication-manager>
+
+    <b:bean id="digestFilter" class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+        <b:property name="userDetailsService" ref="customUserDetailsService"/>
+        <b:property name="authenticationEntryPoint" ref="digestEntryPoint"/>
+    </b:bean>
+
+    <b:bean id="digestEntryPoint"
+            class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+        <b:property name="realmName" value="Contacts Realm via Digest Authentication"/>
+        <b:property name="key" value="acegi"/>
+    </b:bean>
+
+
+    <!--   <b:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/> -->
+
+    <b:bean id="customUserDetailsService" class="com.excilys.cdb.service.impl.UserAuthService"/>
+
+    <!-- <authentication-manager>
+         <authentication-provider ref="authProvider" />
+     </authentication-manager>
+
+     <b:bean id="authProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+         <b:property name="userDetailsService" ref="customUserDetailsService"/>
+         <b:property name="passwordEncoder" ref="encoder"/>
+     </b:bean>
+
+     &lt;!&ndash; For hashing and salting user passwords &ndash;&gt;
+     <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+     <b:bean id="customUserDetailsService" class="com.excilys.cdb.service.impl.UserAuthService"/>
+
+     <b:bean id="digestFilter" class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+         <b:property name="userDetailsService" ref="customUserDetailsService"/>
+         <b:property name="authenticationEntryPoint" ref="digestEntryPoint"/>
+     </b:bean>
+
+     <b:bean id="digestEntryPoint"
+             class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+         <b:property name="realmName" value="Contacts Realm via Digest Authentication"/>
+         <b:property name="key" value="acegi"/>
+     </b:bean>
+
+     <http use-expressions="true" entry-point-ref="digestEntryPoint">
+         <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>
+     </http>-->
+
+</b:beans>

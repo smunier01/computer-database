@@ -44,9 +44,6 @@
 
     <tx:annotation-driven/>
 
-    <!-- <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" 
-        /> -->
-
     <!-- hikari configuration -->
 
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">

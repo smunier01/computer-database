@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.excilys</groupId>
     <artifactId>cdb</artifactId>
@@ -40,6 +40,7 @@
         <compiler.plugin.version>3.5.1</compiler.plugin.version>
         <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
 
+        <spring-security.version>4.1.0.RELEASE</spring-security.version>
     </properties>
 
     <dependencies>
@@ -88,6 +89,26 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- spring-security -->
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
         <!-- http://mvnrepository.com/artifact/javax.validation/validation-api -->
 
         <dependency>
@@ -107,9 +128,6 @@
             <artifactId>hibernate-java8</artifactId>
             <version>${hibernate}</version>
         </dependency>
-
-        <!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-core</artifactId> <version>${hibernate}</version> 
-            </dependency> -->
 
         <dependency>
             <groupId>org.hibernate</groupId>

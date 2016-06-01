@@ -19,7 +19,7 @@ import com.excilys.cdb.service.ServiceException;
 import com.excilys.cdb.validation.ValidatorException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration("file:src/main/webapp/WEB-INF/applicationContext.xml")
+@ContextConfiguration("file:../../../../../../main/webapp/WEB-INF/spring/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerServiceTest {
 
