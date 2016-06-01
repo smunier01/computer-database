@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util
-		http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx 
-		http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="com.excilys.cdb">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
     <!-- datasource configuration file -->
@@ -28,10 +24,10 @@
     </bean>
 
     <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="HikariDatasource" />
-        <property name="packagesToScan" value="com.excilys.cdb.model" />
+        <property name="dataSource" ref="HikariDatasource"/>
+        <property name="packagesToScan" value="com.excilys.cdb.model"/>
         <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
         <property name="jpaProperties">
             <props>
@@ -43,10 +39,10 @@
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="myEmf" />
+        <property name="entityManagerFactory" ref="myEmf"/>
     </bean>
 
-    <tx:annotation-driven />
+    <tx:annotation-driven/>
 
     <!-- <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" 
         /> -->
@@ -54,8 +50,8 @@
     <!-- hikari configuration -->
 
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-        <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
-        <property name="maximumPoolSize" value="100" />
+        <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
+        <property name="maximumPoolSize" value="100"/>
 
         <property name="dataSourceProperties">
             <props>
@@ -70,12 +66,7 @@
     </bean>
 
     <bean id="HikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
-        <constructor-arg ref="hikariConfig" />
+        <constructor-arg ref="hikariConfig"/>
     </bean>
-
-    <!-- transaction manager -->
-
-    <!-- <tx:annotation-driven transaction-manager="txManager" /> <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
-        <property name="dataSource" ref="HikariDatasource" /> </bean> -->
 
 </beans>

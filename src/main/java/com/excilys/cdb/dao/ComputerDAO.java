@@ -81,8 +81,7 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public Computer update(Computer obj) {
-        this.em.persist(obj);
-        return obj;
+        return this.em.merge(obj);
     }
 
     @Override
@@ -107,7 +106,9 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public List<Computer> findAll() {
-        throw new UnsupportedOperationException();
+        return this.jpaQuery.selectFrom(this.qcomputer)
+                .leftJoin(this.qcomputer.company, this.qcompany)
+                .fetch();
     }
 
     @Override

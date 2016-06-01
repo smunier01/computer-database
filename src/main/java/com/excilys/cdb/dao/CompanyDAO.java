@@ -5,8 +5,13 @@ import java.sql.Statement;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.sql.DataSource;
 
+import com.excilys.cdb.model.QCompany;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +28,7 @@ import com.excilys.cdb.model.PageParameters;
 
 /**
  * Singleton for the CompanyDAO.
- *
+ * <p>
  * implements all the CRUD operations defined in DAO<>.
  *
  * @author simon
@@ -36,107 +41,42 @@ public class CompanyDAO implements DAO<Company> {
     @Autowired
     private CompanyMapper companyMapper;
 
-    private static final String FIND_BY_ID = "SELECT id, name FROM company WHERE id=?";
+    private EntityManager em;
 
-    private static final String FIND_ALL = "SELECT id, name FROM company";
+    private JPAQueryFactory jpaQuery;
 
-    private static final String FIND_ALL_LIMIT = "SELECT id, name FROM company LIMIT ?,?";
+    private QCompany qcompany = QCompany.company;
 
-    private static final String INSERT = "INSERT INTO company (name) VALUES (?)";
-
-    private static final String UPDATE = "UPDATE company SET name=? WHERE id=?";
-
-    private static final String DELETE = "DELETE FROM company WHERE id=?";
-
-    private static final String COUNT = "SELECT count(id) as nb FROM company";
-
-    private static final String COUNT_SEARCH = "SELECT count(id) nb FROM company WHERE name like ?";
-
-    private JdbcTemplate jdbcTemplate;
-
-    @Resource(name = "HikariDatasource")
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
+    public void setEntityManager(EntityManager entityManager) {
+        this.em = entityManager;
+        this.jpaQuery = new JPAQueryFactory(entityManager);
     }
 
     @Override
     public Company find(Long id) {
-
-        Company company = null;
-
-        try {
-            company = this.jdbcTemplate.queryForObject(FIND_BY_ID, Company.class, id);
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
-
-        return company;
+        return this.jpaQuery.selectFrom(this.qcompany).where(this.qcompany.id.eq(id)).fetchFirst();
     }
 
     @Override
     public Company create(Company obj) {
-        try {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-
-            int res = this.jdbcTemplate.update((PreparedStatementCreator) connection -> {
-                PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-                this.setParams(ps, obj.getName());
-                return ps;
-            }, keyHolder);
-
-            if (res > 0) {
-                obj.setId(keyHolder.getKey().longValue());
-                LOGGER.info("successfully created computer : " + obj.toString());
-            } else {
-                LOGGER.warn("Could not create computer : " + obj.toString());
-                throw new DAOException("Could not create computer.");
-            }
-
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
-
+        this.em.persist(obj);
         return obj;
     }
 
     @Override
     public Company update(Company obj) {
-        try {
-            int res = this.jdbcTemplate.update(UPDATE, obj.getName(), obj.getId());
-
-            if (res > 0) {
-                CompanyDAO.LOGGER.info("succefully updated company : " + obj.getId());
-            } else {
-                CompanyDAO.LOGGER.warn("couldn't update company : " + obj.getId());
-            }
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
-
-        return obj;
+        return this.em.merge(obj);
     }
 
     @Override
     public void delete(Company obj) {
-        try {
-            this.jdbcTemplate.update(DELETE, obj.getId());
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
+        this.em.remove(obj);
     }
 
     @Override
     public long count(PageParameters page) {
-        try {
-            return this.jdbcTemplate.queryForObject(COUNT_SEARCH, Long.class, page.getSearch() + "%");
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
+        return this.jpaQuery.from().fetchCount();
     }
 
     @Override
@@ -146,32 +86,17 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public List<Company> findAll() {
-        try {
-            return this.jdbcTemplate.query(FIND_ALL, (rs, rowNum) -> this.companyMapper.map(rs));
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
+        return this.jpaQuery.selectFrom(this.qcompany).fetch();
     }
 
     @Override
     public List<Company> findAll(PageParameters page) {
-        try {
-            return this.jdbcTemplate.query(FIND_ALL_LIMIT, (rs, rowNum) -> this.companyMapper.map(rs), page.getSize() * page.getPageNumber(), page.getSize());
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
+        return this.jpaQuery.selectFrom(this.qcompany).offset(page.getSize() * page.getPageNumber()).limit(page.getSize()).fetch();
     }
 
     @Override
     public long count() throws DAOException {
-        try {
-            return this.jdbcTemplate.queryForObject(COUNT, Long.class);
-        } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new DAOException(e);
-        }
+        return this.jpaQuery.from(this.qcompany).fetchCount();
     }
 
 }
