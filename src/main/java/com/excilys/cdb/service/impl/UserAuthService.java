@@ -1,8 +1,8 @@
 package com.excilys.cdb.service.impl;
 
 import com.excilys.cdb.model.User;
+import com.excilys.cdb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,18 +10,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserAuthService implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String ssoId) throws UsernameNotFoundException {
-        User user = userService.findBySSO(ssoId);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userService.findByName(username);
 
         if (user == null) {
             System.out.println("User not found");
@@ -35,24 +34,8 @@ public class UserAuthService implements UserDetailsService {
                 true,
                 true,
                 true,
-                getGrantedAuthorities(user)
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList())
         );
     }
-
-    private List<GrantedAuthority> getGrantedAuthorities(User user) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        /*
-        for (UserProfile userProfile : user.getUserProfiles()) {
-            System.out.println("UserProfile : " + userProfile);
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + userProfile.getType()));
-        }
-        System.out.print("authorities :" + authorities);
-        */
-
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-        return authorities;
-    }
-
 
 }

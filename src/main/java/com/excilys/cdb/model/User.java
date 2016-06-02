@@ -4,26 +4,34 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @Column(name = "username", unique = true, nullable = false, length = 45)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false, length = 60)
+    @Column(name = "password", nullable = false)
     private String password;
 
     private String role;
 
     public User() {
+        this("", "");
     }
 
     public User(String username, String password) {
+        this(username, password, null);
+    }
+
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -48,5 +56,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<String> getRoles() {
+        return Arrays.asList(this.role.split(","));
     }
 }

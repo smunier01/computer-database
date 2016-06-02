@@ -9,7 +9,8 @@
         <intercept-url pattern="/js/**" access="permitAll" />
         <intercept-url pattern="/css/**" access="permitAll" />
         <intercept-url pattern="/logout" access="permitAll" />
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/dashboard" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/computer/**" access="hasRole('ROLE_USER')"/>
         <http-basic />
         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>
     </http>
