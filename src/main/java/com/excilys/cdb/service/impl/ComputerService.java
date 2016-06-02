@@ -1,20 +1,19 @@
 package com.excilys.cdb.service.impl;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.PageParameters;
 import com.excilys.cdb.service.IComputerService;
 import com.excilys.cdb.validation.ValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @Transactional
@@ -60,7 +59,7 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public Computer createComputer(Computer computer) {
         this.LOGGER.debug("entering createComputer()");
         this.validator.validateComputer(computer);
