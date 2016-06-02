@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <artifactId>service</artifactId>
+
+    <parent>
+        <artifactId>cdb</artifactId>
+        <groupId>com.excilys</groupId>
+        <version>0.5.0-RELEASE</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <version>0.5.0</version>
+    <name>Service module</name>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.excilys</groupId>
+            <artifactId>core</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.excilys</groupId>
+            <artifactId>binding</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.excilys</groupId>
+            <artifactId>persistence</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+
+        <!-- spring transactions -->
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Spring scurity -->
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
