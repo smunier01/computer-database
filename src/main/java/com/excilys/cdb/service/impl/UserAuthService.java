@@ -27,6 +27,7 @@ public class UserAuthService implements UserDetailsService {
             System.out.println("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
+
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
@@ -37,7 +38,6 @@ public class UserAuthService implements UserDetailsService {
                 getGrantedAuthorities(user)
         );
     }
-
 
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
