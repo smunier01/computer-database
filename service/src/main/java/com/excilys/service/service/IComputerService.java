@@ -3,11 +3,9 @@ package com.excilys.service.service;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface IComputerService {
 
     /**

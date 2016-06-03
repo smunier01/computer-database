@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.excilys</groupId>
     <artifactId>cdb</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.0-RELEASE</version>
+    <version>${cdb.version}</version>
     <name>ComputerDatabase Webapp</name>
     <url>http://maven.apache.org</url>
 
@@ -18,10 +18,21 @@
     </modules>
 
     <properties>
+
+        <cdb.version>0.5.0-RELEASE</cdb.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
+
+        <!-- modules names -->
+
+        <webapp.name>Webapp Module</webapp.name>
+        <service.name>Services Module</service.name>
+        <persistence.name>Persistence Module</persistence.name>
+        <core.name>Core Module</core.name>
+        <binding.name>Binding Module</binding.name>
 
         <!-- dependencies versions -->
 
@@ -41,14 +52,15 @@
         <logback.spring>0.1.4</logback.spring>
         <slf4j.spring>1.7.0</slf4j.spring>
         <querydsl.version>4.1.1</querydsl.version>
+        <spring-security.version>4.1.0.RELEASE</spring-security.version>
 
         <!-- plugins versions -->
 
         <tomcat.plugin.version>2.2</tomcat.plugin.version>
         <compiler.plugin.version>3.5.1</compiler.plugin.version>
         <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+        <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
 
-        <spring-security.version>4.1.0.RELEASE</spring-security.version>
     </properties>
 
     <build>
@@ -73,7 +85,9 @@
     </build>
 
     <reporting>
+
         <!-- plugin to use mvn checkstyle:check -->
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -81,6 +95,7 @@
                 <version>${checkstyle.plugin.version}</version>
             </plugin>
         </plugins>
+
     </reporting>
 
 

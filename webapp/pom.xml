@@ -5,12 +5,13 @@
     <parent>
         <artifactId>cdb</artifactId>
         <groupId>com.excilys</groupId>
-        <version>0.5.0-RELEASE</version>
+        <version>${cdb.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>0.5.0</version>
-    <name>Webapp module</name>
+    <version>${cdb.version}</version>
+    <name>${webapp.name}</name>
+
     <packaging>war</packaging>
 
     <dependencies>
@@ -20,19 +21,19 @@
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>binding</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>core</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>service</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
         </dependency>
 
         <!-- spring -->
@@ -116,16 +117,47 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- javax.inject (apparently required for the @PersistenceContext) -->
+        <!-- dependency for selenium & junit -->
 
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- javax.inject (apparently required for the @PersistenceContext) -->
+
+        <!--<dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
-        </dependency>
+        </dependency>-->
 
         <!-- logging -->
 
+<!--
         <dependency>
             <groupId>org.logback-extensions</groupId>
             <artifactId>logback-ext-spring</artifactId>
@@ -138,6 +170,7 @@
             <version>${slf4j.spring}</version>
             <scope>runtime</scope>
         </dependency>
+-->
 
 
     </dependencies>

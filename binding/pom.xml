@@ -1,24 +1,38 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<artifactId>binding</artifactId>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<parent>
-		<artifactId>cdb</artifactId>
-		<groupId>com.excilys</groupId>
-		<version>0.5.0-RELEASE</version>
-	</parent>
+    <artifactId>binding</artifactId>
 
-	<modelVersion>4.0.0</modelVersion>
-	<version>0.5.0</version>
-	<name>Binding module</name>
-	<packaging>jar</packaging>
+    <parent>
+        <artifactId>cdb</artifactId>
+        <groupId>com.excilys</groupId>
+        <version>${cdb.version}</version>
+    </parent>
 
-	<dependencies>
-		<dependency>
-			<artifactId>core</artifactId>
-			<groupId>com.excilys</groupId>
-			<version>0.5.0</version>
-		</dependency>
-	</dependencies>
+    <modelVersion>4.0.0</modelVersion>
+    <version>${cdb.version}</version>
+    <name>${binding.name}</name>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!-- cdb dependencies -->
+
+        <dependency>
+            <artifactId>core</artifactId>
+            <groupId>com.excilys</groupId>
+            <version>${cdb.version}</version>
+        </dependency>
+
+        <!-- tests -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>

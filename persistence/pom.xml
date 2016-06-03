@@ -1,25 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <artifactId>persistence</artifactId>
 
     <parent>
         <artifactId>cdb</artifactId>
         <groupId>com.excilys</groupId>
-        <version>0.5.0-RELEASE</version>
+        <version>${cdb.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>0.5.0</version>
-    <name>Persistence module</name>
+    <version>${cdb.version}</version>
+    <name>${persistence.name}</name>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
+        <!-- cdb dependencies -->
+
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>core</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
         </dependency>
 
         <dependency>
@@ -27,6 +30,8 @@
             <artifactId>hibernate-java8</artifactId>
             <version>${hibernate}</version>
         </dependency>
+
+        <!-- hibernate -->
 
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -39,6 +44,23 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate}</version>
         </dependency>
+
+        <!-- tests -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- querydsl -->
 
         <dependency>
             <groupId>com.querydsl</groupId>
@@ -54,14 +76,6 @@
         </dependency>
 
         <!-- hikariCP for the connection pool -->
-
-    <!--    <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>${hikari}</version>
-        </dependency>-->
-
-        <!-- spring -->
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -83,16 +97,17 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- javax.inject (apparently required for the @PersistenceContext) -->
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
 
     </dependencies>
 

@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <artifactId>core</artifactId>
 
     <parent>
         <artifactId>cdb</artifactId>
         <groupId>com.excilys</groupId>
-        <version>0.5.0-RELEASE</version>
+        <version>${cdb.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>core</artifactId>
-    <version>0.5.0</version>
+    <name>${core.name}</name>
+    <version>${cdb.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
+
+        <!-- tests -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- logging -->
 
@@ -40,6 +50,21 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- forward spring logging to logback -->
+
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+            <version>${logback.spring}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.spring}</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- spring -->
 
         <dependency>
@@ -51,6 +76,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -122,7 +153,7 @@
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
-                <version>1.1.3</version>
+                <version>${apt-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>

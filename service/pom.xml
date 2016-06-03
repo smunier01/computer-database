@@ -1,36 +1,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <artifactId>service</artifactId>
 
     <parent>
         <artifactId>cdb</artifactId>
         <groupId>com.excilys</groupId>
-        <version>0.5.0-RELEASE</version>
+        <version>${cdb.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>0.5.0</version>
-    <name>Service module</name>
+    <version>${cdb.version}</version>
+    <name>${service.name}</name>
+
     <packaging>jar</packaging>
 
     <dependencies>
 
+        <!-- cdb dependencies -->
+
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>core</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>binding</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.5.0</version>
+            <version>${cdb.version}</version>
+        </dependency>
+
+        <!-- tests -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- spring transactions -->
