@@ -5,11 +5,10 @@
     <parent>
         <artifactId>cdb</artifactId>
         <groupId>com.excilys</groupId>
-        <version>${cdb.version}</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>${cdb.version}</version>
     <name>${webapp.name}</name>
 
     <packaging>war</packaging>
@@ -21,19 +20,19 @@
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>binding</artifactId>
-            <version>${cdb.version}</version>
+            <version>0.6.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>core</artifactId>
-            <version>${cdb.version}</version>
+            <version>0.6.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.excilys</groupId>
             <artifactId>service</artifactId>
-            <version>${cdb.version}</version>
+            <version>0.6.0-SNAPSHOT</version>
         </dependency>
 
         <!-- spring -->
@@ -41,43 +40,21 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <!-- spring web security (needed for DigestAuthenticationFilter) -->
@@ -85,13 +62,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
 
         <!-- servlets, jsp, jstl -->
@@ -99,22 +74,16 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.api.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
-            <version>${jsp.api.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
-            <version>${jstl.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- dependency for selenium & junit -->
@@ -122,61 +91,26 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-firefox-driver</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-server</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
-
-        <!-- javax.inject (apparently required for the @PersistenceContext) -->
-
-        <!--<dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
-        </dependency>-->
-
-        <!-- logging -->
-
-<!--
-        <dependency>
-            <groupId>org.logback-extensions</groupId>
-            <artifactId>logback-ext-spring</artifactId>
-            <version>${logback.spring}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.spring}</version>
-            <scope>runtime</scope>
-        </dependency>
--->
-
 
     </dependencies>
 
     <build>
-
         <plugins>
             <!-- plugin to use mvn tomcat:deploy -->
             <plugin>
@@ -189,7 +123,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
 
 </project>

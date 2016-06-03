@@ -31,10 +31,6 @@ public class ComputerDTO {
 
     private String companyName;
 
-    public ComputerDTO() {
-
-    }
-
     public ComputerDTO(final String id, final String name, final String introduced, final String discontinued,
             final String companyId, final String companyName) {
         this.id = id;
