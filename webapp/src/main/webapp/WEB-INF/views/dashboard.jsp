@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -87,10 +87,10 @@
     </section>
 
     <footer class="navbar-fixed-bottom">
-        <div class="container text-center">
+        <%--<div class="container text-center">
             <mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
                 psize="${page.params.size}" />
-        </div>
+        </div>--%>
     </footer>
 </body>
 <script type="text/javascript">

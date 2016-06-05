@@ -2,7 +2,6 @@ package com.excilys.core.dto;
 
 import com.excilys.core.model.Company;
 import com.excilys.core.model.Computer;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -11,14 +10,13 @@ import javax.validation.constraints.NotNull;
 /**
  * DTO for the Computer Class.
  *
- * @author excilys
+ * @author simon
  */
 public class ComputerDTO {
 
     private String id;
 
     @NotNull
-    @NotEmpty
     private String name;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -31,8 +29,12 @@ public class ComputerDTO {
 
     private String companyName;
 
+    public ComputerDTO() {
+
+    }
+
     public ComputerDTO(final String id, final String name, final String introduced, final String discontinued,
-            final String companyId, final String companyName) {
+                       final String companyId, final String companyName) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
@@ -44,8 +46,7 @@ public class ComputerDTO {
     /**
      * ComputerDTO constructor using a computer as a template.
      *
-     * @param computer
-     *            computer
+     * @param computer computer
      */
     public ComputerDTO(final Computer computer) {
         this.id = computer.getId().toString();
@@ -119,128 +120,71 @@ public class ComputerDTO {
      */
     public static class Builder {
 
-        private String id;
-        private String name;
-        private String introduced;
-        private String discontinued;
-        private String companyId;
-        private String companyName;
+        private ComputerDTO dto;
 
         public Builder() {
-
+            dto = new ComputerDTO();
         }
 
         public Builder id(final String id) {
-            this.id = id;
+            dto.id = id;
             return this;
         }
 
         public Builder name(final String name) {
-            this.name = name;
+            dto.name = name;
             return this;
         }
 
         public Builder introduced(final String introduced) {
-            this.introduced = introduced;
+            dto.introduced = introduced;
             return this;
         }
 
         public Builder discontinued(final String discontinued) {
-            this.discontinued = discontinued;
+            dto.discontinued = discontinued;
             return this;
         }
 
         public Builder companyId(final String companyId) {
-            this.companyId = companyId;
+            dto.companyId = companyId;
             return this;
         }
 
         public Builder companyName(final String companyName) {
-            this.companyName = companyName;
+            dto.companyName = companyName;
             return this;
         }
 
         public ComputerDTO build() {
-            return new ComputerDTO(this.id, this.name, this.introduced, this.discontinued, this.companyId,
-                    this.companyName);
+            return dto;
         }
     }
 
     @Override
-    public String toString() {
-        return "ComputerDTO [id=" + this.id + ", name=" + this.name + ", introduced=" + this.introduced
-                + ", discontinued=" + this.discontinued + ", companyId=" + this.companyId + ", companyName="
-                + this.companyName + "]";
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ComputerDTO that = (ComputerDTO) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (introduced != null ? !introduced.equals(that.introduced) : that.introduced != null) return false;
+        if (discontinued != null ? !discontinued.equals(that.discontinued) : that.discontinued != null) return false;
+        if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
+        return companyName != null ? companyName.equals(that.companyName) : that.companyName == null;
+
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.companyId == null) ? 0 : this.companyId.hashCode());
-        result = prime * result + ((this.companyName == null) ? 0 : this.companyName.hashCode());
-        result = prime * result + ((this.discontinued == null) ? 0 : this.discontinued.hashCode());
-        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-        result = prime * result + ((this.introduced == null) ? 0 : this.introduced.hashCode());
-        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (introduced != null ? introduced.hashCode() : 0);
+        result = 31 * result + (discontinued != null ? discontinued.hashCode() : 0);
+        result = 31 * result + (companyId != null ? companyId.hashCode() : 0);
+        result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
         return result;
     }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        final ComputerDTO other = (ComputerDTO) obj;
-        if (this.companyId == null) {
-            if (other.companyId != null) {
-                return false;
-            }
-        } else if (!this.companyId.equals(other.companyId)) {
-            return false;
-        }
-        if (this.companyName == null) {
-            if (other.companyName != null) {
-                return false;
-            }
-        } else if (!this.companyName.equals(other.companyName)) {
-            return false;
-        }
-        if (this.discontinued == null) {
-            if (other.discontinued != null) {
-                return false;
-            }
-        } else if (!this.discontinued.equals(other.discontinued)) {
-            return false;
-        }
-        if (this.id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!this.id.equals(other.id)) {
-            return false;
-        }
-        if (this.introduced == null) {
-            if (other.introduced != null) {
-                return false;
-            }
-        } else if (!this.introduced.equals(other.introduced)) {
-            return false;
-        }
-        if (this.name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
-    }
-
 }

@@ -67,12 +67,11 @@ public class ComputerController {
      */
     @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
     public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors) {
-
-        this.paramsValidator.validate(param, errors);
+        paramsValidator.validate(param, errors);
 
         if (!errors.hasErrors()) {
-            PageParameters p = this.pageParamMapper.fromDTO(param);
-            Page<ComputerDTO> computerPage = this.computerMapper.map(this.computerService.getComputersPage(p));
+            PageParameters p = pageParamMapper.fromDTO(param);
+            Page<ComputerDTO> computerPage = computerMapper.map(computerService.getComputersPage(p));
             model.addAttribute("page", computerPage);
         } else {
             throw new ValidatorException(errors);

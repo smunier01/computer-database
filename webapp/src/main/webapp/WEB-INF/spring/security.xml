@@ -4,18 +4,20 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <!--<debug />-->
+
+    <!--<http pattern="/css/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/fonts/**" security="none"/>-->
+
     <http create-session="never">
-        <intercept-url pattern="/fonts/**" access="permitAll" />
-        <intercept-url pattern="/js/**" access="permitAll" />
-        <intercept-url pattern="/css/**" access="permitAll" />
-        <intercept-url pattern="/logout" access="permitAll" />
         <intercept-url pattern="/dashboard" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/computer/**" access="hasRole('ROLE_USER')"/>
         <http-basic />
         <!--<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>-->
     </http>
 
-    <authentication-manager erase-credentials="true">
+    <authentication-manager>
         <authentication-provider user-service-ref="customUserDetailsService" />
     </authentication-manager>
 

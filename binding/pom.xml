@@ -6,7 +6,7 @@
     <parent>
         <artifactId>cdb</artifactId>
         <groupId>com.excilys</groupId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.6.0-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -20,7 +20,7 @@
         <dependency>
             <artifactId>core</artifactId>
             <groupId>com.excilys</groupId>
-            <version>0.6.0-SNAPSHOT</version>
+            <version>0.6.0-RELEASE</version>
         </dependency>
 
         <!-- tests -->

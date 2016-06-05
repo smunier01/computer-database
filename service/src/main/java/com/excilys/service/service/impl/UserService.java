@@ -63,6 +63,12 @@ public class UserService implements IUserService {
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 // transactionnal method that put the default users in the database.
                 defaultValues();
+
+                try {
+                    userDAO.buildIndex();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

@@ -20,9 +20,9 @@ public class ValidatorUtil {
 
     private final Pattern dateRegex = Pattern.compile("((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])");
 
-    public static LocalDate minTimestamp = LocalDate.parse("1970-01-01");
+    private static LocalDate minTimestamp = LocalDate.parse("1970-01-01");
 
-    public static LocalDate maxTimestamp = LocalDate.parse("2037-12-31");
+    private static LocalDate maxTimestamp = LocalDate.parse("2037-12-31");
 
     /**
      * Use a regex to check if an ID is valid.

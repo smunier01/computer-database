@@ -1,5 +1,7 @@
 package com.excilys.core.model;
 
+import org.hibernate.search.annotations.Field;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ public class Company {
     @GeneratedValue
     private Long id;
 
+    @Field
     private String name;
 
     /**
@@ -57,55 +60,30 @@ public class Company {
         this.name = name;
     }
 
-    /**
-     *
-     */
     @Override
     public String toString() {
-        return this.id + " " + this.name;
+        return "Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
-    /**
-     * auto-generated hashCode.
-     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Company company = (Company) o;
+
+        if (id != null ? !id.equals(company.id) : company.id != null) return false;
+        return name != null ? name.equals(company.name) : company.name == null;
+
+    }
+
     @Override
     public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = (prime * result) + ((this.id == null) ? 0 : this.id.hashCode());
-        result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
-    }
-
-    /**
-     * auto-generated equals.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        Company other = (Company) obj;
-        if (this.id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!this.id.equals(other.id)) {
-            return false;
-        }
-        if (this.name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
     }
 }

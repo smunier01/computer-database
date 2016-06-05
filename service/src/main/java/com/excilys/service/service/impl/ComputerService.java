@@ -63,6 +63,9 @@ public class ComputerService implements IComputerService {
     public Computer createComputer(Computer computer) {
         this.LOGGER.debug("entering createComputer()");
         this.validator.validateComputer(computer);
+
+        System.out.println(computer.getId());
+
         Computer c = this.computerDAO.create(computer);
 
         if (this.count != null) {

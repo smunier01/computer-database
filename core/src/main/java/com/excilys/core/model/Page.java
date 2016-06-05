@@ -46,7 +46,7 @@ public class Page<T> {
         Page<T> page;
 
         public Builder() {
-            this.page = new Page<T>();
+            this.page = new Page();
         }
 
         public Builder<T> list(List<T> list) {
@@ -67,5 +67,26 @@ public class Page<T> {
         public Page<T> build() {
             return this.page;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Page<?> page = (Page<?>) o;
+
+        if (list != null ? !list.equals(page.list) : page.list != null) return false;
+        if (totalCount != null ? !totalCount.equals(page.totalCount) : page.totalCount != null) return false;
+        return params != null ? params.equals(page.params) : page.params == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = list != null ? list.hashCode() : 0;
+        result = 31 * result + (totalCount != null ? totalCount.hashCode() : 0);
+        result = 31 * result + (params != null ? params.hashCode() : 0);
+        return result;
     }
 }

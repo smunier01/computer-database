@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ public class CompanyDAO implements DAO<Company> {
 
     private QCompany qcompany = QCompany.company;
 
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
+    @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.em = entityManager;
         this.jpaQuery = new JPAQueryFactory(entityManager);

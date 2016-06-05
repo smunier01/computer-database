@@ -1,9 +1,15 @@
 package com.excilys.core.model;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.SortableField;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Indexed
 @Table(name = "computer")
 public class Computer {
 
@@ -11,16 +17,21 @@ public class Computer {
     @GeneratedValue
     private Long id;
 
+    @Field
+    @SortableField
     private String name;
 
-    @Column(nullable = true)
+    @Field
+    @SortableField
     private LocalDate introduced;
 
-    @Column(nullable = true)
+    @Field
+    @SortableField
     private LocalDate discontinued;
 
+    @IndexedEmbedded
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(nullable = true, name = "company_id")
+    @JoinColumn(name = "company_id")
     private Company company;
 
     /**
@@ -37,16 +48,11 @@ public class Computer {
     /**
      * constructor for a computer.
      *
-     * @param id
-     *            id
-     * @param name
-     *            name
-     * @param introduced
-     *            introduced date
-     * @param discontinued
-     *            discontinued date
-     * @param company
-     *            company (with id = 0 if no company)
+     * @param id           id
+     * @param name         name
+     * @param introduced   introduced date
+     * @param discontinued discontinued date
+     * @param company      company (with id = 0 if no company)
      */
     public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
         this.id = id;
@@ -118,8 +124,7 @@ public class Computer {
         /**
          * id setter.
          *
-         * @param id
-         *            id of the computer
+         * @param id id of the computer
          * @return instance of the builder
          */
         public ComputerBuilder id(Long id) {
@@ -130,8 +135,7 @@ public class Computer {
         /**
          * name setter.
          *
-         * @param name
-         *            name of the computer
+         * @param name name of the computer
          * @return instance of the builder
          */
         public ComputerBuilder name(String name) {
@@ -142,8 +146,7 @@ public class Computer {
         /**
          * introduced date setter.
          *
-         * @param introduced
-         *            introduced date of the computer
+         * @param introduced introduced date of the computer
          * @return instance of the builder
          */
         public ComputerBuilder introduced(LocalDate introduced) {
@@ -154,8 +157,7 @@ public class Computer {
         /**
          * discontinued date setter.
          *
-         * @param discontinued
-         *            discontinued date of the computer
+         * @param discontinued discontinued date of the computer
          * @return instance of the builder
          */
         public ComputerBuilder discontinued(LocalDate discontinued) {
@@ -166,8 +168,7 @@ public class Computer {
         /**
          * company setter.
          *
-         * @param company
-         *            company of the computer
+         * @param company company of the computer
          * @return instance of the builder
          */
         public ComputerBuilder company(Company company) {
@@ -194,72 +195,29 @@ public class Computer {
         return this.id + " " + this.name + " " + intro + " " + discon + " " + (this.company != null ? this.company.toString() : "null");
     }
 
-    /**
-     * auto-generated hashCode.
-     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Computer computer = (Computer) o;
+
+        if (id != null ? !id.equals(computer.id) : computer.id != null) return false;
+        if (name != null ? !name.equals(computer.name) : computer.name != null) return false;
+        if (introduced != null ? !introduced.equals(computer.introduced) : computer.introduced != null) return false;
+        if (discontinued != null ? !discontinued.equals(computer.discontinued) : computer.discontinued != null)
+            return false;
+        return company != null ? company.equals(computer.company) : computer.company == null;
+
+    }
+
     @Override
     public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = (prime * result) + ((this.company == null) ? 0 : this.company.hashCode());
-        result = (prime * result) + ((this.discontinued == null) ? 0 : this.discontinued.hashCode());
-        result = (prime * result) + ((this.id == null) ? 0 : this.id.hashCode());
-        result = (prime * result) + ((this.introduced == null) ? 0 : this.introduced.hashCode());
-        result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (introduced != null ? introduced.hashCode() : 0);
+        result = 31 * result + (discontinued != null ? discontinued.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
         return result;
     }
-
-    /**
-     * auto-generated equals.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        Computer other = (Computer) obj;
-        if (this.company == null) {
-            if (other.company != null) {
-                return false;
-            }
-        } else if (!this.company.equals(other.company)) {
-            return false;
-        }
-        if (this.discontinued == null) {
-            if (other.discontinued != null) {
-                return false;
-            }
-        } else if (!this.discontinued.equals(other.discontinued)) {
-            return false;
-        }
-        if (this.id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!this.id.equals(other.id)) {
-            return false;
-        }
-        if (this.introduced == null) {
-            if (other.introduced != null) {
-                return false;
-            }
-        } else if (!this.introduced.equals(other.introduced)) {
-            return false;
-        }
-        if (this.name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
-    }
-
 }

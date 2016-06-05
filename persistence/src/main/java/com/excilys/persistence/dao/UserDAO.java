@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 
 @Repository
 public class UserDAO {
@@ -18,10 +17,17 @@ public class UserDAO {
 
     private QUser quser = QUser.user;
 
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
+    @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.em = entityManager;
         this.jpaQuery = new JPAQueryFactory(entityManager);
+    }
+
+    public void buildIndex() throws InterruptedException {
+        // build lucene index
+
+        //FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+        //fullTextEntityManager.createIndexer().startAndWait();
     }
 
     public User findByUserName(String username) {

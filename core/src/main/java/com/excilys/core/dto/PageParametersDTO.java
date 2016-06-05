@@ -59,56 +59,27 @@ public class PageParametersDTO {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.direction == null) ? 0 : this.direction.hashCode());
-        result = prime * result + ((this.order == null) ? 0 : this.order.hashCode());
-        result = prime * result + (this.pageNumber ^ (this.pageNumber >>> 32));
-        result = prime * result + ((this.search == null) ? 0 : this.search.hashCode());
-        result = prime * result + (this.size ^ (this.size >>> 32));
+        int result = size;
+        result = 31 * result + pageNumber;
+        result = 31 * result + (search != null ? search.hashCode() : 0);
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (direction != null ? direction.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        PageParametersDTO other = (PageParametersDTO) obj;
-        if (this.direction == null) {
-            if (other.direction != null) {
-                return false;
-            }
-        } else if (!this.direction.equals(other.direction)) {
-            return false;
-        }
-        if (this.order == null) {
-            if (other.order != null) {
-                return false;
-            }
-        } else if (!this.order.equals(other.order)) {
-            return false;
-        }
-        if (this.pageNumber != other.pageNumber) {
-            return false;
-        }
-        if (this.search == null) {
-            if (other.search != null) {
-                return false;
-            }
-        } else if (!this.search.equals(other.search)) {
-            return false;
-        }
-        if (this.size != other.size) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PageParametersDTO that = (PageParametersDTO) o;
+
+        if (size != that.size) return false;
+        if (pageNumber != that.pageNumber) return false;
+        if (search != null ? !search.equals(that.search) : that.search != null) return false;
+        if (order != null ? !order.equals(that.order) : that.order != null) return false;
+        return direction != null ? direction.equals(that.direction) : that.direction == null;
+
     }
 
 }

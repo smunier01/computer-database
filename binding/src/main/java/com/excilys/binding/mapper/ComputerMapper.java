@@ -5,11 +5,8 @@ import com.excilys.core.model.Company;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.Computer.ComputerBuilder;
 import com.excilys.core.model.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,14 +20,10 @@ import java.util.stream.Collectors;
 @Component
 public class ComputerMapper {
 
-    @Autowired
-    private LocalDateMapper localDateMapper;
-
     /**
      * Creates a ComputerDTO object from a Computer.
      *
-     * @param computer
-     *            computer
+     * @param computer computer
      * @return ComputerDTo object
      */
     public ComputerDTO toDTO(Computer computer) {
@@ -40,8 +33,7 @@ public class ComputerMapper {
     /**
      * Creates a Computer object from a ComputerDTO object.
      *
-     * @param computer
-     *            ComputerDTO instance to convert.
+     * @param computer ComputerDTO instance to convert.
      * @return instance of a Computer
      */
     public Computer fromDTO(ComputerDTO computer) {
@@ -70,62 +62,21 @@ public class ComputerMapper {
     }
 
     /**
-     * Creates a Computer object from a jdbc ResultSet.
-     *
-     * @param rs
-     *            ResultSet containing the informations about the computer
-     * @return instance of the computer created
-     * @throws SQLException
-     *             exception
-     * @throws MapperException
-     *             exception
-     */
-    public Computer map(ResultSet rs) throws SQLException, MapperException {
-
-        Long id = rs.getLong(1);
-        String name = rs.getString(2);
-
-        LocalDate introduced = this.localDateMapper.fromTimestamp(rs.getTimestamp(3));
-        LocalDate discontinued = this.localDateMapper.fromTimestamp(rs.getTimestamp(4));
-
-        Long companyId = rs.getLong(5);
-
-        Company company = null;
-
-        if (companyId > 0) {
-
-            String companyName = rs.getString(6);
-
-            if ((companyName == null) || "".equals(companyName)) {
-                // there should never be a null or empty name when the id is not
-                // null.
-                throw new MapperException();
-            } else {
-                company = new Company(companyId, companyName);
-            }
-
-        }
-
-        return new Computer.ComputerBuilder()
-                .id(id)
-                .name(name)
-                .introduced(introduced)
-                .discontinued(discontinued)
-                .company(company)
-                .build();
-    }
-
-    /**
      * convert a list of Computer to a list of ComputerDTO.
      *
-     * @param companies
-     *            list of Computer
+     * @param computers list of Computer
      * @return list of ComputerDTO
      */
     public List<ComputerDTO> map(List<Computer> computers) {
         return computers.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    /**
+     * convert a page of Computer to a page of ComputerDTO.
+     *
+     * @param page page to convert
+     * @return page result
+     */
     public Page<ComputerDTO> map(Page<Computer> page) {
         return new Page.Builder<ComputerDTO>().list(this.map(page.getList())).params(page.getParams())
                 .totalCount(page.getTotalCount()).build();

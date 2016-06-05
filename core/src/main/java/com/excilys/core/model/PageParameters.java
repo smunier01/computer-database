@@ -64,48 +64,6 @@ public class PageParameters {
                 + ", order=" + this.order + "]";
     }
 
-    @Override
-    public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = (prime * result) + ((this.order == null) ? 0 : this.order.hashCode());
-        result = (prime * result) + (int) (this.pageNumber ^ (this.pageNumber >>> 32));
-        result = (prime * result) + ((this.search == null) ? 0 : this.search.hashCode());
-        result = (prime * result) + (int) (this.size ^ (this.size >>> 32));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        PageParameters other = (PageParameters) obj;
-        if (this.order != other.order) {
-            return false;
-        }
-        if (this.pageNumber != other.pageNumber) {
-            return false;
-        }
-        if (this.search == null) {
-            if (other.search != null) {
-                return false;
-            }
-        } else if (!this.search.equals(other.search)) {
-            return false;
-        }
-        if (this.size != other.size) {
-            return false;
-        }
-        return true;
-    }
-
     public String getSearch() {
         return this.search;
     }
@@ -200,4 +158,28 @@ public class PageParameters {
         return this.direction;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PageParameters that = (PageParameters) o;
+
+        if (size != that.size) return false;
+        if (pageNumber != that.pageNumber) return false;
+        if (search != null ? !search.equals(that.search) : that.search != null) return false;
+        if (order != that.order) return false;
+        return direction == that.direction;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (size ^ (size >>> 32));
+        result = 31 * result + (int) (pageNumber ^ (pageNumber >>> 32));
+        result = 31 * result + (search != null ? search.hashCode() : 0);
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (direction != null ? direction.hashCode() : 0);
+        return result;
+    }
 }

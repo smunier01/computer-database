@@ -181,7 +181,6 @@ public class ComputerServiceTest {
         Assert.assertEquals(firstCount, thirdCount);
     }
 
-    @Ignore
     @Test
     public void testCountDeleteThreadSafe() throws ServiceException {
 
