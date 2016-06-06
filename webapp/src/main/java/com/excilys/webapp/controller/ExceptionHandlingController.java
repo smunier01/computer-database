@@ -1,4 +1,4 @@
-package com.excilys.webapp.servlets;
+package com.excilys.webapp.controller;
 
 import com.excilys.binding.validation.ValidatorException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

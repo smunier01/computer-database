@@ -78,7 +78,7 @@
             <artifactId>spring-security-config</artifactId>
         </dependency>
 
-        <!-- servlets, jsp, jstl -->
+        <!-- controller, jsp, jstl -->
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -132,6 +132,7 @@
                     <path>/cdb</path>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
