@@ -46,7 +46,6 @@ public class UserService implements IUserService {
         this.create(new User("user", "user", "USER"));
     }
 
-
     /**
      * PostConstruct method to init the user roles.
      *
@@ -63,12 +62,6 @@ public class UserService implements IUserService {
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 // transactionnal method that put the default users in the database.
                 defaultValues();
-
-                try {
-                    userDAO.buildIndex();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }

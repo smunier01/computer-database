@@ -23,13 +23,6 @@ public class UserDAO {
         this.jpaQuery = new JPAQueryFactory(entityManager);
     }
 
-    public void buildIndex() throws InterruptedException {
-        // build lucene index
-
-        //FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-        //fullTextEntityManager.createIndexer().startAndWait();
-    }
-
     public User findByUserName(String username) {
         return jpaQuery.selectFrom(quser).where(quser.username.eq(username)).fetchFirst();
     }

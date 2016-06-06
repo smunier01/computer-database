@@ -10,8 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,6 +25,9 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ComputerService implements IComputerService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
+
+    @Autowired
+    protected PlatformTransactionManager txManager;
 
     @Autowired
     private ComputerDAO computerDAO;
@@ -118,7 +126,7 @@ public class ComputerService implements IComputerService {
         this.LOGGER.debug("entering countComputers(page)");
         this.validator.validatePageParameters(page);
 
-        long result = 0;
+        long result;
         if (page.getSearch().isEmpty()) {
             if (this.count == null) {
                 this.count = new AtomicLong();
@@ -132,6 +140,32 @@ public class ComputerService implements IComputerService {
         }
 
         return result;
+    }
+
+    /**
+     * PostConstruct method to create the hibernate search index if needed.
+     *
+     * TransactionCallbackWithoutResult is necessary in order to make sure that the context is fully instantiated
+     *
+     * @throws Exception
+     */
+    @PostConstruct
+    public void initIt() throws Exception {
+
+        TransactionTemplate tmpl = new TransactionTemplate(txManager);
+
+        tmpl.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                /*try {
+                    computerDAO.buildIndex();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+            }
+        });
     }
 
 }

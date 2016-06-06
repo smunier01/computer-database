@@ -14,11 +14,13 @@ import org.apache.lucene.search.SortField;
 import org.hibernate.search.SearchFactory;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
+import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -142,7 +144,7 @@ public class ComputerDAO implements DAO<Computer> {
     }
 
     /**
-     * Use hibernate-search with lucene backend to do the search.
+     * Use hibernate-search with lucene back-end to do the search.
      */
     @SuppressWarnings("unchecked")
     private List<Computer> findAllLucene(PageParameters page) {
@@ -164,6 +166,11 @@ public class ComputerDAO implements DAO<Computer> {
         fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING)));
 
         return fullTextQuery.getResultList();
+    }
+
+    public void buildIndex() throws InterruptedException, IOException {
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+        fullTextEntityManager.createIndexer().startAndWait();
     }
 
     @Override
