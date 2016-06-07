@@ -46,17 +46,17 @@ public class ComputerRestController {
 
     @RequestMapping(value = "/computer/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ComputerDTO> getComputer(@PathVariable("id") long id) {
-        Computer computer = computerService.getComputer(id);
+        ComputerDTO computer = computerMapper.toDTO(computerService.getComputer(id));
         // TODO: I don't remember if this throw an exception or returns null
         if (computer == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(computer, HttpStatus.OK);
         }
     }
 
     @RequestMapping(value = "/computer/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@Valid @RequestBody ComputerDTO computer, UriComponentsBuilder ucBuilder, BindingResult errors) {
+    public ResponseEntity<Void> createComputer(@Valid @RequestBody ComputerDTO computer, UriComponentsBuilder ucBuilder, BindingResult errors) {
 
         // TODO: If I remember correctly, a special code (CONFLICT ?) should be returned if the element already exist
 

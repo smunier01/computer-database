@@ -187,4 +187,16 @@ public class ComputerDTO {
         result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ComputerDTO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", introduced='" + introduced + '\'' +
+                ", discontinued='" + discontinued + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", companyName='" + companyName + '\'' +
+                '}';
+    }
 }

@@ -5,6 +5,7 @@ import com.excilys.core.model.Computer;
 import com.excilys.core.model.PageParameters;
 import com.excilys.persistence.dao.DAOException;
 import com.excilys.service.service.ICompanyService;
+import com.excilys.service.service.IComputerRestService;
 import com.excilys.service.service.IComputerService;
 import com.excilys.service.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class Menu {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private Scanner sc = null;
+
+    @Autowired
+    private IComputerRestService computerRestService;
 
     @Autowired
     private IComputerService computerService;
@@ -77,7 +81,7 @@ public class Menu {
 
         this.printMenu();
 
-        int choice = 0;
+        int choice;
 
         while ((choice = Math.toIntExact(this.promptForLong(":"))) < 0) {
             System.out.println("invalid choice");
@@ -99,7 +103,7 @@ public class Menu {
         Long computerId, companyId;
         LocalDate introduced, discontinued;
         String name;
-        Computer computer = null;
+        Computer computer;
         PageParameters page;
 
         boolean stop = false;
@@ -114,7 +118,7 @@ public class Menu {
                 while (this.listComputers(page)) {
                     System.out.println("quit (0), next(1), previous(2)");
 
-                    Long a = null;
+                    Long a;
 
                     while ((a = this.promptForLong(":")) < 0) {
                         System.out.println("invalid choice");
@@ -140,7 +144,7 @@ public class Menu {
                 while (this.listCompanies(page)) {
                     System.out.println("quit (0), next(1), previous(2)");
 
-                    Long a = null;
+                    Long a;
 
                     while ((a = this.promptForLong(":")) < 0) {
                         System.out.println("invalid choice");
@@ -229,7 +233,7 @@ public class Menu {
                         + " ) : ";
                 final String tmpPromptDisco = "new introduced date (current : " + computer.getDiscontinued().toString()
                         + " ) : ";
-                final String tmpPromptCompaId = "new company id (current : " + computer.getCompany().getId() + " ) : ";
+                final String tmpPromptCompanyId = "new company id (current : " + computer.getCompany().getId() + " ) : ";
 
                 while ((name = this.promptForString(tmpPromptName)) == "") {
                     System.out.println("invalid name");
@@ -243,7 +247,7 @@ public class Menu {
                     System.out.println("invalid date");
                 }
 
-                while ((companyId = this.promptForLong(tmpPromptCompaId)) <= -1) {
+                while ((companyId = this.promptForLong(tmpPromptCompanyId)) <= -1) {
                     System.out.println("invalid id");
                 }
 
@@ -372,11 +376,15 @@ public class Menu {
      *            page parameters
      * @return false if offset reached the end of the data
      */
-    public boolean listComputers(final PageParameters page) {
-        List<Computer> computers = null;
+    public boolean listComputers(PageParameters page) {
+
+        computerRestService.getList(1);
+
+        /*List<Computer> computers;
 
         try {
-            computers = this.computerService.getComputers(page);
+
+            //computers = this.computerService.getComputers(page);
         } catch (final ServiceException e) {
             System.out.println("Error retrieving list of computer.");
             return false;
@@ -386,7 +394,9 @@ public class Menu {
             System.out.println(c.toString());
         }
 
-        return (computers.size() == page.getSize());
+        return (computers.size() == page.getSize());*/
+
+        return false;
     }
 
     /**
