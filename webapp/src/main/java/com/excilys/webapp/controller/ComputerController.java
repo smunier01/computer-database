@@ -1,9 +1,9 @@
 package com.excilys.webapp.controller;
 
 
-import com.excilys.binding.mapper.CompanyMapper;
-import com.excilys.binding.mapper.ComputerMapper;
-import com.excilys.binding.mapper.PageParametersMapper;
+import com.excilys.binding.mapper.impl.CompanyMapper;
+import com.excilys.binding.mapper.impl.ComputerMapper;
+import com.excilys.binding.mapper.impl.PageParametersMapper;
 import com.excilys.binding.validation.ComputerValidator;
 import com.excilys.binding.validation.PageParametersValidator;
 import com.excilys.binding.validation.ValidatorException;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("${path.base}")
 public class ComputerController {
 
     @Autowired
@@ -65,7 +65,7 @@ public class ComputerController {
      * @param param PageParameters object containing the url parameters.
      * @return servlet name
      */
-    @RequestMapping(path = "${dashboard}", method = RequestMethod.GET)
+    @RequestMapping(path = "${path.dashboard}", method = RequestMethod.GET)
     public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors) {
         paramsValidator.validate(param, errors);
 
@@ -87,7 +87,7 @@ public class ComputerController {
      * @param id    id of the computer to edit
      * @return servlet name
      */
-    @RequestMapping(path = "${computer.edit}", method = RequestMethod.GET)
+    @RequestMapping(path = "${path.computer.edit}", method = RequestMethod.GET)
     public String getEditComputer(ModelMap model, @RequestParam long id) {
 
         com.excilys.core.model.Computer computer = this.computerService.getComputer(id);
@@ -98,7 +98,7 @@ public class ComputerController {
             model.addAttribute("computer", this.computerMapper.toDTO(computer));
         }
 
-        List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
+        List<CompanyDTO> companies = this.companyMapper.toDTO(this.companyService.getCompanies());
         model.addAttribute("companies", companies);
 
         return "editComputer";
@@ -112,19 +112,19 @@ public class ComputerController {
      * @param errors   BindingResult containing validation errors
      * @return servlet name
      */
-    @RequestMapping(path = "${computer.edit}", method = RequestMethod.POST)
+    @RequestMapping(path = "${path.computer.edit}", method = RequestMethod.POST)
     public String postEditComputer(ModelMap model, @Valid @ModelAttribute ComputerDTO computer, BindingResult errors) {
 
         this.computerValidator.validate(computer, errors);
 
         if (!errors.hasErrors()) {
             this.computerService.updateComputer(this.computerMapper.fromDTO(computer));
-            return "redirect:${dashboard}";
+            return "redirect:${path.dashboard}";
         } else {
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
 
-            List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
+            List<CompanyDTO> companies = this.companyMapper.toDTO(this.companyService.getCompanies());
             model.addAttribute("companies", companies);
 
             return "editComputer";
@@ -137,9 +137,9 @@ public class ComputerController {
      * @param model Spring ModelMap
      * @return servlet name
      */
-    @RequestMapping(path = "${computer.add}", method = RequestMethod.GET)
+    @RequestMapping(path = "${path.computer.add}", method = RequestMethod.GET)
     public String getAddComputer(ModelMap model) {
-        List<CompanyDTO> companies = this.companyMapper.map(this.companyService.getCompanies());
+        List<CompanyDTO> companies = this.companyMapper.toDTO(this.companyService.getCompanies());
         model.addAttribute("companies", companies);
         return "addComputer";
     }
@@ -152,14 +152,14 @@ public class ComputerController {
      * @param errors   BindingResult containing validation errors
      * @return servlet name
      */
-    @RequestMapping(path = "${computer.add}", method = RequestMethod.POST)
+    @RequestMapping(path = "${path.computer.add}", method = RequestMethod.POST)
     public String postAddComputer(ModelMap model, @Valid @ModelAttribute ComputerDTO computer, BindingResult errors) {
 
         this.computerValidator.validate(computer, errors);
 
         if (!errors.hasErrors()) {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
-            return "redirect:${dashboard}";
+            return "redirect:${path.dashboard}";
         } else {
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
@@ -173,7 +173,7 @@ public class ComputerController {
      * @param selection ids of computers to delete
      * @return servlet name
      */
-    @RequestMapping(path = "${computer.delete}", method = RequestMethod.POST)
+    @RequestMapping(path = "${path.computer.delete}", method = RequestMethod.POST)
     public String postDeleteComputer(@RequestParam String selection) {
 
         this.computerService.deleteComputers(
@@ -182,6 +182,6 @@ public class ComputerController {
                         .map(Long::parseLong)
                         .collect(Collectors.toList()));
 
-        return "redirect:${dashboard}";
+        return "redirect:${path.dashboard}";
     }
 }

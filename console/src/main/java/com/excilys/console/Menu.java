@@ -94,11 +94,10 @@ public class Menu {
     /**
      * route to the right action based on the option picked.
      *
-     * @param choice
-     *            id of the option
+     * @param choice id of the option
      * @return false if the user wants to quit
      */
-    public boolean pick(final int choice) {
+    private boolean pick(final int choice) {
 
         Long computerId, companyId;
         LocalDate introduced, discontinued;
@@ -197,14 +196,14 @@ public class Menu {
                     System.out.println("invalid id");
                 }
 
-                // create the new computer
-                try {
-                    final Computer c = new Computer.ComputerBuilder().name(name).introduced(introduced)
-                            .discontinued(discontinued).company(new Company(companyId, "")).build();
-                    this.computerService.createComputer(c);
-                } catch (final ServiceException e) {
-                    System.out.println("Could not create Computer :(");
-                }
+                computer = new Computer.ComputerBuilder()
+                        .name(name)
+                        .introduced(introduced)
+                        .discontinued(discontinued)
+                        .company(new Company(companyId, ""))
+                        .build();
+
+                this.computerRestService.createComputer(computer);
 
                 break;
 
@@ -251,13 +250,15 @@ public class Menu {
                     System.out.println("invalid id");
                 }
 
-                try {
-                    final Computer c = new Computer.ComputerBuilder().id(computerId).name(name).introduced(introduced)
-                            .discontinued(discontinued).company(new Company(companyId, "")).build();
-                    this.computerService.updateComputer(c);
-                } catch (final ServiceException e) {
-                    System.out.println("Error updating computer.");
-                }
+                computer = new Computer.ComputerBuilder()
+                        .id(computerId)
+                        .name(name)
+                        .introduced(introduced)
+                        .discontinued(discontinued)
+                        .company(new Company(companyId, ""))
+                        .build();
+
+                this.computerRestService.updateComputer(computer);
 
                 break;
 
@@ -268,11 +269,7 @@ public class Menu {
                     System.out.println("invalid id");
                 }
 
-                try {
-                    this.computerService.deleteComputer(computerId);
-                } catch (final ServiceException e) {
-                    System.out.println("Error updating computer.");
-                }
+                this.computerRestService.deleteComputer(computerId);
 
                 break;
 
@@ -300,8 +297,7 @@ public class Menu {
     /**
      * use the scanner to prompt for a Long.
      *
-     * @param s
-     *            String that will be use as an indication for the prompt
+     * @param s String that will be use as an indication for the prompt
      * @return Long returned by the scanner
      */
     private Long promptForLong(final String s) {
@@ -322,8 +318,7 @@ public class Menu {
     /**
      * use the scanner to prompt for a String.
      *
-     * @param s
-     *            String that will be use as an indication for the prompt
+     * @param s String that will be use as an indication for the prompt
      * @return string returned by the scanner
      */
     private String promptForString(final String s) {
@@ -344,8 +339,7 @@ public class Menu {
     /**
      * use the scanner to prompt for a Date.
      *
-     * @param s
-     *            String that will be use as an indication for the prompt
+     * @param s String that will be use as an indication for the prompt
      * @return null if the date is not valid, LocalDate.MIN if empty date
      */
     private LocalDate promptForDate(final String s) {
@@ -354,7 +348,7 @@ public class Menu {
 
         final String dateString = this.sc.next();
 
-        LocalDate date = null;
+        LocalDate date;
 
         if ("".equals(dateString)) {
             date = LocalDate.MIN;
@@ -372,41 +366,26 @@ public class Menu {
     /**
      * display the list of computers.
      *
-     * @param page
-     *            page parameters
+     * @param page page parameters
      * @return false if offset reached the end of the data
      */
-    public boolean listComputers(PageParameters page) {
-
-        computerRestService.getList(1);
-
-        /*List<Computer> computers;
-
-        try {
-
-            //computers = this.computerService.getComputers(page);
-        } catch (final ServiceException e) {
-            System.out.println("Error retrieving list of computer.");
-            return false;
-        }
+    private boolean listComputers(PageParameters page) {
+        List<Computer> computers = computerRestService.getList(page);
 
         for (final Computer c : computers) {
             System.out.println(c.toString());
         }
 
-        return (computers.size() == page.getSize());*/
-
-        return false;
+        return (computers.size() == page.getSize());
     }
 
     /**
      * display the list of companies.
      *
-     * @param page
-     *            page parameters
+     * @param page page parameters
      * @return false if offset reached the end of the data
      */
-    public boolean listCompanies(final PageParameters page) {
+    private boolean listCompanies(final PageParameters page) {
         List<Company> companies = null;
 
         try {
@@ -426,16 +405,11 @@ public class Menu {
     /**
      * show details of a computer based on its id.
      *
-     * @param id
-     *            id of the computer to show
+     * @param id id of the computer to show
      */
-    public void showComputerDetails(final Long id) {
-        Computer computer = null;
-        try {
-            computer = this.computerService.getComputer(id);
-        } catch (final ServiceException e) {
-            System.out.println("Error retrieving computer.");
-        }
+    private void showComputerDetails(final Long id) {
+
+        Computer computer = this.computerRestService.getComputerById(id);
 
         if (computer != null) {
             System.out.println("Details on computer " + id + " :");
@@ -443,5 +417,6 @@ public class Menu {
         } else {
             System.out.println("Computer of id " + id + " doesn't exist");
         }
+
     }
 }

@@ -1,5 +1,7 @@
 package com.excilys.core.dto;
 
+import com.excilys.core.model.PageParameters;
+
 public class PageParametersDTO {
 
     private int size = 10;
@@ -11,6 +13,18 @@ public class PageParametersDTO {
     private String order = "name";
 
     private String direction = "asc";
+
+    public PageParametersDTO() {
+
+    }
+
+    public PageParametersDTO(PageParameters params) {
+        this.size = (int)params.getSize();
+        this.pageNumber = (int)params.getPageNumber();
+        this.search = params.getSearch();
+        this.order = params.getOrder().toString();
+        this.direction = params.getDirection().toString();
+    }
 
     public int getSize() {
         return this.size;

@@ -22,6 +22,8 @@ public class ComputerValidator implements Validator {
     @Override
     public void validate(Object obj, Errors err) {
 
+        // TODO: errors messages should be externalized in a property file.
+
         // computer name (required)
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "name", "invalid name");
 

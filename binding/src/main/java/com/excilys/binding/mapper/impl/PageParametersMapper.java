@@ -1,5 +1,6 @@
-package com.excilys.binding.mapper;
+package com.excilys.binding.mapper.impl;
 
+import com.excilys.binding.mapper.IPageParametersMapper;
 import com.excilys.core.dto.PageParametersDTO;
 import com.excilys.core.model.PageParameters;
 import com.excilys.core.model.PageParameters.Direction;
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Component;
  * @author simon
  */
 @Component
-public class PageParametersMapper {
+public class PageParametersMapper implements IPageParametersMapper {
 
+    @Override
     public PageParameters fromDTO(PageParametersDTO dto) {
 
         PageParameters.Builder builder = new PageParameters.Builder();
@@ -36,5 +38,10 @@ public class PageParametersMapper {
         }
 
         return builder.build();
+    }
+
+    @Override
+    public PageParametersDTO toDTO(PageParameters param) {
+        return new PageParametersDTO(param);
     }
 }

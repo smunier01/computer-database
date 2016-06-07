@@ -1,13 +1,15 @@
 package com.excilys.service.service;
 
-import com.excilys.core.dto.ComputerDTO;
+import com.excilys.core.model.Computer;
+import com.excilys.core.model.PageParameters;
 
 import java.util.List;
 
 public interface IComputerRestService {
-    List<ComputerDTO> getList(int index);
-    ComputerDTO getComputerById(long id);
-    ComputerDTO createComputer(ComputerDTO computer);
-    ComputerDTO updateComputer(ComputerDTO computer);
+    List<Computer> getList();
+    List<Computer> getList(PageParameters params);
+    Computer getComputerById(long id);
+    Computer createComputer(Computer computer);
+    Computer updateComputer(Computer computer);
     void deleteComputer(long id);
 }

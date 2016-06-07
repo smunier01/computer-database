@@ -1,9 +1,14 @@
 package com.excilys.service.service.impl;
 
+import com.excilys.binding.mapper.impl.ComputerMapper;
+import com.excilys.binding.mapper.impl.PageParametersMapper;
 import com.excilys.core.dto.ComputerDTO;
+import com.excilys.core.model.Computer;
+import com.excilys.core.model.PageParameters;
 import com.excilys.service.service.IComputerRestService;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.client.Client;
@@ -18,59 +23,84 @@ import java.util.List;
 @Service
 public class ComputerRestService implements IComputerRestService {
 
+    private static final String AUTH_USER = "user";
+
+    private static final String AUTH_PASSWORD = "user";
+
     private static final String BASE_URL = "http://localhost:8080/cdb/rest/computer";
 
-    private Client client;
-
     private WebTarget target;
+
+    @Autowired
+    private ComputerMapper computerMapper;
+
+    @Autowired
+    private PageParametersMapper pageParametersMapper;
 
     public ComputerRestService() {
         HttpAuthenticationFeature auth = HttpAuthenticationFeature
                 .universalBuilder()
-                .credentialsForBasic("user", "user")
+                .credentialsForBasic(AUTH_USER, AUTH_PASSWORD)
                 .build();
 
-        client = ClientBuilder.newClient().register(auth).register(JacksonJsonProvider.class);
+        Client client = ClientBuilder.newClient().register(auth).register(JacksonJsonProvider.class);
         target = client.target(BASE_URL);
     }
 
     @Override
-    public List<ComputerDTO> getList(int index) {
+    public List<Computer> getList() {
         Response response = target
                 .path("/")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-        return response.readEntity(new GenericType<List<ComputerDTO>>(){});
+        return computerMapper.fromDTO(response.readEntity(new GenericType<List<ComputerDTO>>() {
+        }));
     }
 
     @Override
-    public ComputerDTO getComputerById(long id) {
+    public List<Computer> getList(PageParameters params) {
+        Response response = target
+                .path("/page")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(pageParametersMapper.toDTO(params)));
+
+        return computerMapper.fromDTO(response.readEntity(new GenericType<List<ComputerDTO>>() {
+        }));
+    }
+
+    @Override
+    public Computer getComputerById(long id) {
         Response response = target
                 .path("/" + id)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-        return response.readEntity(ComputerDTO.class);
+        return computerMapper.fromDTO(response.readEntity(ComputerDTO.class));
     }
 
     @Override
-    public ComputerDTO createComputer(ComputerDTO computer) {
+    public Computer createComputer(Computer computer) {
         Response response = target
                 .path("/")
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.json(computer));
+                .post(Entity.json(computerMapper.toDTO(computer)));
 
-        return response.readEntity(ComputerDTO.class);
+        return computerMapper.fromDTO(response.readEntity(ComputerDTO.class));
     }
 
     @Override
-    public ComputerDTO updateComputer(ComputerDTO computer) {
-        return null;
+    public Computer updateComputer(Computer computer) {
+        Response response = target
+                .path("/" + computer.getId())
+                .request(MediaType.APPLICATION_JSON)
+                .put(Entity.json(computerMapper.toDTO(computer)));
+
+        return computerMapper.fromDTO(response.readEntity(ComputerDTO.class));
     }
 
     @Override
     public void deleteComputer(long id) {
-
+        target.path("/").request(MediaType.APPLICATION_JSON).delete();
     }
 }

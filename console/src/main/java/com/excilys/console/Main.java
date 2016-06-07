@@ -14,8 +14,7 @@ public class Main {
     /**
      * entry method for the CLI app.
      *
-     * @param args
-     *            arguments
+     * @param args arguments
      */
     public static void main(final String[] args) {
 
@@ -26,11 +25,11 @@ public class Main {
 
         Main p = context.getBean(Main.class);
 
-        p.start(args);
+        p.start();
 
     }
 
-    private void start(String[] args) {
+    private void start() {
 
         while (this.menu.pick()) {
             System.out.println("pick menu :");

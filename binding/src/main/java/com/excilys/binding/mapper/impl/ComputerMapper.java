@@ -1,5 +1,6 @@
-package com.excilys.binding.mapper;
+package com.excilys.binding.mapper.impl;
 
+import com.excilys.binding.mapper.IComputerMapper;
 import com.excilys.core.dto.ComputerDTO;
 import com.excilys.core.model.Company;
 import com.excilys.core.model.Computer;
@@ -8,8 +9,6 @@ import com.excilys.core.model.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -18,24 +17,14 @@ import java.util.stream.Collectors;
  * @author simon
  */
 @Component
-public class ComputerMapper {
+public class ComputerMapper implements IComputerMapper {
 
-    /**
-     * Creates a ComputerDTO object from a Computer.
-     *
-     * @param computer computer
-     * @return ComputerDTo object
-     */
+    @Override
     public ComputerDTO toDTO(Computer computer) {
         return new ComputerDTO(computer);
     }
 
-    /**
-     * Creates a Computer object from a ComputerDTO object.
-     *
-     * @param computer ComputerDTO instance to convert.
-     * @return instance of a Computer
-     */
+    @Override
     public Computer fromDTO(ComputerDTO computer) {
 
         ComputerBuilder builder = new Computer.ComputerBuilder();
@@ -61,25 +50,13 @@ public class ComputerMapper {
         return builder.build();
     }
 
-    /**
-     * convert a list of Computer to a list of ComputerDTO.
-     *
-     * @param computers list of Computer
-     * @return list of ComputerDTO
-     */
-    public List<ComputerDTO> map(List<Computer> computers) {
-        return computers.stream().map(this::toDTO).collect(Collectors.toList());
-    }
-
-    /**
-     * convert a page of Computer to a page of ComputerDTO.
-     *
-     * @param page page to convert
-     * @return page result
-     */
+    @Override
     public Page<ComputerDTO> map(Page<Computer> page) {
-        return new Page.Builder<ComputerDTO>().list(this.map(page.getList())).params(page.getParams())
-                .totalCount(page.getTotalCount()).build();
+        return new Page.Builder<ComputerDTO>()
+                .list(this.toDTO(page.getList()))
+                .params(page.getParams())
+                .totalCount(page.getTotalCount())
+                .build();
     }
 
 }
