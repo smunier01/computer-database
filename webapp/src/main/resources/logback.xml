@@ -25,12 +25,12 @@
         <target>System.err</target>
     </appender>
 
-    <appender name="consoleAppender" class="ch.qos.logback.ext.spring.DelegatingLogbackAppender" />
+    <appender name="consoleAppender" class="ch.qos.logback.ext.spring.DelegatingLogbackAppender"/>
 
     <root level="DEBUG">
-        <appender-ref ref="STDERR" />
-        <appender-ref ref="FILE" />
-        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="STDERR"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="consoleAppender"/>
     </root>
 
 </configuration>

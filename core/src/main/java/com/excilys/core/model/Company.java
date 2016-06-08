@@ -34,10 +34,8 @@ public class Company {
     /**
      * company constructor.
      *
-     * @param id
-     *            id of the company
-     * @param name
-     *            name of the company
+     * @param id   id of the company
+     * @param name name of the company
      */
     public Company(Long id, String name) {
         this.id = id;

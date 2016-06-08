@@ -1,140 +1,147 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/smunier01/computer-database.git</url>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>*/master</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <submoduleCfg class="list"/>
-    <extensions/>
-  </scm>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.19.1">
-      <spec></spec>
-    </com.cloudbees.jenkins.GitHubPushTrigger>
-  </triggers>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>
+    <actions/>
+    <description></description>
+    <keepDependencies>false</keepDependencies>
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+            <hudson.plugins.git.UserRemoteConfig>
+                <url>https://github.com/smunier01/computer-database.git</url>
+            </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+            <hudson.plugins.git.BranchSpec>
+                <name>*/master</name>
+            </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions/>
+    </scm>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.19.1">
+            <spec></spec>
+        </com.cloudbees.jenkins.GitHubPushTrigger>
+    </triggers>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>
 
-        # Initialization containers
+                # Initialization containers
 
 
-        # create test network
+                # create test network
 
-        network_present=$(docker network ls | grep dind-test-network | awk '{print $1}')
+                network_present=$(docker network ls | grep dind-test-network | awk '{print $1}')
 
-        if [ -z "$network_present" ]; then
-	docker network create dind-test-network;
-	echo "******************* dind-test-network not present *********************"
-        else 
-	echo "******************* dind-test-network present *********************"
-        fi
+                if [ -z "$network_present" ]; then
+                docker network create dind-test-network;
+                echo "******************* dind-test-network not present *********************"
+                else
+                echo "******************* dind-test-network present *********************"
+                fi
 
-        # run mysql-test-container
+                # run mysql-test-container
 
-        mysql_test_present=$(docker ps -aq -f name=mysql-test-container)
+                mysql_test_present=$(docker ps -aq -f name=mysql-test-container)
 
-        if [ -z "$mysql_test_present" ]; then
-	echo "******************* mysql_test_container not present *********************"
-        docker pull smunier/mysql-img
-        docker run -d --net dind-test-network --name=mysql-test-container smunier/mysql-img;
-        else
-	docker start mysql-test-container
-	echo "******************* mysql_test_container present *********************"
-        fi
+                if [ -z "$mysql_test_present" ]; then
+                echo "******************* mysql_test_container not present *********************"
+                docker pull smunier/mysql-img
+                docker run -d --net dind-test-network --name=mysql-test-container smunier/mysql-img;
+                else
+                docker start mysql-test-container
+                echo "******************* mysql_test_container present *********************"
+                fi
 
-        # run maven-container
+                # run maven-container
 
-        maven_present=$(docker ps -aq -f name=maven-container)
+                maven_present=$(docker ps -aq -f name=maven-container)
 
-        if [ -z "$maven_present" ]; then
-	echo "******************* maven_container not present *********************"
-        docker pull smunier/maven-img
-        docker run -dit --net dind-test-network --name=maven-container smunier/maven-img /bin/bash;
-        else
-	docker start maven-container
-	echo "******************* maven_container present *********************"
-        fi
+                if [ -z "$maven_present" ]; then
+                echo "******************* maven_container not present *********************"
+                docker pull smunier/maven-img
+                docker run -dit --net dind-test-network --name=maven-container smunier/maven-img /bin/bash;
+                else
+                docker start maven-container
+                echo "******************* maven_container present *********************"
+                fi
 
-        # run mysql-dev-container
+                # run mysql-dev-container
 
-        mysql_dev_present=$(docker ps -aq -f name=mysql-dev-container)
+                mysql_dev_present=$(docker ps -aq -f name=mysql-dev-container)
 
-        if [ -z "$mysql_dev_present" ]; then
-	echo "******************* mysql_dev_containernot present *********************"
-        docker pull smunier/mysql-img
-        docker run -d --name=mysql-dev-container smunier/mysql-img;
-        else
-	docker start mysql-dev-container
-	echo "******************* mysql_dev_container present *********************"
-        fi
+                if [ -z "$mysql_dev_present" ]; then
+                echo "******************* mysql_dev_containernot present *********************"
+                docker pull smunier/mysql-img
+                docker run -d --name=mysql-dev-container smunier/mysql-img;
+                else
+                docker start mysql-dev-container
+                echo "******************* mysql_dev_container present *********************"
+                fi
 
-      </command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>
-        # copy database properties to maven container
+            </command>
+        </hudson.tasks.Shell>
+        <hudson.tasks.Shell>
+            <command>
+                # copy database properties to maven container
 
-        docker ps
-        docker cp . maven-container:/computer-database
-        docker exec maven-container ls
+                docker ps
+                docker cp . maven-container:/computer-database
+                docker exec maven-container ls
 
-        test_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql-test-container)
-        docker exec maven-container cp /home/mysql.properties /computer-database/src/test/resources/mysql.properties
-        docker exec maven-container sed -i -e 's/{{INSERT_IP}}/'$test_ip'/g' /computer-database/src/test/resources/mysql.properties
+                test_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+                mysql-test-container)
+                docker exec maven-container cp /home/mysql.properties
+                /computer-database/src/test/resources/mysql.properties
+                docker exec maven-container sed -i -e 's/{{INSERT_IP}}/'$test_ip'/g'
+                /computer-database/src/test/resources/mysql.properties
 
-        dev_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql-dev-container)
-        docker exec maven-container cp /home/mysql.properties /computer-database/src/main/resources/mysql.properties
-        docker exec maven-container sed -i -e 's/{{INSERT_IP}}/'$dev_ip'/g' /computer-database/src/main/resources/mysql.properties
-      </command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>docker exec maven-container cat /computer-database/src/test/resources/mysql.properties
-      docker inspect mysql-test-container | grep &quot;IPAddress&quot;
-      </command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>docker exec maven-container mvn -f /computer-database/pom.xml clean install test</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command># Post build success, Tomcat deployment
+                dev_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+                mysql-dev-container)
+                docker exec maven-container cp /home/mysql.properties
+                /computer-database/src/main/resources/mysql.properties
+                docker exec maven-container sed -i -e 's/{{INSERT_IP}}/'$dev_ip'/g'
+                /computer-database/src/main/resources/mysql.properties
+            </command>
+        </hudson.tasks.Shell>
+        <hudson.tasks.Shell>
+            <command>docker exec maven-container cat /computer-database/src/test/resources/mysql.properties
+                docker inspect mysql-test-container | grep &quot;IPAddress&quot;
+            </command>
+        </hudson.tasks.Shell>
+        <hudson.tasks.Shell>
+            <command>docker exec maven-container mvn -f /computer-database/pom.xml clean install test</command>
+        </hudson.tasks.Shell>
+        <hudson.tasks.Shell>
+            <command># Post build success, Tomcat deployment
 
-      present=`docker ps -aq -f name=tomtom`
-      echo $present
-      if [ -z &quot;$present&quot; ]; then
-      echo &quot;******************* tomtom not present *********************&quot;
-      else 
-      echo &quot;******************* tomtom present *********************&quot;
-      docker rm -f tomtom
-      fi
+                present=`docker ps -aq -f name=tomtom`
+                echo $present
+                if [ -z &quot;$present&quot; ]; then
+                echo &quot;******************* tomtom not present *********************&quot;
+                else
+                echo &quot;******************* tomtom present *********************&quot;
+                docker rm -f tomtom
+                fi
 
-      docker run -dit --name=tomtom smunier/tomcat-img
-      docker cp maven-container:/computer-database/target/cdb.war /
-      docker cp /cdb.war tomtom:/usr/local/tomcat/webapps
-      docker exec tomtom ls /
-      docker exec tomtom ls /usr/local/tomcat/webapps
-      docker login --username=smunier --password=azerty #please dont use the password PLEEEEEASE
-      docker commit tomtom smunier/tomcat-img
-      docker push smunier/tomcat-img</command>
-    </hudson.tasks.Shell>
-  </builders>
-  <publishers/>
-  <buildWrappers/>
+                docker run -dit --name=tomtom smunier/tomcat-img
+                docker cp maven-container:/computer-database/target/cdb.war /
+                docker cp /cdb.war tomtom:/usr/local/tomcat/webapps
+                docker exec tomtom ls /
+                docker exec tomtom ls /usr/local/tomcat/webapps
+                docker login --username=smunier --password=azerty #please dont use the password PLEEEEEASE
+                docker commit tomtom smunier/tomcat-img
+                docker push smunier/tomcat-img
+            </command>
+        </hudson.tasks.Shell>
+    </builders>
+    <publishers/>
+    <buildWrappers/>
 </project>

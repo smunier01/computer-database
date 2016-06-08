@@ -11,9 +11,8 @@ import java.util.List;
 /**
  * abstract class describing methods of a dao object.
  *
- * @author simon
- *
  * @param <T>
+ * @author simon
  */
 public interface DAO<T> {
 
@@ -22,8 +21,7 @@ public interface DAO<T> {
     /**
      * find an object by its id.
      *
-     * @param id
-     *            of the object
+     * @param id of the object
      * @return instance of the object found
      */
     T find(Long id);
@@ -31,8 +29,7 @@ public interface DAO<T> {
     /**
      * create a new object.
      *
-     * @param obj
-     *            object to create
+     * @param obj object to create
      * @return instance of the object created
      */
     T create(T obj);
@@ -40,8 +37,7 @@ public interface DAO<T> {
     /**
      * update an object.
      *
-     * @param obj
-     *            object to update
+     * @param obj object to update
      * @return instance of the object updated
      */
     T update(T obj);
@@ -49,16 +45,14 @@ public interface DAO<T> {
     /**
      * remove an object.
      *
-     * @param obj
-     *            object to remove
+     * @param obj object to remove
      */
     void delete(T obj);
 
     /**
      * remove multiple object by their IDs.
      *
-     * @param objs
-     *            list of the object ids to remove
+     * @param objs list of the object ids to remove
      */
     void deleteAll(List<Long> objs);
 
@@ -72,8 +66,7 @@ public interface DAO<T> {
     /**
      * return all object with an offset and a limit.
      *
-     * @param params
-     *            page parameters
+     * @param params page parameters
      * @return the list of object
      */
     List<T> findAll(PageParameters params);
@@ -88,8 +81,7 @@ public interface DAO<T> {
     /**
      * Count number of object using a page parameters.
      *
-     * @param page
-     *            parameters for the query.
+     * @param page parameters for the query.
      * @return number of object
      */
     long count(PageParameters params);
@@ -97,8 +89,7 @@ public interface DAO<T> {
     /**
      * close the list of resources given as parameters.
      *
-     * @param resources
-     *            varargs containing the AutCloseable resources to close
+     * @param resources varargs containing the AutCloseable resources to close
      */
     default void closeAll(AutoCloseable... resources) {
         for (AutoCloseable resource : resources) {
@@ -115,13 +106,10 @@ public interface DAO<T> {
     /**
      * add params contained in the varargs to the prepared statement.
      *
-     * @param stmt
-     *            prepared statement where to set the params
-     * @param params
-     *            varargs of Object to be added to the prepared statement
+     * @param stmt   prepared statement where to set the params
+     * @param params varargs of Object to be added to the prepared statement
      * @return same instance of the prepared statement (for conveniance)
-     * @throws SQLException
-     *             exception
+     * @throws SQLException exception
      */
     default PreparedStatement setParams(PreparedStatement stmt, Object... params) throws SQLException {
 

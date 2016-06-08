@@ -16,8 +16,7 @@ public interface ICompanyService {
     /**
      * get company by its id.
      *
-     * @param id
-     *            of the company
+     * @param id of the company
      * @return null if invalid id or computer doesn't exist
      */
     Company getCompany(Long id);
@@ -25,8 +24,7 @@ public interface ICompanyService {
     /**
      * get list of company.
      *
-     * @param page
-     *            page parameters
+     * @param page page parameters
      * @return the list of company
      */
     List<Company> getCompanies(PageParameters page);
@@ -34,8 +32,7 @@ public interface ICompanyService {
     /**
      * delete a company based on its ID.
      *
-     * @param id
-     *            id of the company to delete
+     * @param id id of the company to delete
      */
     void deleteCompany(Long id);
 

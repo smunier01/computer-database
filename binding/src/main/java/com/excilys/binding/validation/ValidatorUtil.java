@@ -27,8 +27,7 @@ public class ValidatorUtil {
     /**
      * Use a regex to check if an ID is valid.
      *
-     * @param s
-     *            String representing the ID.
+     * @param s String representing the ID.
      * @return true if valid
      */
     public boolean isIdValid(String s) {
@@ -38,8 +37,7 @@ public class ValidatorUtil {
     /**
      * Use a regex to check if a date is valid.
      *
-     * @param s
-     *            String representing the date.
+     * @param s String representing the date.
      * @return true if valid
      */
     public boolean isDateValid(String s) {
@@ -49,11 +47,8 @@ public class ValidatorUtil {
     /**
      * Check for the legality of an ID.
      *
-     * @param id
-     *            the id
-     * @throws ValidatorException
-     *             ValidatorException if the id is illegal.
-     *
+     * @param id the id
+     * @throws ValidatorException ValidatorException if the id is illegal.
      */
     public void validateId(Long id) {
         if ((id == null) || (id <= 0)) {
@@ -64,10 +59,8 @@ public class ValidatorUtil {
     /**
      * Check the illegality of a PageParameter object.
      *
-     * @param params
-     *            page parameter object to check
-     * @throws ValidatorException
-     *             ValidatorException if the PageParameters is illegal.
+     * @param params page parameter object to check
+     * @throws ValidatorException ValidatorException if the PageParameters is illegal.
      */
     public void validatePageParameters(PageParameters params) {
 
@@ -100,10 +93,8 @@ public class ValidatorUtil {
     /**
      * Check for the legality of a Computer.
      *
-     * @param computer
-     *            computer object to check.
-     * @throws ValidatorException
-     *             ValidatorException if the Computer is illegal.
+     * @param computer computer object to check.
+     * @throws ValidatorException ValidatorException if the Computer is illegal.
      */
     public void validateComputer(Computer computer) {
 
@@ -142,8 +133,7 @@ public class ValidatorUtil {
     /**
      * Check for the legality of a Computer.
      *
-     * @param company
-     *            company object to check.
+     * @param company company object to check.
      */
     public void validateCompany(Company company) {
 

@@ -20,8 +20,7 @@ public class CompanyDTO {
     /**
      * CompanyDTO constructor using a company as a template.
      *
-     * @param company
-     *            company
+     * @param company company
      */
     public CompanyDTO(Company company) {
         if (company != null) {

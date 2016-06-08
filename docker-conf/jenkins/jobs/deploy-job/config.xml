@@ -1,31 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>docker pull smunier/tomcat-img
+    <actions/>
+    <description></description>
+    <keepDependencies>false</keepDependencies>
+    <properties/>
+    <scm class="hudson.scm.NullSCM"/>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers/>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>docker pull smunier/tomcat-img
 
-tomcat_dev_id=$(docker ps -aq -f name=tomcat-dev-container)
+                tomcat_dev_id=$(docker ps -aq -f name=tomcat-dev-container)
 
-if [ ! -z &quot;$tomcat_dev_id&quot; ]; then
-	docker stop tomcat-dev-container
-    docker rm tomcat-dev-container
-fi
+                if [ ! -z &quot;$tomcat_dev_id&quot; ]; then
+                docker stop tomcat-dev-container
+                docker rm tomcat-dev-container
+                fi
 
-docker run --name tomcat-dev-container -dit -p 8081:8080 smunier/tomcat-img
-</command>
-    </hudson.tasks.Shell>
-  </builders>
-  <publishers/>
-  <buildWrappers/>
+                docker run --name tomcat-dev-container -dit -p 8081:8080 smunier/tomcat-img
+            </command>
+        </hudson.tasks.Shell>
+    </builders>
+    <publishers/>
+    <buildWrappers/>
 </project>

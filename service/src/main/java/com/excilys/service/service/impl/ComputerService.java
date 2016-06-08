@@ -142,7 +142,7 @@ public class ComputerService implements IComputerService {
 
     /**
      * PostConstruct method to create the hibernate search index if needed.
-     *
+     * <p>
      * TransactionCallbackWithoutResult is necessary in order to make sure that the context is fully instantiated
      *
      * @throws Exception

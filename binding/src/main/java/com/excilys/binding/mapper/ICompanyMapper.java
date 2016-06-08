@@ -4,7 +4,7 @@ import com.excilys.core.dto.CompanyDTO;
 import com.excilys.core.model.Company;
 import com.excilys.core.model.Page;
 
-public interface ICompanyMapper extends DTOMapper<CompanyDTO, Company>{
+public interface ICompanyMapper extends DTOMapper<CompanyDTO, Company> {
     /**
      * convert a page of Company to a page of CompanyDTO.
      *

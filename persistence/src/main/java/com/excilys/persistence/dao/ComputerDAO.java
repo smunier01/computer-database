@@ -60,6 +60,7 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public Computer create(Computer obj) {
+        obj = this.em.merge(obj);
         this.em.persist(obj);
         return obj;
     }

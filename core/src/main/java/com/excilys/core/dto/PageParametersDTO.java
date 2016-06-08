@@ -19,8 +19,8 @@ public class PageParametersDTO {
     }
 
     public PageParametersDTO(PageParameters params) {
-        this.size = (int)params.getSize();
-        this.pageNumber = (int)params.getPageNumber();
+        this.size = (int) params.getSize();
+        this.pageNumber = (int) params.getPageNumber();
         this.search = params.getSearch();
         this.order = params.getOrder().toString();
         this.direction = params.getDirection().toString();

@@ -5,7 +5,7 @@ import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 
 public interface IComputerMapper extends DTOMapper<ComputerDTO, Computer> {
-    
+
     /**
      * convert a page of Computer to a page of ComputerDTO.
      *

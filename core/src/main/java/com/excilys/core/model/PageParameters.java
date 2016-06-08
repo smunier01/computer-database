@@ -39,16 +39,11 @@ public class PageParameters {
     /**
      * PageParameters constructor.
      *
-     * @param size
-     *            size of a page.
-     * @param pageNumber
-     *            current page number.
-     * @param search
-     *            string search for the query.
-     * @param order
-     *            enum corresponding to the column name for the order by.
-     * @param direction
-     *            direction of the order by (asc, desc).
+     * @param size       size of a page.
+     * @param pageNumber current page number.
+     * @param search     string search for the query.
+     * @param order      enum corresponding to the column name for the order by.
+     * @param direction  direction of the order by (asc, desc).
      */
     public PageParameters(long size, long pageNumber, String search, Order order, Direction direction) {
         this.size = size;

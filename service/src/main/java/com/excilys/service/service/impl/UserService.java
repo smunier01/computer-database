@@ -48,7 +48,7 @@ public class UserService implements IUserService {
 
     /**
      * PostConstruct method to init the user roles.
-     *
+     * <p>
      * TransactionCallbackWithoutResult is necessary in order to make sure that the context is fully instantiated
      *
      * @throws Exception

@@ -19,7 +19,7 @@ public interface DTOMapper<T, V> {
      * @param dto instance of the DTO to convert
      * @return object created
      */
-    V fromDTO (T dto);
+    V fromDTO(T dto);
 
     /**
      * convert a list of object to a list of DTO.

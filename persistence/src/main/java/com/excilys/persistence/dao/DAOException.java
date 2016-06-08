@@ -19,8 +19,7 @@ public class DAOException extends RuntimeException {
     /**
      * constructor taking only a message.
      *
-     * @param message
-     *            message for the exception
+     * @param message message for the exception
      */
     public DAOException(final String message) {
         super(message);
@@ -29,10 +28,8 @@ public class DAOException extends RuntimeException {
     /**
      * constructor taking a string message and un throwable.
      *
-     * @param message
-     *            message
-     * @param cause
-     *            throwable
+     * @param message message
+     * @param cause   throwable
      */
     public DAOException(final String message, final Throwable cause) {
         super(message, cause);
@@ -41,8 +38,7 @@ public class DAOException extends RuntimeException {
     /**
      * constructor taking a throwable.
      *
-     * @param cause
-     *            throwable
+     * @param cause throwable
      */
     public DAOException(final Throwable cause) {
         super(cause);

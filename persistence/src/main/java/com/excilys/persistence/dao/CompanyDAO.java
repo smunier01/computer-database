@@ -39,6 +39,7 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public Company create(Company obj) {
+        obj = this.em.merge(obj);
         this.em.persist(obj);
         return obj;
     }
