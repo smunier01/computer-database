@@ -33,6 +33,8 @@ import java.util.List;
 @Repository
 public class ComputerDAO implements DAO<Computer> {
 
+    private static final int LARGE_OFFSET = 15000;
+
     private EntityManager em;
 
     private JPAQueryFactory jpaQuery;
@@ -99,7 +101,11 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public List<Computer> findAll(PageParameters page) {
         if (page.getSearch().isEmpty()) {
-            return this.findAllNormal(page);
+            if (page.getSize() * page.getPageNumber() > LARGE_OFFSET) {
+                return this.findAllWithSubQuery(page);
+            } else {
+                return this.findAllNormal(page);
+            }
         } else {
             return this.findAllLucene(page);
         }
@@ -119,24 +125,13 @@ public class ComputerDAO implements DAO<Computer> {
      * this is more efficient when the offset is large
      */
     private List<Computer> findAllWithSubQuery(PageParameters page) {
-        List<Long> ids;
 
-        if (page.getSearch().isEmpty()) {
-            ids = this.jpaQuery.select(this.qcomputer.id)
-                    .from(this.qcomputer)
-                    .orderBy(ComputerDAO.getOrderMethod(page.getOrder(), page.getDirection()))
-                    .offset(page.getSize() * page.getPageNumber())
-                    .limit(page.getSize())
-                    .fetch();
-        } else {
-            ids = this.jpaQuery.select(this.qcomputer.id)
-                    .from(this.qcomputer)
-                    .where(this.qcomputer.name.like(page.getSearch() + "%"))
-                    .orderBy(ComputerDAO.getOrderMethod(page.getOrder(), page.getDirection()))
-                    .offset(page.getSize() * page.getPageNumber())
-                    .limit(page.getSize())
-                    .fetch();
-        }
+        List<Long> ids = this.jpaQuery.select(this.qcomputer.id)
+                .from(this.qcomputer)
+                .orderBy(ComputerDAO.getOrderMethod(page.getOrder(), page.getDirection()))
+                .offset(page.getSize() * page.getPageNumber())
+                .limit(page.getSize())
+                .fetch();
 
         return this.jpaQuery.selectFrom(this.qcomputer)
                 .leftJoin(this.qcomputer.company, this.qcompany)
@@ -164,7 +159,24 @@ public class ComputerDAO implements DAO<Computer> {
         FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
         fullTextQuery.setFirstResult((int) (page.getSize() * page.getPageNumber()));
         fullTextQuery.setMaxResults((int) page.getSize());
-        fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING)));
+
+        switch (page.getOrder()) {
+            case NAME:
+                fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING)));
+                break;
+            case INTRODUCED:
+                fullTextQuery.setSort(new Sort(new SortField("introduced", SortField.Type.INT)));
+                break;
+            case DISCONTINUED:
+                fullTextQuery.setSort(new Sort(new SortField("discontinued", SortField.Type.INT)));
+                break;
+            case COMPANY_NAME:
+                fullTextQuery.setSort(new Sort(new SortField("company.name", SortField.Type.STRING)));
+                break;
+            default:
+                fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING)));
+                break;
+        }
 
         return fullTextQuery.getResultList();
     }

@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -148,7 +149,7 @@ public class ComputerService implements IComputerService {
     /**
      * PostConstruct method to create the hibernate search index if needed.
      * <p>
-     * TransactionCallbackWithoutResult is necessary in order to make sure that the context is fully instantiated
+     * TransactionCallbackWithoutResult is necessary in order to make sure that the context is fully instantiated.
      *
      * @throws Exception
      */
@@ -160,11 +161,11 @@ public class ComputerService implements IComputerService {
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                /*try {
+                try {
                     computerDAO.buildIndex();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         });
     }
