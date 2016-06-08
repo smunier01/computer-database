@@ -14,6 +14,7 @@
     <http create-session="never">
         <intercept-url pattern="/dashboard" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/computer/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')"/>
 
         <http-basic/>
 
