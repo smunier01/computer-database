@@ -52,4 +52,19 @@ public interface ICompanyService {
      * @return number of companies
      */
     long countCompanies();
+
+    /**
+     * create a new company.
+     *
+     * @param company
+     * @return
+     */
+    Company createCompany(Company company);
+
+    /**
+     * update an existing company.
+     *
+     * @param company
+     */
+    void updateCompany(Company company);
 }

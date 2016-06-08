@@ -1,11 +1,11 @@
 package com.excilys.service.service.impl;
 
-import com.excilys.binding.mapper.impl.ComputerMapper;
+import com.excilys.binding.mapper.impl.CompanyMapper;
 import com.excilys.binding.mapper.impl.PageParametersMapper;
-import com.excilys.core.dto.ComputerDTO;
-import com.excilys.core.model.Computer;
+import com.excilys.core.dto.CompanyDTO;
+import com.excilys.core.model.Company;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.service.IComputerRestService;
+import com.excilys.service.service.ICompanyRestService;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +21,23 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Service
-public class ComputerRestService implements IComputerRestService {
+public class CompanyRestService implements ICompanyRestService {
 
     private static final String AUTH_USER = "user";
 
     private static final String AUTH_PASSWORD = "user";
 
-    private static final String BASE_URL = "http://localhost:8080/cdb/rest/computer";
+    private static final String BASE_URL = "http://localhost:8080/cdb/rest/company";
 
     private WebTarget target;
 
     @Autowired
-    private ComputerMapper computerMapper;
+    private CompanyMapper companyMapper;
 
     @Autowired
     private PageParametersMapper pageParametersMapper;
 
-    public ComputerRestService() {
+    public CompanyRestService() {
         HttpAuthenticationFeature auth = HttpAuthenticationFeature
                 .universalBuilder()
                 .credentialsForBasic(AUTH_USER, AUTH_PASSWORD)
@@ -48,59 +48,60 @@ public class ComputerRestService implements IComputerRestService {
     }
 
     @Override
-    public List<Computer> getList() {
+    public List<Company> getList() {
         Response response = target
                 .path("/")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-        return computerMapper.fromDTO(response.readEntity(new GenericType<List<ComputerDTO>>() {
+        return companyMapper.fromDTO(response.readEntity(new GenericType<List<CompanyDTO>>() {
         }));
     }
 
     @Override
-    public List<Computer> getList(PageParameters params) {
+    public List<Company> getList(PageParameters params) {
         Response response = target
                 .path("/page")
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(pageParametersMapper.toDTO(params)));
 
-        return computerMapper.fromDTO(response.readEntity(new GenericType<List<ComputerDTO>>() {
+        return companyMapper.fromDTO(response.readEntity(new GenericType<List<CompanyDTO>>() {
         }));
     }
 
     @Override
-    public Computer getComputerById(long id) {
+    public Company getCompanyById(long id) {
         Response response = target
                 .path("/" + id)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-        return computerMapper.fromDTO(response.readEntity(ComputerDTO.class));
+        return companyMapper.fromDTO(response.readEntity(CompanyDTO.class));
     }
 
     @Override
-    public Computer createComputer(Computer computer) {
+    public Company createCompany(Company company) {
         Response response = target
                 .path("/")
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.json(computerMapper.toDTO(computer)));
+                .post(Entity.json(companyMapper.toDTO(company)));
 
-        return computerMapper.fromDTO(response.readEntity(ComputerDTO.class));
+        return companyMapper.fromDTO(response.readEntity(CompanyDTO.class));
     }
 
     @Override
-    public Computer updateComputer(Computer computer) {
+    public Company updateCompany(Company company) {
         Response response = target
-                .path("/" + computer.getId())
+                .path("/" + company.getId())
                 .request(MediaType.APPLICATION_JSON)
-                .put(Entity.json(computerMapper.toDTO(computer)));
+                .put(Entity.json(companyMapper.toDTO(company)));
 
-        return computerMapper.fromDTO(response.readEntity(ComputerDTO.class));
+        return companyMapper.fromDTO(response.readEntity(CompanyDTO.class));
     }
 
     @Override
-    public void deleteComputer(long id) {
+    public void deleteCompany(long id) {
         target.path("/" + id).request(MediaType.APPLICATION_JSON).delete();
     }
+
 }

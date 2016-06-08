@@ -13,6 +13,10 @@ public class CompanyDTO {
 
     private String name;
 
+    public CompanyDTO() {
+
+    }
+
     /**
      * CompanyDTO constructor using a company as a template.
      *

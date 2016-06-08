@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class CompanyService implements ICompanyService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
@@ -71,5 +70,20 @@ public class CompanyService implements ICompanyService {
     public long countCompanies() {
         this.LOGGER.debug("entering countCompanies()");
         return this.companyDAO.count();
+    }
+
+    @Override
+    @Transactional
+    public Company createCompany(Company company) {
+        this.LOGGER.debug("entering createCompany()");
+        System.out.println(company);
+        return this.companyDAO.create(company);
+    }
+
+    @Override
+    @Transactional
+    public void updateCompany(Company company) {
+        this.LOGGER.debug("entering updateCompany()");
+        this.companyDAO.update(company);
     }
 }

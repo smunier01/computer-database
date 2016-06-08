@@ -3,11 +3,8 @@ package com.excilys.console;
 import com.excilys.core.model.Company;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.PageParameters;
-import com.excilys.persistence.dao.DAOException;
-import com.excilys.service.service.ICompanyService;
+import com.excilys.service.service.ICompanyRestService;
 import com.excilys.service.service.IComputerRestService;
-import com.excilys.service.service.IComputerService;
-import com.excilys.service.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,10 +30,7 @@ public class Menu {
     private IComputerRestService computerRestService;
 
     @Autowired
-    private IComputerService computerService;
-
-    @Autowired
-    private ICompanyService companyService;
+    private ICompanyRestService companyRestService;
 
     public Menu() {
         this.sc = new Scanner(System.in);
@@ -97,7 +91,7 @@ public class Menu {
      * @param choice id of the option
      * @return false if the user wants to quit
      */
-    private boolean pick(final int choice) {
+    private boolean pick(int choice) {
 
         Long computerId, companyId;
         LocalDate introduced, discontinued;
@@ -215,26 +209,12 @@ public class Menu {
                     System.out.println("invalid id");
                 }
 
-                try {
-                    computer = this.computerService.getComputer(computerId);
-                } catch (final ServiceException e) {
-                    System.out.println("Error while retrieving computer of id " + computerId);
-                    break;
-                }
+                String tmpPromptName = "new name: ";
+                String tmpPromptIntro = "new introduced date: ";
+                String tmpPromptDisco = "new introduced date: ";
+                String tmpPromptCompanyId = "new company id : ";
 
-                if (computer == null) {
-                    System.out.println("Computer of id " + computerId + " doesn't exists");
-                    break;
-                }
-
-                final String tmpPromptName = "new name (current : " + computer.getName() + " ) : ";
-                final String tmpPromptIntro = "new introduced date (current : " + computer.getIntroduced().toString()
-                        + " ) : ";
-                final String tmpPromptDisco = "new introduced date (current : " + computer.getDiscontinued().toString()
-                        + " ) : ";
-                final String tmpPromptCompanyId = "new company id (current : " + computer.getCompany().getId() + " ) : ";
-
-                while ((name = this.promptForString(tmpPromptName)) == "") {
+                while ((name = this.promptForString(tmpPromptName)).isEmpty()) {
                     System.out.println("invalid name");
                 }
 
@@ -278,11 +258,7 @@ public class Menu {
                     System.out.println("invalid id");
                 }
 
-                try {
-                    this.companyService.deleteCompany(companyId);
-                } catch (final DAOException e) {
-                    System.out.println("Eerror while deleting computer.");
-                }
+                this.companyRestService.deleteCompany(companyId);
 
                 break;
             // quit
@@ -300,14 +276,14 @@ public class Menu {
      * @param s String that will be use as an indication for the prompt
      * @return Long returned by the scanner
      */
-    private Long promptForLong(final String s) {
+    private Long promptForLong(String s) {
         Long result;
 
         System.out.print(s);
 
         try {
             result = this.sc.nextLong();
-        } catch (final InputMismatchException e) {
+        } catch (InputMismatchException e) {
             this.sc.next();
             result = -1L;
         }
@@ -321,14 +297,14 @@ public class Menu {
      * @param s String that will be use as an indication for the prompt
      * @return string returned by the scanner
      */
-    private String promptForString(final String s) {
+    private String promptForString(String s) {
         String result;
 
         System.out.print(s);
 
         try {
             result = this.sc.next();
-        } catch (final InputMismatchException e) {
+        } catch (InputMismatchException e) {
             this.sc.next();
             result = "";
         }
@@ -342,11 +318,11 @@ public class Menu {
      * @param s String that will be use as an indication for the prompt
      * @return null if the date is not valid, LocalDate.MIN if empty date
      */
-    private LocalDate promptForDate(final String s) {
+    private LocalDate promptForDate(String s) {
 
         System.out.print(s);
 
-        final String dateString = this.sc.next();
+        String dateString = this.sc.next();
 
         LocalDate date;
 
@@ -355,7 +331,7 @@ public class Menu {
         } else {
             try {
                 date = LocalDate.parse(dateString, Menu.formatter);
-            } catch (final DateTimeParseException e) {
+            } catch (DateTimeParseException e) {
                 date = null;
             }
         }
@@ -372,7 +348,7 @@ public class Menu {
     private boolean listComputers(PageParameters page) {
         List<Computer> computers = computerRestService.getList(page);
 
-        for (final Computer c : computers) {
+        for (Computer c : computers) {
             System.out.println(c.toString());
         }
 
@@ -385,19 +361,10 @@ public class Menu {
      * @param page page parameters
      * @return false if offset reached the end of the data
      */
-    private boolean listCompanies(final PageParameters page) {
-        List<Company> companies = null;
+    private boolean listCompanies(PageParameters page) {
+        List<Company> companies = this.companyRestService.getList(page);
 
-        try {
-            companies = this.companyService.getCompanies(page);
-        } catch (final ServiceException e) {
-            System.out.println("Error retrieving list of companies.");
-            return false;
-        }
-
-        for (final Company c : companies) {
-            System.out.println(c);
-        }
+        companies.forEach(System.out::println);
 
         return (companies.size() == page.getSize());
     }
