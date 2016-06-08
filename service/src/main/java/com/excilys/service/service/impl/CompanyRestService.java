@@ -8,6 +8,8 @@ import com.excilys.core.model.PageParameters;
 import com.excilys.service.service.ICompanyRestService;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import java.util.List;
 
 @Service
 public class CompanyRestService implements ICompanyRestService {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
     private static final String AUTH_USER = "user";
 
@@ -49,6 +53,8 @@ public class CompanyRestService implements ICompanyRestService {
 
     @Override
     public List<Company> getList() {
+        this.LOGGER.debug("entering getList()");
+
         Response response = target
                 .path("/")
                 .request(MediaType.APPLICATION_JSON)
@@ -60,6 +66,8 @@ public class CompanyRestService implements ICompanyRestService {
 
     @Override
     public List<Company> getList(PageParameters params) {
+        this.LOGGER.debug("entering getList(params) {}", params);
+
         Response response = target
                 .path("/page")
                 .request(MediaType.APPLICATION_JSON)
@@ -71,6 +79,8 @@ public class CompanyRestService implements ICompanyRestService {
 
     @Override
     public Company getCompanyById(long id) {
+        this.LOGGER.error("entering getCompanyById()");
+
         Response response = target
                 .path("/" + id)
                 .request(MediaType.APPLICATION_JSON)
@@ -81,6 +91,8 @@ public class CompanyRestService implements ICompanyRestService {
 
     @Override
     public Company createCompany(Company company) {
+        this.LOGGER.error("entering createCompany()");
+
         Response response = target
                 .path("/")
                 .request(MediaType.APPLICATION_JSON)
@@ -91,6 +103,8 @@ public class CompanyRestService implements ICompanyRestService {
 
     @Override
     public Company updateCompany(Company company) {
+        this.LOGGER.error("entering updateCompany()");
+
         Response response = target
                 .path("/" + company.getId())
                 .request(MediaType.APPLICATION_JSON)
@@ -101,6 +115,7 @@ public class CompanyRestService implements ICompanyRestService {
 
     @Override
     public void deleteCompany(long id) {
+        this.LOGGER.error("entering deleteCompany()");
         target.path("/" + id).request(MediaType.APPLICATION_JSON).delete();
     }
 

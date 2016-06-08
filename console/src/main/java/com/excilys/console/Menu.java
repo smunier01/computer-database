@@ -16,6 +16,9 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * class in charge of displaying the menu and calling the rest service client depending on the inputs.
+ */
 @Component
 public class Menu {
     private static final int MAX_PER_PAGES = 20;
@@ -32,6 +35,11 @@ public class Menu {
     @Autowired
     private ICompanyRestService companyRestService;
 
+    /**
+     * default constructor for the menu.
+     *
+     * initialized the list of possible options.
+     */
     public Menu() {
         this.sc = new Scanner(System.in);
         this.sc.useDelimiter("\\n");
@@ -48,6 +56,9 @@ public class Menu {
         Menu.options.add("quit");
     }
 
+    /**
+     * close the scanner.
+     */
     public void close() {
         if (this.sc != null) {
             this.sc.close();
@@ -242,7 +253,7 @@ public class Menu {
 
                 break;
 
-            // delete an existing computer
+            // delete a computer
             case 6:
 
                 while ((computerId = this.promptForLong("id : ")) <= 0) {
@@ -253,6 +264,7 @@ public class Menu {
 
                 break;
 
+            // delete a company
             case 7:
                 while ((companyId = this.promptForLong("id : ")) <= 0) {
                     System.out.println("invalid id");
@@ -348,9 +360,7 @@ public class Menu {
     private boolean listComputers(PageParameters page) {
         List<Computer> computers = computerRestService.getList(page);
 
-        for (Computer c : computers) {
-            System.out.println(c.toString());
-        }
+        computers.forEach(System.out::println);
 
         return (computers.size() == page.getSize());
     }

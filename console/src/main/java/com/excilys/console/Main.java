@@ -18,7 +18,6 @@ public class Main {
      */
     public static void main(final String[] args) {
 
-        @SuppressWarnings("resource")
         ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 
         context.registerShutdownHook();

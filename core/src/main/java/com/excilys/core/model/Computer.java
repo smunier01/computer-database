@@ -30,7 +30,7 @@ public class Computer {
     private LocalDate discontinued;
 
     @IndexedEmbedded
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
@@ -104,8 +104,6 @@ public class Computer {
 
     /**
      * Builder pattern for a computer.
-     *
-     * @author excilys
      */
     public static class ComputerBuilder {
         private Long id = null;

@@ -11,6 +11,7 @@ import com.excilys.binding.validation.ValidatorUtil;
 import com.excilys.core.dto.CompanyDTO;
 import com.excilys.core.dto.ComputerDTO;
 import com.excilys.core.dto.PageParametersDTO;
+import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.service.service.ICompanyService;
@@ -90,7 +91,7 @@ public class ComputerController {
     @RequestMapping(path = "${path.computer.edit}", method = RequestMethod.GET)
     public String getEditComputer(ModelMap model, @RequestParam long id) {
 
-        com.excilys.core.model.Computer computer = this.computerService.getComputer(id);
+        Computer computer = this.computerService.getComputer(id);
 
         if (computer == null) {
             throw new NoSuchElementException();

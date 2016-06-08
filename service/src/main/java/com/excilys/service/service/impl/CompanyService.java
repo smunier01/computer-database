@@ -76,7 +76,6 @@ public class CompanyService implements ICompanyService {
     @Transactional
     public Company createCompany(Company company) {
         this.LOGGER.debug("entering createCompany()");
-        System.out.println(company);
         return this.companyDAO.create(company);
     }
 

@@ -50,7 +50,7 @@ public class ComputerDTO {
      */
     public ComputerDTO(final Computer computer) {
         this.id = computer.getId().toString();
-        this.name = computer.getName().toString();
+        this.name = computer.getName();
         this.introduced = computer.getIntroduced() == null ? "" : computer.getIntroduced().toString();
         this.discontinued = computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString();
 

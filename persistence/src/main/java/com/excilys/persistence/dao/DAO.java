@@ -4,8 +4,6 @@ import com.excilys.core.model.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -81,45 +79,8 @@ public interface DAO<T> {
     /**
      * Count number of object using a page parameters.
      *
-     * @param page parameters for the query.
+     * @param params parameters for the query.
      * @return number of object
      */
     long count(PageParameters params);
-
-    /**
-     * close the list of resources given as parameters.
-     *
-     * @param resources varargs containing the AutCloseable resources to close
-     */
-    default void closeAll(AutoCloseable... resources) {
-        for (AutoCloseable resource : resources) {
-            if (resource != null) {
-                try {
-                    resource.close();
-                } catch (Exception e) {
-                    LOGGER.error("couldn't close resource : " + resource.toString());
-                }
-            }
-        }
-    }
-
-    /**
-     * add params contained in the varargs to the prepared statement.
-     *
-     * @param stmt   prepared statement where to set the params
-     * @param params varargs of Object to be added to the prepared statement
-     * @return same instance of the prepared statement (for conveniance)
-     * @throws SQLException exception
-     */
-    default PreparedStatement setParams(PreparedStatement stmt, Object... params) throws SQLException {
-
-        int cnt = 0;
-
-        for (final Object o : params) {
-            stmt.setObject(++cnt, o);
-        }
-
-        return stmt;
-
-    }
 }

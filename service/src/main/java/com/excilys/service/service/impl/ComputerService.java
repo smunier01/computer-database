@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
-@Transactional
 public class ComputerService implements IComputerService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
@@ -35,6 +34,10 @@ public class ComputerService implements IComputerService {
     @Autowired
     private ValidatorUtil validator;
 
+    /**
+     * cache for the total number of computers in the database.
+     * TODO check if it's still necessary to do it manually now that we use hibernate.
+     */
     private AtomicLong count;
 
     @Override
@@ -125,6 +128,8 @@ public class ComputerService implements IComputerService {
         this.validator.validatePageParameters(page);
 
         long result;
+
+        // try to use the cache if there is no search query.
         if (page.getSearch().isEmpty()) {
             if (this.count == null) {
                 this.count = new AtomicLong();
@@ -157,9 +162,7 @@ public class ComputerService implements IComputerService {
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 /*try {
                     computerDAO.buildIndex();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }*/
             }

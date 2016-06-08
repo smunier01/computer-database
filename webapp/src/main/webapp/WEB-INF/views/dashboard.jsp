@@ -90,10 +90,10 @@
 </section>
 
 <footer class="navbar-fixed-bottom">
-    <%--<div class="container text-center">
+    <div class="container text-center">
         <mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
             psize="${page.params.size}" />
-    </div>--%>
+    </div>
 </footer>
 </body>
 <script type="text/javascript">

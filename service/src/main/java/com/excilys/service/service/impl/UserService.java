@@ -1,6 +1,5 @@
 package com.excilys.service.service.impl;
 
-
 import com.excilys.core.model.User;
 import com.excilys.persistence.dao.UserDAO;
 import com.excilys.service.service.IUserService;
@@ -49,7 +48,7 @@ public class UserService implements IUserService {
     /**
      * PostConstruct method to init the user roles.
      * <p>
-     * TransactionCallbackWithoutResult is necessary in order to make sure that the context is fully instantiated
+     * TransactionCallbackWithoutResult is necessary in order to make sure that the spring context is fully instantiated.
      *
      * @throws Exception
      */

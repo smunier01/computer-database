@@ -23,7 +23,6 @@ public class UserAuthService implements UserDetailsService {
         User user = userService.findByName(username);
 
         if (user == null) {
-            System.out.println("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
 

@@ -2,6 +2,11 @@ package com.excilys.core.model;
 
 import java.util.List;
 
+/**
+ * generic page containing a list of object.
+ *
+ * @param <T>
+ */
 public class Page<T> {
 
     private List<T> list;
@@ -10,10 +15,11 @@ public class Page<T> {
 
     private PageParameters params;
 
-    public Page() {
-
-    }
-
+    /**
+     * returns the number of pages necessary for the pagination.
+     *
+     * @return number of pages.
+     */
     public long numberOfPages() {
         return Math.max(1, ((this.totalCount + this.params.getSize()) - 1) / this.params.getSize());
     }
@@ -46,7 +52,7 @@ public class Page<T> {
         Page<T> page;
 
         public Builder() {
-            this.page = new Page();
+            this.page = new Page<T>();
         }
 
         public Builder<T> list(List<T> list) {
