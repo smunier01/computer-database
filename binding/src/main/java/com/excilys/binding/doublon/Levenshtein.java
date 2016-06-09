@@ -1,8 +1,5 @@
 package com.excilys.binding.doublon;
 
-/**
- * Created by excilys on 09/06/16.
- */
 public class Levenshtein implements SimilarityCalculator {
 
     /**
