@@ -17,7 +17,6 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -161,11 +160,14 @@ public class ComputerService implements IComputerService {
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
+                // TODO uncomment to make the search work
+                /*
                 try {
                     computerDAO.buildIndex();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
+                */
             }
         });
     }
