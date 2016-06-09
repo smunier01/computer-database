@@ -27,7 +27,7 @@
             </a></li>
         </c:when>
         <c:otherwise>
-            <li><a href="?pageNumber=${count - 1}&size=${psize}&search=${param.search}&order=${param.order}&direction=${param.direction}" aria-label="Previous"> <span
+            <li><a href="?pageNumber=${current - 1}&size=${psize}&search=${param.search}&searchType=${param.searchType}&order=${param.order}&direction=${param.direction}" aria-label="Previous"> <span
                     aria-hidden="true">&laquo;</span></a></li>
         </c:otherwise>
     </c:choose>
@@ -54,7 +54,7 @@
                     aria-hidden="true">&laquo;</span></a></li>
         </c:when>
         <c:otherwise>
-            <li><a id="next" href="?pageNumber=${current + 1}&size=${psize}&search=${param.search}&order=${param.order}&direction=${param.direction}" aria-label="Next">
+            <li><a id="next" href="?pageNumber=${current + 1}&size=${psize}&search=${param.search}&searchType=${param.searchType}&order=${param.order}&direction=${param.direction}" aria-label="Next">
                 <span aria-hidden="true">&laquo;</span>
             </a></li>
         </c:otherwise>
