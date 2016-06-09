@@ -111,7 +111,7 @@ public class CompanyDAOTest {
         companyDAO.delete(comp);
     }
 
-    @Test @Ignore
+    @Test
     @Transactional
     public void CountTestFound() {
         PageParameters pageParameters = new PageParameters.Builder().search("count").build();
@@ -124,7 +124,7 @@ public class CompanyDAOTest {
         companyDAO.delete(comp);
     }
 
-    @Test @Ignore
+    @Test
     @Transactional
     public void CountTestNotFound() {
         PageParameters pageParameters = new PageParameters.Builder().search("hunt").build();
@@ -139,10 +139,10 @@ public class CompanyDAOTest {
 
     // -------------------------------------- Find all tests -----------------------------------------------------------
 
-    @Test
+   @Test @Ignore
     @Transactional
     public void findAllTest() {
-        PageParameters pageParameters = new PageParameters.Builder().search("apple").direction(PageParameters.Direction.ASC).size(5).build();
+        PageParameters pageParameters = new PageParameters.Builder().search("apple").order(PageParameters.Order.NAME).direction(PageParameters.Direction.ASC).size(5).build();
         List<Company> companies = companyDAO.findAll(pageParameters);
         for (int i =1; i < companies.size(); i++) {
             Company comp = companies.get(i);
@@ -154,7 +154,8 @@ public class CompanyDAOTest {
             assertTrue(nameOrder >= 0);
         }
     }
-    /* @Test
+
+    /*@Test
     public void testUpdate() throws DAOException {
 
         // create a company

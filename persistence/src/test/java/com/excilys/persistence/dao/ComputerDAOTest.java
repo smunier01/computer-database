@@ -9,8 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 @ContextConfiguration("classpath:applicationContext.xml")
@@ -81,15 +79,15 @@ public class ComputerDAOTest {
 
     // -------------------------------------- Remove tests -------------------------------------------------------------
 
-/*
+
     @Test
     @Transactional
     public void removeTest() {
-        Computer computer = new Company(null,"removedTestDAO");
-        Company created = computerDAO.create(company);
+        Computer computer = new Computer.ComputerBuilder().name("removedTestDAO").build();
+        Computer created = computerDAO.create(computer);
         Long id = created.getId();
         computerDAO.delete(created);
-        Company retrieve = computerDAO.find(id);
+        Computer retrieve = computerDAO.find(id);
         assertNull(retrieve);
     }
 
@@ -99,43 +97,43 @@ public class ComputerDAOTest {
     @Test
     @Transactional
     public void CountTest() {
-        long countInitial = companyDAO.count();
-        Company comp = new Company(null,"countTestDAO");
-        companyDAO.create(comp);
-        long count = companyDAO.count();
+        long countInitial = computerDAO.count();
+        Computer comp = new Computer.ComputerBuilder().name("CountTestDAO").build();
+        computerDAO.create(comp);
+        long count = computerDAO.count();
         assertEquals(countInitial+1,count);
 
-        companyDAO.delete(comp);
+        computerDAO.delete(comp);
     }
 
-    @Test @Ignore
+    @Test
     @Transactional
     public void CountTestFound() {
         PageParameters pageParameters = new PageParameters.Builder().search("count").build();
-        long countInitial = companyDAO.count(pageParameters);
-        Company comp = new Company(null,"countTest1DAO");
-        companyDAO.create(comp);
-        long count = companyDAO.count(pageParameters);
+        long countInitial = computerDAO.count(pageParameters);
+        Computer comp = new Computer.ComputerBuilder().name("CountTestDAO1").build();
+        computerDAO.create(comp);
+        long count = computerDAO.count(pageParameters);
         assertEquals(countInitial+1,count);
 
-        companyDAO.delete(comp);
+        computerDAO.delete(comp);
     }
 
-    @Test @Ignore
+    @Test
     @Transactional
     public void CountTestNotFound() {
         PageParameters pageParameters = new PageParameters.Builder().search("hunt").build();
-        long countInitial = companyDAO.count(pageParameters);
-        Company comp = new Company(null,"countTest2DAO");
-        companyDAO.create(comp);
-        long count = companyDAO.count(pageParameters);
+        long countInitial = computerDAO.count(pageParameters);
+        Computer comp = new Computer.ComputerBuilder().name("CountTestDAO2").build();
+        computerDAO.create(comp);
+        long count = computerDAO.count(pageParameters);
         assertEquals(countInitial,count);
 
-        companyDAO.delete(comp);
-    }*/
+        computerDAO.delete(comp);
+    }
 
     // -------------------------------------- Find all tests -----------------------------------------------------------
-
+    /*
     @Test
     @Transactional
     public void findAllTest() {
@@ -153,7 +151,7 @@ public class ComputerDAOTest {
     }
 
 
-    /*
+
 
     @Test
     public void testFindAll() throws DAOException {
