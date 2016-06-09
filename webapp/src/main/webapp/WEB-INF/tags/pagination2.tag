@@ -45,7 +45,7 @@
 
     <c:if test="${indexStop < (count - 1)}">
         <li class="disabled"><a>&hellip;</a></li>
-        <li><a href="?page=${count - 1}">${count}</a></li>
+        <li><a href="?pageNumber=${count - 1}&size=${psize}&search=${pparam.search}&order=${param.order}&dir=${param.dir}">${count}</a></li>
     </c:if>
 
     <c:choose>

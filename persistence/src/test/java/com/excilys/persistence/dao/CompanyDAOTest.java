@@ -1,16 +1,15 @@
 package com.excilys.persistence.dao;
 
 import com.excilys.core.model.Company;
-import com.excilys.core.model.PageParameters;
-import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
-import java.util.List;
+import static org.junit.Assert.*;
 
 @ContextConfiguration("classpath*:applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -19,63 +18,104 @@ public class CompanyDAOTest {
     @Autowired
     private CompanyDAO companyDAO;
 
+    private  static Long initialCount;
+
+    @BeforeClass
+    public static void beforeTests() {
+       // companiesCreated = new ArrayList<>();
+    }
+
+//    @Test
+//    public void TestInit() {
+//        companyDAO = companyDAO;
+//    }
+    // -------------------------------------- Find tests ---------------------------------------------------------------
     @Test
-    public void testFindShouldHaveValidId() throws DAOException {
+    @Transactional
+    public void testFindShouldHaveValidId() {
+
 
         Company result = this.companyDAO.find(-1L);
-
-        Assert.assertNull(result);
+        assertNull(result);
 
         result = this.companyDAO.find(0L);
-
-        Assert.assertNull(result);
+        assertNull(result);
 
     }
 
     @Test
-    public void testCreateFindDelete() throws DAOException, SQLException {
+    public void findTest() {
+        Company comp = companyDAO.find(3L);
+        assertEquals(comp.getName(), "RCA");
+    }
 
-        // create a company
+    // -------------------------------------- Create tests -------------------------------------------------------------
+    @Test
+    @Transactional
+    public void createTest() {
+        Company comp = new Company();
+        comp.setName("createComputerTestDAO");
+        Company created = companyDAO.create(comp);
+        assertNotNull(created);
+        assertNotNull(created.getId());
 
-        final Company comp = new Company(null, "MyCompanyName");
-
-        Assert.assertNotNull(comp);
-        final Company a = this.companyDAO.create(comp);
-        Assert.assertNotNull(a);
-        final Long id = a.getId();
-        Assert.assertTrue(id > 0L);
-
-        // find the computer by its id
-
-        final Company b = this.companyDAO.find(id);
-
-        Assert.assertNotNull(b);
-        Assert.assertEquals(comp.getName(), b.getName());
-        Assert.assertEquals(comp, b);
-
-        // delete the computer
-
-        this.companyDAO.delete(b);
-
-        // try to find it again
-
-        final Company c = this.companyDAO.find(id);
-
-        Assert.assertNull(c);
+        companyDAO.delete(created);
     }
 
     @Test
+    @Transactional
+    public void createEqualTest() {
+        Company comp = new Company();
+        comp.setName("createEqualsComputerTestDAO");
+        Company created = companyDAO.create(comp);
+        comp.setId(created.getId());
+        assertEquals(comp,created);
+
+        companyDAO.delete(created);
+    }
+
+
+    // -------------------------------------- Update tests -------------------------------------------------------------
+
+    @Test
+    @Transactional
+    public void updateTest() {
+        Company company = new Company(null,"updateTestDAO");
+        company = companyDAO.create(company);
+        company.setName("updatedTestDAO");
+        company = companyDAO.update(company);
+        assertEquals("updatedTestDAO",company.getName());
+
+        companyDAO.delete(company);
+    }
+
+
+    // -------------------------------------- Remove tests -------------------------------------------------------------
+
+
+    @Test
+    @Transactional
+    public void removeTest() {
+        Company company = new Company(null,"removedTestDAO");
+        Company created = companyDAO.create(company);
+        Long id = created.getId();
+        companyDAO.delete(created);
+        Company retrieve = companyDAO.find(id);
+        assertNull(retrieve);
+    }
+
+   /* @Test
     public void testUpdate() throws DAOException {
 
         // create a company
 
         final Company comp = new Company(null, "MyCompanyName");
 
-        Assert.assertNotNull(comp);
+        assertNotNull(comp);
         final Company a = this.companyDAO.create(comp);
-        Assert.assertNotNull(a);
+        assertNotNull(a);
         final Long id = a.getId();
-        Assert.assertTrue(id > 0L);
+        //assertTrue(id > 0L);
 
         // modify the object
 
@@ -85,8 +125,8 @@ public class CompanyDAOTest {
 
         final Company b = this.companyDAO.update(a);
 
-        Assert.assertEquals(b, a);
-        Assert.assertEquals(id, b.getId());
+        assertEquals(b, a);
+        assertEquals(id, b.getId());
 
         // retrieve from db
 
@@ -103,14 +143,14 @@ public class CompanyDAOTest {
 
         final Company e = this.companyDAO.find(id);
 
-        Assert.assertNull(e);
+        assertNull(e);
     }
 
     @Test
     public void testFindAll() throws DAOException {
         final List<Company> companies = this.companyDAO.findAll();
 
-        Assert.assertNotNull(companies);
+        assertNotNull(companies);
         Assert.assertTrue(companies.size() > 0);
     }
 
@@ -197,6 +237,6 @@ public class CompanyDAOTest {
         } else {
             Assert.assertTrue(companies1.size() == (companies2.size() - (2 * 7)));
         }
-    }
+    }*/
 
 }

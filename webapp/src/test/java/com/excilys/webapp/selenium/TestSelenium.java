@@ -3,7 +3,7 @@ package com.excilys.webapp.selenium;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 
-@Ignore
 public class TestSelenium {
     private WebDriver driver;
     private String baseUrl;
@@ -23,16 +22,16 @@ public class TestSelenium {
     @Before
     public void setUp() throws Exception {
         this.driver = new FirefoxDriver();
-        this.baseUrl = "http://localhost:8080/";
+        this.baseUrl = "http://user:user@localhost:8080/";
         this.driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
-    @Ignore
-    void testCreateFindDelete() throws Exception {
+    @Test
+    public void testCreateFindDelete() throws Exception {
 
         // creates a computer with a name of "ComputerTest"
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("addComputer")).click();
         this.driver.findElement(By.id("computerName")).clear();
         this.driver.findElement(By.id("computerName")).sendKeys("ComputerTest");
@@ -40,7 +39,7 @@ public class TestSelenium {
 
         // check if it has been added
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTest");
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound = this.driver.findElement(By.id("nbComputers")).getText();
@@ -57,7 +56,7 @@ public class TestSelenium {
 
         // check if it has been removed
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTest");
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound2 = this.driver.findElement(By.id("nbComputers")).getText();
@@ -65,12 +64,12 @@ public class TestSelenium {
         Assert.assertEquals(nbFound2, "0");
     }
 
-    @Ignore
+    @Test
     public void testUpdate() throws Exception {
 
         // creates a computer with a name of "ComputerTest"
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("addComputer")).click();
         this.driver.findElement(By.id("computerName")).clear();
         this.driver.findElement(By.id("computerName")).sendKeys("ComputerTest");
@@ -78,7 +77,7 @@ public class TestSelenium {
 
         // check if it has been added
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTest");
         this.driver.findElement(By.id("searchsubmit")).click();
         String nbFound = this.driver.findElement(By.id("nbComputers")).getText();
@@ -96,7 +95,7 @@ public class TestSelenium {
 
         // check if has been edited
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTestEdited");
         this.driver.findElement(By.id("searchsubmit")).click();
         nbFound = this.driver.findElement(By.id("nbComputers")).getText();
@@ -113,7 +112,7 @@ public class TestSelenium {
 
         // check if it has been removed
 
-        this.driver.get(this.baseUrl + "/cdb/dashboard");
+        this.driver.get(this.baseUrl + "dashboard");
         this.driver.findElement(By.id("searchbox")).sendKeys("ComputerTestEdited");
         this.driver.findElement(By.id("searchsubmit")).click();
         final String nbFound2 = this.driver.findElement(By.id("nbComputers")).getText();
