@@ -18,4 +18,9 @@ public class ImportController {
         computerImportService.importComputers();
         return "dashboard";
     }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String handleError(){
+        return "invalidComputerImport";
+    }
 }
