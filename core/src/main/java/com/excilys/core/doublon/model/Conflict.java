@@ -38,4 +38,13 @@ public class Conflict {
     public Error getErrors() {
         return errors;
     }
+    public void setOrigin(ComputerDTO origin) {
+        this.origin = origin;
+    }
+    public void setConflictComputers(List<ComputerDTO> conflictComputers) {
+        this.conflictComputers = conflictComputers;
+    }
+    public void setErrors(Error errors) {
+        this.errors = errors;
+    }
 }
