@@ -208,6 +208,7 @@ public class ComputerDAO implements DAO<Computer> {
     private FullTextQuery getFullTextQuery(PageParameters page) {
         FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
         SearchFactory sf = fullTextEntityManager.getSearchFactory();
+
         QueryBuilder computerQB = sf.buildQueryBuilder().forEntity(Computer.class).get();
 
         org.apache.lucene.search.Query luceneQuery;

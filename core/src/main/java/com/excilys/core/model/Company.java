@@ -1,5 +1,6 @@
 package com.excilys.core.model;
 
+import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.SortableField;
 
@@ -22,7 +23,7 @@ public class Company {
     private Long id;
 
     @SortableField
-    @Field
+    @Field(analyze = Analyze.NO)
     private String name;
 
     /**
