@@ -52,6 +52,12 @@ a.glyphicon:hover{
     color:#000;
 }
 
+.errortext{
+    font-size:55px;
+    font-weight: bold;
+    text-align: center;
+}
+
 body{
     /*background-color:#efefef;*/
     background-size:cover;
