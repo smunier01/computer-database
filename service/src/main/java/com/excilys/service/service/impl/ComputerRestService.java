@@ -31,7 +31,7 @@ public class ComputerRestService implements IComputerRestService {
 
     private static final String AUTH_PASSWORD = "user";
 
-    private static final String BASE_URL = "http://localhost:8080/cdb/rest/computer";
+    private static final String BASE_URL = "http://localhost:8080/rest/computer";
 
     private WebTarget target;
 
