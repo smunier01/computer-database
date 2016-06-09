@@ -1,6 +1,23 @@
 package com.excilys.webapp.controller;
 
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.excilys.binding.mapper.impl.CompanyMapper;
 import com.excilys.binding.mapper.impl.ComputerMapper;
 import com.excilys.binding.mapper.impl.PageParametersMapper;
@@ -16,20 +33,6 @@ import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.service.service.ICompanyService;
 import com.excilys.service.service.IComputerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("${path.base}")
@@ -67,7 +70,7 @@ public class ComputerController {
      * @return servlet name
      */
     @RequestMapping(path = "${path.dashboard}", method = RequestMethod.GET)
-    public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors) {
+    public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors, HttpServletRequest request) {
         paramsValidator.validate(param, errors);
 
         if (!errors.hasErrors()) {
@@ -77,6 +80,9 @@ public class ComputerController {
         } else {
             throw new ValidatorException(errors);
         }
+        
+        // Add the information "isAdmin" to the model
+        model.addAttribute("isAdmin", request.isUserInRole("ROLE_ADMIN"));
 
         return "dashboard";
     }
@@ -120,7 +126,7 @@ public class ComputerController {
 
         if (!errors.hasErrors()) {
             this.computerService.updateComputer(this.computerMapper.fromDTO(computer));
-            return "redirect:${path.dashboard}";
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
@@ -160,7 +166,7 @@ public class ComputerController {
 
         if (!errors.hasErrors()) {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
-            return "redirect:${path.dashboard}";
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
@@ -183,6 +189,6 @@ public class ComputerController {
                         .map(Long::parseLong)
                         .collect(Collectors.toList()));
 
-        return "redirect:${path.dashboard}";
+        return "redirect:/dashboard";
     }
 }

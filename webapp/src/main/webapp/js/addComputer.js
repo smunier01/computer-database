@@ -31,7 +31,7 @@ $(function () {
         return f;
     }();
 
-    $('#computerName').on('input', function () {
+    $('#name').on('input', function () {
 
         var elem = $(this);
         var parent = elem.parent().first();

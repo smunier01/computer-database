@@ -55,7 +55,7 @@ a.glyphicon:hover{
 body{
     /*background-color:#efefef;*/
     background-size:cover;
-    background: #0F3355 url("images/bg1.png") fixed top center no-repeat;
+    background: #fff url("images/bg1.png") fixed top center no-repeat;
     font-family: 'Open Sans', sans-serif;
 }
 
