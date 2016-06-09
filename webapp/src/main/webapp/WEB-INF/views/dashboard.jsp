@@ -16,6 +16,7 @@
 <spring:message code="dashboard.addcomputer" var="addComputer"/>
 <spring:message code="dashboard.edit" var="editComputer"/>
 <spring:message code="dashboard.found" var="foundComputer"/>
+<spring:message code="dashboard.admin" var="admin"/>
 <spring:message code="delete.confirmation" var="deleteConfirmation"/>
 
 <body>
@@ -34,9 +35,10 @@
                 </form>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a>
                 <c:if test="${isAdmin}">
+                	<a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a>
                 	<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
+                	<a class="btn btn-default" id="admin" href="admin">${admin}</a>
                 </c:if>
             </div>
         </div>

@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 @Service
@@ -22,6 +24,10 @@ public class UserService implements IUserService {
     @Autowired
     protected PlatformTransactionManager txManager;
 
+    public List<User> listAllUser(){
+    	return userDAO.listAllUser();
+    }
+    
     @Override
     public User findById(int id) {
         return null;
