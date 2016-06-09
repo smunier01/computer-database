@@ -30,7 +30,7 @@
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name"/>
-                    <input id="search_type" name="search_type" type="hidden">
+                    <input id="searchType" name="searchType" type="hidden">
 
                     <div class="btn-group">
                         <button type="submit" id="searchsubmit" class="btn btn-primary">${filterByName}</button>
@@ -41,12 +41,10 @@
                         <ul class="dropdown-menu">
                             <li><a type="submit" href="#">${filterByName}</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#" onclick="$('#search_type').val('company'); $('#searchForm').submit()">${filtercompany}</a></li>
-                            <li><a href="#" onclick="$('#search_type').val('computer'); $('#searchForm').submit()">${filtercomputer}</a></li>
+                            <li><a href="#" onclick="$('#searchType').val('company'); $('#searchForm').submit()">${filtercompany}</a></li>
+                            <li><a href="#" onclick="$('#searchType').val('computer'); $('#searchForm').submit()">${filtercomputer}</a></li>
                         </ul>
                     </div>
-
-                    <%--<input type="submit" id="searchsubmit" value="${filterByName}" class="btn btn-primary"/>--%>
                 </form>
             </div>
             <div class="pull-right">
