@@ -1,17 +1,17 @@
 package com.excilys.core.doublon.model;
 
+import com.excilys.core.doublon.error.Error;
 import com.excilys.core.dto.ComputerDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by excilys on 09/06/16.
- */
 public class Conflict {
 
     // list of the variable
     private ComputerDTO origin;
-    private ArrayList<ComputerDTO> conflictComputers;
+    private List<ComputerDTO> conflictComputers;
+    private Error errors;
 
     /**
      * Default constructor.
@@ -32,7 +32,10 @@ public class Conflict {
     public ComputerDTO getOrigin() {
         return origin;
     }
-    public ArrayList<ComputerDTO> getConflictComputers() {
+    public List<ComputerDTO> getConflictComputers() {
         return conflictComputers;
+    }
+    public Error getErrors() {
+        return errors;
     }
 }
