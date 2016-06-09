@@ -14,9 +14,15 @@
     <http pattern="/fonts/**" security="none"/>
 
     <http create-session="never">
+    	<!-- Dashboard & Computer -->
         <intercept-url pattern="/dashboard" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <intercept-url pattern="/computer/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/rest/**" access="hasRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/computer/**" access="hasAnyRole('ROLE_ADMIN')"/>
+        
+        <!-- REST requests --> 
+        <intercept-url pattern="/rest/**" method='GET' access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/rest/**" method='POST' access="hasAnyRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/rest/**" method='PUT' access="hasAnyRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/rest/**" method='DELETE' access="hasAnyRole('ROLE_ADMIN')"/>
 
         <http-basic/>
 
