@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <jsp:include page="top.jsp"/>
 
@@ -40,14 +40,7 @@
                 <!-- Variable declarations for passing labels as parameters -->
                 <!-- Table header for Computer Name -->
 
-                <c:if test="${isAdmin}">
-                    <th class="editMode" style="width: 60px; height: 22px;">
-                        <input type="checkbox" id="selectall"/>
-                		<span style="vertical-align: top;"> - <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected('${deleteConfirmation}');">
-                		<i class="fa fa-trash-o fa-lg"></i></a>
-                        </span>
-                    </th>
-                </c:if>
+
                 <th>
                     <mylib2:link target="" name="${columnName}" params="${page.params}" order="name"/>
                 </th>
@@ -64,29 +57,16 @@
             </thead>
             <!-- Browse attribute computers -->
             <tbody id="results">
-            <c:forEach items="${page.list}" var="computer">
-                <tr>
-                    <c:if test="${isAdmin}">
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" id="${computer.name}_id" class="cb" value="${computer.id}">
-                        </td>
-                    </c:if>
-                    <td>
-                        <c:choose>
-                            <c:when test="${isAdmin}">
-                                <a id="${computer.name}_name" href="${context}/computer/edit?id=${computer.id}" onclick="">${computer.name}</a>
-                            </c:when>
-                            <c:otherwise>
-                                ${computer.name}
-                            </c:otherwise>
-                        </c:choose>
-
-                    </td>
-                    <td>${computer.introduced}</td>
-                    <td>${computer.discontinued}</td>
-                    <td>${computer.companyName}</td>
-                </tr>
-            </c:forEach>
+            <form action="${contextPath}/import" method="POST">
+                <c:forEach items="${page.list}" var="computer">
+                    <tr>
+                        <td><input type="text" name="name[]" value="${computer.name}"></td>
+                        <td><input type="text" name="introduced[]" value="${computer.introduced}"></td>
+                        <td><input type="text" name="discontinued[]" value="${computer.discontinued}"></td>
+                        <td><input type="text" name="companyName[]" value="${computer.companyName}"></td>
+                    </tr>
+                </c:forEach>
+            </form>
             </tbody>
         </table>
     </div>
@@ -94,13 +74,12 @@
     <div class="container">
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
-
+                <a class="btn btn-default" id="addComputer" href="#">Cancel</a>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a>
-                <c:if test="${isAdmin}">
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
-                </c:if>
+                <a class="btn btn-default" id="addComputer" href="#">Export Errors as CSV</a>
+                <a class="btn btn-default" id="addComputer" href="#">Ignore Errors</a>
+                <a class="btn btn-success" id="addComputer" href="#">Submit</a>
             </div>
         </div>
     </div>
