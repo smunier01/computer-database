@@ -120,7 +120,7 @@ public class ComputerController {
 
         if (!errors.hasErrors()) {
             this.computerService.updateComputer(this.computerMapper.fromDTO(computer));
-            return "redirect:${path.dashboard}";
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
@@ -160,7 +160,7 @@ public class ComputerController {
 
         if (!errors.hasErrors()) {
             this.computerService.createComputer(this.computerMapper.fromDTO(computer));
-            return "redirect:${path.dashboard}";
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("computer", computer);
             model.addAttribute("errors", errors);
@@ -183,6 +183,6 @@ public class ComputerController {
                         .map(Long::parseLong)
                         .collect(Collectors.toList()));
 
-        return "redirect:${path.dashboard}";
+        return "redirect:/dashboard";
     }
 }
