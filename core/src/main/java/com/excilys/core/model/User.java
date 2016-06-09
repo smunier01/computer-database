@@ -8,16 +8,17 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
     @Id
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "userRole")
     private String role;
 
     public User() {
