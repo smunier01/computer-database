@@ -32,7 +32,6 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 @Controller
 @RequestMapping("${path.base}")
 public class ComputerController {
@@ -71,12 +70,12 @@ public class ComputerController {
     @RequestMapping(path = "${path.dashboard}", method = RequestMethod.GET)
     public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors, HttpServletRequest request) {
         paramsValidator.validate(param, errors);
-
         if (!errors.hasErrors()) {
             PageParameters p = pageParamMapper.fromDTO(param);
             Page<ComputerDTO> computerPage = computerMapper.map(computerService.getComputersPage(p));
             model.addAttribute("page", computerPage);
         } else {
+
             throw new ValidatorException(errors);
         }
 

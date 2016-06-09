@@ -124,6 +124,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.excilys</groupId>
+            <artifactId>binding</artifactId>
+            <version>0.7.0-RELEASE</version>
+        </dependency>
 
     </dependencies>
 
