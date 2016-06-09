@@ -25,6 +25,10 @@ public class PageParametersMapper implements IPageParametersMapper {
             builder.search(dto.getSearch());
         }
 
+        if (dto.getSearchType() != null && !dto.getSearchType().isEmpty()) {
+            builder.searchType(dto.getSearchType());
+        }
+
         builder.size(dto.getSize());
 
         builder.pageNumber(dto.getPageNumber());
