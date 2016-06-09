@@ -86,7 +86,7 @@
 	                    </c:if>
 	                    <td>
 	                    	<c:choose>
-		  						<c:when test="${condition1}">
+		  						<c:when test="${isAdmin}">
 		  							<a id="${computer.name}_name" href="${context}/computer/edit?id=${computer.id}" onclick="">${computer.name}</a>
 			  					</c:when>
 			  					<c:otherwise>
