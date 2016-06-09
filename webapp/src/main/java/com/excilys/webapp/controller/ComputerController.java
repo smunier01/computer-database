@@ -79,7 +79,7 @@ public class ComputerController {
             throw new ValidatorException(errors);
         }
 
-        // Add the information "isAdmin" to the model
+        // Add the information "isAdmin" to the doublon
         model.addAttribute("isAdmin", request.isUserInRole("ROLE_ADMIN"));
 
         return "dashboard";

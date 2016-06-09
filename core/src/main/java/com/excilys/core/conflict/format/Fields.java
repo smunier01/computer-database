@@ -1,4 +1,4 @@
-package com.excilys.core.doublon.error;
+package com.excilys.core.conflict.format;
 
 public enum Fields {
     NAME, INTRODUCED, DISCONTINUED, COMPANY_NAME

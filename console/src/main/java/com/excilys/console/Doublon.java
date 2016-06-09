@@ -4,7 +4,7 @@ import com.excilys.binding.doublon.Hamming;
 import com.excilys.binding.doublon.Levenshtein;
 import com.excilys.binding.doublon.SimilarityCalculator;
 import com.excilys.binding.mapper.impl.ComputerMapper;
-import com.excilys.service.service.impl.ComputerRestService;
+import com.excilys.service.computer.impl.ComputerRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

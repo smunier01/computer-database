@@ -1,4 +1,5 @@
-package com.excilys.core.doublon.model;
+package com.excilys.core.conflict;
+
 
 import com.excilys.binding.doublon.Hamming;
 import com.excilys.binding.doublon.Levenshtein;
@@ -47,12 +48,15 @@ public class Rapport {
     public List<Conflict> getToCheck() {
         return toCheck;
     }
+
     public void setToImport(List<ComputerDTO> toImport) {
         this.toImport = toImport;
     }
+
     public void setToCheck(List<Conflict> toCheck) {
         this.toCheck = toCheck;
     }
+
     public void setRefuse(List<Conflict> refuse) {
         this.refuse = refuse;
     }

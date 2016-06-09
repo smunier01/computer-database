@@ -37,12 +37,12 @@ $(function () {
         var parent = elem.parent().first();
 
         if (!validateString(elem.val())) {
-            parent.addClass('has-error');
+            parent.addClass('has-format');
             parent.removeClass('has-success');
             name = false;
         } else {
             parent.addClass('has-success');
-            parent.removeClass('has-error');
+            parent.removeClass('has-format');
             name = true;
         }
 
@@ -55,12 +55,12 @@ $(function () {
         var parent = elem.parent().first();
 
         if (!validateDate(elem.val())) {
-            parent.addClass('has-error');
+            parent.addClass('has-format');
             parent.removeClass('has-success');
             introduced = false;
         } else {
             parent.addClass('has-success');
-            parent.removeClass('has-error');
+            parent.removeClass('has-format');
             introduced = true;
         }
 
@@ -73,12 +73,12 @@ $(function () {
         var parent = elem.parent().first();
 
         if (!validateDate(elem.val())) {
-            parent.addClass('has-error');
+            parent.addClass('has-format');
             parent.removeClass('has-success');
             discontinued = false;
         } else {
             parent.addClass('has-success');
-            parent.removeClass('has-error');
+            parent.removeClass('has-format');
             discontinued = true;
         }
 
