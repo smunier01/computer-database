@@ -1,4 +1,4 @@
-package com.excilys.service.service;
+package com.excilys.service;
 
 /**
  * Exception used when there is a problem in one of the Service classes.

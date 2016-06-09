@@ -1,11 +1,12 @@
-package com.excilys.service.service.impl;
+package com.excilys.service.company.impl;
 
 import com.excilys.binding.mapper.impl.CompanyMapper;
 import com.excilys.binding.mapper.impl.PageParametersMapper;
 import com.excilys.core.dto.CompanyDTO;
 import com.excilys.core.model.Company;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.service.ICompanyRestService;
+import com.excilys.service.company.ICompanyRestService;
+import com.excilys.service.computer.impl.ComputerService;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;

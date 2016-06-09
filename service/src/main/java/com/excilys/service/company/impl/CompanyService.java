@@ -1,4 +1,4 @@
-package com.excilys.service.service.impl;
+package com.excilys.service.company.impl;
 
 
 import com.excilys.binding.validation.ValidatorUtil;
@@ -6,7 +6,7 @@ import com.excilys.core.model.Company;
 import com.excilys.core.model.PageParameters;
 import com.excilys.persistence.dao.CompanyDAO;
 import com.excilys.persistence.dao.ComputerDAO;
-import com.excilys.service.service.ICompanyService;
+import com.excilys.service.ICompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

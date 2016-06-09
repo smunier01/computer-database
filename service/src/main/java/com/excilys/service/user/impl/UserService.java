@@ -1,8 +1,8 @@
-package com.excilys.service.service.impl;
+package com.excilys.service.user.impl;
 
 import com.excilys.core.model.User;
 import com.excilys.persistence.dao.UserDAO;
-import com.excilys.service.service.IUserService;
+import com.excilys.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;

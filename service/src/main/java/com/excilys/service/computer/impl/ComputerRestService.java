@@ -1,11 +1,11 @@
-package com.excilys.service.service.impl;
+package com.excilys.service.computer.impl;
 
 import com.excilys.binding.mapper.impl.ComputerMapper;
 import com.excilys.binding.mapper.impl.PageParametersMapper;
 import com.excilys.core.dto.ComputerDTO;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.service.IComputerRestService;
+import com.excilys.service.IComputerRestService;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;

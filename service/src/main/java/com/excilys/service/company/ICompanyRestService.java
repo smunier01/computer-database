@@ -1,4 +1,4 @@
-package com.excilys.service.service;
+package com.excilys.service.company;
 
 import com.excilys.core.model.Company;
 import com.excilys.core.model.PageParameters;

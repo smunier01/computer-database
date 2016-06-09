@@ -1,4 +1,4 @@
-package com.excilys.service.service;
+package com.excilys.service;
 
 
 import com.excilys.core.model.Company;
