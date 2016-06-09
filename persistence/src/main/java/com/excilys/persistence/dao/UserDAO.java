@@ -1,12 +1,15 @@
 package com.excilys.persistence.dao;
 
-import com.excilys.core.model.QUser;
-import com.excilys.core.model.User;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
+import com.excilys.core.model.QUser;
+import com.excilys.core.model.User;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 public class UserDAO {
@@ -23,6 +26,10 @@ public class UserDAO {
         this.jpaQuery = new JPAQueryFactory(entityManager);
     }
 
+    public List<User> listAllUser(){
+    	return jpaQuery.selectFrom(quser).fetch();
+    }
+    
     public User findByUserName(String username) {
         return jpaQuery.selectFrom(quser).where(quser.username.eq(username)).fetchFirst();
     }
