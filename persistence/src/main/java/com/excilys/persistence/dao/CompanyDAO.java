@@ -51,7 +51,7 @@ public class CompanyDAO implements DAO<Company> {
 
     @Override
     public void delete(Company obj) {
-        this.em.remove(obj);
+        this.em.remove(em.merge(obj));
     }
 
     public long count(PageParameters page) {
