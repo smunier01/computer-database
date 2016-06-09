@@ -1,13 +1,18 @@
 package com.excilys.core.doublon.error;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Error {
 
     // list of the variables
     private Map<Fields, List<String>> errorMap;
+
+    /**
+     * The default constructor.
+     */
+    public Error() {
+        this.errorMap = new HashMap<Fields, List<String>>();
+    }
 
     /**
      * Return the list corresponding to the key in Errors Object.
@@ -27,4 +32,7 @@ public class Error {
         }
     }
 
+    public Map<Fields, List<String>> getErrorMap() {
+        return errorMap;
+    }
 }
