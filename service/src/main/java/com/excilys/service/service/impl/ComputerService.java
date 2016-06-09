@@ -124,6 +124,12 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
+    public List<Computer> getAll() {
+        this.LOGGER.debug("entering get()");
+        return this.computerDAO.findAll();
+    }
+
+    @Override
     public long countComputers(PageParameters page) {
         this.LOGGER.debug("entering countComputers(page)");
         this.validator.validatePageParameters(page);

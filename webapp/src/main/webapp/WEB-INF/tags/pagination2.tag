@@ -27,25 +27,25 @@
             </a></li>
         </c:when>
         <c:otherwise>
-            <li><a href="?page=${current - 1}" aria-label="Previous"> <span
+            <li><a href="?pageNumber=${count - 1}&size=${psize}&search=${param.search}&order=${param.order}&direction=${param.direction}" aria-label="Previous"> <span
                     aria-hidden="true">&laquo;</span></a></li>
         </c:otherwise>
     </c:choose>
 
     <c:if test="${indexStart > 0}">
-        <li><a href="?page=0">0</a></li>
+        <li><a href="?pageNumber=0">1</a></li>
         <li class="disabled"><a>&hellip;</a></li>
     </c:if>
 
     <c:forEach var="i" begin="${indexStart}" end="${indexStop}">
         <li ${current == i ? 'class="active"' : ''}><a
-                href="?pageNumber=${i}&size=${psize}&search=${pparam.search}&order=${param.order}&dir=${param.dir}">${i + 1}</a>
+                href="?pageNumber=${i}&size=${psize}&search=${param.search}&order=${param.order}&direction=${param.direction}">${i + 1}</a>
         </li>
     </c:forEach>
 
     <c:if test="${indexStop < (count - 1)}">
         <li class="disabled"><a>&hellip;</a></li>
-        <li><a href="?pageNumber=${count - 1}&size=${psize}&search=${pparam.search}&order=${param.order}&dir=${param.dir}">${count}</a></li>
+        <li><a href="?pageNumber=${count - 1}&size=${psize}&search=${param.search}&order=${param.order}&dir=${param.dir}">${count}</a></li>
     </c:if>
 
     <c:choose>
@@ -54,7 +54,7 @@
                     aria-hidden="true">&laquo;</span></a></li>
         </c:when>
         <c:otherwise>
-            <li><a id="next" href="?page=${current + 1}" aria-label="Next">
+            <li><a id="next" href="?pageNumber=${current + 1}&size=${psize}&search=${param.search}&order=${param.order}&direction=${param.direction}" aria-label="Next">
                 <span aria-hidden="true">&laquo;</span>
             </a></li>
         </c:otherwise>

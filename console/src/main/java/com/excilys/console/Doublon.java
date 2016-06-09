@@ -1,15 +1,12 @@
 package com.excilys.console;
 
+import com.excilys.binding.doublon.Hamming;
+import com.excilys.binding.doublon.Levenshtein;
+import com.excilys.binding.doublon.SimilarityCalculator;
 import com.excilys.binding.mapper.impl.ComputerMapper;
-import com.excilys.core.doublon.model.Rapport;
-import com.excilys.core.model.Computer;
 import com.excilys.service.service.impl.ComputerRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class Doublon {
@@ -27,15 +24,24 @@ public class Doublon {
      */
     public static void main(final String[] args) {
 
-        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+//        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+//
+//        context.registerShutdownHook();
+//
+//        Doublon p = context.getBean(Doublon.class);
+//
+//        List<Computer> l = p.computerRestService.getList();
+//
+//        Rapport r = new Rapport(p.computerMapper.toDTO(l));
 
-        context.registerShutdownHook();
+        String left = "Apple";
+        String right = "Apple Inc.";
 
-        Doublon p = context.getBean(Doublon.class);
+        SimilarityCalculator sc1 = new Hamming();
+        SimilarityCalculator sc2 = new Levenshtein();
 
-        List<Computer> l = p.computerRestService.getList();
-
-        Rapport r = new Rapport(p.computerMapper.toDTO(l));
+        System.out.println(sc1.getPercentSimilarity(left, right));
+        System.out.println(sc2.getPercentSimilarity(left, right));
 
     }
 }
