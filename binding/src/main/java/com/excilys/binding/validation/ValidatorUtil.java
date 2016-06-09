@@ -57,6 +57,18 @@ public class ValidatorUtil {
     }
 
     /**
+     * Check for the legality of a name.
+     *
+     * @param name the name
+     * @throws ValidatorException ValidatorException if the name is illegal.
+     */
+    public void validateName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new ValidatorException("Illegal name: " + name);
+        }
+    }
+
+    /**
      * Check the illegality of a PageParameter object.
      *
      * @param params page parameter object to check
@@ -140,6 +152,7 @@ public class ValidatorUtil {
         // company id (required)
         this.validateId(company.getId());
 
-        // TODO name ???
+        // company name not null or empty
+        this.validateName(company.getName());
     }
 }
