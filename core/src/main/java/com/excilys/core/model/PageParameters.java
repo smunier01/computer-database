@@ -20,9 +20,9 @@ public class PageParameters {
     private long pageNumber;
 
     private String search;
+    private String searchType = "";
 
     private Order order;
-
     private Direction direction;
 
     /**
@@ -32,6 +32,7 @@ public class PageParameters {
         this.size = 10;
         this.pageNumber = 0;
         this.search = "";
+        this.searchType = "";
         this.order = Order.NAME;
         this.direction = Direction.ASC;
     }
@@ -42,13 +43,15 @@ public class PageParameters {
      * @param size       size of a page.
      * @param pageNumber current page number.
      * @param search     string search for the query.
+     * @param searchType string search type for search by company or computer names.
      * @param order      enum corresponding to the column name for the order by.
      * @param direction  direction of the order by (asc, desc).
      */
-    public PageParameters(long size, long pageNumber, String search, Order order, Direction direction) {
+    public PageParameters(long size, long pageNumber, String search, String searchType, Order order, Direction direction) {
         this.size = size;
         this.pageNumber = pageNumber;
         this.search = search;
+        this.searchType = searchType;
         this.order = order;
         this.direction = direction;
     }
@@ -65,6 +68,14 @@ public class PageParameters {
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
     }
 
     public Order getOrder() {
@@ -100,6 +111,7 @@ public class PageParameters {
         private int size = 10;
         private int pageNumber = 0;
         private String search = "";
+        private String searchType = "";
         private Order order = Order.NAME;
         private Direction direction = Direction.ASC;
 
@@ -118,6 +130,11 @@ public class PageParameters {
             return this;
         }
 
+        public Builder searchType(String searchType) {
+            this.searchType = searchType;
+            return this;
+        }
+
         public Builder order(Order order) {
             this.order = order;
             return this;
@@ -129,7 +146,7 @@ public class PageParameters {
         }
 
         public PageParameters build() {
-            return new PageParameters(this.size, this.pageNumber, this.search, this.order, this.direction);
+            return new PageParameters(this.size, this.pageNumber, this.search, this.searchType, this.order, this.direction);
         }
     }
 

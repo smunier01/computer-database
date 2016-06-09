@@ -23,7 +23,7 @@
 <c:if test="${!empty order}">
     <c:set var="myVar" value="${myVar}order=${order}&"/>
     <c:set var="myVar"
-           value="${myVar}dir=${param.dir == 'asc' && param.order == order ? 'desc' : 'asc'}"/>
+           value="${myVar}direction=${param.direction == 'asc' && param.order == order ? 'desc' : 'asc'}"/>
 </c:if>
 
 <a href="${target}?${myVar}">${name}</a>

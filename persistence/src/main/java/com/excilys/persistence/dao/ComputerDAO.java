@@ -46,7 +46,13 @@ public class ComputerDAO implements DAO<Computer> {
     @SuppressWarnings("rawtypes")
     public static OrderSpecifier<? extends Comparable> getOrderMethod(Order o, Direction d) {
         PathBuilder<QComputer> orderByExpression = new PathBuilder<>(QComputer.class, "computer");
-        return new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+        if (d == Direction.ASC) {
+            System.out.println("ASC");
+            return new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+        } else {
+            System.out.println("DESC");
+            return new OrderSpecifier<>(com.querydsl.core.types.Order.DESC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+        }
     }
 
     @PersistenceContext
@@ -144,17 +150,29 @@ public class ComputerDAO implements DAO<Computer> {
      */
     @SuppressWarnings("unchecked")
     private List<Computer> findAllLucene(PageParameters page) {
-
         FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
         SearchFactory sf = fullTextEntityManager.getSearchFactory();
 
         QueryBuilder computerQB = sf.buildQueryBuilder().forEntity(Computer.class).get();
 
-        org.apache.lucene.search.Query luceneQuery = computerQB.keyword()
-                .onField("name")
-                .andField("company.name")
-                .matching(page.getSearch())
-                .createQuery();
+        org.apache.lucene.search.Query luceneQuery;
+        if (page.getSearchType().equals("computer")) {
+            luceneQuery = computerQB.keyword()
+                    .onField("name")
+                    .matching(page.getSearch())
+                    .createQuery();
+        } else if (page.getSearchType().equals("company")) {
+            luceneQuery = computerQB.keyword()
+                    .onField("company.name")
+                    .matching(page.getSearch())
+                    .createQuery();
+        } else {
+            luceneQuery = computerQB.keyword()
+                    .onField("name")
+                    .andField("company.name")
+                    .matching(page.getSearch())
+                    .createQuery();
+        }
 
         FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
         fullTextQuery.setFirstResult((int) (page.getSize() * page.getPageNumber()));

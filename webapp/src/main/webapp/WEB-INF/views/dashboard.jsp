@@ -13,6 +13,9 @@
 <spring:message code="column.discontinued" var="columnDiscontinued"/>
 <spring:message code="column.company" var="columnCompany"/>
 <spring:message code="dashboard.filterbyname" var="filterByName"/>
+<spring:message code="dashboard.filterall" var="filterall"/>
+<spring:message code="dashboard.filtercompany" var="filtercompany"/>
+<spring:message code="dashboard.filtercomputer" var="filtercomputer"/>
 <spring:message code="dashboard.addcomputer" var="addComputer"/>
 <spring:message code="dashboard.edit" var="editComputer"/>
 <spring:message code="dashboard.found" var="foundComputer"/>
@@ -29,15 +32,28 @@
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">
+                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${param.search}"  />
+                    <input id="searchType" name="searchType" type="hidden">
 
-                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name"/>
-                    <input type="submit" id="searchsubmit" value="${filterByName}" class="btn btn-primary"/>
+                    <div class="btn-group">
+                        <button type="submit" id="searchsubmit" class="btn btn-primary raised">${ param.searchType == "" ? filterall : (param.searchType =="computer" ? filtercomputer:filtercompany)}</button>
+                        <button type="button" class="btn btn-primary raised dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="searchoption" onclick="$('#searchType').val(''); $('#searchForm').submit()">${filterall}</a></li>
+                            <li><a href="#" class="searchoption" onclick="$('#searchType').val('company'); $('#searchForm').submit()">${filtercompany}</a></li>
+                            <li><a href="#" class="searchoption" onclick="$('#searchType').val('computer'); $('#searchForm').submit()">${filtercomputer}</a></li>
+                        </ul>
+                    </div>
                 </form>
             </div>
             <div class="pull-right">
                 <c:if test="${isAdmin}">
+                	<a class="btn btn-success raised" id="addComputer" href="${context}/computer/add">${addComputer}</a>
                 	<a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a>
-                	<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
+					<a class="btn btn-warning raised" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
                 	<a class="btn btn-default" id="admin" href="admin">${admin}</a>
                 </c:if>
             </div>
@@ -49,7 +65,7 @@
     </form>
 
     <div class="container" style="margin-top: 10px;">
-        <table class="table table-striped table-bordered">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <!-- Variable declarations for passing labels as parameters -->
@@ -66,10 +82,10 @@
                 <th>
                 	<mylib2:link target="" name="${columnName}" params="${page.params}" order="name"/>
                 </th>
-                <th><mylib2:link target="" name="${columnIntroduced}" params="${page.params}"
+                <th class="text-center"><mylib2:link target="" name="${columnIntroduced}" params="${page.params}"
                                  order="introduced"/></th>
                 <!-- Table header for Discontinued Date -->
-                <th><mylib2:link target="" name="${columnDiscontinued}" params="${page.params}"
+                <th class="text-center"><mylib2:link target="" name="${columnDiscontinued}" params="${page.params}"
                                  order="discontinued"/></th>
                 <!-- Table header for Company -->
                 <th><mylib2:link target="" name="${columnCompany}" params="${page.params}"
@@ -95,10 +111,10 @@
 			  						${computer.name}
 								</c:otherwise>
 							</c:choose>
-	                    	
+
 	                   	</td>
-	                    <td>${computer.introduced}</td>
-	                    <td>${computer.discontinued}</td>
+	                    <td class="text-center">${computer.introduced}</td>
+	                    <td class="text-center">${computer.discontinued}</td>
 	                    <td>${computer.companyName}</td>
 	                </tr>
 	            </c:forEach>
@@ -111,6 +127,8 @@
     <div class="container text-center">
         <mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
             psize="${page.params.size}" />
+        <p>Developed by Excilys Avril 2015</p>
+        <p><a>Mentions Légales</a></p>
     </div>
 </footer>
 </body>
@@ -118,5 +136,12 @@
     $.springMessages = {
         deleteConfirmation: "${deleteConfirmation}"
     };
+
+    $(function(){
+        $(".searchoption").on("click",function(){
+            console.log($(this).text());
+            $('#searchsubmit').text($(this).text());
+        })
+    });
 </script>
 </html>
