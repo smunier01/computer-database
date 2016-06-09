@@ -29,12 +29,12 @@
                 <form id="searchForm" action="#" method="GET" class="form-inline">
 
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name"/>
-                    <input type="submit" id="searchsubmit" value="${filterByName}" class="btn btn-primary"/>
+                    <input type="submit" id="searchsubmit" value="${filterByName}" class="btn btn-primary raised"/>
                 </form>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a> <a
-                    class="btn btn-default" id="editComputer" href="#"
+                <a class="btn btn-success raised" id="addComputer" href="${context}/computer/add">${addComputer}</a> <a
+                    class="btn btn-primary raised" id="editComputer" href="#"
                     onclick="$.fn.toggleEditMode();">${editComputer}</a>
             </div>
         </div>
@@ -45,7 +45,7 @@
     </form>
 
     <div class="container" style="margin-top: 10px;">
-        <table class="table table-striped table-bordered">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <!-- Variable declarations for passing labels as parameters -->
@@ -60,10 +60,10 @@
                             </a>
                         </span></th>
                 <th><mylib2:link target="" name="${columnName}" params="${page.params}" order="name"/></th>
-                <th><mylib2:link target="" name="${columnIntroduced}" params="${page.params}"
+                <th class="text-center"><mylib2:link target="" name="${columnIntroduced}" params="${page.params}"
                                  order="introduced"/></th>
                 <!-- Table header for Discontinued Date -->
-                <th><mylib2:link target="" name="${columnDiscontinued}" params="${page.params}"
+                <th class="text-center"><mylib2:link target="" name="${columnDiscontinued}" params="${page.params}"
                                  order="discontinued"/></th>
                 <!-- Table header for Company -->
                 <th><mylib2:link target="" name="${columnCompany}" params="${page.params}"
@@ -77,10 +77,10 @@
                 <tr>
                     <td class="editMode"><input type="checkbox" name="cb" id="${computer.name}_id"
                                                 class="cb" value="${computer.id}"></td>
-                    <td><a id="${computer.name}_name" href="${context}/computer/edit?id=${computer.id}"
+                    <td class=""><a id="${computer.name}_name" href="${context}/computer/edit?id=${computer.id}"
                            onclick="">${computer.name}</a></td>
-                    <td>${computer.introduced}</td>
-                    <td>${computer.discontinued}</td>
+                    <td class="text-center">${computer.introduced}</td>
+                    <td class="text-center">${computer.discontinued}</td>
                     <td>${computer.companyName}</td>
                 </tr>
             </c:forEach>
@@ -93,6 +93,8 @@
     <div class="container text-center">
         <mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
             psize="${page.params.size}" />
+        <p>Developed by Excilys Avril 2015</p>
+        <p><a>Mentions Légales</a></p>
     </div>
 </footer>
 </body>

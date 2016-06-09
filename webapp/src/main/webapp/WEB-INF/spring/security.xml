@@ -8,6 +8,7 @@
     <!--<debug />-->
 
     <http pattern="/css/**" security="none"/>
+    <http pattern="/assets/**" security="none"/>
     <http pattern="/js/**" security="none"/>
     <http pattern="/fonts/**" security="none"/>
 
