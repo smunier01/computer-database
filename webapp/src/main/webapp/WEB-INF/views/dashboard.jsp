@@ -12,6 +12,8 @@
 <spring:message code="column.discontinued" var="columnDiscontinued"/>
 <spring:message code="column.company" var="columnCompany"/>
 <spring:message code="dashboard.filterbyname" var="filterByName"/>
+<spring:message code="dashboard.filtercompany" var="filtercompany"/>
+<spring:message code="dashboard.filtercomputer" var="filtercomputer"/>
 <spring:message code="dashboard.addcomputer" var="addComputer"/>
 <spring:message code="dashboard.edit" var="editComputer"/>
 <spring:message code="dashboard.found" var="foundComputer"/>
@@ -27,9 +29,24 @@
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">
-
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name"/>
-                    <input type="submit" id="searchsubmit" value="${filterByName}" class="btn btn-primary"/>
+                    <input id="search_type" name="search_type" type="hidden">
+
+                    <div class="btn-group">
+                        <button type="submit" id="searchsubmit" class="btn btn-primary">${filterByName}</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a type="submit" href="#">${filterByName}</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" onclick="$('#search_type').val('company'); $('#searchForm').submit()">${filtercompany}</a></li>
+                            <li><a href="#" onclick="$('#search_type').val('computer'); $('#searchForm').submit()">${filtercomputer}</a></li>
+                        </ul>
+                    </div>
+
+                    <%--<input type="submit" id="searchsubmit" value="${filterByName}" class="btn btn-primary"/>--%>
                 </form>
             </div>
             <div class="pull-right">
