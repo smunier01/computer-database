@@ -33,6 +33,7 @@ import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.service.service.ICompanyService;
 import com.excilys.service.service.IComputerService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("${path.base}")
@@ -188,6 +189,13 @@ public class ComputerController {
                         .filter(this.validator::isIdValid)
                         .map(Long::parseLong)
                         .collect(Collectors.toList()));
+
+        return "redirect:/dashboard";
+    }
+
+    @RequestMapping(value="addComputers", method = RequestMethod.POST)
+    public String postAddComputers(@RequestParam("url") MultipartFile file) {
+
 
         return "redirect:/dashboard";
     }

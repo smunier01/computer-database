@@ -120,6 +120,11 @@
             <artifactId>selenium-server</artifactId>
         </dependency>
 
+        <!-- File upload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

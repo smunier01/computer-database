@@ -57,6 +57,7 @@
         <jackson-jaxrs-json-provider.version>2.7.4</jackson-jaxrs-json-provider.version>
         <javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
         <jersey-client.version>2.23</jersey-client.version>
+        <file-upload.version>1.2</file-upload.version>
 
         <!-- plugins versions -->
 
@@ -336,6 +337,13 @@
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-client</artifactId>
                 <version>${jersey-client.version}</version>
+            </dependency>
+
+            <!-- File upload -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${file-upload.version}</version>
             </dependency>
 
         </dependencies>
