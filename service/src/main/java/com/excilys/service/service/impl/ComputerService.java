@@ -161,7 +161,6 @@ public class ComputerService implements IComputerService {
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                // TODO uncomment to make the search work
                 try {
                     computerDAO.buildIndex();
                 } catch (InterruptedException | IOException e) {
