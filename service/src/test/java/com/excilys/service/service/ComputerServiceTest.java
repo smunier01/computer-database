@@ -4,6 +4,8 @@ package com.excilys.service.service;
 import com.excilys.binding.validation.ValidatorException;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.PageParameters;
+import com.excilys.service.IComputerService;
+import com.excilys.service.ServiceException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;

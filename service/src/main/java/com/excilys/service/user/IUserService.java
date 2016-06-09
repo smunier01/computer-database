@@ -1,4 +1,4 @@
-package com.excilys.service.service;
+package com.excilys.service.user;
 
 
 import com.excilys.core.model.User;

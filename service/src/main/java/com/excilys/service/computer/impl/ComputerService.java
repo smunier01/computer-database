@@ -1,11 +1,11 @@
-package com.excilys.service.service.impl;
+package com.excilys.service.computer.impl;
 
 import com.excilys.binding.validation.ValidatorUtil;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.persistence.dao.ComputerDAO;
-import com.excilys.service.service.IComputerService;
+import com.excilys.service.IComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

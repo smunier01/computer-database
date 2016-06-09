@@ -44,6 +44,6 @@
 
     <b:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <b:bean id="customUserDetailsService" class="com.excilys.service.service.impl.UserAuthService"/>
+    <b:bean id="customUserDetailsService" class="com.excilys.service.user.impl.UserAuthService"/>
 
 </b:beans>
