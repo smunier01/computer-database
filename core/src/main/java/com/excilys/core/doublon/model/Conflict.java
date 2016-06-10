@@ -17,6 +17,13 @@ public class Conflict {
     public Conflict() {
         this(new ComputerDTO());
     }
+
+    /**
+     * Constructor with the origin computer and the list of ComputerDTO.
+     *
+     * @param origin            of the conflict
+     * @param conflictComputers list of conflicted computerDTO
+     */
     public Conflict(ComputerDTO origin, List<ComputerDTO> conflictComputers) {
         this.origin = origin;
         this.conflictComputers = conflictComputers;
@@ -24,6 +31,7 @@ public class Conflict {
 
     /**
      * Constructor with a computer.
+     *
      * @param computer of the origin
      */
     public Conflict(ComputerDTO computer) {
@@ -34,12 +42,15 @@ public class Conflict {
     public ComputerDTO getOrigin() {
         return origin;
     }
+
     public List<ComputerDTO> getConflictComputers() {
         return conflictComputers;
     }
+
     public void setOrigin(ComputerDTO origin) {
         this.origin = origin;
     }
+
     public void setConflictComputers(List<ComputerDTO> conflictComputers) {
         this.conflictComputers = conflictComputers;
     }

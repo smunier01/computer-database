@@ -22,7 +22,7 @@ public class TestSelenium {
     @Before
     public void setUp() throws Exception {
         this.driver = new FirefoxDriver();
-        this.baseUrl = "http://user:user@localhost:8080/";
+        this.baseUrl = "http://localhost:8080/cdb/";
         this.driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
