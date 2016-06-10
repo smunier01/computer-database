@@ -9,11 +9,11 @@ public class PageParameters {
 
     // enum to sort
     public enum Order {
-        NAME, COMPANY_NAME, INTRODUCED, DISCONTINUED;
+        NAME, COMPANY_NAME, INTRODUCED, DISCONTINUED
     }
 
     public enum Direction {
-        ASC, DESC;
+        ASC, DESC
     }
 
     // list of variables

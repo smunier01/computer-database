@@ -6,7 +6,7 @@ import com.excilys.core.dto.CompanyDTO;
 import com.excilys.core.dto.PageParametersDTO;
 import com.excilys.core.model.Company;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.service.ICompanyService;
+import com.excilys.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

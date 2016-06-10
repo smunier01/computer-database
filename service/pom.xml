@@ -84,6 +84,12 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
         </dependency>
 
+
+        <!-- import csv  -->
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
