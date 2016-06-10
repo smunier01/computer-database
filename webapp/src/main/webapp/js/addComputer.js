@@ -86,7 +86,7 @@ $(function () {
         validateForm();
 
         return f;
-    }
+    }();
 
     $('#name').on('input', validateFieldName);
 
