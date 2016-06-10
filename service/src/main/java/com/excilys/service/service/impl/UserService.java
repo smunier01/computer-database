@@ -18,56 +18,61 @@ import javax.annotation.PostConstruct;
 @Service
 public class UserService implements IUserService {
 
-    @Autowired
-    private UserDAO userDAO;
+	@Autowired
+	private UserDAO userDAO;
 
-    @Autowired
-    protected PlatformTransactionManager txManager;
+	@Autowired
+	protected PlatformTransactionManager txManager;
 
-    public List<User> listAllUser(){
-    	return userDAO.listAllUser();
-    }
-    
-    @Override
-    public User findById(int id) {
-        return null;
-    }
+	public List<User> listAllUser() {
+		return userDAO.listAllUser();
+	}
 
-    @Override
-    public User findByName(String username) {
-        return this.userDAO.findByUserName(username);
-    }
+	@Override
+	public User findById(int id) {
+		return null;
+	}
 
-    @Override
-    public User create(User user) {
-        return this.userDAO.create(user);
-    }
+	@Override
+	public User findByName(String username) {
+		return this.userDAO.findByUserName(username);
+	}
 
-    @Transactional
-    @Override
-    public void defaultValues() {
-        //this.userDAO.empty();
-        this.create(new User("admin", "admin", "ADMIN"));
-        this.create(new User("user", "user", "USER"));
-    }
+	@Override
+	public User create(User user) {
+		return this.userDAO.create(user);
+	}
 
-    /**
-     * PostConstruct method to init the user roles.
-     * <p>
-     * TransactionCallbackWithoutResult is necessary in order to make sure that the spring context is fully instantiated.
-     *
-     * @throws Exception
-     */
-    @PostConstruct
-    public void initIt() throws Exception {
+	@Transactional
+	@Override
+	public void defaultValues() {
+		if (findByName("admin") == null) {
+			this.create(new User("admin", "admin", "ADMIN"));
+		}
+		if (findByName("user") == null) {
+			this.create(new User("user", "user", "USER"));
+		}
+	}
 
-        TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        tmpl.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                // transactionnal method that put the default users in the database.
-                defaultValues();
-            }
-        });
-    }
+	/**
+	 * PostConstruct method to init the user roles.
+	 * <p>
+	 * TransactionCallbackWithoutResult is necessary in order to make sure that
+	 * the spring context is fully instantiated.
+	 *
+	 * @throws Exception
+	 */
+	@PostConstruct
+	public void initIt() throws Exception {
+
+		TransactionTemplate tmpl = new TransactionTemplate(txManager);
+		tmpl.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
+				// transactionnal method that put the default users in the
+				// database.
+				defaultValues();
+			}
+		});
+	}
 }

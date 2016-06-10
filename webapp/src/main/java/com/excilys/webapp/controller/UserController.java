@@ -38,7 +38,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/add", method = RequestMethod.GET)
-	public String addOrEditUser(ModelMap model, @RequestParam(required = false, name = "username") String username) {
+	public String addOrEditUser(ModelMap model, @RequestParam(required = false, name = "userUserName") String username) {
 		// If a username is specify : edit mode
 		if (username != null) {
 			User user = userService.findByName(username);
@@ -50,11 +50,9 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
-	public String addOrEditUserPOST(ModelMap model/*, @Valid User user*/) {
-		System.out.println("TEST");
-		return "admin";
-		//userService.create(user);
-		//return "addUser";
-		//return "redirect:/admin";
+	public String addOrEditUserPOST(ModelMap model, @Valid User user) {
+		userService.create(user);
+		
+		return "redirect:/admin";
 	}
 }
