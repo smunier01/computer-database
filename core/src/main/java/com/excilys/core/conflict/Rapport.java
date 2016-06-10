@@ -19,6 +19,10 @@ public class Rapport {
         this(new ArrayList<ComputerDTO>());
     }
 
+    /**
+     * Constructor with the list of computerDTO.
+     * @param toImport list of ComputerDTO
+     */
     public Rapport(List<ComputerDTO> toImport) {
         this.toImport = toImport;
         this.toCheck = new ArrayList<>();

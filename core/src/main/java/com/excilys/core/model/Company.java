@@ -1,6 +1,5 @@
 package com.excilys.core.model;
 
-import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.SortableField;
 
@@ -18,6 +17,7 @@ import javax.persistence.Table;
 @Table(name = "company")
 public class Company {
 
+    // list of the variables
     @Id
     @GeneratedValue
     private Long id;
@@ -62,23 +62,18 @@ public class Company {
     }
 
     @Override
-    public String toString() {
-        return "Company{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Company company = (Company) o;
-
-        if (id != null ? !id.equals(company.id) : company.id != null) return false;
+        if (id != null ? !id.equals(company.id) : company.id != null) {
+            return false;
+        }
         return name != null ? name.equals(company.name) : company.name == null;
-
     }
 
     @Override
@@ -87,4 +82,13 @@ public class Company {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
 }

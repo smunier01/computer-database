@@ -83,4 +83,12 @@ public interface DAO<T> {
      * @return number of object
      */
     long count(PageParameters params);
+
+    /**
+     * Find the autoCompleteMatches.
+     *
+     * @param entry ti find
+     * @return the list of autocompleteMatches
+     */
+    List<String> findAutocompleteMatches(String entry);
 }

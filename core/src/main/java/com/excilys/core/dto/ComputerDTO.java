@@ -26,13 +26,24 @@ public class ComputerDTO {
     private String discontinued;
 
     private String companyId;
-
     private String companyName;
 
+    /**
+     * Default constructor.
+     */
     public ComputerDTO() {
-
     }
 
+    /**
+     * Constructor to build the DTO.
+     *
+     * @param id           of the DTO
+     * @param name         of the DTO
+     * @param introduced   of the DTO
+     * @param discontinued of the DTO
+     * @param companyId    of the DTO
+     * @param companyName  of the DTO
+     */
     public ComputerDTO(final String id, final String name, final String introduced, final String discontinued,
                        final String companyId, final String companyName) {
         this.id = id;
@@ -122,40 +133,84 @@ public class ComputerDTO {
 
         private ComputerDTO dto;
 
+        /**
+         * Default constructor.
+         */
         public Builder() {
             dto = new ComputerDTO();
         }
 
+        /**
+         * Set the id.
+         *
+         * @param id to set
+         * @return the builder
+         */
         public Builder id(final String id) {
             dto.id = id;
             return this;
         }
 
+        /**
+         * Set the name.
+         *
+         * @param name to set
+         * @return the builder
+         */
         public Builder name(final String name) {
             dto.name = name;
             return this;
         }
 
+        /**
+         * Set the introduced date.
+         *
+         * @param introduced date to set
+         * @return the builder
+         */
         public Builder introduced(final String introduced) {
             dto.introduced = introduced;
             return this;
         }
 
+        /**
+         * Set the discontinued date.
+         *
+         * @param discontinued date to set
+         * @return the builder
+         */
         public Builder discontinued(final String discontinued) {
             dto.discontinued = discontinued;
             return this;
         }
 
+        /**
+         * Set the company id.
+         *
+         * @param companyId to set
+         * @return the builder
+         */
         public Builder companyId(final String companyId) {
             dto.companyId = companyId;
             return this;
         }
 
+        /**
+         * Set the company name.
+         *
+         * @param companyName to set
+         * @return the builder
+         */
         public Builder companyName(final String companyName) {
             dto.companyName = companyName;
             return this;
         }
 
+        /**
+         * Get the current DTO.
+         *
+         * @return the ComputerDTO build
+         */
         public ComputerDTO build() {
             return dto;
         }
@@ -163,18 +218,31 @@ public class ComputerDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ComputerDTO that = (ComputerDTO) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (introduced != null ? !introduced.equals(that.introduced) : that.introduced != null) return false;
-        if (discontinued != null ? !discontinued.equals(that.discontinued) : that.discontinued != null) return false;
-        if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+        if (introduced != null ? !introduced.equals(that.introduced) : that.introduced != null) {
+            return false;
+        }
+        if (discontinued != null ? !discontinued.equals(that.discontinued) : that.discontinued != null) {
+            return false;
+        }
+        if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) {
+            return false;
+        }
         return companyName != null ? companyName.equals(that.companyName) : that.companyName == null;
-
     }
 
     @Override

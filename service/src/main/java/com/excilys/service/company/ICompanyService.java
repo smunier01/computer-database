@@ -64,4 +64,11 @@ public interface ICompanyService {
      * @param company
      */
     void updateCompany(Company company);
+
+    /**
+     * Return the list of Computer names that contains the value typed by the user.
+     * @param entry is the value typed by the user.
+     * @return A list of names.
+     */
+    List<String> findAutocompleteResult(String entry);
 }

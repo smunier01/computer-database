@@ -73,4 +73,11 @@ public interface IComputerService {
      * @return the list of computer
      */
     List<Computer> getAll();
+
+    /**
+     * Return the list of Computer names that contains the value typed by the user.
+     * @param entry is the value typed by the user.
+     * @return A list of names.
+     */
+    List<String> findAutocompleteResult(String entry);
 }

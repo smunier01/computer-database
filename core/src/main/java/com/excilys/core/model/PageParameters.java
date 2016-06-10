@@ -7,6 +7,7 @@ package com.excilys.core.model;
  */
 public class PageParameters {
 
+    // enum to sort
     public enum Order {
         NAME, COMPANY_NAME, INTRODUCED, DISCONTINUED
     }
@@ -15,13 +16,11 @@ public class PageParameters {
         ASC, DESC
     }
 
+    // list of variables
     private long size;
-
     private long pageNumber;
-
     private String search;
     private String searchType = "";
-
     private Order order;
     private Direction direction;
 
@@ -56,36 +55,6 @@ public class PageParameters {
         this.direction = direction;
     }
 
-    @Override
-    public String toString() {
-        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + ", search=" + this.search
-                + ", order=" + this.order + "]";
-    }
-
-    public String getSearch() {
-        return this.search;
-    }
-
-    public void setSearch(String search) {
-        this.search = search;
-    }
-
-    public String getSearchType() {
-        return searchType;
-    }
-
-    public void setSearchType(String searchType) {
-        this.searchType = searchType;
-    }
-
-    public Order getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
     /**
      * increment the page number.
      *
@@ -115,36 +84,77 @@ public class PageParameters {
         private Order order = Order.NAME;
         private Direction direction = Direction.ASC;
 
+        /**
+         * Set the size.
+         *
+         * @param size to set
+         * @return the builder
+         */
         public Builder size(int size) {
             this.size = size;
             return this;
         }
 
+        /**
+         * Set the page number.
+         *
+         * @param pageNumber to set
+         * @return the builder
+         */
         public Builder pageNumber(int pageNumber) {
             this.pageNumber = pageNumber;
             return this;
         }
 
+        /**
+         * Set the search.
+         *
+         * @param search to set
+         * @return the builder
+         */
         public Builder search(String search) {
             this.search = search;
             return this;
         }
 
+        /**
+         * Set the search type.
+         *
+         * @param searchType to set
+         * @return the builder
+         */
         public Builder searchType(String searchType) {
             this.searchType = searchType;
             return this;
         }
 
+        /**
+         * Set the order.
+         *
+         * @param order to set
+         * @return the builder
+         */
         public Builder order(Order order) {
             this.order = order;
             return this;
         }
 
+        /**
+         * Set the direction.
+         *
+         * @param direction to set
+         * @return the builder
+         */
         public Builder direction(Direction direction) {
             this.direction = direction;
             return this;
         }
 
+        /**
+         * Get the Object.
+         *
+         * @return the PageParameters build by the builder
+         */
         public PageParameters build() {
             return new PageParameters(this.size, this.pageNumber, this.search, this.searchType, this.order, this.direction);
         }
@@ -170,17 +180,51 @@ public class PageParameters {
         return this.direction;
     }
 
+    public String getSearch() {
+        return this.search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    public Order getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PageParameters that = (PageParameters) o;
-
-        if (size != that.size) return false;
-        if (pageNumber != that.pageNumber) return false;
-        if (search != null ? !search.equals(that.search) : that.search != null) return false;
-        if (order != that.order) return false;
+        if (size != that.size) {
+            return false;
+        }
+        if (pageNumber != that.pageNumber) {
+            return false;
+        }
+        if (search != null ? !search.equals(that.search) : that.search != null) {
+            return false;
+        }
+        if (order != that.order) {
+            return false;
+        }
         return direction == that.direction;
 
     }
@@ -193,5 +237,11 @@ public class PageParameters {
         result = 31 * result + (order != null ? order.hashCode() : 0);
         result = 31 * result + (direction != null ? direction.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "PageParameters [size=" + this.size + ", pageNumber=" + this.pageNumber + ", search=" + this.search
+                + ", order=" + this.order + "]";
     }
 }

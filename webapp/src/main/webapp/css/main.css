@@ -10,7 +10,7 @@ footer {
     width: 100%;
     background: #FEFEFE;
     border-top: 1px solid #CCC;
-    height: 60px;
+    min-height: 60px;
 }
 
 footer .pagination {
@@ -65,10 +65,19 @@ body{
     font-family: 'Open Sans', sans-serif;
 }
 
+.logo{
+    height:50px;
+    margin:-12px 10px 0 0;
+    padding:0;
+    float:left;
+}
+
 footer{
     height:auto;
 }
-footer p{
+footer div{
+    margin-top:10px;
+    margin-bottom:10px;
     line-height:14px;
 }
 

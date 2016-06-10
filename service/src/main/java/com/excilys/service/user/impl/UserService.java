@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -29,8 +28,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User findById(int id) {
-		return null;
+	public User find(Integer id) {
+		return userDAO.find(id);
 	}
 
 	@Override
@@ -42,15 +41,25 @@ public class UserService implements IUserService {
 	public User create(User user) {
 		return this.userDAO.create(user);
 	}
+	
+	@Override
+	public User edit(User user){
+		return userDAO.update(user);
+	}
 
+	@Override
+	public void remove(int id) {
+		userDAO.remove(id);
+	}
+	
 	@Transactional
 	@Override
 	public void defaultValues() {
 		if (findByName("admin") == null) {
-			this.create(new User("admin", "admin", "ADMIN"));
+			this.create(new User("admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "ADMIN"));
 		}
 		if (findByName("user") == null) {
-			this.create(new User("user", "user", "USER"));
+			this.create(new User("user", "04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb", "USER"));
 		}
 	}
 
