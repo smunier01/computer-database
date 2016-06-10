@@ -28,13 +28,13 @@
 <section id="main">
     <div class="container">
         <h1 id="homeTitle">
-            <span id="nbComputers">${page.totalCount}</span>&nbsp<span>${foundComputer}</span>
+            <span id="nbComputers">${page.totalCount}</span>&nbsp;<span>${foundComputer}</span>
         </h1>
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder=${search} value="${param.search}"  />
-                    <input id="searchType" name="searchType" type="hidden">
+                    <input id="searchType" name="searchType" type="hidden" />
 
                     <div class="btn-group">
                         <button type="submit" id="searchsubmit" class="btn btn-primary raised">${ param.searchType == "" ? filterall : (param.searchType =="computer" ? filtercomputer:filtercompany)}</button>
