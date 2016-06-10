@@ -242,6 +242,7 @@ public class ComputerDAO implements DAO<Computer> {
     public List<String> findAutocompleteMatches(String entry) {
         return this.jpaQuery
                 .select(this.qcomputer.name)
+                .distinct()
                 .from(this.qcomputer)
                 .where(this.qcomputer.name.like("%"+entry+"%"))
                 .fetch();
