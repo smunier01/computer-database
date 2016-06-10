@@ -46,7 +46,7 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public void defaultValues() {
-        this.userDAO.empty();
+        //this.userDAO.empty();
         this.create(new User("admin", "admin", "ADMIN"));
         this.create(new User("user", "user", "USER"));
     }
