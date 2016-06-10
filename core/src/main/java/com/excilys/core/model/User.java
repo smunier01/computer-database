@@ -1,11 +1,14 @@
 package com.excilys.core.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Arrays;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -13,11 +16,14 @@ public class User {
 
     @Id
     @Column(name = "username", unique = true, nullable = false)
+    @Size(min=3, max=30)
     private String username;
 
     @Column(name = "password", nullable = false)
+    @Size(min=3, max=30)
     private String password;
 
+    @NotNull
     private String role;
 
     public User() {

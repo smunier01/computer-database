@@ -1,11 +1,13 @@
 package com.excilys.webapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.core.model.User;
@@ -35,8 +37,8 @@ public class UserController {
 		return "admin";
 	}
 
-	@RequestMapping(value = "/user/add")
-	public String addOrEditUser(ModelMap model, @RequestParam(required = false, name = "username") String username) {
+	@RequestMapping(value = "/user/add", method = RequestMethod.GET)
+	public String addOrEditUser(ModelMap model, @RequestParam(required = false, name = "userUserName") String username) {
 		// If a username is specify : edit mode
 		if (username != null) {
 			User user = userService.findByName(username);
@@ -45,5 +47,12 @@ public class UserController {
 			}
 		}
 		return "addUser";
+	}
+
+	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
+	public String addOrEditUserPOST(ModelMap model, @Valid User user) {
+		userService.create(user);
+		
+		return "redirect:/admin";
 	}
 }

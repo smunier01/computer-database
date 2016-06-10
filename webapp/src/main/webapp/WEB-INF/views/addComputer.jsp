@@ -71,7 +71,7 @@
                     </fieldset>
                     <div class="actions pull-right">
                         <input id="buttonForm" type="submit" value="Add"
-                               class="btn btn-primary"> ${formOr} <a href="dashboard.html"
+                               class="btn btn-primary"> ${formOr} <a href="${pageContext.request.contextPath}/dashboard"
                                                                      class="btn btn-default">${cancel}</a>
                     </div>
                 </form>
