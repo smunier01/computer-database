@@ -20,6 +20,10 @@
     <c:set var="myVar" value="${myVar}search=${params.search}&"/>
 </c:if>
 
+<c:if test="${!empty param.searchType}">
+    <c:set var="myVar" value="${myVar}searchType=${param.searchType}&"/>
+</c:if>
+
 <c:if test="${!empty order}">
     <c:set var="myVar" value="${myVar}order=${order}&"/>
     <c:set var="myVar"
