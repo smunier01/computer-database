@@ -2,6 +2,7 @@ package com.excilys.webapp.controller;
 
 import com.excilys.core.conflict.Rapport;
 import com.excilys.service.importTool.impl.ComputerImportService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(value = "/import")
 public class ImportController {
 
+    private final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ImportController.class);
+
+
     @Autowired
     ComputerImportService computerImportService;
     private static final String ROOT = "/home/nbelleme/Bureau/dev/cdb/service/src/main/resources/";
+
 
     @RequestMapping(value = "/computers", method = RequestMethod.GET)
     public String getImport() {

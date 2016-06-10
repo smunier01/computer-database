@@ -2,6 +2,7 @@ package com.excilys.core.conflict.format;
 
 import com.excilys.core.conflict.Conflict;
 import com.excilys.core.conflict.ErrorType;
+import com.excilys.core.dto.ComputerDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,13 @@ public class Error extends Conflict{
 
     // list of the variables
     private Map<Fields, List<ErrorMessage>> errorMap;
+
+    public Error(){}
+
+    public Error(ComputerDTO computerDTO, Map<Fields, List<ErrorMessage>> errorMap) {
+        super(computerDTO);
+        this.errorMap = errorMap;
+    }
 
     /**
      * Return the list corresponding to the key in Errors Object.
@@ -29,6 +37,10 @@ public class Error extends Conflict{
             return list;
 
         }
+    }
+
+    public Map<Fields, List<ErrorMessage>> getErrorMap() {
+        return errorMap;
     }
 
     public void setErrorMap(Map<Fields, List<ErrorMessage>> errorMap) {
