@@ -151,8 +151,5 @@ public class ValidatorUtil {
 
         // company id (required)
         this.validateId(company.getId());
-
-        // company name not null or empty
-        this.validateName(company.getName());
     }
 }
