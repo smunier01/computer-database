@@ -54,6 +54,11 @@ public class UserDAO {
         return this.em.merge(obj);
     }
     
+    @Transactional(readOnly = false)
+    public void remove(int id) {
+    	this.em.remove(find(id));
+    }
+    
     @Transactional(readOnly = true)
     public void empty() {
         jpaQuery.delete(quser).execute();

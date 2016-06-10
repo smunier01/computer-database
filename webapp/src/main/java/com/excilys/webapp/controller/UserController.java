@@ -1,8 +1,11 @@
 package com.excilys.webapp.controller;
 
+import java.util.LinkedList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.openqa.jetty.html.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,6 +63,17 @@ public class UserController {
 			userService.edit(user);
 		}
 		
+		return "redirect:/admin";
+	}
+
+	@RequestMapping(value = "/user/delete", method = RequestMethod.POST)
+	public String deleteUser(ModelMap model, String selection) {
+		System.out.println(selection);
+		String[] array = selection.split(",");
+		for(String st : array) {
+			Integer i = Integer.parseInt(st);
+			userService.remove(i);
+		}
 		return "redirect:/admin";
 	}
 }

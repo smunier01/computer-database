@@ -69,7 +69,7 @@
 						<tr>
 							<c:if test="${isAdmin}">
 								<td class="editMode">
-									<input type="checkbox" name="cb" id="${user.username}" class="cb" value="${user.username}">
+									<input type="checkbox" name="cb" id="${user.id}" class="cb" value="${user.id}">
 								</td>
 							</c:if>
 							<td>

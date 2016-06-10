@@ -48,6 +48,11 @@ public class UserService implements IUserService {
 		return userDAO.update(user);
 	}
 
+	@Override
+	public void remove(int id) {
+		userDAO.remove(id);
+	}
+	
 	@Transactional
 	@Override
 	public void defaultValues() {

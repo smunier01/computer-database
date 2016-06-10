@@ -14,6 +14,8 @@ public interface IUserService {
     User edit(User user);
 
     User create(User user);
-
+    
+    void remove(int id);
+    
     void defaultValues();
 }
