@@ -30,7 +30,6 @@ public class ExceptionHandlingController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
-
         return "500";
     }
 
