@@ -50,9 +50,17 @@
                             <input type="text" class="form-control" name="username" id="username" placeholder="${username}" value="${user.username}" required="true">
                         </div>
                         
+                        <!-- Specify the password is not necessary, modified only if changed -->
                         <div >
                             <label class="control-label" for="password">${password}</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="${password}" value="${user.password}" required="true">
+                            <c:choose>
+								<c:when test="${not empty param.id}">
+                            		<input type="password" class="form-control" name="password" id="password" placeholder="${password}"/>
+								</c:when>
+								<c:otherwise>
+                            		<input type="password" class="form-control" name="password" id="password" placeholder="${password}" required="true" />
+								</c:otherwise>
+							</c:choose>
                         </div>
                         
                         <div >

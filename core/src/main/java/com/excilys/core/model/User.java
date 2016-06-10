@@ -24,7 +24,7 @@ public class User {
     private String username;
 
     @Column(name = "password", nullable = false)
-    @Size(min=3, max=30)
+    @NotNull
     private String password;
 
     @NotNull
