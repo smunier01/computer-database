@@ -1,7 +1,16 @@
 package com.excilys.binding.doublon;
 
+/**
+ * Created by excilys on 09/06/16.
+ */
 public class Levenshtein implements SimilarityCalculator {
 
+    /**
+     * Use to get the modification.
+     * @param left string to compare
+     * @param right string to compare
+     * @return the number of change
+     */
     private int getValue(String left, String right) {
         int[][] matrix = new int[left.length() + 1][right.length() + 1];
 
@@ -40,6 +49,6 @@ public class Levenshtein implements SimilarityCalculator {
 
     @Override
     public double getPercentSimilarity(String left, String right) {
-        return 100 - ( getValue(left, right) / ( (left.length() + right.length()) / 2 ) );
+        return 100 - ((getValue(left, right) * 100) / ((left.length() + right.length()) / 2 ));
     }
 }

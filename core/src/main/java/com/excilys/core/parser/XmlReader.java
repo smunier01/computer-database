@@ -3,6 +3,8 @@ package com.excilys.core.parser;
 import java.io.File;
 import java.io.IOException;
 import java.security.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,6 +15,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.excilys.core.doublon.error.Error;
+import com.excilys.core.doublon.error.Fields;
+import com.excilys.core.doublon.model.Conflict;
 import com.excilys.core.doublon.model.Rapport;
 import com.excilys.core.dto.ComputerDTO;
 
@@ -75,7 +79,7 @@ public class XmlReader {
 
     private static Rapport mapDatas(NodeList elts) {
         Rapport pReturn = new Rapport();
-        List<ComputerDTO> list = new ArrayList<ComputerDTO>(elts.getLength());
+        List<ComputerDTO> conflicComputer = new ArrayList<ComputerDTO>();
         List<String> errors = new ArrayList<String>();
 
         for (int i = 0; i < elts.getLength(); i++) {
@@ -88,9 +92,18 @@ public class XmlReader {
                 temp.setIntroduced(eElement.getElementsByTagName("introduced").item(0).getTextContent());
                 temp.setDiscontinued(eElement.getElementsByTagName("discontinued").item(0).getTextContent());
                 temp.setCompanyName(eElement.getElementsByTagName("company_name").item(0).getTextContent());
-                Timestamp s = new Timestamp();
-                s.
-                internalValidator.validate(temps);
+
+                Error err = internalValidator(temp);
+                if (err.getErrorMap().size() == 0) {
+                    pReturn.getToImport().add(temp);
+                } else {
+                    Conflict c = new Conflict();
+                    conflicComputer.add(temp);
+                    c.setConflictComputers(conflicComputer);
+                    c.setErrors(err);
+
+                    pReturn.getRefuse().add(c);
+                }
             }
 
         }
@@ -98,20 +111,25 @@ public class XmlReader {
     }
 
     private static Error internalValidator(ComputerDTO computer) {
+        Error err = new Error();
+        List<String> mess = new ArrayList<String>();
 
         // computer name
         if (computer == null || computer.getName().equals("") || computer.getName().equals(" ")) {
-
+            mess.add("Invalid name");
+            err.getErrorMap().put(Fields.NAME, mess);
         }
 
         Pattern pattern;
         Matcher matcher;
         // introduced date
-        if ((computer.getIntroduced() != null) & !"".equals(computer.getIntroduced())) {
+        if ((computer.getIntroduced() != null) && !"".equals(computer.getIntroduced())) {
             pattern = Pattern.compile(DATE_REGEX);
             matcher = pattern.matcher(computer.getIntroduced());
             if (!matcher.matches()) {
-
+                mess = new ArrayList<String>();
+                mess.add("Invalid introduced date");
+                err.getErrorMap().put(Fields.INTRODUCED, mess);
             }
         }
 
@@ -120,14 +138,43 @@ public class XmlReader {
             pattern = Pattern.compile(DATE_REGEX);
             matcher = pattern.matcher(computer.getDiscontinued());
             if (!matcher.matches()) {
+                mess = new ArrayList<String>();
+                mess.add("Invalid discontinued date");
+                err.getErrorMap().put(Fields.DISCONTINUED, mess);
+            }
+        }
 
+        // date order
+        if (err.getErrorMap().get(Fields.INTRODUCED) == null && err.getErrorMap().get(Fields.DISCONTINUED) == null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date parsedDate = null;
+            try {
+                parsedDate = dateFormat.parse(computer.getIntroduced());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            java.sql.Timestamp disco = new java.sql.Timestamp(parsedDate.getTime());
+
+            try {
+                parsedDate = dateFormat.parse(computer.getDiscontinued());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            java.sql.Timestamp intro = new java.sql.Timestamp(parsedDate.getTime());
+            if (disco.before(intro)) {
+                mess = new ArrayList<String>();
+                mess.add("Invalid discontinued date : discontinued before introduced");
+                err.getErrorMap().put(Fields.DISCONTINUED, mess);
             }
         }
 
         // company name
         if ((computer.getCompanyName() != null) || computer.getCompanyName().equals("") || computer.getCompanyName().equals(" ")) {
-
+            mess = new ArrayList<String>();
+            mess.add("Invalid company name");
+            err.getErrorMap().put(Fields.COMPANY_NAME, mess);
         }
+        return err;
 
     }
 }

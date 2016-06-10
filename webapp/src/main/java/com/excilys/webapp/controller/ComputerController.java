@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.excilys.core.doublon.model.Rapport;
+import com.excilys.core.parser.XmlReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -73,7 +75,6 @@ public class ComputerController {
     @RequestMapping(path = "${path.dashboard}", method = RequestMethod.GET)
     public String mainDashboard(ModelMap model, @Valid @ModelAttribute PageParametersDTO param, BindingResult errors, HttpServletRequest request) {
         paramsValidator.validate(param, errors);
-
         if (!errors.hasErrors()) {
             PageParameters p = pageParamMapper.fromDTO(param);
             Page<ComputerDTO> computerPage = computerMapper.map(computerService.getComputersPage(p));
@@ -193,9 +194,21 @@ public class ComputerController {
         return "redirect:/dashboard";
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     @RequestMapping(value="addComputers", method = RequestMethod.POST)
     public String postAddComputers(@RequestParam("url") MultipartFile file) {
+        //TODO : Check extension
+        Rapport rapp = XmlReader.parseFile(file);
 
+        if (rapp.getRefuse().size() == 0) {
+            //TODO : Forward to data analyser
+        } else {
+            //TODO : Sent error
+        }
 
         return "redirect:/dashboard";
     }

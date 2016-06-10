@@ -46,7 +46,13 @@ public class ComputerDAO implements DAO<Computer> {
     @SuppressWarnings("rawtypes")
     public static OrderSpecifier<? extends Comparable> getOrderMethod(Order o, Direction d) {
         PathBuilder<QComputer> orderByExpression = new PathBuilder<>(QComputer.class, "computer");
-        return new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+        if (d == Direction.ASC) {
+            System.out.println("ASC");
+            return new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+        } else {
+            System.out.println("DESC");
+            return new OrderSpecifier<>(com.querydsl.core.types.Order.DESC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+        }
     }
 
     @PersistenceContext
