@@ -7,12 +7,15 @@ import com.excilys.core.model.User;
 
 public interface IUserService {
 	List<User> listAllUser();
-	
-    User findById(int id);
 
+	User find(Integer id);
     User findByName(String username);
+    
+    User edit(User user);
 
     User create(User user);
-
+    
+    void remove(int id);
+    
     void defaultValues();
 }

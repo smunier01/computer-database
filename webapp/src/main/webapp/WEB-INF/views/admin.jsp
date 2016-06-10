@@ -17,15 +17,16 @@
 <spring:message code="admin.delete" var="delete"/>
 
 <body>
-<jsp:include page="header.jsp"/>
+<<<<<<< HEAD
+	<jsp:include page="header.jsp" />
 
-<section id="main">
+	<section id="main">
 
 
-    <div class="container">
-        <h1 id="homeTitle">${admin}</h1>
+		<div class="container">
+			<h1 id="homeTitle">${admin}</h1>
 
-        <div class="row">
+      <div class="row">
             <div class="col-md-4">
                 <div class="well">
                     <form action="admin/addComputers" enctype="multipart/form-data" method="POST">
@@ -35,7 +36,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+      </div>
 
         <div id="actions" class="form-horizontal">
             <div class="pull-right">
@@ -62,6 +63,39 @@
 									<i class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
+<<<<<<< HEAD
+						</c:if>
+						<th>${userName}</th>
+						<th>${userRole}</th>
+					</tr>
+				</thead>
+
+				<!-- Browse attribute user -->
+				<tbody id="results">
+					<c:forEach items="${list}" var="user">
+						<tr>
+							<c:if test="${isAdmin}">
+								<td class="editMode">
+									<input type="checkbox" name="cb" id="${user.id}" class="cb" value="${user.id}">
+								</td>
+							</c:if>
+							<td>
+								<c:choose>
+									<c:when test="${isAdmin}">
+										<!-- 	We pass the username to userusername to prevent a strang comportement where Spring concatenate the username form
+												et username from the GET request -->
+										<a id="${user.username}" href="${context}/user/addEdit?id=${user.id}" onclick="">${user.username}</a>
+									</c:when>
+									<c:otherwise>${user.username}</c:otherwise>
+								</c:choose></td>
+							<td>${user.role}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</section>
+=======
                 </c:if>
                 <th>${userName}</th>
                 <th>${userRole}</th>
@@ -94,6 +128,7 @@
         </table>
     </div>
 </section>
+>>>>>>> a6f9e880676e9f75714aa6ef5d5ba46fe3805270
 </body>
 
 <script type="text/javascript">

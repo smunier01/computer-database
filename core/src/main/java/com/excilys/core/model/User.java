@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -13,8 +14,11 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "users")
 public class User {
-
-    @Id
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+	private Integer id;
+    
     @Column(name = "username", unique = true, nullable = false)
     @Size(min=3, max=30)
     private String username;
@@ -68,7 +72,15 @@ public class User {
         return Arrays.asList(this.role.split(","));
     }
 
-    @Override
+    public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -87,5 +99,10 @@ public class User {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
+    }
+    
+    @Override
+    public String toString() {
+    	return String.format("%d %s %s %s", id, username, password, role);
     }
 }
