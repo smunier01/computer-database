@@ -25,14 +25,11 @@ import java.util.List;
 @Service
 public class ComputerRestService implements IComputerRestService {
 
+    // list of the variables
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
-
     private static final String AUTH_USER = "user";
-
     private static final String AUTH_PASSWORD = "user";
-
     private static final String BASE_URL = "http://localhost:8080/cdb/rest/computer";
-
     private WebTarget target;
 
     @Autowired
@@ -41,12 +38,14 @@ public class ComputerRestService implements IComputerRestService {
     @Autowired
     private PageParametersMapper pageParametersMapper;
 
+    /**
+     * Default constructor.
+     */
     public ComputerRestService() {
         HttpAuthenticationFeature auth = HttpAuthenticationFeature
                 .universalBuilder()
                 .credentialsForBasic(AUTH_USER, AUTH_PASSWORD)
                 .build();
-
         Client client = ClientBuilder.newClient().register(auth).register(JacksonJsonProvider.class);
         target = client.target(BASE_URL);
     }

@@ -6,11 +6,6 @@ import com.excilys.core.model.PageParameters;
 
 import java.util.List;
 
-/**
- * CompanyService interface.
- *
- * @author simon
- */
 public interface ICompanyService {
 
     /**
@@ -53,15 +48,15 @@ public interface ICompanyService {
     /**
      * create a new company.
      *
-     * @param company
-     * @return
+     * @param company to create
+     * @return the company created
      */
     Company createCompany(Company company);
 
     /**
      * update an existing company.
      *
-     * @param company
+     * @param company to update
      */
     void updateCompany(Company company);
 
