@@ -75,11 +75,10 @@ public class ComputerController {
             Page<ComputerDTO> computerPage = computerMapper.map(computerService.getComputersPage(p));
             model.addAttribute("page", computerPage);
         } else {
-
             throw new ValidatorException(errors);
         }
 
-        // Add the information "isAdmin" to the doublon
+        // Add the information "isAdmin" to the model
         model.addAttribute("isAdmin", request.isUserInRole("ROLE_ADMIN"));
 
         return "dashboard";
@@ -180,7 +179,6 @@ public class ComputerController {
      */
     @RequestMapping(path = "${path.computer.delete}", method = RequestMethod.POST)
     public String postDeleteComputer(@RequestParam String selection) {
-
         this.computerService.deleteComputers(
                 Stream.of(selection.split(","))
                         .filter(this.validator::isIdValid)

@@ -34,4 +34,8 @@ public class Error extends Conflict{
     public void setErrorMap(Map<Fields, List<ErrorMessage>> errorMap) {
         this.errorMap = errorMap;
     }
+
+    public Map<Fields, List<ErrorMessage>> getErrorMap() {
+        return errorMap;
+    }
 }

@@ -18,9 +18,20 @@
 
 <body>
 	<jsp:include page="header.jsp" />
+	
 	<section id="main">
+	
+	
 		<div class="container">
 			<h1 id="homeTitle">${admin}</h1>
+			
+			<div>
+				<form action="admin/addComputers"  enctype="multipart/form-data" method="POST">
+        			<input type="file" accept="text/xml" id="url" name="url"/> 
+        			<input type="submit" value="Add computers" class="btn btn-primary" >                
+				</form>
+			</div>
+			
 			<div id="actions" class="form-horizontal">
 				<div class="pull-right">
 					<c:if test="${isAdmin}">
@@ -64,7 +75,9 @@
 							<td>
 								<c:choose>
 									<c:when test="${isAdmin}">
-										<a id="${user.username}" href="${context}/user/add?username=${user.username}" onclick="">${user.username}</a>
+										<!-- 	We pass the username to userusername to prevent a strang comportement where Spring concatenate the username form
+												et username from the GET request -->
+										<a id="${user.username}" href="${context}/user/add?userUserName=${user.username}" onclick="">${user.username}</a>
 									</c:when>
 									<c:otherwise>${user.username}</c:otherwise>
 								</c:choose></td>

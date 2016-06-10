@@ -9,8 +9,6 @@ import java.util.List;
 public class Rapport {
 
     // list of the variables
-    private static final double VALIDATE_VALUE = 80.0;
-    private static final double UNKNOWN_VALUE = 70.0;
     private List<ComputerDTO> toImport;
     private List<Conflict> toCheck;
     private List<Conflict> refuse;
@@ -51,4 +49,5 @@ public class Rapport {
     public void setRefuse(List<Conflict> refuse) {
         this.refuse = refuse;
     }
+
 }
