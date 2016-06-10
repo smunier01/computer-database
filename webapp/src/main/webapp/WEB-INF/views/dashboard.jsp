@@ -51,7 +51,6 @@
             </div>
             <div class="pull-right">
                 <c:if test="${isAdmin}">
-                	<a class="btn btn-success raised" id="addComputer" href="${context}/computer/add">${addComputer}</a>
                 	<a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a>
 					<a class="btn btn-warning raised" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
                 	<a class="btn btn-default" id="admin" href="admin">${admin}</a>

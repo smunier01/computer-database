@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.core.model.QUser;
 import com.excilys.core.model.User;
@@ -25,20 +26,24 @@ public class UserDAO {
         this.em = entityManager;
         this.jpaQuery = new JPAQueryFactory(entityManager);
     }
-
+    
+    @Transactional(readOnly = true)
     public List<User> listAllUser(){
     	return jpaQuery.selectFrom(quser).fetch();
     }
     
+    @Transactional(readOnly = true)
     public User findByUserName(String username) {
         return jpaQuery.selectFrom(quser).where(quser.username.eq(username)).fetchFirst();
     }
 
+    @Transactional(readOnly = false)
     public User create(User user) {
         this.em.persist(user);
         return user;
     }
 
+    @Transactional(readOnly = true)
     public void empty() {
         jpaQuery.delete(quser).execute();
     }
