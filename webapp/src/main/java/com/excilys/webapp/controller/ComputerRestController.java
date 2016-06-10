@@ -98,4 +98,10 @@ public class ComputerRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RequestMapping(value="/getautocomplete/{entry}", method = RequestMethod.GET)
+    public ResponseEntity<List<String>> getSearchList(@PathVariable("entry") String entry) {
+        List<String> result = this.computerService.findAutocompleteResult(entry);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

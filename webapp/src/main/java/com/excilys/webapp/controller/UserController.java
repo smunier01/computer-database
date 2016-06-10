@@ -1,15 +1,16 @@
 package com.excilys.webapp.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.excilys.core.model.User;
+import com.excilys.service.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.core.model.User;
-import com.excilys.service.service.IUserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -35,15 +36,40 @@ public class UserController {
 		return "admin";
 	}
 
-	@RequestMapping(value = "/user/add")
-	public String addOrEditUser(ModelMap model, @RequestParam(required = false, name = "username") String username) {
-		// If a username is specify : edit mode
-		if (username != null) {
-			User user = userService.findByName(username);
+	@RequestMapping(value = "/user/addEdit", method = RequestMethod.GET)
+	public String editUser(ModelMap model, @RequestParam(required = false, name = "id") Integer id) {
+		// If an id is specify : edit mode
+		if (id != null) {
+			User user = userService.find(id);
 			if (user != null) {
 				model.addAttribute("user", user);
 			}
 		}
-		return "addUser";
+		return "addEditUser";
+	}
+	
+	@RequestMapping(value = "/user/addEdit", method = RequestMethod.POST)
+	public String editUserPOST(ModelMap model, @Valid User user) {
+		// Case 1 : Add user
+		if (user.getId() == null) {
+			userService.create(user);
+		}
+		else {
+			System.out.println(user);
+			userService.edit(user);
+		}
+		
+		return "redirect:/admin";
+	}
+
+	@RequestMapping(value = "/user/delete", method = RequestMethod.POST)
+	public String deleteUser(ModelMap model, String selection) {
+		System.out.println(selection);
+		String[] array = selection.split(",");
+		for(String st : array) {
+			Integer i = Integer.parseInt(st);
+			userService.remove(i);
+		}
+		return "redirect:/admin";
 	}
 }

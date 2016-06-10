@@ -215,27 +215,36 @@ public class ComputerDAO implements DAO<Computer> {
 
         switch (page.getSearchType()) {
             case "computer":
-                luceneQuery = computerQB.keyword()
+                luceneQuery = computerQB.phrase()
                         .onField("name")
-                        .matching(page.getSearch())
+                        .sentence(page.getSearch())
                         .createQuery();
                 break;
             case "company":
-                luceneQuery = computerQB.keyword()
+                luceneQuery = computerQB.phrase()
                         .onField("company.name")
-                        .matching(page.getSearch())
+                        .sentence(page.getSearch())
                         .createQuery();
                 break;
             default:
-                luceneQuery = computerQB.keyword()
+                luceneQuery = computerQB.phrase()
                         .onField("name")
                         .andField("company.name")
-                        .matching(page.getSearch())
+                        .sentence(page.getSearch())
                         .createQuery();
                 break;
         }
 
         return fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
+    }
+
+    @Override
+    public List<String> findAutocompleteMatches(String entry) {
+        //FixMe : search condition missing
+        return this.jpaQuery
+                .select(this.qcomputer.name)
+                .from(this.qcomputer)
+                .fetch();
     }
 
 }
