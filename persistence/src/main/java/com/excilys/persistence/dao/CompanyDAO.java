@@ -81,9 +81,9 @@ public class CompanyDAO implements DAO<Company> {
     public List<String> findAutocompleteMatches(String entry) {
         return this.jpaQuery
                 .select(this.qcompany.name)
+                .distinct()
                 .from(this.qcompany)
                 .where(this.qcompany.name.like("%"+entry+"%"))
                 .fetch();
     }
-
 }
