@@ -44,6 +44,7 @@
                 <form method="POST">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input type="hidden" name="id" value="${user.id}"/>
+                    <p>${error}</p>
                     <fieldset>
                         <div >
                             <label class="control-label" for="username">${addUser}</label>
@@ -55,7 +56,7 @@
                             <label class="control-label" for="password">${password}</label>
                             <c:choose>
 								<c:when test="${not empty param.id}">
-                            		<input type="password" class="form-control" name="password" id="password" placeholder="${password}"/>
+                            		<input type="password" class="form-control" name="password" id="password" placeholder="${password}" value="*****"/>
 								</c:when>
 								<c:otherwise>
                             		<input type="password" class="form-control" name="password" id="password" placeholder="${password}" required="true" />
@@ -65,10 +66,10 @@
                         
                         <div >
                             <label class="control-label" for="role">${role}</label>
-                            <select class="form-control" name="role" id="${user.role}">
-                            <option value="USER">USER</option>
-                            <option value="ADMIN">ADMIN</option>
-                        </select>
+                            <select class="form-control" name="role" id="role">
+                            	<option value="USER">USER</option>
+                            	<option value="ADMIN">ADMIN</option>
+                        	</select>
                         </div>
                     </fieldset>
                     <br/>
