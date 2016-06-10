@@ -17,7 +17,7 @@ public class Computer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Field(analyze = Analyze.NO)
+    @Field
     @SortableField
     private String name;
 
