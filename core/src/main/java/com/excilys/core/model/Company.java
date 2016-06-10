@@ -1,6 +1,8 @@
 package com.excilys.core.model;
 
+import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.SortableField;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +22,7 @@ public class Company {
     @GeneratedValue
     private Long id;
 
+    @SortableField
     @Field
     private String name;
 

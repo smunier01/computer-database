@@ -27,3 +27,198 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+
+a.glyphicon:hover{
+    text-decoration:none;
+}
+
+
+.flag {
+    width: 25px;
+}
+
+.navbar-right{
+    margin-right:10px;
+}
+
+.navbarlink{
+    vertical-align: middle;
+    display: table-cell;
+    height: 55px;
+}
+
+.navbar-inverse .btn-link, .navbar-inverse .btn-link:focus, .navbar-inverse .btn-link:hover{
+    color:#000;
+}
+
+.errortext{
+    font-size:55px;
+    font-weight: bold;
+    text-align: center;
+}
+
+body{
+    /*background-color:#efefef;*/
+    background-size:cover;
+    background: #fff url("images/bg1.png") fixed top center no-repeat;
+    font-family: 'Open Sans', sans-serif;
+}
+
+footer{
+    height:auto;
+}
+footer p{
+    line-height:14px;
+}
+
+/* BOOTSTRAP OVERRIDE */
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td,
+.table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ccc;
+}
+
+.table-striped > tbody > tr:nth-child(odd) {
+    background-color: #aaf2ff;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #fafbff;
+}
+
+.navbar-default {
+    background-color: #008CFF;
+    border-color:#fefefe;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #fff;
+    background-color: transparent;
+}
+
+.navbar-default .navbar-nav > li > a{
+    color: #fff;
+    background-color: transparent;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #fff;
+    background-color: #000;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #000;
+}
+
+.nav > li > a {
+    display: block;
+}
+
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    color:#fff;
+    background-color: #111;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+
+.dropdown-menu.pull-right {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.dropdown-menu > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus{
+    color: #fff;
+    text-decoration: none;
+    background-color: #008CFF;
+}
+.navbar-default .btn-link{
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+.navbar-default .btn-link:hover, .navbar-default .btn-link:focus {
+    background-color: #008cFF;
+    color:#fff;
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #337ab7;
+    outline: 0;
+}
+
+.dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+    color: #777;
+}
+
+.dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
+    text-decoration: none;
+    cursor: not-allowed;
+    background-color: transparent;
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 37px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+    ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+    .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    margin-top: 2px;
+}

@@ -2,15 +2,14 @@ package com.excilys.persistence.dao;
 
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.PageParameters;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
+import static org.junit.Assert.*;
 
 @ContextConfiguration("classpath:applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -19,100 +18,147 @@ public class ComputerDAOTest {
     @Autowired
     private ComputerDAO computerDAO;
 
+    // -------------------------------------- Find tests ---------------------------------------------------------------
     @Test
-    public void testFindShouldHaveValidId() throws DAOException {
+    @Transactional
+    public void testFindShouldHaveValidId() {
+
 
         Computer result = this.computerDAO.find(-1L);
-
-        Assert.assertNull(result);
+        assertNull(result);
 
         result = this.computerDAO.find(0L);
-
-        Assert.assertNull(result);
+        assertNull(result);
 
     }
 
     @Test
-    public void testCreateFindDelete() throws DAOException {
+    public void findTest() {
+        Computer comp = computerDAO.find(2L);
+        assertEquals(comp.getName(), "CM-2a");
+    }
 
-        // create a computer
+    // -------------------------------------- Create tests -------------------------------------------------------------
+    @Test
+    @Transactional
+    public void createTest() {
+        Computer comp = new Computer.ComputerBuilder().name("createComputerTestDAO").build();
+        Computer created = computerDAO.create(comp);
+        assertNotNull(created);
+        assertNotNull(created.getId());
 
-        final Computer comp = new Computer.ComputerBuilder().name("MyComputerName").discontinued(LocalDate.now())
-                .build();
-
-        Assert.assertNotNull(comp);
-        final Computer a = this.computerDAO.create(comp);
-        Assert.assertNotNull(a);
-        final Long id = a.getId();
-        Assert.assertTrue(id > 0L);
-
-        // find the computer by its id
-
-        final Computer b = this.computerDAO.find(id);
-
-        Assert.assertNotNull(b);
-        Assert.assertEquals(comp.getName(), b.getName());
-        Assert.assertEquals(comp, b);
-
-        // delete the computer
-
-        this.computerDAO.delete(b);
-
-        // try to find it again
-
-        final Computer c = this.computerDAO.find(id);
-
-        Assert.assertNull(c);
+        computerDAO.delete(created);
     }
 
     @Test
-    public void testUpdate() throws DAOException {
+    @Transactional
+    public void createEqualTest() {
+        Computer comp = new Computer.ComputerBuilder().name("createEqualsComputerTestDAO").build();
+        Computer created = computerDAO.create(comp);
+        comp.setId(created.getId());
+        assertEquals(comp,created);
 
-        // create a computer
+        computerDAO.delete(created);
+    }
 
-        final LocalDate d1 = LocalDate.now();
 
-        final Computer comp = new Computer.ComputerBuilder().name("MyComputerName").discontinued(d1).build();
+    // -------------------------------------- Update tests -------------------------------------------------------------
 
-        Assert.assertNotNull(comp);
-        final Computer a = this.computerDAO.create(comp);
-        Assert.assertNotNull(a);
-        final Long id = a.getId();
-        Assert.assertTrue(id > 0L);
+    @Test
+    @Transactional
+    public void updateTest() {
+        Computer computer = new Computer.ComputerBuilder().name("updateTestDAO").build();
+        computer = computerDAO.create(computer);
+        computer.setName("updatedTestDAO");
+        computer = computerDAO.update(computer);
+        assertEquals("updatedTestDAO",computer.getName());
 
-        // modify the object
+        computerDAO.delete(computer);
+    }
 
-        final LocalDate d2 = LocalDate.now().plusYears(1);
 
-        a.setName("NewComputerName");
-        a.setIntroduced(d2);
-        a.setDiscontinued(null);
+    // -------------------------------------- Remove tests -------------------------------------------------------------
 
-        // update the db
 
-        final Computer b = this.computerDAO.update(a);
+    @Test
+    @Transactional
+    public void removeTest() {
+        Computer computer = new Computer.ComputerBuilder().name("removedTestDAO").build();
+        Computer created = computerDAO.create(computer);
+        Long id = created.getId();
+        computerDAO.delete(created);
+        Computer retrieve = computerDAO.find(id);
+        assertNull(retrieve);
+    }
 
-        Assert.assertEquals(b, a);
-        Assert.assertEquals(id, b.getId());
 
-        // retrieve from db
+    // -------------------------------------- Count tests --------------------------------------------------------------
 
-        final Computer d = this.computerDAO.find(id);
+    @Test
+    @Transactional
+    public void CountTest() {
+        long countInitial = computerDAO.count();
+        Computer comp = new Computer.ComputerBuilder().name("CountTestDAO").build();
+        computerDAO.create(comp);
+        long count = computerDAO.count();
+        assertEquals(countInitial+1,count);
 
-        Assert.assertNotNull(d);
-        Assert.assertEquals("NewComputerName", d.getName());
-        Assert.assertNull(d.getDiscontinued());
-        Assert.assertEquals(d2, d.getIntroduced());
+        computerDAO.delete(comp);
+    }
 
-        // delete clean up
+    @Test
+    @Transactional
+    public void CountTestFound() {
+        PageParameters pageParameters = new PageParameters.Builder().search("count").build();
+        long countInitial = computerDAO.count(pageParameters);
+        Computer comp = new Computer.ComputerBuilder().name("CountTestDAO1").build();
+        computerDAO.create(comp);
+        long count = computerDAO.count(pageParameters);
+        assertEquals(countInitial+1,count);
 
-        this.computerDAO.delete(d);
+        computerDAO.delete(comp);
+    }
 
-        // test the delete
+    @Test
+    @Transactional
+    public void CountTestNotFound() {
+        PageParameters pageParameters = new PageParameters.Builder().search("hunt").build();
+        long countInitial = computerDAO.count(pageParameters);
+        Computer comp = new Computer.ComputerBuilder().name("CountTestDAO2").build();
+        computerDAO.create(comp);
+        long count = computerDAO.count(pageParameters);
+        assertEquals(countInitial,count);
 
-        final Computer e = this.computerDAO.find(id);
+        computerDAO.delete(comp);
+    }
 
-        Assert.assertNull(e);
+    // -------------------------------------- Find all tests -----------------------------------------------------------
+    /*
+    @Test
+    @Transactional
+    public void findAllTest() {
+        PageParameters pageParameters = new PageParameters.Builder().search("apple").direction(PageParameters.Direction.ASC).size(5).build();
+        List<Computer> companies = computerDAO.findAll(pageParameters);
+        for (int i =1; i < companies.size(); i++) {
+            Computer comp = companies.get(i);
+            Computer before = companies.get(i-1);
+            System.err.println("dkljdjkf->"+comp.getName());
+            boolean searchName = comp.getName().toLowerCase().contains("apple");
+            assertTrue(searchName);
+            int nameOrder = comp.getName().compareTo(before.getName());
+            assertTrue(nameOrder >= 0);
+        }
+    }
+
+
+
+
+    @Test
+    public void testFindAll() throws DAOException {
+        final List<Company> companies = this.companyDAO.findAll();
+
+        assertNotNull(companies);
+        Assert.assertTrue(companies.size() > 0);
     }
 
     @Test
@@ -120,42 +166,87 @@ public class ComputerDAOTest {
 
         // count the number of computers with findAll
 
-        long sizeA = this.computerDAO.count();
+        final List<Company> companies1 = this.companyDAO.findAll();
 
-        Assert.assertTrue(sizeA > 0);
+        Assert.assertNotNull(companies1);
+        Assert.assertTrue(companies1.size() > 0);
+
+        final long sizeA = companies1.size();
 
         // create a computer
 
-        final LocalDate d1 = LocalDate.now();
+        final Company company = new Company(null, "MyCompanyName");
 
-        final Computer comp = new Computer.ComputerBuilder().name("MyComputerName").discontinued(d1).build();
-
-        Assert.assertNotNull(comp);
-        final Computer a = this.computerDAO.create(comp);
+        Assert.assertNotNull(company);
+        final Company a = this.companyDAO.create(company);
         Assert.assertNotNull(a);
         final Long id = a.getId();
         Assert.assertTrue(id > 0L);
 
         // count again, and compare the sizes
 
-        long sizeB = this.computerDAO.count();
+        final List<Company> companies2 = this.companyDAO.findAll();
 
-        Assert.assertTrue(sizeB > 0);
+        Assert.assertNotNull(companies2);
+        Assert.assertTrue(companies2.size() > 0);
+
+        final long sizeB = companies2.size();
 
         Assert.assertEquals(sizeA + 1L, sizeB);
 
         // delete clean up
 
-        this.computerDAO.delete(comp);
+        this.companyDAO.delete(company);
 
         // count and compare sizes
 
-        long sizeC = this.computerDAO.count();
+        final List<Company> companies3 = this.companyDAO.findAll();
 
-        Assert.assertTrue(sizeC > 0);
+        Assert.assertNotNull(companies3);
+        Assert.assertTrue(companies3.size() > 0);
+
+        final long sizeC = companies3.size();
 
         Assert.assertEquals(sizeA, sizeC);
     }
+
+    @Test
+    public void testFindAllWithLimit1() throws DAOException {
+
+        final PageParameters page = new PageParameters.Builder().size(20).pageNumber(0).build();
+
+        final List<Company> companies1 = this.companyDAO.findAll(page);
+        final List<Company> companies2 = this.companyDAO.findAll();
+
+        Assert.assertNotNull(companies1);
+        Assert.assertNotNull(companies2);
+
+        if (companies2.size() > 20) {
+            Assert.assertEquals(companies1.size(), 20);
+        } else {
+            Assert.assertTrue(companies1.size() == companies2.size());
+        }
+    }
+
+    @Test
+    public void testFindAllWithLimit2() throws DAOException {
+
+        final PageParameters page = new PageParameters.Builder().size(7).pageNumber(3).build();
+
+        final List<Company> companies1 = this.companyDAO.findAll(page);
+        final List<Company> companies2 = this.companyDAO.findAll();
+
+        Assert.assertNotNull(companies1);
+        Assert.assertNotNull(companies2);
+
+        if (companies2.size() > (3 * 7)) {
+            Assert.assertTrue(companies1.size() == 7);
+        } else {
+            Assert.assertTrue(companies1.size() == (companies2.size() - (2 * 7)));
+        }
+    }
+
+
 
     @Test
     public void testFindAllWithLimit1() throws DAOException {
@@ -187,5 +278,5 @@ public class ComputerDAOTest {
         } else {
             Assert.assertTrue(computers1.size() == (res - (2 * 7)));
         }
-    }
+    }*/
 }

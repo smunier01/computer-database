@@ -1,12 +1,12 @@
 package com.excilys.core.model;
 
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
-import org.hibernate.search.annotations.SortableField;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Index;
 import java.time.LocalDate;
+
+import static com.excilys.core.model.QCompany.company;
 
 @Entity
 @Indexed

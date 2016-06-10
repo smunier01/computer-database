@@ -20,21 +20,22 @@ public class ExceptionHandlingController {
 
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNoSuchElementException(NoSuchElementException ex) {
-        return "errors/404";
+        return "404";
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handlePageNotFoundException(NoHandlerFoundException ex) {
-        return "errors/404";
+        return "404";
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
-        return "errors/500";
+
+        return "500";
     }
 
     @ExceptionHandler(Exception.class)
     public String handleAllException(Exception ex) {
-        return "errors/505";
+        return "505";
     }
 }
