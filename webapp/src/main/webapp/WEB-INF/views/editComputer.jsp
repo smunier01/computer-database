@@ -33,9 +33,9 @@
                     <input id="id" name="id" type="hidden" value="${computer.id}"/>
                     <fieldset>
                         <div class="form-group ${errors.hasFieldErrors('name') ? 'has-error': ''}">
-                            <label for="computerName">${columnName}</label> <input
+                            <label for="name">${columnName}</label> <input
                                 type="text" class="form-control" name="name"
-                                id="computerName" placeholder="${columnName}"
+                                id="name" placeholder="${columnName}"
                                 value="${computer.name}">
                         </div>
                         <div class="form-group ${errors.hasFieldErrors('introduced') ? 'has-error': ''}">
