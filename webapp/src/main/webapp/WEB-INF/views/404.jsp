@@ -1,9 +1,15 @@
-<!DOCTYPE html>
+<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"
-	isELIgnored="false"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="mytag" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
+<jsp:include page="top.jsp"/>
+
+<c:set var="context" value="${pageContext.request.contextPath}"/>
+
+
 <html>
 <jsp:include page="top.jsp"/>
 <body>
@@ -20,13 +26,12 @@
         </div>
     </section>
 
-    <footer>
-        <div class="container text-center">
-            <p>&nbsp;</p>
-            <p>Developed by Excilys Avril 2016</p>
-            <p><a>Mentions Légales</a></p>
+    <footer class="navbar-fixed-bottom">
+        <div class="text-center">
+            <small><spring:message code="dashboard.footer" /> - <a><spring:message code="dashboard.legal" /></a></small>
         </div>
     </footer>
+
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
