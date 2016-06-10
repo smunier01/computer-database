@@ -3,10 +3,7 @@ package com.excilys.core.model;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.SortableField;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Company Class.
@@ -19,7 +16,7 @@ public class Company {
 
     // list of the variables
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @SortableField
