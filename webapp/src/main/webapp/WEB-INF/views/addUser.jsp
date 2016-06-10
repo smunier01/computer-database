@@ -27,20 +27,20 @@
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 box">
                 <h1>${addUser}</h1>
-                <form action="${contextPath}/user/add" method="POST">
+                <form method="POST">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <fieldset>
-                        <div class="form-group ${fn:contains(errors, 'username') ? 'has-error': ''}">
+                        <div >
                             <label class="control-label" for="username">${addUser}</label>
                             <input type="text" class="form-control" name="username" id="username" placeholder="${username}" value="${user.username}">
                         </div>
                         
-                        <div class="form-group ${fn:contains(errors, 'password') ? 'has-error': ''}">
+                        <div >
                             <label class="control-label" for="password">${password}</label>
                             <input type="password" class="form-control" name="password" id="password" placeholder="${password}" value="${user.password}">
                         </div>
                         
-                        <div class="form-group ${fn:contains(errors, 'role') ? 'has-error': ''}">
+                        <div >
                             <label class="control-label" for="role">${role}</label>
                             <select class="form-control" name="role" id="role">
                             <option value="USER">USER</option>
@@ -51,7 +51,7 @@
 
 					<!-- Validation button -->
                     <div class="actions pull-right">
-                        <input id="buttonForm" type="submit" value="${add}" class="btn btn-primary"> ${formOr} <a href="admin" class="btn btn-default">${cancel}</a>
+                        <input id="addButtonUser" type="submit" value="${add}" class="btn btn-primary"> ${formOr} <a href="${pageContext.request.contextPath}/admin" class="btn btn-default">${cancel}</a>
                     </div>
                 </form>
             </div>
