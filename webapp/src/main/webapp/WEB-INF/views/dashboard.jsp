@@ -21,6 +21,7 @@
 <spring:message code="dashboard.found" var="foundComputer"/>
 <spring:message code="dashboard.admin" var="admin"/>
 <spring:message code="delete.confirmation" var="deleteConfirmation"/>
+<spring:message code="dashboard.search" var="search"/>
 
 <body>
 <jsp:include page="header.jsp"/>
@@ -32,7 +33,7 @@
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">
-                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${param.search}"  />
+                    <input type="search" id="searchbox" name="search" class="form-control" placeholder=${search} value="${param.search}"  />
                     <input id="searchType" name="searchType" type="hidden">
 
                     <div class="btn-group">
@@ -52,7 +53,7 @@
             <div class="pull-right">
                 <c:if test="${isAdmin}">
                 	<a class="btn btn-success" id="addComputer" href="${context}/computer/add">${addComputer}</a>
-					<a class="btn btn-warning raised" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
+					<a class="btn btn-warning" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${editComputer}</a>
                 	<a class="btn btn-default" id="admin" href="admin">${admin}</a>
                 </c:if>
             </div>

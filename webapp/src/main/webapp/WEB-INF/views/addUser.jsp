@@ -48,7 +48,7 @@
                         </select>
                         </div>
                     </fieldset>
-
+                    <br/>
 					<!-- Validation button -->
                     <div class="actions pull-right">
                         <input id="addButtonUser" type="submit" value="${add}" class="btn btn-primary"> ${formOr} <a href="${pageContext.request.contextPath}/admin" class="btn btn-default">${cancel}</a>
