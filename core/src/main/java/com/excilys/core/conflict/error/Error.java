@@ -1,4 +1,4 @@
-package com.excilys.core.doublon.error;
+package com.excilys.core.conflict.error;
 
 import com.excilys.core.conflict.format.Fields;
 

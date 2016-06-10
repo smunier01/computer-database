@@ -1,6 +1,5 @@
 package com.excilys.core.conflict;
 
-
 import com.excilys.core.dto.ComputerDTO;
 
 import java.util.ArrayList;

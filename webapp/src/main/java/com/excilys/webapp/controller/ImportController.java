@@ -19,7 +19,6 @@ public class ImportController {
 
     @RequestMapping(value = "/computers", method = RequestMethod.GET)
     public String getImport() {
-
         return "addListComputers";
     }
 
@@ -30,13 +29,13 @@ public class ImportController {
         //File extension
         String file_type = tab[1];
 
-        Rapport rapp = null;
+        Rapport rapport = null;
         switch (file_type) {
             case "xml":
-                rapp = computerImportService.importComputersFromXML(file);
+                rapport = computerImportService.importComputersFromXML(file);
                 break;
             case "csv":
-                computerImportService.importComputersFromCSV();
+                rapport = computerImportService.importComputersFromCSV(file);
                 break;
             default:
 

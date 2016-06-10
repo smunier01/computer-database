@@ -8,11 +8,11 @@ package com.excilys.core.model;
 public class PageParameters {
 
     public enum Order {
-        NAME, COMPANY_NAME, INTRODUCED, DISCONTINUED;
+        NAME, COMPANY_NAME, INTRODUCED, DISCONTINUED
     }
 
     public enum Direction {
-        ASC, DESC;
+        ASC, DESC
     }
 
     private long size;

@@ -1,14 +1,15 @@
-package com.excilys.service.doublon.service;
+package com.excilys.service.doublon;
 
 import com.excilys.binding.doublon.Hamming;
 import com.excilys.binding.doublon.Levenshtein;
 import com.excilys.binding.doublon.SimilarityCalculator;
 import com.excilys.binding.mapper.IComputerMapper;
-import com.excilys.core.doublon.model.Conflict;
-import com.excilys.core.doublon.model.DoublonRules;
-import com.excilys.core.doublon.model.Rapport;
+import com.excilys.core.conflict.Rapport;
+
+import com.excilys.core.conflict.doublon.Doublon;
+import com.excilys.core.conflict.doublon.DoublonRules;
 import com.excilys.core.dto.ComputerDTO;
-import com.excilys.service.service.IComputerService;
+import com.excilys.service.computer.IComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Validator;
@@ -57,11 +58,11 @@ public class DoublonServiceImpl implements DoublonService {
                     retVal.getToImport().add(computerOut);
                 } else {
                     // TODO: need to add the conflicts
-                    retVal.getToCheck().add(new Conflict(computerOut, tList));
+                    retVal.getToCheck().add(new Doublon(computerOut, tList));
                 }
             } else {
                 // TODO: need to add the conflicts
-                retVal.getRefuse().add(new Conflict(computerOut, tList));
+                retVal.getRefuse().add(new Doublon(computerOut, tList));
             }
         }
         return retVal;

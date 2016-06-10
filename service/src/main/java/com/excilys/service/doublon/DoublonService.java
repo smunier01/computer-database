@@ -1,4 +1,4 @@
-package com.excilys.service.doublon.service;
+package com.excilys.service.doublon;
 
 
 

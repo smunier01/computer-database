@@ -2,14 +2,11 @@ package com.excilys.service.importTool.impl;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.excilys.binding.validation.ComputerValidator;
-import com.excilys.binding.validation.ValidatorUtil;
-import com.excilys.core.conflict.Conflict;
 import com.excilys.core.conflict.Rapport;
 import com.excilys.core.conflict.format.Error;
 import com.excilys.core.conflict.format.ErrorMessage;
 import com.excilys.core.conflict.format.Fields;
 import com.excilys.core.dto.ComputerDTO;
-import com.excilys.core.model.Computer;
 import com.excilys.service.importTool.IComputerImportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +23,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,21 +31,24 @@ public class ComputerImportService implements IComputerImportService {
 
     @Autowired
     private ComputerValidator computerValidator;
-    public static final String RESOURCE = "/home/nbelleme/Bureau/dev/cdb/service/src/main/resources/computer.csv";
 
     @Override
-    public List<Conflict> importComputersFromCSV() {
-
-        File file = new File(RESOURCE);
-        List<Conflict> conflicts = new ArrayList<>();
+    public Rapport importComputersFromCSV(MultipartFile file) {
+        Rapport rapport = new Rapport();
+        File convFile = new File(file.getOriginalFilename());
         try {
-            FileReader fr = new FileReader(file);
+            file.transferTo(convFile);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try {
+            FileReader fr = new FileReader(convFile);
             CSVReader csvReader = new CSVReader(fr, ',');
             csvReader.readNext();
             String[] nextLine;
-            List<Computer> computers = new ArrayList<>();
 
-            ValidatorUtil validatorUtil = new ValidatorUtil();
             while ((nextLine = csvReader.readNext()) != null) {
                 String name = nextLine[0];
                 String introducedString = nextLine[1];
@@ -60,29 +59,43 @@ public class ComputerImportService implements IComputerImportService {
                         .name(name)
                         .introduced(introducedString)
                         .discontinued(discontinuedString)
+                        .companyName(companyName)
                         .build();
 
                 Map<Fields, List<ErrorMessage>> errors = computerValidator.validateComputerDTO(computerDTO);
-                System.out.println(errors.toString());
                 Error conflict = new Error();
-                conflict.setComputerDTO(computerDTO);
-                conflict.setErrorMap(errors);
-                conflicts.add(conflict);
-
+                if (errors.size() != 0) {
+                    conflict.setComputerDTO(computerDTO);
+                    conflict.setErrorMap(errors);
+                    rapport.getRefuse().add(conflict);
+                } else {
+                    rapport.getToImport().add(computerDTO);
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return conflicts;
+        return rapport;
+    }
+
+    @Override
+    public Rapport importComputersFromXML(MultipartFile file) {
+        File convFile = new File(file.getOriginalFilename());
+        try {
+            file.transferTo(convFile);
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return mapDatas(readFile(convFile));
     }
 
     private Rapport mapDatas(NodeList elts) {
-        Rapport pReturn = new Rapport();
-        List<ComputerDTO> conflicComputer = new ArrayList<ComputerDTO>();
-        List<String> errors = new ArrayList<String>();
-        List<Conflict> conflicts = new ArrayList<>();
+        Rapport rapport = new Rapport();
 
         for (int i = 0; i < elts.getLength(); i++) {
             Node nNode = elts.item(i);
@@ -97,22 +110,19 @@ public class ComputerImportService implements IComputerImportService {
 
                 Map<Fields, List<ErrorMessage>> err = computerValidator.validateComputerDTO(temp);
                 if (err.size() == 0) {
-                    pReturn.getToImport().add(temp);
+                    rapport.getToImport().add(temp);
                 } else {
                     Error conflict = new Error();
                     conflict.setComputerDTO(temp);
                     conflict.setErrorMap(err);
-                    conflicts.add(conflict);
-
-                    pReturn.setRefuse(conflicts);
+                    rapport.getRefuse().add(conflict);
                 }
             }
         }
-
-        return pReturn;
+        return rapport;
     }
 
-    private  NodeList readFile(File file) {
+    private NodeList readFile(File file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
         try {
@@ -138,19 +148,5 @@ public class ComputerImportService implements IComputerImportService {
 
 
         return doc.getElementsByTagName("computer");
-    }
-
-    public  Rapport importComputersFromXML(MultipartFile file) {
-        File convFile = new File(file.getOriginalFilename());
-        try {
-            file.transferTo(convFile);
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return mapDatas(readFile(convFile));
     }
 }

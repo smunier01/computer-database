@@ -1,4 +1,4 @@
-package com.excilys.core.doublon.model;
+package com.excilys.core.conflict.doublon;
 
 public class DoublonRules {
 

@@ -33,6 +33,9 @@
         <binding.name>Binding Module</binding.name>
         <console.name>CLI Module</console.name>
 
+        <!-- modules version -->
+        <core.version>0.7.0-RELEASE</core.version>
+
         <!-- dependencies versions -->
 
         <junit.version>4.12</junit.version>
@@ -77,6 +80,13 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- cdb -->
+            <dependency>
+                <groupId>com.excilys</groupId>
+                <artifactId>core</artifactId>
+                <version>${core.version}</version>
+            </dependency>
 
             <!-- spring -->
 
