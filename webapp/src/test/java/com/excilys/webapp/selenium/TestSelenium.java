@@ -2,27 +2,27 @@ package com.excilys.webapp.selenium;
 
 import java.util.concurrent.TimeUnit;
 import org.junit.*;
+import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-import static org.junit.Assert.assertTrue;
-
 public class TestSelenium {
     private WebDriver driver;
     private String baseUrl;
-    private final StringBuffer verificationErrors = new StringBuffer();
     private boolean acceptNextAlert = true;
+    private StringBuffer verificationErrors = new StringBuffer();
 
     @Before
     public void setUp() throws Exception {
         driver = new FirefoxDriver();
         baseUrl = "http://localhost:8080/cdb";
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
+    @Ignore
     @Test
-    public void testCreateFindDelete() throws Exception {
+    public void testSelenium() throws Exception {
 
         // creates a computer with a name of "ComputerTest"
 
@@ -83,25 +83,25 @@ public class TestSelenium {
 
     @After
     public void tearDown() throws Exception {
-        this.driver.quit();
-        final String verificationErrorString = this.verificationErrors.toString();
+        driver.quit();
+        String verificationErrorString = verificationErrors.toString();
         if (!"".equals(verificationErrorString)) {
-            Assert.fail(verificationErrorString);
+            fail(verificationErrorString);
         }
     }
-
+    
     private String closeAlertAndGetItsText() {
         try {
-            final Alert alert = this.driver.switchTo().alert();
-            final String alertText = alert.getText();
-            if (this.acceptNextAlert) {
+            Alert alert = driver.switchTo().alert();
+            String alertText = alert.getText();
+            if (acceptNextAlert) {
                 alert.accept();
             } else {
                 alert.dismiss();
             }
             return alertText;
         } finally {
-            this.acceptNextAlert = true;
+            acceptNextAlert = true;
         }
     }
 }
