@@ -180,7 +180,6 @@ public class ComputerController {
      */
     @RequestMapping(path = "${path.computer.delete}", method = RequestMethod.POST)
     public String postDeleteComputer(@RequestParam String selection) {
-
         this.computerService.deleteComputers(
                 Stream.of(selection.split(","))
                         .filter(this.validator::isIdValid)
