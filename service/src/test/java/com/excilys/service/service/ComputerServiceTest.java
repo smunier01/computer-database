@@ -182,42 +182,4 @@ public class ComputerServiceTest {
 
         Assert.assertEquals(firstCount, thirdCount);
     }
-
-    @Test
-    public void testCountDeleteThreadSafe() throws ServiceException {
-
-        PageParameters p = new PageParameters.Builder().size(10).pageNumber(0).build();
-
-        List<Long> created = new ArrayList<>();
-        Computer tmp;
-
-        // start by counting the number of computers
-
-        long firstCount = this.service.countComputers(p);
-
-        for (int i = 0; i < 100; i++) {
-            tmp = new Computer.ComputerBuilder().name("test").build();
-            this.service.createComputer(tmp);
-            Assert.assertTrue(tmp.getId() > 0);
-            created.add(tmp.getId());
-        }
-
-        Assert.assertEquals(100, created.size());
-
-        // should be 100 more computer inside now
-
-        long secondCount = this.service.countComputers(p);
-
-        Assert.assertEquals(firstCount + 100, secondCount);
-
-        // delete all using parallel stream
-
-        created.stream().parallel().forEach(this.service::deleteComputer);
-
-        // count should be equal to the first one ..
-
-        long thirdCount = this.service.countComputers(p);
-
-        Assert.assertEquals(firstCount, thirdCount);
-    }
 }

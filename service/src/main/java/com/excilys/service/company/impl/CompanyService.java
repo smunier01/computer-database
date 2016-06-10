@@ -18,14 +18,12 @@ import java.util.List;
 @Service
 public class CompanyService implements ICompanyService {
 
+    // list of variables
     private final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
-
     @Autowired
     private CompanyDAO companyDAO;
-
     @Autowired
     private ComputerDAO computerDAO;
-
     @Autowired
     private ValidatorUtil validator;
 
@@ -87,7 +85,7 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public List<String> findAutocompleteResult(String entry){
+    public List<String> findAutocompleteResult(String entry) {
         return this.companyDAO.findAutocompleteMatches(entry);
     }
 }
