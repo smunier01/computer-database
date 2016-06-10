@@ -1,6 +1,9 @@
 ﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="mytag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<spring:message code="header.hello" var="hello"/>
+
 <header class="navbar navbar-default navbar-fixed-top">
     <ul class="nav navbar-nav navbar-left">
         <li><a href="${pageContext.request.contextPath}/dashboard" class="navbar-brand navbarlink">Application - Computer Database</a></li>
@@ -34,7 +37,7 @@
                     <a class="dropdown-toggle navbarlink"
                        data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                        aria-expanded="false">
-                        Bonjour
+                        ${hello}
                         <c:out
                                 value="${pageContext.request.userPrincipal.name}" /> <span
                             class="caret"></span></a>
