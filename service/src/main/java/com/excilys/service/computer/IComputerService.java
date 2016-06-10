@@ -67,4 +67,10 @@ public interface IComputerService {
      * @return page of computers.
      */
     Page<Computer> getComputersPage(PageParameters param);
+
+    /**
+     * Return the list of all the computers.
+     * @return the list of computer
+     */
+    List<Computer> getAll();
 }

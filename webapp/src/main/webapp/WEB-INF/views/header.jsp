@@ -52,8 +52,8 @@
                 </li>
             </c:when>
             <c:otherwise>
-                <li><a href="${ pageContext.request.contextPath }/login" class="navbarlink"><button class="btn btn-sm btn-success"><spring:message
-                        code="button_login" /></button></a></li>
+                <li><a href="${ pageContext.request.contextPath }/login" class="navbarlink"><spring:message
+                        code="button_login" /></a></li>
             </c:otherwise>
         </c:choose>
 

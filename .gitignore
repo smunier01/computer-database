@@ -1,5 +1,12 @@
 
-# Created by https://www.gitignore.io/api/eclipse,javz
+
+# Created by https://www.gitignore.io/api/eclipse,java
+
+### properties files ###
+*mysql.properties
+.idea
+*.iml
+
 # mysql.properties
 
 ### log files ###

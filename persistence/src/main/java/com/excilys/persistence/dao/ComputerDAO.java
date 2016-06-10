@@ -7,7 +7,7 @@ import com.excilys.core.model.PageParameters.Order;
 import com.excilys.core.model.QCompany;
 import com.excilys.core.model.QComputer;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
@@ -43,16 +43,27 @@ public class ComputerDAO implements DAO<Computer> {
 
     private QCompany qcompany = QCompany.company;
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("unchecked")
     public static OrderSpecifier<? extends Comparable> getOrderMethod(Order o, Direction d) {
-        PathBuilder<QComputer> orderByExpression = new PathBuilder<>(QComputer.class, "computer");
-        if (d == Direction.ASC) {
-            System.out.println("ASC");
-            return new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
-        } else {
-            System.out.println("DESC");
-            return new OrderSpecifier<>(com.querydsl.core.types.Order.DESC, orderByExpression.get(o.toString().toLowerCase(), Comparable.class));
+
+        ComparableExpressionBase path;
+
+        switch(o) {
+            case INTRODUCED:
+                path = QComputer.computer.introduced;
+                break;
+            case DISCONTINUED:
+                path = QComputer.computer.discontinued;
+                break;
+            case COMPANY_NAME:
+                path = QComputer.computer.company.name;
+                break;
+            default:
+                path = QComputer.computer.name;
+                break;
         }
+
+        return d == Direction.ASC ? path.asc() : path.desc();
     }
 
     @PersistenceContext
@@ -150,49 +161,25 @@ public class ComputerDAO implements DAO<Computer> {
      */
     @SuppressWarnings("unchecked")
     private List<Computer> findAllLucene(PageParameters page) {
-        FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
-        SearchFactory sf = fullTextEntityManager.getSearchFactory();
-
-        QueryBuilder computerQB = sf.buildQueryBuilder().forEntity(Computer.class).get();
-
-        org.apache.lucene.search.Query luceneQuery;
-        if (page.getSearchType().equals("computer")) {
-            luceneQuery = computerQB.keyword()
-                    .onField("name")
-                    .matching(page.getSearch())
-                    .createQuery();
-        } else if (page.getSearchType().equals("company")) {
-            luceneQuery = computerQB.keyword()
-                    .onField("company.name")
-                    .matching(page.getSearch())
-                    .createQuery();
-        } else {
-            luceneQuery = computerQB.keyword()
-                    .onField("name")
-                    .andField("company.name")
-                    .matching(page.getSearch())
-                    .createQuery();
-        }
-
-        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
+        FullTextQuery fullTextQuery = getFullTextQuery(page);
         fullTextQuery.setFirstResult((int) (page.getSize() * page.getPageNumber()));
         fullTextQuery.setMaxResults((int) page.getSize());
 
         switch (page.getOrder()) {
             case NAME:
-                fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING)));
+                fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING, page.getDirection() == Direction.ASC)));
                 break;
             case INTRODUCED:
-                fullTextQuery.setSort(new Sort(new SortField("introduced", SortField.Type.INT)));
+                fullTextQuery.setSort(new Sort(new SortField("introduced", SortField.Type.STRING, page.getDirection() == Direction.ASC)));
                 break;
             case DISCONTINUED:
-                fullTextQuery.setSort(new Sort(new SortField("discontinued", SortField.Type.INT)));
+                fullTextQuery.setSort(new Sort(new SortField("discontinued", SortField.Type.STRING, page.getDirection() == Direction.ASC)));
                 break;
             case COMPANY_NAME:
-                fullTextQuery.setSort(new Sort(new SortField("company.name", SortField.Type.STRING)));
+                fullTextQuery.setSort(new Sort(new SortField("company.name", SortField.Type.STRING, page.getDirection() == Direction.ASC)));
                 break;
             default:
-                fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING)));
+                fullTextQuery.setSort(new Sort(new SortField("name", SortField.Type.STRING, page.getDirection() == Direction.ASC)));
                 break;
         }
 
@@ -206,11 +193,49 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public long count(PageParameters page) {
-        return this.jpaQuery.from(this.qcomputer).where(this.qcomputer.name.like(page.getSearch() + "%")).fetchCount();
+        if (page.getSearch().isEmpty()) {
+            return this.jpaQuery.from(this.qcomputer).fetchCount();
+        } else {
+            return (long) getFullTextQuery(page).getResultSize();
+        }
     }
 
     @Override
     public long count() {
         return this.jpaQuery.from(this.qcomputer).fetchCount();
     }
+
+    private FullTextQuery getFullTextQuery(PageParameters page) {
+        FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
+        SearchFactory sf = fullTextEntityManager.getSearchFactory();
+
+        QueryBuilder computerQB = sf.buildQueryBuilder().forEntity(Computer.class).get();
+
+        org.apache.lucene.search.Query luceneQuery;
+
+        switch (page.getSearchType()) {
+            case "computer":
+                luceneQuery = computerQB.keyword()
+                        .onField("name")
+                        .matching(page.getSearch())
+                        .createQuery();
+                break;
+            case "company":
+                luceneQuery = computerQB.keyword()
+                        .onField("company.name")
+                        .matching(page.getSearch())
+                        .createQuery();
+                break;
+            default:
+                luceneQuery = computerQB.keyword()
+                        .onField("name")
+                        .andField("company.name")
+                        .matching(page.getSearch())
+                        .createQuery();
+                break;
+        }
+
+        return fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
+    }
+
 }

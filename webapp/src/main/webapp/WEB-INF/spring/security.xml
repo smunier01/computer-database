@@ -1,6 +1,6 @@
 <b:beans xmlns:b="http://www.springframework.org/schema/beans"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://www.springframework.org/schema/security"
+         xmlns:security="http://www.springframework.org/schema/security"
          xsi:schemaLocation="http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security
@@ -9,32 +9,36 @@
 
     <!--<debug />-->
 
-    <http pattern="/css/**" security="none"/>
-    <http pattern="/assets/**" security="none"/>
-    <http pattern="/js/**" security="none"/>
-    <http pattern="/fonts/**" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/assets/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/fonts/**" security="none"/>
 
-    <http create-session="never">
-    	<!-- Dashboard & Computer -->
-        <intercept-url pattern="/dashboard" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <intercept-url pattern="/computer/**" access="hasAnyRole('ROLE_ADMIN')"/>
-        
-        <!-- REST requests --> 
-        <intercept-url pattern="/rest/**" method='GET' access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <intercept-url pattern="/rest/**" method='POST' access="hasAnyRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/rest/**" method='PUT' access="hasAnyRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/rest/**" method='DELETE' access="hasAnyRole('ROLE_ADMIN')"/>
 
-        <http-basic/>
+    <security:http auto-config="true" >
+        <security:access-denied-handler error-page="/403" />
+        <security:http-basic />
+        <security:intercept-url pattern="/dashboard" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/computer/**" access="hasAnyRole('ROLE_ADMIN')"/>
 
-        <!--<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>-->
+        <!-- REST requests -->
+        <security:intercept-url pattern="/rest/**" method='GET' access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/rest/**" method='POST' access="hasAnyRole('ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/rest/**" method='PUT' access="hasAnyRole('ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/rest/**" method='DELETE' access="hasAnyRole('ROLE_ADMIN')"/>
+        <security:form-login
+                login-page="/login"
+                authentication-failure-url="/login?error"
+                default-target-url="/dashboard"/>
+        <security:csrf disabled="true" />
+        <security:logout />
+    </security:http>
 
-        <csrf disabled="true"/>
-    </http>
 
-    <authentication-manager>
-        <authentication-provider user-service-ref="customUserDetailsService"/>
-    </authentication-manager>
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="customUserDetailsService" />
+    </security:authentication-manager>
 
     <!-- digest filter -->
 
