@@ -17,7 +17,6 @@
 <spring:message code="admin.delete" var="delete"/>
 
 <body>
-<<<<<<< HEAD
 	<jsp:include page="header.jsp" />
 
 	<section id="main">
@@ -41,7 +40,7 @@
         <div id="actions" class="form-horizontal">
             <div class="pull-right">
                 <c:if test="${isAdmin}">
-                    <a class="btn btn-success" id="addUser" href="${context}/user/add">${addUser}</a>
+                    <a class="btn btn-success" id="addUser" href="${context}/user/addEdit">${addUser}</a>
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${delete}</a>
                 </c:if>
             </div>
@@ -63,7 +62,7 @@
 									<i class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
-<<<<<<< HEAD
+
 						</c:if>
 						<th>${userName}</th>
 						<th>${userRole}</th>
@@ -95,40 +94,6 @@
 			</table>
 		</div>
 	</section>
-=======
-                </c:if>
-                <th>${userName}</th>
-                <th>${userRole}</th>
-            </tr>
-            </thead>
-
-            <!-- Browse attribute user -->
-            <tbody id="results">
-            <c:forEach items="${list}" var="user">
-                <tr>
-                    <c:if test="${isAdmin}">
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" id="${user.username}" class="cb" value="${user.username}">
-                        </td>
-                    </c:if>
-                    <td>
-                        <c:choose>
-                            <c:when test="${isAdmin}">
-                                <!-- We pass the username to userusername to prevent a strang comportement where Spring concatenate the username form
-                                et username from the GET request -->
-                                <a id="${user.username}" href="${context}/user/add?userUserName=${user.username}"
-                                   onclick="">${user.username}</a>
-                            </c:when>
-                            <c:otherwise>${user.username}</c:otherwise>
-                        </c:choose></td>
-                    <td>${user.role}</td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
-</section>
->>>>>>> a6f9e880676e9f75714aa6ef5d5ba46fe3805270
 </body>
 
 <script type="text/javascript">
