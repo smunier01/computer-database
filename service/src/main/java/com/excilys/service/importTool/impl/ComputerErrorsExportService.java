@@ -3,9 +3,9 @@ package com.excilys.service.importTool.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.excilys.core.conflict.format.Error;
 import org.springframework.stereotype.Service;
 
-import com.excilys.core.conflict.format.Error;
 import com.excilys.core.conflict.format.ErrorMessage;
 import com.excilys.core.conflict.format.Fields;
 import com.excilys.core.dto.ComputerDTO;
