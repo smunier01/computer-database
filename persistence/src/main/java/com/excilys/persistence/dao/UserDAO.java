@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.excilys.core.model.Computer;
 import com.excilys.core.model.QUser;
 import com.excilys.core.model.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,6 +34,11 @@ public class UserDAO {
     }
     
     @Transactional(readOnly = true)
+    public User find(Integer id) {
+        return jpaQuery.selectFrom(quser).where(quser.id.eq(id)).fetchFirst();
+    }
+    
+    @Transactional(readOnly = true)
     public User findByUserName(String username) {
         return jpaQuery.selectFrom(quser).where(quser.username.eq(username)).fetchFirst();
     }
@@ -43,6 +49,11 @@ public class UserDAO {
         return user;
     }
 
+    @Transactional(readOnly = false)
+    public User update(User obj) {
+        return this.em.merge(obj);
+    }
+    
     @Transactional(readOnly = true)
     public void empty() {
         jpaQuery.delete(quser).execute();

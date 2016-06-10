@@ -35,7 +35,7 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-right">
 					<c:if test="${isAdmin}">
-						<a class="btn btn-success" id="addUser" href="${context}/user/add">${addUser}</a>
+						<a class="btn btn-success" id="addUser" href="${context}/user/addEdit">${addUser}</a>
 						<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">${delete}</a>
 					</c:if>
 				</div>
@@ -77,7 +77,7 @@
 									<c:when test="${isAdmin}">
 										<!-- 	We pass the username to userusername to prevent a strang comportement where Spring concatenate the username form
 												et username from the GET request -->
-										<a id="${user.username}" href="${context}/user/add?userUserName=${user.username}" onclick="">${user.username}</a>
+										<a id="${user.username}" href="${context}/user/addEdit?id=${user.id}" onclick="">${user.username}</a>
 									</c:when>
 									<c:otherwise>${user.username}</c:otherwise>
 								</c:choose></td>

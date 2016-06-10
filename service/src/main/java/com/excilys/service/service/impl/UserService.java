@@ -29,8 +29,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User findById(int id) {
-		return null;
+	public User find(Integer id) {
+		return userDAO.find(id);
 	}
 
 	@Override
@@ -41,6 +41,11 @@ public class UserService implements IUserService {
 	@Override
 	public User create(User user) {
 		return this.userDAO.create(user);
+	}
+	
+	@Override
+	public User edit(User user){
+		return userDAO.update(user);
 	}
 
 	@Transactional
