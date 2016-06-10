@@ -6,7 +6,7 @@
 
 <header class="navbar navbar-default navbar-fixed-top">
     <ul class="nav navbar-nav navbar-left">
-        <li><a href="${pageContext.request.contextPath}/dashboard" class="navbar-brand navbarlink"> <img src="${pageContext.request.pathTranslated}/css/images/logo.png" alt="logo" class="logo" /> Application - Computer Database</a></li>
+        <li><a href="${pageContext.request.contextPath}/dashboard" class="navbar-brand navbarlink"> <img src="${pageContext.request.contextPath}/css/images/logo.png" alt="logo" class="logo" /> Application - Computer Database</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown"><a class="dropdown-toggle navbarlink"
