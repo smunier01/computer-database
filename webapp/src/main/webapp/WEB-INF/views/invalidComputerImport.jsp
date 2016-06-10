@@ -40,7 +40,6 @@
                 <!-- Variable declarations for passing labels as parameters -->
                 <!-- Table header for Computer Name -->
 
-
                 <th>
                     <mylib2:link target="" name="${columnName}" params="${page.params}" order="name"/>
                 </th>

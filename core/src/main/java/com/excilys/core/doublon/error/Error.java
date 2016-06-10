@@ -1,5 +1,7 @@
 package com.excilys.core.doublon.error;
 
+import com.excilys.core.conflict.format.Fields;
+
 import java.util.*;
 
 public class Error {

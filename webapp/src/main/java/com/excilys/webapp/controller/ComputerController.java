@@ -15,7 +15,7 @@ import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.service.ICompanyService;
-import com.excilys.service.IComputerService;
+import com.excilys.service.computer.IComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

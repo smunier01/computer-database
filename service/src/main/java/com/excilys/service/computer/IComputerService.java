@@ -1,4 +1,4 @@
-package com.excilys.service;
+package com.excilys.service.computer;
 
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;

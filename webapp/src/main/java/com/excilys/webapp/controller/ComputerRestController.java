@@ -8,7 +8,7 @@ import com.excilys.core.dto.PageParametersDTO;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.IComputerService;
+import com.excilys.service.computer.IComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

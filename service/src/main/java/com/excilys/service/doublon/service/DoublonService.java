@@ -4,9 +4,9 @@ import com.excilys.binding.doublon.Hamming;
 import com.excilys.binding.doublon.Levenshtein;
 import com.excilys.binding.doublon.SimilarityCalculator;
 import com.excilys.binding.mapper.DTOMapper;
-import com.excilys.core.doublon.model.Rapport;
+import com.excilys.core.conflict.Rapport;
 import com.excilys.core.dto.ComputerDTO;
-import com.excilys.service.service.impl.ComputerService;
+import com.excilys.service.computer.impl.ComputerService;
 
 import java.util.List;
 

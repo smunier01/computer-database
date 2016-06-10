@@ -5,14 +5,10 @@ import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.persistence.dao.ComputerDAO;
-<<<<<<< HEAD:service/src/main/java/com/excilys/service/computer/impl/ComputerService.java
-import com.excilys.service.IComputerService;
-=======
-import com.excilys.service.service.IComputerService;
+import com.excilys.service.computer.IComputerService;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.FSDirectory;
->>>>>>> ed9383f8f0515afcf733842e0806aa1977f587f0:service/src/main/java/com/excilys/service/service/impl/ComputerService.java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
