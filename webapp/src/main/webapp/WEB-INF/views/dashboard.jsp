@@ -28,12 +28,13 @@
 <section id="main">
     <div class="container">
         <h1 id="homeTitle">
-            <span id="nbComputers">${page.totalCount}</span>&nbsp<span>${foundComputer}</span>
+            <span id="nbComputers">${page.totalCount}</span>&nbsp;<span>${foundComputer}</span>
         </h1>
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">
-                    <input type="search" id="searchbox" name="search" class="form-control" placeholder=${search} value="${param.search}"  />
+
+                    <input type="search" id="searchbox" name="search" autocomplete="off" class="form-control" placeholder=${search} value="${param.search}"  />
                     <input id="searchType" name="searchType" type="hidden">
 
                     <div class="btn-group">
@@ -132,6 +133,7 @@
         <small><spring:message code="dashboard.footer" /> - <a><spring:message code="dashboard.legal" /></a></small>
     </div>
 </footer>
+<script src="${pageContext.request.contextPath}/js/autocomplete.js"></script>
 </body>
 <script type="text/javascript">
     $.springMessages = {

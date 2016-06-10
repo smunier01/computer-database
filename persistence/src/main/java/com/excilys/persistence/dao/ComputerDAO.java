@@ -267,10 +267,11 @@ public class ComputerDAO implements DAO<Computer> {
 
     @Override
     public List<String> findAutocompleteMatches(String entry) {
-        //FixMe : search condition missing
         return this.jpaQuery
                 .select(this.qcomputer.name)
+                .distinct()
                 .from(this.qcomputer)
+                .where(this.qcomputer.name.like("%"+entry+"%"))
                 .fetch();
     }
 

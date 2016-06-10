@@ -130,7 +130,7 @@ public class CompanyDAOTest {
         PageParameters pageParameters = new PageParameters.Builder().search("hunt").build();
         long countInitial = companyDAO.count(pageParameters);
         Company comp = new Company(null,"countTest2DAO");
-        companyDAO.create(comp);
+        comp = companyDAO.create(comp);
         long count = companyDAO.count(pageParameters);
         assertEquals(countInitial,count);
 
