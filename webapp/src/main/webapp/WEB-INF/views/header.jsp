@@ -6,7 +6,7 @@
 
 <header class="navbar navbar-default navbar-fixed-top">
     <ul class="nav navbar-nav navbar-left">
-        <li><a href="${pageContext.request.contextPath}/dashboard" class="navbar-brand navbarlink">Application - Computer Database</a></li>
+        <li><a href="${pageContext.request.contextPath}/dashboard" class="navbar-brand navbarlink"> <img src="${pageContext.request.pathTranslated}/css/images/logo.png" alt="logo" class="logo" /> Application - Computer Database</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown"><a class="dropdown-toggle navbarlink"
@@ -18,11 +18,11 @@
         </a>
             <ul class="dropdown-menu" style="z-index: 99999">
                 <li><a
-                        href="${pageContext.request.pathTranslated }?lang=en"><img
+                        href="${pageContext.request.pathTranslated }?lang=en"><img alt="en"
                         src="${pageContext.request.contextPath}/css/images/en.png"
                         class="flag" alt="English" /> English</a></li>
                 <li><a
-                        href="${pageContext.request.pathTranslated }?lang=fr"><img
+                        href="${pageContext.request.pathTranslated }?lang=fr"><img alt="fr"
                         src="${pageContext.request.contextPath}/css/images/fr.png"
                         class="flag" alt="France" /> Français</a></li>
                 <li role="separator" class="divider"></li>
@@ -47,7 +47,6 @@
                             <form class="form-inline" action="${logoutUrl}" method="post">
                                 <input type="submit" class="btn btn-link"
                                        value="${ logoutmsg }" />
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                             </form>
                         </li>
                     </ul>
