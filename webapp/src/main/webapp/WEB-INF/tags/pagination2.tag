@@ -42,7 +42,7 @@
 
     <c:choose>
         <%-- More than 10 pages --%>
-        <c:when test="${count >= 10}">
+        <c:when test="${count > 10}">
             <%-- Begin page assignation --%>
             <c:set var="begin" value="0"/>
             <c:if test="${(current - 5) >= 0}">
@@ -78,7 +78,7 @@
         </c:when>
         <%-- Less than 10 pages --%>
         <c:otherwise>
-            <c:forEach var="i" begin="1" end="${count - 1}">
+            <c:forEach var="i" begin="0" end="${count - 1}">
                 <li ${current == i ? 'class="active"' : ''}>
                     <a href="?pageNumber=${i}&size=${psize}&search=${param.search}&searchType=${param.searchType}&order=${param.order}&direction=${param.direction}">
                             ${i + 1}
