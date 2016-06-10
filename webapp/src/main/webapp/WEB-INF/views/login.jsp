@@ -1,8 +1,14 @@
-<!DOCTYPE html>
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="mytag" tagdir="/WEB-INF/tags" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib2" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
+<jsp:include page="top.jsp"/>
+
+<c:set var="context" value="${pageContext.request.contextPath}"/>
+
 
 <html>
 	<jsp:include page="top.jsp"/>

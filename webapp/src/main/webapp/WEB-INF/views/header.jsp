@@ -9,9 +9,8 @@
         <li class="dropdown"><a class="dropdown-toggle navbarlink"
                                 data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                                 aria-expanded="false">
-            <!--<img
-                src="${pageContext.request.contextPath}/css/images/${pageContext.response.locale}.png"
-                class="flag" />--> <spring:message code="i18n.lang" text="Language" />
+
+                <spring:message code="i18n.lang" text="Language" />
             <span class="caret"></span>
         </a>
             <ul class="dropdown-menu" style="z-index: 99999">
