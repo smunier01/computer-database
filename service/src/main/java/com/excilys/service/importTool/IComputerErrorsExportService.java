@@ -20,6 +20,7 @@ public interface IComputerErrorsExportService {
     static final String ERROR_DATE_FORMAT = "/!\\ Date must be like YYYY-MM-DD ";
     static final String ERROR_COMPARED_DATES = "/!\\ Introduced date must be before discontinued ";
     static final String ERROR_COMPANY = "/!\\ This company does not exist in DB ";
+    static final String ERROR_SEPARATOR = "| ";
 
     /**
      * Export all computers with format errors in a String.

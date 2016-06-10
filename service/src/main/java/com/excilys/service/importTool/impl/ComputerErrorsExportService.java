@@ -35,12 +35,12 @@ public class ComputerErrorsExportService
     public void writeErrors(StringBuffer writer,
             Map<Fields, List<ErrorMessage>> errorMap) {
         if (errorMap.containsKey(Fields.NAME)) {
-            writer.append("NAME: " + ERROR_NAME + "; ");
+            writer.append("NAME: " + ERROR_NAME + ERROR_SEPARATOR);
         }
         if (errorMap.containsKey(Fields.INTRODUCED)) {
             writer.append("INTRODUCED DATE: ");
             writeDateErrors(errorMap.get(Fields.INTRODUCED), writer);
-            writer.append("; ");
+            writer.append(ERROR_SEPARATOR);
         }
         if (errorMap.containsKey(Fields.DISCONTINUED)) {
             writer.append("DISCONTINUED DATE: ");
@@ -49,11 +49,10 @@ public class ComputerErrorsExportService
             if (tmp.contains(ErrorMessage.INTRODUCED_AFTER_DISCONTINUED)) {
                 writer.append(ERROR_COMPARED_DATES);
             }
-            writer.append("; ");
+            writer.append(ERROR_SEPARATOR);
         }
         if (errorMap.containsKey(Fields.COMPANY_NAME)) {
-            writer.append("COMPANY: " + ERROR_COMPANY);
-            writer.append("; ");
+            writer.append("COMPANY: " + ERROR_COMPANY + ERROR_SEPARATOR);
         }
     }
 
