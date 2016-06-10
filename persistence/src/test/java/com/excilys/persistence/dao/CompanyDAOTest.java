@@ -1,13 +1,16 @@
 package com.excilys.persistence.dao;
 
 import com.excilys.core.model.Company;
-import org.junit.BeforeClass;
+import com.excilys.core.model.PageParameters;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -18,17 +21,6 @@ public class CompanyDAOTest {
     @Autowired
     private CompanyDAO companyDAO;
 
-    private  static Long initialCount;
-
-    @BeforeClass
-    public static void beforeTests() {
-       // companiesCreated = new ArrayList<>();
-    }
-
-//    @Test
-//    public void TestInit() {
-//        companyDAO = companyDAO;
-//    }
     // -------------------------------------- Find tests ---------------------------------------------------------------
     @Test
     @Transactional
@@ -54,7 +46,7 @@ public class CompanyDAOTest {
     @Transactional
     public void createTest() {
         Company comp = new Company();
-        comp.setName("createComputerTestDAO");
+        comp.setName("createCompanyTestDAO");
         Company created = companyDAO.create(comp);
         assertNotNull(created);
         assertNotNull(created.getId());
@@ -66,7 +58,7 @@ public class CompanyDAOTest {
     @Transactional
     public void createEqualTest() {
         Company comp = new Company();
-        comp.setName("createEqualsComputerTestDAO");
+        comp.setName("createEqualsCompanyTestDAO");
         Company created = companyDAO.create(comp);
         comp.setId(created.getId());
         assertEquals(comp,created);
@@ -104,7 +96,66 @@ public class CompanyDAOTest {
         assertNull(retrieve);
     }
 
-   /* @Test
+
+    // -------------------------------------- Count tests --------------------------------------------------------------
+
+    @Test
+    @Transactional
+    public void CountTest() {
+        long countInitial = companyDAO.count();
+        Company comp = new Company(null,"countTestDAO");
+        companyDAO.create(comp);
+        long count = companyDAO.count();
+        assertEquals(countInitial+1,count);
+
+        companyDAO.delete(comp);
+    }
+
+    @Test
+    @Transactional
+    public void CountTestFound() {
+        PageParameters pageParameters = new PageParameters.Builder().search("count").build();
+        long countInitial = companyDAO.count(pageParameters);
+        Company comp = new Company(null,"countTest1DAO");
+        companyDAO.create(comp);
+        long count = companyDAO.count(pageParameters);
+        assertEquals(countInitial+1,count);
+
+        companyDAO.delete(comp);
+    }
+
+    @Test
+    @Transactional
+    public void CountTestNotFound() {
+        PageParameters pageParameters = new PageParameters.Builder().search("hunt").build();
+        long countInitial = companyDAO.count(pageParameters);
+        Company comp = new Company(null,"countTest2DAO");
+        companyDAO.create(comp);
+        long count = companyDAO.count(pageParameters);
+        assertEquals(countInitial,count);
+
+        companyDAO.delete(comp);
+    }
+
+    // -------------------------------------- Find all tests -----------------------------------------------------------
+
+   @Test @Ignore
+    @Transactional
+    public void findAllTest() {
+        PageParameters pageParameters = new PageParameters.Builder().search("apple").order(PageParameters.Order.NAME).direction(PageParameters.Direction.ASC).size(5).build();
+        List<Company> companies = companyDAO.findAll(pageParameters);
+        for (int i =1; i < companies.size(); i++) {
+            Company comp = companies.get(i);
+            Company before = companies.get(i-1);
+            System.err.println("dkljdjkf->"+comp.getName());
+            boolean searchName = comp.getName().toLowerCase().contains("apple");
+            assertTrue(searchName);
+            int nameOrder = comp.getName().compareTo(before.getName());
+            assertTrue(nameOrder >= 0);
+        }
+    }
+
+    /*@Test
     public void testUpdate() throws DAOException {
 
         // create a company

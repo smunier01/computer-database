@@ -55,7 +55,7 @@ public class CompanyDAO implements DAO<Company> {
     }
 
     public long count(PageParameters page) {
-        return this.jpaQuery.from().fetchCount();
+        return this.jpaQuery.from(this.qcompany).where(this.qcompany.name.like(page.getSearch() + "%")).fetchCount();
     }
 
     @Override

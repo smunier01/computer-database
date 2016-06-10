@@ -6,6 +6,9 @@ import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
 import com.excilys.persistence.dao.ComputerDAO;
 import com.excilys.service.service.IComputerService;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -37,7 +41,6 @@ public class ComputerService implements IComputerService {
 
     /**
      * cache for the total number of computers in the database.
-     * TODO check if it's still necessary to do it manually now that we use hibernate.
      */
     private AtomicLong count;
 
@@ -124,6 +127,12 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
+    public List<Computer> getAll() {
+        this.LOGGER.debug("entering get()");
+        return this.computerDAO.findAll();
+    }
+
+    @Override
     public long countComputers(PageParameters page) {
         this.LOGGER.debug("entering countComputers(page)");
         this.validator.validatePageParameters(page);
@@ -159,15 +168,29 @@ public class ComputerService implements IComputerService {
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
 
         tmpl.execute(new TransactionCallbackWithoutResult() {
+
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
-                    computerDAO.buildIndex();
-                } catch (InterruptedException | IOException e) {
-                    e.printStackTrace();
+                    IndexReader reader = DirectoryReader.open(FSDirectory.open(FileSystems.getDefault().getPath("/tmp/lucene/indexes/com.excilys.core.model.Computer/")));
+
+                    if (reader.maxDoc() == 0) {
+                        LOGGER.warn("lucene index empty. Building index...");
+                        computerDAO.buildIndex();
+                    } else {
+                        LOGGER.warn("Found " + reader.maxDoc() + " documents in the lucene index.");
+                    }
+                } catch (IOException e) {
+                    try {
+                        LOGGER.warn("No lucene index found. Building index...");
+                        computerDAO.buildIndex();
+                    } catch (InterruptedException | IOException e1) {
+                        LOGGER.warn("Couldn't finish building lucene index.", e1);
+                    }
+                } catch (InterruptedException e) {
+                    LOGGER.warn("Couldn't finish building lucene index.", e);
                 }
             }
         });
     }
-
 }
