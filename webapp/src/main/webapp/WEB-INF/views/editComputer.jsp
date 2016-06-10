@@ -36,7 +36,7 @@
                             <label for="name">${columnName}</label> <input
                                 type="text" class="form-control" name="name"
                                 id="name" placeholder="${columnName}"
-                                value="${computer.name}">
+                                value="${computer.name}" />
                         </div>
                         <div class="form-group ${errors.hasFieldErrors('introduced') ? 'has-error': ''}">
                             <label for="introduced">${columnIntroduced}</label> <input
