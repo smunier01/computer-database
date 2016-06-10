@@ -88,7 +88,7 @@ public class XmlReader {
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 ComputerDTO temp = new ComputerDTO();
-                temp.setCompanyName(eElement.getElementsByTagName("name").item(0).getTextContent());
+                temp.setName(eElement.getElementsByTagName("name").item(0).getTextContent());
                 temp.setIntroduced(eElement.getElementsByTagName("introduced").item(0).getTextContent());
                 temp.setDiscontinued(eElement.getElementsByTagName("discontinued").item(0).getTextContent());
                 temp.setCompanyName(eElement.getElementsByTagName("company_name").item(0).getTextContent());

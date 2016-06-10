@@ -200,19 +200,31 @@ public class ComputerController {
      */
     @RequestMapping(value="admin/addComputers", method = RequestMethod.POST)
     public String postAddComputers(@RequestParam("url") MultipartFile file) {
-        //TODO : Check extension
-        System.out.println(file.getName());
+        //Check extension
+        String tab[] = file.getOriginalFilename().split("\\.");
+        //File extension
+        String file_type = tab[1];
 
+        Rapport rapp = null;
+        switch (file_type) {
+            case "xml" :
+                rapp = XmlReader.parseFile(file);
+                break;
+            case "extension you want" :
+
+                break;
+            default :
+
+                break;
+        }
 
         /*
-        Rapport rapp = XmlReader.parseFile(file);
-
         if (rapp.getRefuse().size() == 0) {
             //TODO : Forward to data analyser
         } else {
             //TODO : Sent error
         }
         */
-        return "redirect:/dashboard";
+        return "redirect:/admin";
     }
 }
