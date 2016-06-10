@@ -142,7 +142,7 @@ public class CompanyDAOTest {
     // TODO fix CompanyDAO, search param doesn't seem to be taken into account (Test ignored due to failing results)
    @Test @Ignore
     @Transactional
-    public void findAllTest() {
+    public void findAllParamTest() {
         PageParameters pageParameters = new PageParameters.Builder().search("apple").order(PageParameters.Order.NAME).direction(PageParameters.Direction.ASC).size(5).build();
         List<Company> companies = companyDAO.findAll(pageParameters);
         for (int i =1; i < companies.size(); i++) {
@@ -151,8 +151,23 @@ public class CompanyDAOTest {
             System.err.println("dkljdjkf->"+comp.getName());
             boolean searchName = comp.getName().toLowerCase().contains("apple");
             assertTrue(searchName);
-            int nameOrder = comp.getName().compareTo(before.getName());
+            int nameOrder = comp.getName().toLowerCase().compareTo(before.getName().toLowerCase());
             assertTrue(nameOrder >= 0);
         }
+    }
+
+    @Test
+    @Transactional
+    public void findAllTest() {
+        List<Company> companies = companyDAO.findAll();
+        int initialSize = companies.size();
+        Company comp = new Company(null,"FindAllTestDAO");
+        companyDAO.create(comp);
+        companies = companyDAO.findAll();
+
+        int size = companies.size();
+        assertEquals(initialSize +1, size);
+
+        companyDAO.delete(comp);
     }
 }

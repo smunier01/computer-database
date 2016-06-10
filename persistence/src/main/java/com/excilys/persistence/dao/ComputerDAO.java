@@ -194,7 +194,7 @@ public class ComputerDAO implements DAO<Computer> {
     @Override
     public long count(PageParameters page) {
         if (page.getSearch().isEmpty()) {
-            return this.jpaQuery.from(this.qcomputer).fetchCount();
+            return count();
         } else {
             return (long) getFullTextQuery(page).getResultSize();
         }
