@@ -58,7 +58,7 @@ public class UserController {
 		// Case 2 : Edit user
 		else {
 			// Change the password only if modified
-			if(user.getPassword().isEmpty()) {
+			if(user.getPassword().equals("*****")) {
 				user.setPassword(userService.find(user.getId()).getPassword());
 			} else {
 				user.setPassword(encodePassword(user.getPassword()));
