@@ -139,9 +139,10 @@ public class CompanyDAOTest {
 
     // -------------------------------------- Find all tests -----------------------------------------------------------
 
+    // TODO fix CompanyDAO, search param doesn't seem to be taken into account (Test ignored due to failing results)
    @Test @Ignore
     @Transactional
-    public void findAllTest() {
+    public void findAllParamTest() {
         PageParameters pageParameters = new PageParameters.Builder().search("apple").order(PageParameters.Order.NAME).direction(PageParameters.Direction.ASC).size(5).build();
         List<Company> companies = companyDAO.findAll(pageParameters);
         for (int i =1; i < companies.size(); i++) {
@@ -150,144 +151,23 @@ public class CompanyDAOTest {
             System.err.println("dkljdjkf->"+comp.getName());
             boolean searchName = comp.getName().toLowerCase().contains("apple");
             assertTrue(searchName);
-            int nameOrder = comp.getName().compareTo(before.getName());
+            int nameOrder = comp.getName().toLowerCase().compareTo(before.getName().toLowerCase());
             assertTrue(nameOrder >= 0);
         }
     }
 
-    /*@Test
-    public void testUpdate() throws DAOException {
-
-        // create a company
-
-        final Company comp = new Company(null, "MyCompanyName");
-
-        assertNotNull(comp);
-        final Company a = this.companyDAO.create(comp);
-        assertNotNull(a);
-        final Long id = a.getId();
-        //assertTrue(id > 0L);
-
-        // modify the object
-
-        a.setName("NewCompanyName");
-
-        // update the db
-
-        final Company b = this.companyDAO.update(a);
-
-        assertEquals(b, a);
-        assertEquals(id, b.getId());
-
-        // retrieve from db
-
-        final Company d = this.companyDAO.find(id);
-
-        Assert.assertNotNull(d);
-        Assert.assertEquals("NewCompanyName", d.getName());
-
-        // delete clean up
-
-        this.companyDAO.delete(d);
-
-        // test the delete
-
-        final Company e = this.companyDAO.find(id);
-
-        assertNull(e);
-    }
-
     @Test
-    public void testFindAll() throws DAOException {
-        final List<Company> companies = this.companyDAO.findAll();
+    @Transactional
+    public void findAllTest() {
+        List<Company> companies = companyDAO.findAll();
+        int initialSize = companies.size();
+        Company comp = new Company(null,"FindAllTestDAO");
+        companyDAO.create(comp);
+        companies = companyDAO.findAll();
 
-        assertNotNull(companies);
-        Assert.assertTrue(companies.size() > 0);
+        int size = companies.size();
+        assertEquals(initialSize +1, size);
+
+        companyDAO.delete(comp);
     }
-
-    @Test
-    public void testFindAllWithCreate() throws DAOException {
-
-        // count the number of computers with findAll
-
-        final List<Company> companies1 = this.companyDAO.findAll();
-
-        Assert.assertNotNull(companies1);
-        Assert.assertTrue(companies1.size() > 0);
-
-        final long sizeA = companies1.size();
-
-        // create a computer
-
-        final Company company = new Company(null, "MyCompanyName");
-
-        Assert.assertNotNull(company);
-        final Company a = this.companyDAO.create(company);
-        Assert.assertNotNull(a);
-        final Long id = a.getId();
-        Assert.assertTrue(id > 0L);
-
-        // count again, and compare the sizes
-
-        final List<Company> companies2 = this.companyDAO.findAll();
-
-        Assert.assertNotNull(companies2);
-        Assert.assertTrue(companies2.size() > 0);
-
-        final long sizeB = companies2.size();
-
-        Assert.assertEquals(sizeA + 1L, sizeB);
-
-        // delete clean up
-
-        this.companyDAO.delete(company);
-
-        // count and compare sizes
-
-        final List<Company> companies3 = this.companyDAO.findAll();
-
-        Assert.assertNotNull(companies3);
-        Assert.assertTrue(companies3.size() > 0);
-
-        final long sizeC = companies3.size();
-
-        Assert.assertEquals(sizeA, sizeC);
-    }
-
-    @Test
-    public void testFindAllWithLimit1() throws DAOException {
-
-        final PageParameters page = new PageParameters.Builder().size(20).pageNumber(0).build();
-
-        final List<Company> companies1 = this.companyDAO.findAll(page);
-        final List<Company> companies2 = this.companyDAO.findAll();
-
-        Assert.assertNotNull(companies1);
-        Assert.assertNotNull(companies2);
-
-        if (companies2.size() > 20) {
-            Assert.assertEquals(companies1.size(), 20);
-        } else {
-            Assert.assertTrue(companies1.size() == companies2.size());
-        }
-    }
-
-    @Test
-    public void testFindAllWithLimit2() throws DAOException {
-
-        final PageParameters page = new PageParameters.Builder().size(7).pageNumber(3).build();
-
-        final List<Company> companies1 = this.companyDAO.findAll(page);
-        final List<Company> companies2 = this.companyDAO.findAll();
-
-        Assert.assertNotNull(companies1);
-        Assert.assertNotNull(companies2);
-
-        if (companies2.size() > (3 * 7)) {
-            Assert.assertTrue(companies1.size() == 7);
-        } else {
-            Assert.assertTrue(companies1.size() == (companies2.size() - (2 * 7)));
-        }
-    }*/
-
 }
