@@ -14,8 +14,8 @@ import com.excilys.core.dto.PageParametersDTO;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.Page;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.service.ICompanyService;
-import com.excilys.service.service.IComputerService;
+import com.excilys.service.ICompanyService;
+import com.excilys.service.computer.IComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -75,10 +75,9 @@ public class ComputerController {
             Page<ComputerDTO> computerPage = computerMapper.map(computerService.getComputersPage(p));
             model.addAttribute("page", computerPage);
         } else {
-
             throw new ValidatorException(errors);
         }
-        
+
         // Add the information "isAdmin" to the model
         model.addAttribute("isAdmin", request.isUserInRole("ROLE_ADMIN"));
 
