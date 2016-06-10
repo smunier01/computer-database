@@ -9,10 +9,9 @@ import java.util.List;
  */
 public class Page<T> {
 
+    // list of the variables
     private List<T> list;
-
     private Long totalCount;
-
     private PageParameters params;
 
     /**
@@ -51,25 +50,51 @@ public class Page<T> {
     public static class Builder<T> {
         Page<T> page;
 
+        /**
+         * Default Construtor.
+         */
         public Builder() {
             this.page = new Page<T>();
         }
 
+        /**
+         * Set the list.
+         *
+         * @param list to set
+         * @return the builder
+         */
         public Builder<T> list(List<T> list) {
             this.page.list = list;
             return this;
         }
 
+        /**
+         * Set the count.
+         *
+         * @param count to set
+         * @return the builder
+         */
         public Builder<T> totalCount(Long count) {
             this.page.totalCount = count;
             return this;
         }
 
+        /**
+         * Set the params.
+         *
+         * @param params to set
+         * @return the builder
+         */
         public Builder<T> params(PageParameters params) {
             this.page.params = params;
             return this;
         }
 
+        /**
+         * Get the object.
+         *
+         * @return an object build by the builder.
+         */
         public Page<T> build() {
             return this.page;
         }
@@ -77,13 +102,21 @@ public class Page<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Page<?> page = (Page<?>) o;
 
-        if (list != null ? !list.equals(page.list) : page.list != null) return false;
-        if (totalCount != null ? !totalCount.equals(page.totalCount) : page.totalCount != null) return false;
+        if (list != null ? !list.equals(page.list) : page.list != null) {
+            return false;
+        }
+        if (totalCount != null ? !totalCount.equals(page.totalCount) : page.totalCount != null) {
+            return false;
+        }
         return params != null ? params.equals(page.params) : page.params == null;
 
     }

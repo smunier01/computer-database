@@ -5,7 +5,13 @@ import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.SortableField;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import java.time.LocalDate;
 
 @Entity
@@ -186,25 +192,34 @@ public class Computer {
 
     @Override
     public String toString() {
-
         String intro = this.introduced == null ? "null" : this.introduced.toString();
         String discon = this.discontinued == null ? "null" : this.discontinued.toString();
-
         return this.id + " " + this.name + " " + intro + " " + discon + " " + (this.company != null ? this.company.toString() : "null");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Computer computer = (Computer) o;
 
-        if (id != null ? !id.equals(computer.id) : computer.id != null) return false;
-        if (name != null ? !name.equals(computer.name) : computer.name != null) return false;
-        if (introduced != null ? !introduced.equals(computer.introduced) : computer.introduced != null) return false;
-        if (discontinued != null ? !discontinued.equals(computer.discontinued) : computer.discontinued != null)
+        if (id != null ? !id.equals(computer.id) : computer.id != null) {
             return false;
+        }
+        if (name != null ? !name.equals(computer.name) : computer.name != null) {
+            return false;
+        }
+        if (introduced != null ? !introduced.equals(computer.introduced) : computer.introduced != null) {
+            return false;
+        }
+        if (discontinued != null ? !discontinued.equals(computer.discontinued) : computer.discontinued != null) {
+            return false;
+        }
         return company != null ? company.equals(computer.company) : computer.company == null;
 
     }
@@ -218,4 +233,5 @@ public class Computer {
         result = 31 * result + (company != null ? company.hashCode() : 0);
         return result;
     }
+
 }
