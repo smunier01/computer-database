@@ -15,6 +15,7 @@
 <spring:message code="admin.userName" var="userName"/>
 <spring:message code="admin.userRole" var="userRole"/>
 <spring:message code="admin.delete" var="delete"/>
+<spring:message code="admin.deleteConfirmation" var="deleteConfirmation"/>
 
 <body>
 	<jsp:include page="header.jsp" />

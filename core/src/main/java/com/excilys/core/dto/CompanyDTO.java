@@ -13,8 +13,10 @@ public class CompanyDTO {
 
     private String name;
 
+    /**
+     * Default constructor.
+     */
     public CompanyDTO() {
-
     }
 
     /**
