@@ -199,9 +199,13 @@ public class ComputerController {
      * @param file
      * @return
      */
-    @RequestMapping(value="addComputers", method = RequestMethod.POST)
+    @RequestMapping(value="admin/addComputers", method = RequestMethod.POST)
     public String postAddComputers(@RequestParam("url") MultipartFile file) {
         //TODO : Check extension
+        System.out.println(file.getName());
+
+
+        /*
         Rapport rapp = XmlReader.parseFile(file);
 
         if (rapp.getRefuse().size() == 0) {
@@ -209,7 +213,7 @@ public class ComputerController {
         } else {
             //TODO : Sent error
         }
-
+        */
         return "redirect:/dashboard";
     }
 }
