@@ -19,6 +19,10 @@ public class Conflict {
     public Conflict() {
         this(new ComputerDTO());
     }
+    public Conflict(ComputerDTO origin, List<ComputerDTO> conflictComputers) {
+        this.origin = origin;
+        this.conflictComputers = conflictComputers;
+    }
 
     /**
      * Constructor with a computer.
