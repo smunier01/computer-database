@@ -238,4 +238,13 @@ public class ComputerDAO implements DAO<Computer> {
         return fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
     }
 
+    @Override
+    public List<String> findAutocompleteMatches(String entry) {
+        //FixMe : search condition missing
+        return this.jpaQuery
+                .select(this.qcomputer.name)
+                .from(this.qcomputer)
+                .fetch();
+    }
+
 }

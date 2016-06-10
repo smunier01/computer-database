@@ -77,4 +77,13 @@ public class CompanyDAO implements DAO<Company> {
         return this.jpaQuery.from(this.qcompany).fetchCount();
     }
 
+    @Override
+    public List<String> findAutocompleteMatches(String entry) {
+        //FixMe : search condition missing
+        return this.jpaQuery
+                .select(this.qcompany.name)
+                .from(this.qcompany)
+                .fetch();
+    }
+
 }

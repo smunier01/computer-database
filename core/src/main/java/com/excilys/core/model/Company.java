@@ -23,7 +23,7 @@ public class Company {
     private Long id;
 
     @SortableField
-    @Field(analyze = Analyze.NO)
+    @Field
     private String name;
 
     /**
