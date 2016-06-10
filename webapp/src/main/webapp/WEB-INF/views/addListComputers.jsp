@@ -11,6 +11,9 @@
     <title>Title</title>
 </head>
 <body>
-
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button type="submit">Envoyer</button>
+</form>
 </body>
 </html>

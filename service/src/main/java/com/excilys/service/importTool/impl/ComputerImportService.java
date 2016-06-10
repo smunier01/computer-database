@@ -26,7 +26,7 @@ public class ComputerImportService implements IComputerImportService {
 
     @Autowired
     private ComputerValidator computerValidator;
-    private static final String RESOURCE = "/home/nbelleme/Bureau/dev/cdb/service/src/main/resources/computer.csv";
+    public static final String RESOURCE = "/home/nbelleme/Bureau/dev/cdb/service/src/main/resources/computer.csv";
 
     @Override
     public List<Conflict> importComputers() {
@@ -54,10 +54,12 @@ public class ComputerImportService implements IComputerImportService {
                         .build();
 
                 Map<Fields, List<ErrorMessage>> errors = computerValidator.validateComputerDTO(computerDTO);
+                System.out.println(errors.toString());
                 Error conflict = new Error();
                 conflict.setComputerDTO(computerDTO);
                 conflict.setErrorMap(errors);
                 conflicts.add(conflict);
+
             }
 
         } catch (IOException e) {

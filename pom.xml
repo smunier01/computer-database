@@ -67,6 +67,11 @@
 
         <!-- import csv -->
         <opencsv.version>2.3</opencsv.version>
+        <commons-io.version>2.5</commons-io.version>
+
+
+        <!-- File upload -->
+        <file-upload.version>1.2</file-upload.version>
 
     </properties>
 
@@ -349,7 +354,18 @@
                 <version>${opencsv.version}</version>
             </dependency>
 
+            <!-- File upload -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${file-upload.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
