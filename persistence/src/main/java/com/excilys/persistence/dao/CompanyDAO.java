@@ -20,12 +20,16 @@ import java.util.List;
 @Repository
 public class CompanyDAO implements DAO<Company> {
 
+    // list of variable
     private EntityManager em;
-
     private JPAQueryFactory jpaQuery;
-
     private QCompany qcompany = QCompany.company;
 
+    /**
+     * Set the entity manager.
+     *
+     * @param entityManager to set
+     */
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.em = entityManager;
@@ -54,6 +58,12 @@ public class CompanyDAO implements DAO<Company> {
         this.em.remove(em.merge(obj));
     }
 
+    /**
+     * Return the number of element of a page.
+     *
+     * @param page to count the elements
+     * @return the number of elements
+     */
     public long count(PageParameters page) {
         return this.jpaQuery.from(this.qcompany).where(this.qcompany.name.like(page.getSearch() + "%")).fetchCount();
     }
@@ -68,6 +78,12 @@ public class CompanyDAO implements DAO<Company> {
         return this.jpaQuery.selectFrom(this.qcompany).fetch();
     }
 
+    /**
+     * Get all the elements of a page.
+     *
+     * @param page to get the elements
+     * @return the list of company
+     */
     public List<Company> findAll(PageParameters page) {
         return this.jpaQuery.selectFrom(this.qcompany).offset(page.getSize() * page.getPageNumber()).limit(page.getSize()).fetch();
     }
