@@ -18,6 +18,8 @@ public interface IComputerService {
 
     /**
      * delete a list of computers.
+     *
+     * @param ids list of computers to delete
      */
     void deleteComputers(List<Long> ids);
 
@@ -70,12 +72,14 @@ public interface IComputerService {
 
     /**
      * Return the list of all the computers.
+     *
      * @return the list of computer
      */
     List<Computer> getAll();
 
     /**
      * Return the list of Computer names that contains the value typed by the user.
+     *
      * @param entry is the value typed by the user.
      * @return A list of names.
      */

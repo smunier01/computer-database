@@ -28,17 +28,14 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class ComputerService implements IComputerService {
 
+    // list of the variables
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
-
     @Autowired
     protected PlatformTransactionManager txManager;
-
     @Autowired
     private ComputerDAO computerDAO;
-
     @Autowired
     private ValidatorUtil validator;
-
     /**
      * cache for the total number of computers in the database.
      */
@@ -195,7 +192,7 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
-    public List<String> findAutocompleteResult(String entry){
+    public List<String> findAutocompleteResult(String entry) {
         return this.computerDAO.findAutocompleteMatches(entry);
     }
 }

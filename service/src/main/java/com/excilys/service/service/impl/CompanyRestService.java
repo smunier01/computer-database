@@ -25,14 +25,11 @@ import java.util.List;
 @Service
 public class CompanyRestService implements ICompanyRestService {
 
+    // list of the variables
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
-
     private static final String AUTH_USER = "user";
-
     private static final String AUTH_PASSWORD = "user";
-
     private static final String BASE_URL = "http://localhost:8080/cdb/rest/company";
-
     private WebTarget target;
 
     @Autowired
@@ -41,6 +38,9 @@ public class CompanyRestService implements ICompanyRestService {
     @Autowired
     private PageParametersMapper pageParametersMapper;
 
+    /**
+     * Default constructor.
+     */
     public CompanyRestService() {
         HttpAuthenticationFeature auth = HttpAuthenticationFeature
                 .universalBuilder()
