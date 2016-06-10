@@ -123,11 +123,12 @@
 </section>
 
 <footer class="navbar-fixed-bottom">
-    <div class="container text-center">
+    <div class="text-center">
         <mylib2:pagination2 current="${page.params.pageNumber}" count="${page.numberOfPages()}"
             psize="${page.params.size}" />
-        <p>Developed by Excilys Avril 2015</p>
-        <p><a>Mentions Légales</a></p>
+    </div>
+    <div class="text-center">
+        <small><spring:message code="dashboard.footer" /> - <a><spring:message code="dashboard.legal" /></a></small>
     </div>
 </footer>
 </body>
