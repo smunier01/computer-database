@@ -16,12 +16,12 @@ import java.util.Set;
 public class PageParametersValidator implements Validator {
 
     /**
-     * valid order strings
+     * valid order strings.
      */
     private static Set<String> orders = new HashSet<>(Arrays.asList("name", "introduced", "discontinued", "company_name"));
 
     /**
-     * valid directions strings
+     * valid directions strings.
      */
     private static Set<String> directions = new HashSet<>(Arrays.asList("asc", "desc"));
 

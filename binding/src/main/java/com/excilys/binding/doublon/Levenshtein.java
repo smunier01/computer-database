@@ -4,7 +4,8 @@ public class Levenshtein implements SimilarityCalculator {
 
     /**
      * Use to get the modification.
-     * @param left string to compare
+     *
+     * @param left  string to compare
      * @param right string to compare
      * @return the number of change
      */
@@ -46,6 +47,6 @@ public class Levenshtein implements SimilarityCalculator {
 
     @Override
     public double getPercentSimilarity(String left, String right) {
-        return 100 - ((getValue(left, right) * 100) / ((left.length() + right.length()) / 2 ));
+        return 100 - ((getValue(left, right) * 100) / ((left.length() + right.length()) / 2));
     }
 }
