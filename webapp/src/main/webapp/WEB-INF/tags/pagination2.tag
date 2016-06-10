@@ -51,11 +51,11 @@
     <c:choose>
         <c:when test="${current == (count - 1)}">
             <li class="disabled"><a aria-label="Next"> <span
-                    aria-hidden="true">&laquo;</span></a></li>
+                    aria-hidden="true">&raquo;</span></a></li>
         </c:when>
         <c:otherwise>
             <li><a id="next" href="?pageNumber=${current + 1}&size=${psize}&search=${param.search}&searchType=${param.searchType}&order=${param.order}&direction=${param.direction}" aria-label="Next">
-                <span aria-hidden="true">&laquo;</span>
+                <span aria-hidden="true">&raquo;</span>
             </a></li>
         </c:otherwise>
     </c:choose>
