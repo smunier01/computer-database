@@ -33,22 +33,26 @@ import java.util.List;
 @Repository
 public class ComputerDAO implements DAO<Computer> {
 
+    // list of the variables
     private static final int LARGE_OFFSET = 15000;
-
     private EntityManager em;
-
     private JPAQueryFactory jpaQuery;
-
     private QComputer qcomputer = QComputer.computer;
-
     private QCompany qcompany = QCompany.company;
 
+    /**
+     * Get the order params of hte page.
+     *
+     * @param o the order to set
+     * @param d the direction of the order
+     * @return the query DSL order specifier
+     */
     @SuppressWarnings("unchecked")
     public static OrderSpecifier<? extends Comparable> getOrderMethod(Order o, Direction d) {
 
         ComparableExpressionBase path;
 
-        switch(o) {
+        switch (o) {
             case INTRODUCED:
                 path = QComputer.computer.introduced;
                 break;
@@ -66,6 +70,11 @@ public class ComputerDAO implements DAO<Computer> {
         return d == Direction.ASC ? path.asc() : path.desc();
     }
 
+    /**
+     * Set the entity manager.
+     *
+     * @param entityManager to set
+     */
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.em = entityManager;
@@ -128,6 +137,12 @@ public class ComputerDAO implements DAO<Computer> {
         }
     }
 
+    /**
+     * Get the computers of the page.
+     *
+     * @param page where we want to get the computers
+     * @return the list of computers
+     */
     private List<Computer> findAllNormal(PageParameters page) {
         return this.jpaQuery
                 .selectFrom(this.qcomputer)
@@ -139,17 +154,18 @@ public class ComputerDAO implements DAO<Computer> {
     }
 
     /**
-     * this is more efficient when the offset is large
+     * Like a fin all but more efficient whent he offset in large.
+     *
+     * @param page to get element
+     * @return the list of computers
      */
     private List<Computer> findAllWithSubQuery(PageParameters page) {
-
         List<Long> ids = this.jpaQuery.select(this.qcomputer.id)
                 .from(this.qcomputer)
                 .orderBy(ComputerDAO.getOrderMethod(page.getOrder(), page.getDirection()))
                 .offset(page.getSize() * page.getPageNumber())
                 .limit(page.getSize())
                 .fetch();
-
         return this.jpaQuery.selectFrom(this.qcomputer)
                 .leftJoin(this.qcomputer.company, this.qcompany)
                 .where(this.qcomputer.id.in(ids))
@@ -158,6 +174,9 @@ public class ComputerDAO implements DAO<Computer> {
 
     /**
      * Use hibernate-search with lucene back-end to do the search.
+     *
+     * @param page to get the elements
+     * @return the list of computers
      */
     @SuppressWarnings("unchecked")
     private List<Computer> findAllLucene(PageParameters page) {
@@ -186,6 +205,12 @@ public class ComputerDAO implements DAO<Computer> {
         return fullTextQuery.getResultList();
     }
 
+    /**
+     * Use to build the index of lucene.
+     *
+     * @throws InterruptedException in case of fail
+     * @throws IOException          in case of fail
+     */
     public void buildIndex() throws InterruptedException, IOException {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
         fullTextEntityManager.createIndexer().startAndWait();
@@ -205,14 +230,17 @@ public class ComputerDAO implements DAO<Computer> {
         return this.jpaQuery.from(this.qcomputer).fetchCount();
     }
 
+    /**
+     * Get a lucene full text query with a page parameters.
+     *
+     * @param page to get the lucene full text query
+     * @return the lucene full text query
+     */
     private FullTextQuery getFullTextQuery(PageParameters page) {
         FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
         SearchFactory sf = fullTextEntityManager.getSearchFactory();
-
         QueryBuilder computerQB = sf.buildQueryBuilder().forEntity(Computer.class).get();
-
         org.apache.lucene.search.Query luceneQuery;
-
         switch (page.getSearchType()) {
             case "computer":
                 luceneQuery = computerQB.phrase()
@@ -234,7 +262,6 @@ public class ComputerDAO implements DAO<Computer> {
                         .createQuery();
                 break;
         }
-
         return fullTextEntityManager.createFullTextQuery(luceneQuery, Computer.class);
     }
 
