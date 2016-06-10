@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Error extends Conflict{
+public class Error extends Conflict {
     private static final ErrorType errorType = ErrorType.FORMAT;
 
     // list of the variables
     private Map<Fields, List<ErrorMessage>> errorMap;
 
-    public Error(){}
+    public Error() {
+    }
 
     public Error(ComputerDTO computerDTO, Map<Fields, List<ErrorMessage>> errorMap) {
         super(computerDTO);
@@ -24,8 +25,7 @@ public class Error extends Conflict{
     /**
      * Return the list corresponding to the key in Errors Object.
      *
-     * @param key
-     *            the key in the Errors Object for the wanted list
+     * @param key the key in the Errors Object for the wanted list
      * @return the wanted list
      */
     public List<ErrorMessage> getListForKey(Fields key) {
@@ -37,10 +37,6 @@ public class Error extends Conflict{
             return list;
 
         }
-    }
-
-    public Map<Fields, List<ErrorMessage>> getErrorMap() {
-        return errorMap;
     }
 
     public void setErrorMap(Map<Fields, List<ErrorMessage>> errorMap) {
