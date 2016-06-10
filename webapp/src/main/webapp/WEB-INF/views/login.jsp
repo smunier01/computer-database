@@ -33,11 +33,9 @@
 				</button>
 			</form>
 		</div>
-		<footer>
-			<div class="container text-center">
-				<p>&nbsp;</p>
-				<p>Developed by Excilys Avril 2016</p>
-				<p><a>Mentions Légales</a></p>
+		<footer class="navbar-fixed-bottom">
+			<div class="text-center">
+				<small><spring:message code="dashboard.footer" /> - <a><spring:message code="dashboard.legal" /></a></small>
 			</div>
 		</footer>
 		<script	src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
