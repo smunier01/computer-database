@@ -85,4 +85,9 @@ public class CompanyService implements ICompanyService {
         this.LOGGER.debug("entering updateCompany()");
         this.companyDAO.update(company);
     }
+
+    @Override
+    public List<String> findAutocompleteResult(String entry){
+        return this.companyDAO.findAutocompleteMatches(entry);
+    }
 }

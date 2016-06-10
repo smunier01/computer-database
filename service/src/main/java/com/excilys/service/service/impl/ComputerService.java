@@ -193,4 +193,9 @@ public class ComputerService implements IComputerService {
             }
         });
     }
+
+    @Override
+    public List<String> findAutocompleteResult(String entry){
+        return this.computerDAO.findAutocompleteMatches(entry);
+    }
 }
