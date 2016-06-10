@@ -39,6 +39,9 @@ public class ComputerService implements IComputerService {
     private ComputerDAO computerDAO;
 
     @Autowired
+    private CompanyDAO companyDAO;
+
+    @Autowired
     private ValidatorUtil validator;
 
     /**
@@ -198,6 +201,10 @@ public class ComputerService implements IComputerService {
 
     @Override
     public List<String> findAutocompleteResult(String entry){
-        return this.computerDAO.findAutocompleteMatches(entry);
+        List<String> result = new ArrayList<>();
+        result.addAll(this.computerDAO.findAutocompleteMatches(entry));
+        result.addAll(this.companyDAO.findAutocompleteMatches(entry));
+
+        return result;
     }
 }

@@ -215,22 +215,22 @@ public class ComputerDAO implements DAO<Computer> {
 
         switch (page.getSearchType()) {
             case "computer":
-                luceneQuery = computerQB.keyword()
+                luceneQuery = computerQB.phrase()
                         .onField("name")
-                        .matching(page.getSearch())
+                        .sentence(page.getSearch())
                         .createQuery();
                 break;
             case "company":
-                luceneQuery = computerQB.keyword()
+                luceneQuery = computerQB.phrase()
                         .onField("company.name")
-                        .matching(page.getSearch())
+                        .sentence(page.getSearch())
                         .createQuery();
                 break;
             default:
-                luceneQuery = computerQB.keyword()
+                luceneQuery = computerQB.phrase()
                         .onField("name")
                         .andField("company.name")
-                        .matching(page.getSearch())
+                        .sentence(page.getSearch())
                         .createQuery();
                 break;
         }
