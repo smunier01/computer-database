@@ -271,7 +271,7 @@ public class ComputerDAO implements DAO<Computer> {
                 .select(this.qcomputer.name)
                 .distinct()
                 .from(this.qcomputer)
-                .where(this.qcomputer.name.like("%"+entry+"%"))
+                .where(this.qcomputer.name.like("%" + entry + "%"))
                 .fetch();
     }
 

@@ -198,7 +198,7 @@ public class ComputerService implements IComputerService {
     }
 
     @Override
-    public List<String> findAutocompleteResult(String entry){
+    public List<String> findAutocompleteResult(String entry) {
         List<String> result = new ArrayList<>();
         result.addAll(this.computerDAO.findAutocompleteMatches(entry));
         result.addAll(this.companyDAO.findAutocompleteMatches(entry));

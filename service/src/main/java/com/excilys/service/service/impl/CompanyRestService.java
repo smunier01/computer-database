@@ -1,5 +1,6 @@
 package com.excilys.service.service.impl;
 
+
 import com.excilys.binding.mapper.impl.CompanyMapper;
 import com.excilys.binding.mapper.impl.PageParametersMapper;
 import com.excilys.core.dto.CompanyDTO;
