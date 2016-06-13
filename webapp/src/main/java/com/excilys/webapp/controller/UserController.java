@@ -1,7 +1,7 @@
 package com.excilys.webapp.controller;
 
 import com.excilys.core.model.User;
-import com.excilys.service.service.IUserService;
+import com.excilys.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
