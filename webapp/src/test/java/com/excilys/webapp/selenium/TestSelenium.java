@@ -89,7 +89,7 @@ public class TestSelenium {
             fail(verificationErrorString);
         }
     }
-    
+
     private String closeAlertAndGetItsText() {
         try {
             Alert alert = driver.switchTo().alert();

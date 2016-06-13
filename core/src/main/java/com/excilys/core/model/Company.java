@@ -3,7 +3,12 @@ package com.excilys.core.model;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.SortableField;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import javax.persistence.Entity;
 
 /**
  * Company Class.

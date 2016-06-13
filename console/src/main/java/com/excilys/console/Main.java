@@ -28,6 +28,9 @@ public class Main {
 
     }
 
+    /**
+     * main loop for the cli.
+     */
     private void start() {
 
         while (this.menu.pick()) {

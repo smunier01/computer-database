@@ -149,7 +149,6 @@
                     <path>/cdb</path>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

@@ -99,7 +99,7 @@ public class CompanyDAO implements DAO<Company> {
                 .select(this.qcompany.name)
                 .distinct()
                 .from(this.qcompany)
-                .where(this.qcompany.name.like("%"+entry+"%"))
+                .where(this.qcompany.name.like("%" + entry + "%"))
                 .fetch();
     }
 }
