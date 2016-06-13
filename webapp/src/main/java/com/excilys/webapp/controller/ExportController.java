@@ -1,8 +1,10 @@
 package com.excilys.webapp.controller;
 
+import com.excilys.core.conflict.ImportException;
 import com.excilys.core.conflict.format.Error;
 import com.excilys.service.importTool.impl.ComputerErrorsExportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +35,7 @@ public class ExportController {
             outputStream.flush();
             outputStream.close();
         } catch (IOException e) {
-            throw new RuntimeException("Error at file creation !", e);// FIXME
+            throw new ImportException("Error at file creation !", e);
         }
 
     }

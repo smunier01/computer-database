@@ -2,6 +2,7 @@ package com.excilys.service.importTool.impl;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.excilys.binding.validation.ComputerValidator;
+import com.excilys.core.conflict.ImportException;
 import com.excilys.core.conflict.Rapport;
 import com.excilys.core.conflict.format.Error;
 import com.excilys.core.conflict.format.ErrorMessage;
@@ -10,12 +11,12 @@ import com.excilys.core.dto.ComputerDTO;
 import com.excilys.service.importTool.IComputerImportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,8 +40,7 @@ public class ComputerImportService implements IComputerImportService {
         try {
             file.transferTo(convFile);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ImportException("Error converting file", e);
         }
 
         try {
@@ -84,12 +84,8 @@ public class ComputerImportService implements IComputerImportService {
         File convFile = new File(file.getOriginalFilename());
         try {
             file.transferTo(convFile);
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ImportException("Error converting file", e);
         }
         return mapDatas(readFile(convFile));
     }
@@ -124,28 +120,20 @@ public class ComputerImportService implements IComputerImportService {
 
     private NodeList readFile(File file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = null;
+        DocumentBuilder dBuilder;
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ImportException("Error creating Document Builder", e);
         }
-        Document doc = null;
+        Document doc;
         try {
             doc = dBuilder.parse(file);
-        } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (SAXException | IOException e) {
+            throw new ImportException("Error parsing file", e);
         }
 
-        //optional, but recommended
-        //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
         doc.getDocumentElement().normalize();
-
 
         return doc.getElementsByTagName("computer");
     }
