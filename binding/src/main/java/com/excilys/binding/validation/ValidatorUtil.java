@@ -41,7 +41,7 @@ public class ValidatorUtil {
      * @return true if valid
      */
     public boolean isDateValid(String s) {
-        return this.dateRegex.matcher(s).matches();
+        return this.dateRegex.matcher(s).matches() || s.isEmpty() || s.equals("null");
     }
 
     /**

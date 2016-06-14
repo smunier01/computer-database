@@ -35,11 +35,11 @@ public class ComputerMapper implements IComputerMapper {
             builder.id(Long.parseLong(computer.getId()));
         }
 
-        if ((computer.getIntroduced() != null) && !"".equals(computer.getIntroduced())) {
+        if ((computer.getIntroduced() != null) && !"".equals(computer.getIntroduced()) && !"null".equals(computer.getIntroduced())) {
             builder.introduced(LocalDate.parse(computer.getIntroduced()));
         }
 
-        if ((computer.getDiscontinued() != null) && !"".equals(computer.getDiscontinued())) {
+        if ((computer.getDiscontinued() != null) && !"".equals(computer.getDiscontinued()) && !"null".equals(computer.getIntroduced())) {
             builder.discontinued(LocalDate.parse(computer.getDiscontinued()));
         }
 

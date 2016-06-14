@@ -81,12 +81,12 @@ public class ComputerValidator implements Validator {
         boolean isDiscontinuedWellFormed = true;
         Map<Fields, List<ErrorMessage>> errors = new HashMap<>();
 
-        if (computerDTO.getName() == null || computerDTO.getName().trim().equalsIgnoreCase("")) {
+        if (computerDTO.getName() == null || computerDTO.getName().equalsIgnoreCase("")) {
             errors.put(Fields.NAME, new ArrayList<>());
             errors.get(Fields.NAME).add(ErrorMessage.NAME_NULL);
         }
 
-        if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().trim().equalsIgnoreCase("")) {
+        if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().equalsIgnoreCase("") && !computerDTO.getIntroduced().equalsIgnoreCase("null")) {
             isIntroducedWellFormed = validator.isDateValid(computerDTO.getIntroduced());
             if (!isIntroducedWellFormed) {
             errors.put(Fields.INTRODUCED, new ArrayList<>());
@@ -94,7 +94,7 @@ public class ComputerValidator implements Validator {
             }
         }
 
-        if (computerDTO.getDiscontinued() != null && !computerDTO.getDiscontinued().trim().equalsIgnoreCase("")) {
+        if (computerDTO.getDiscontinued() != null && !computerDTO.getDiscontinued().equalsIgnoreCase("") && !computerDTO.getIntroduced().equalsIgnoreCase("null")) {
             isDiscontinuedWellFormed = validator.isDateValid(computerDTO.getDiscontinued());
             if (!isDiscontinuedWellFormed) {
                 errors.put(Fields.DISCONTINUED, new ArrayList<>());
@@ -103,7 +103,7 @@ public class ComputerValidator implements Validator {
         }
 
         if (isIntroducedWellFormed && isDiscontinuedWellFormed) {
-            if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().trim().equalsIgnoreCase("")) {
+            if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().equalsIgnoreCase("") && !computerDTO.getIntroduced().equalsIgnoreCase("null")) {
                 LocalDate introduced = LocalDate.parse(computerDTO.getIntroduced());
 
                 if (introduced.isBefore(MIN_TIMESTAMP)) {
@@ -114,7 +114,7 @@ public class ComputerValidator implements Validator {
                     errors.get(Fields.INTRODUCED).add(ErrorMessage.DATE_AFTER_TIMESTAMP);
                 }
 
-                if (computerDTO.getDiscontinued() != null && !computerDTO.getDiscontinued().trim().equalsIgnoreCase("")) {
+                if (computerDTO.getDiscontinued() != null && !computerDTO.getDiscontinued().equalsIgnoreCase("") && !computerDTO.getIntroduced().equalsIgnoreCase("null")) {
                     LocalDate discontinued = LocalDate.parse(computerDTO.getDiscontinued());
 
                     if (discontinued.isBefore(MIN_TIMESTAMP)) {
