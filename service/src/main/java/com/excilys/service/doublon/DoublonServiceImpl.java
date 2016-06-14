@@ -6,6 +6,7 @@ import com.excilys.binding.mapper.IComputerMapper;
 import com.excilys.core.conflict.Rapport;
 import com.excilys.core.conflict.doublon.Doublon;
 import com.excilys.core.dto.ComputerDTO;
+import com.excilys.service.ICompanyService;
 import com.excilys.service.computer.IComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,13 @@ public class DoublonServiceImpl implements DoublonService {
     private IComputerService computerService;
 
     @Autowired
+    private ICompanyService companyService;
+
+    @Autowired
     private IComputerMapper computerMapper;
 
-    private static final double TO_CHECK = 60.0;
-    private static final double TO_REFUSE = 70.0;
+    private static final double TO_CHECK = 95.0;
+    private static final double TO_REFUSE = 100.0;
 
     private SimilarityCalculator levenshtein = new Levenshtein();
 
@@ -36,6 +40,7 @@ public class DoublonServiceImpl implements DoublonService {
             if (tList.isEmpty()) {
                 tList.addAll(check(computersInBase, computerOut, this.TO_REFUSE));
                 if (tList.isEmpty()) {
+                    computerOut.setCompanyId(companyService.getCompanyByName(computerOut.getCompanyName()).getId() + "");
                     retVal.getToImport().add(computerOut);
                 } else {
                     retVal.getToCheck().add(new Doublon(computerOut, tList));

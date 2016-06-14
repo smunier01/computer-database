@@ -88,4 +88,9 @@ public class CompanyService implements ICompanyService {
     public List<String> findAutocompleteResult(String entry) {
         return this.companyDAO.findAutocompleteMatches(entry);
     }
+
+    @Override
+    public Company getCompanyByName(String companyName) {
+        return this.companyDAO.findByName(companyName);
+    }
 }

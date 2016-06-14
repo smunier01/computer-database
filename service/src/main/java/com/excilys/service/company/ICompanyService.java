@@ -62,8 +62,17 @@ public interface ICompanyService {
 
     /**
      * Return the list of Computer names that contains the value typed by the user.
+     *
      * @param entry is the value typed by the user.
      * @return A list of names.
      */
     List<String> findAutocompleteResult(String entry);
+
+    /**
+     * Return a company from a company name.
+     *
+     * @param companyName of the company to find
+     * @return the company from a name
+     */
+    Company getCompanyByName(String companyName);
 }

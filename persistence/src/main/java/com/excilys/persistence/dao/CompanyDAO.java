@@ -102,4 +102,19 @@ public class CompanyDAO implements DAO<Company> {
                 .where(this.qcompany.name.like("%" + entry + "%"))
                 .fetch();
     }
+
+    /**
+     * Return a company from a company name.
+     *
+     * @param companyName of the company to find
+     * @return the company from a name
+     */
+    public Company findByName(String companyName) {
+        return this.jpaQuery
+                .select(this.qcompany)
+                .distinct()
+                .from(this.qcompany)
+                .where(this.qcompany.name.like(companyName))
+                .fetchFirst();
+    }
 }
