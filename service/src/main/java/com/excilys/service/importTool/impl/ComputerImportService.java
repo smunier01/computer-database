@@ -37,6 +37,7 @@ public class ComputerImportService implements IComputerImportService {
     public Rapport importComputersFromCSV(MultipartFile file) {
         Rapport rapport = new Rapport();
         File convFile = new File(file.getOriginalFilename());
+
         try {
             file.transferTo(convFile);
         } catch (IOException e) {
@@ -46,7 +47,6 @@ public class ComputerImportService implements IComputerImportService {
         try {
             FileReader fr = new FileReader(convFile);
             CSVReader csvReader = new CSVReader(fr, ',');
-            csvReader.readNext();
             String[] nextLine;
 
             while ((nextLine = csvReader.readNext()) != null) {
@@ -56,14 +56,15 @@ public class ComputerImportService implements IComputerImportService {
                 String companyName = nextLine[3];
 
                 ComputerDTO computerDTO = new ComputerDTO.Builder()
-                        .name(name)
-                        .introduced(introducedString)
-                        .discontinued(discontinuedString)
-                        .companyName(companyName)
+                        .name(name.trim())
+                        .introduced(introducedString.trim())
+                        .discontinued(discontinuedString.trim())
+                        .companyName(companyName.trim())
                         .build();
 
                 Map<Fields, List<ErrorMessage>> errors = computerValidator.validateComputerDTO(computerDTO);
                 Error conflict = new Error();
+
                 if (errors.size() != 0) {
                     conflict.setComputerDTO(computerDTO);
                     conflict.setErrorMap(errors);
@@ -73,7 +74,7 @@ public class ComputerImportService implements IComputerImportService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return rapport;

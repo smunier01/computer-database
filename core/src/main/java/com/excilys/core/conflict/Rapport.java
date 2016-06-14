@@ -16,7 +16,7 @@ public class Rapport {
      * The default constructor.
      */
     public Rapport() {
-        this(new ArrayList<ComputerDTO>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -51,6 +51,10 @@ public class Rapport {
 
     public void setRefuse(List<Conflict> refuse) {
         this.refuse = refuse;
+    }
+
+    public boolean hasErrors() {
+        return refuse.size() > 0;
     }
 
 }

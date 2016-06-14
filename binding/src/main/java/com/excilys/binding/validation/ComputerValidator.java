@@ -81,7 +81,6 @@ public class ComputerValidator implements Validator {
         boolean isDiscontinuedWellFormed = true;
         Map<Fields, List<ErrorMessage>> errors = new HashMap<>();
 
-
         if (computerDTO.getName() == null || computerDTO.getName().trim().equalsIgnoreCase("")) {
             errors.put(Fields.NAME, new ArrayList<>());
             errors.get(Fields.NAME).add(ErrorMessage.NAME_NULL);
@@ -132,6 +131,7 @@ public class ComputerValidator implements Validator {
                 }
             }
         }
+
         return errors;
     }
 
