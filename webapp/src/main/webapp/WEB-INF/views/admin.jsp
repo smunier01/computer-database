@@ -29,8 +29,8 @@
       <div class="row">
             <div class="col-md-4">
                 <div class="well">
-                    <form action="admin/addComputers" enctype="multipart/form-data" method="POST">
-                        <input type="file" accept="text/xml" id="url" name="url"/>
+                    <form action="import/computers" enctype="multipart/form-data" method="POST">
+                        <input type="file" accept="text/xml" id="file" name="file"/>
                         <br/>
                         <input type="submit" value="Add computers" class="btn btn-primary">
                     </form>

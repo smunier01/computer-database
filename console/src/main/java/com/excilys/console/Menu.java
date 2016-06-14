@@ -3,8 +3,8 @@ package com.excilys.console;
 import com.excilys.core.model.Company;
 import com.excilys.core.model.Computer;
 import com.excilys.core.model.PageParameters;
-import com.excilys.service.service.ICompanyRestService;
-import com.excilys.service.service.IComputerRestService;
+import com.excilys.service.company.ICompanyRestService;
+import com.excilys.service.IComputerRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
