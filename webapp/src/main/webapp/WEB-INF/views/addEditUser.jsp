@@ -44,6 +44,9 @@
                 <form method="POST">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input type="hidden" name="id" value="${user.id}"/>
+                    <c:if test="${errorType == 1}">
+                        <div class="alert alert-danger">Invalid username and/or password.</div>
+                    </c:if>
                     <fieldset>
                         <div >
                             <label class="control-label" for="username">${addUser}</label>

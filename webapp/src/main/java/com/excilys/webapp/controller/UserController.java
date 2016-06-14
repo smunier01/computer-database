@@ -3,6 +3,7 @@ package com.excilys.webapp.controller;
 import com.excilys.core.model.User;
 import com.excilys.service.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,7 +67,12 @@ public class UserController {
         // Case 1 : Add user
         if (user.getId() == null) {
             user.setPassword(encodePassword(user.getPassword()));
-            userService.create(user);
+            try {
+                userService.create(user);
+            } catch (DataIntegrityViolationException e) {
+                model.addAttribute("errorType", 1);
+                return "addEditUser";
+            }
         } else {
             // Case 2 : Edit user
             // Change the password only if modified
