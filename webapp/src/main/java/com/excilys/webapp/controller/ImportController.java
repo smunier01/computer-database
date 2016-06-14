@@ -59,10 +59,10 @@ public class ImportController {
             // Check duplicate computers
             rapport = doublonService.getRapport(rapport.getToImport());
 
+            rapport.getToImport().forEach(e -> service.createComputer(mapper.fromDTO(e)));
+
             if (rapport.hasErrors()) {
                 // TODO return errors of duplicate in the view
-            } else {
-                rapport.getToImport().forEach(e -> service.createComputer(mapper.fromDTO(e)));
             }
         }
 
