@@ -19,7 +19,7 @@ public class ExceptionHandlingController {
      */
     @ExceptionHandler(ValidatorException.class)
     public ModelAndView handleValidatorException(ValidatorException ex) {
-        ModelAndView mav = new ModelAndView("errors/validation-error");
+        ModelAndView mav = new ModelAndView("errors/validation-format");
         mav.getModelMap().addAttribute("errors", ex.getErrors());
         return mav;
     }
