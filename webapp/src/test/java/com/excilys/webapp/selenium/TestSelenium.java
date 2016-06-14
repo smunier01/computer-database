@@ -16,11 +16,10 @@ public class TestSelenium {
     @Before
     public void setUp() throws Exception {
         driver = new FirefoxDriver();
-        baseUrl = "http://localhost:8080/cdb";
+        baseUrl = "http://localhost:8080/cdb/";
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    @Ignore
     @Test
     public void testSelenium() throws Exception {
 
@@ -32,6 +31,14 @@ public class TestSelenium {
         driver.findElement(By.id("password")).clear();
         driver.findElement(By.id("password")).sendKeys("admin");
         driver.findElement(By.name("submit")).click();
+
+        // change the language
+
+        driver.findElement(By.linkText("English")).click();
+        driver.findElement(By.linkText("Français")).click();
+
+        // adding computer
+
         driver.findElement(By.id("addComputer")).click();
         driver.findElement(By.id("name")).clear();
         driver.findElement(By.id("name")).sendKeys("testComputer");
@@ -63,7 +70,6 @@ public class TestSelenium {
 
         Assert.assertEquals(nbFound2, "1");
 
-
         // remove it
 
         driver.findElement(By.id("editComputer")).click();
@@ -77,7 +83,6 @@ public class TestSelenium {
         //Check deletion
 
         final String nbFound3 = this.driver.findElement(By.id("nbComputers")).getText();
-
         Assert.assertEquals(nbFound3, "0");
     }
 
