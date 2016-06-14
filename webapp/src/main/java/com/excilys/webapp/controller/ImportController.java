@@ -3,6 +3,7 @@ package com.excilys.webapp.controller;
 import com.excilys.binding.mapper.impl.ComputerMapper;
 import com.excilys.core.conflict.Rapport;
 import com.excilys.service.computer.IComputerService;
+import com.excilys.service.doublon.DoublonService;
 import com.excilys.service.importTool.IComputerImportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,8 @@ public class ImportController {
 
     @Autowired
     private IComputerImportService importService;
+    @Autowired
+    private DoublonService doublonService;
     @Autowired
     private IComputerService service;
     @Autowired
@@ -37,6 +40,7 @@ public class ImportController {
 
         String extension = fileName[1];
 
+        // Check the validity of files format
         Rapport rapport;
         switch (extension) {
             case "xml":
@@ -50,11 +54,16 @@ public class ImportController {
         }
 
         if (rapport.hasErrors()) {
-            // TODO return errors in the view
+            // TODO return errors of file format in the view
         } else {
-            // TODO check doublon in services
+            // Check duplicate computers
+            rapport = doublonService.getRapport(rapport.getToImport());
 
             rapport.getToImport().forEach(e -> service.createComputer(mapper.fromDTO(e)));
+
+            if (rapport.hasErrors()) {
+                // TODO return errors of duplicate in the view
+            }
         }
 
         return "redirect:/admin";
